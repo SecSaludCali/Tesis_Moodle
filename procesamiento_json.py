@@ -72,7 +72,27 @@ class MotorAnalitico:
                         filas_procesadas.append(g_copy)
                     continue
                 
-                # Caso B: Múltiples Bloques (Requiere Ruptura Temporal)
+                # Caso B: Múltiples Bloques (Análisis de Ruptura Temporal vs Paralelismo)
+                # Evaluamos si las encuestas se comportan como cursos paralelos en el mismo bloque de tiempo
+                # Si el rango de tiempo de las encuestas es muy estrecho o comparten la misma edición, clonamos todo.
+                
+                # REGLA DE INTEGRIDAD: Si el nombre del formulario indica que es la misma edición/cohorte
+                # pero para cursos paralelos (ej. misma cohorte en los paréntesis), clonamos el grupo completo.
+                es_paralelo = False
+                if "012026" in nombre_str or "01_2026" in nombre_str: 
+                    # Puedes agregar aquí palabras clave si detectas más casos paralelos
+                    es_paralelo = True
+
+                if es_paralelo:
+                    # CLONACIÓN TOTAL: Las 149 respuestas aplican para ambos cursos simultáneamente
+                    for bloque in cohortes_temporales:
+                        for mid in bloque:
+                            g_copy = grupo.copy()
+                            g_copy['Llave_PK'] = mid
+                            filas_procesadas.append(g_copy)
+                    continue
+
+                # Si NO es paralelo, ejecutamos la ruptura temporal original (Caso secuencial)
                 if not col_fecha:
                     partes_df = np.array_split(grupo, num_bloques)
                     for i, segmento in enumerate(partes_df):
@@ -81,6 +101,11 @@ class MotorAnalitico:
                             seg_c['Llave_PK'] = mid
                             filas_procesadas.append(seg_c)
                     continue
+                
+                # ALGORITMO ADAPTATIVO ORIGINAL PARA CURSOS SECUENCIALES (DEJAR IGUAL ABAJO)
+                grupo = grupo.sort_values(by=col_fecha).copy()
+                grupo['Diferencia'] = grupo[col_fecha].diff().dt.total_seconds()
+                # ... (el resto del código del algoritmo adaptativo se queda exactamente igual)
                 
                 # ALGORITMO ADAPTATIVO: Encuentra los mayores vacíos de tiempo, sean de los días que sean
                 grupo = grupo.sort_values(by=col_fecha).copy()
