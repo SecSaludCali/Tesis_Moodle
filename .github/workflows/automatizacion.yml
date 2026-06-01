@@ -2,8 +2,8 @@ name: Automatizacion Scraping y Dashboard
 
 on:
   schedule:
-    # Se ejecuta automáticamente todos los días a las 11:00 PM UTC
-    - cron: '0 23 * * *'
+    # Se ejecuta automáticamente todos los días a las 3:00 AM hora Colombia
+    - cron: '0 8 * * *'
   workflow_dispatch: # Activa un botón en GitHub para actualizarlo manualmente cuando quieras
 
 jobs:
