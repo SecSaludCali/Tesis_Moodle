@@ -1,0 +1,43 @@
+name: Automatizacion Scraping y Dashboard
+
+on:
+  schedule:
+    # Se ejecuta automáticamente todos los días a las 11:00 PM UTC
+    - cron: '0 23 * * *'
+  workflow_dispatch: # Activa un botón en GitHub para actualizarlo manualmente cuando quieras
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Descargar Repositorio
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Instalar Dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas numpy requests
+
+    - name: Reconstruir Credenciales de Google desde los Secrets
+      run: |
+        echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+        # Descomenta la línea de abajo si también configuraste el token en los secretos:
+        # echo '${{ secrets.GOOGLE_TOKEN }}' > token.json
+
+    - name: Ejecutar Extractor y Procesamiento
+      run: |
+        python scraper_forms.py
+        python procesamiento_json.py
+
+    - name: Autoguardar Cambios en GitHub
+      run: |
+        git config --global user.name 'Automated Scraper'
+        git config --global user.email 'actions@github.com'
+        git add dashboard_data.json
+        git diff-index --quiet HEAD || git commit -m "Bot: Datos actualizados automáticamente"
+        git push
