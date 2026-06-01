@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Analítico - Secretaría de Salud</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* PALETA ACCESIBLE Y MINIMALISTA */
+        :root[data-theme="light"] {
+            --bg-color: #f4f7fe;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #4318ff;
+            --success: #05cd99;
+            --warning: #ffb547;
+            --danger: #ee5d50;
+            --info: #0ea5e9;
+            --card-shadow: 0 14px 24px -10px rgba(0, 0, 0, 0.05), 0 4px 10px -5px rgba(0, 0, 0, 0.03);
+            --border-color: rgba(0, 0, 0, 0.03);
+            --ia-bg: #ffffff;
+            --ia-border: #e2e8f0;
+            --ia-text: #334155;
+            --ia-card-bg: #f8fafc;
+            --modal-bg: #ffffff;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-color: #0b1437;
+            --card-bg: #111c44;
+            --text-main: #f8fafc;
+            --text-muted: #8f9bba;
+            --primary: #7551ff;
+            --success: #01b574;
+            --warning: #ffb547;
+            --danger: #ee5d50;
+            --info: #38bdf8;
+            --card-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.4);
+            --border-color: rgba(255, 255, 255, 0.02);
+            --ia-bg: #111c44;
+            --ia-border: #1b2559;
+            --ia-text: #e2e8f0;
+            --ia-card-bg: #0b1437;
+            --modal-bg: #0b1437;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        h2 {
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 0;
+            font-size: 2.2rem;
+        }
+
+        h5 {
+            font-size: 1.05rem;
+            margin-bottom: 24px;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 32px;
+            height: 100%;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .kpi-card {
+            border-left: 5px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 28px 32px;
+        }
+
+        .kpi-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
+
+        .metric-big {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 10px;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.05em;
+        }
+
+        .form-select {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px 24px;
+            font-weight: 500;
+            box-shadow: var(--card-shadow);
+            transition: all 0.2s ease;
+            font-size: 1.05rem;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15);
+            outline: none;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background-color 0.2s;
+            box-shadow: var(--card-shadow);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 280px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .radar-wrapper {
+            position: relative;
+            height: 420px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-tabs {
+            border-bottom: 2px solid rgba(163, 174, 208, 0.3);
+            margin-bottom: 40px;
+            margin-top: 10px;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--text-muted);
+            font-weight: 600;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.05rem;
+            transition: color 0.2s;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            background: transparent;
+            font-weight: 700;
+        }
+
+        .list-group-item {
+            padding: 16px 0;
+        }
+
+        .list-group-item.bg-transparent {
+            color: var(--text-main) !important;
+            border-color: rgba(163, 174, 208, 0.2) !important;
+        }
+
+        /* ESTILOS IA */
+        .ia-panel-wrapper {
+            margin-top: 40px;
+            padding-top: 10px;
+        }
+
+        .ia-card {
+            background-color: var(--ia-bg);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--ia-border);
+            box-shadow: var(--card-shadow);
+        }
+
+        .ia-title {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ia-mini-card {
+            background: var(--ia-card-bg);
+            border: 1px solid var(--ia-border);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: transform 0.2s;
+        }
+
+        .ia-mini-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .ia-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+
+        .ia-val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1;
+            margin-bottom: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .ia-lbl {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ia-desc {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-top: 12px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        .bg-indigo-soft {
+            background-color: rgba(67, 24, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .bg-emerald-soft {
+            background-color: rgba(5, 205, 153, 0.1);
+            color: var(--success);
+        }
+
+        .bg-amber-soft {
+            background-color: rgba(255, 181, 71, 0.1);
+            color: var(--warning);
+        }
+
+        .bg-rose-soft {
+            background-color: rgba(238, 93, 80, 0.1);
+            color: var(--danger);
+        }
+
+        .lobby-card {
+            cursor: pointer;
+            border: 2px solid transparent;
+            padding: 40px 20px;
+        }
+
+        .lobby-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(67, 24, 255, 0.15);
+        }
+
+        /* ESTILOS DEL MODAL DICCIONARIO (LANDING DE KPIs) */
+        .modal-content {
+            background-color: var(--modal-bg);
+            color: var(--text-main);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 24px 40px;
+        }
+
+        .modal-body {
+            padding: 40px;
+            background-color: var(--bg-color);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+        }
+
+        .btn-info-kpi {
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: none;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3);
+        }
+
+        .btn-info-kpi:hover {
+            transform: scale(1.1);
+            color: white;
+        }
+
+        .dic-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            display: flex;
+            gap: 30px;
+            align-items: stretch;
+            box-shadow: var(--card-shadow);
+        }
+
+        .dic-info {
+            flex: 1;
+        }
+
+        .dic-mockup {
+            flex: 0 0 280px;
+            background: var(--bg-color);
+            border-radius: 16px;
+            border: 1px dashed var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .dic-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(67, 24, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .dic-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        .dic-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .dic-formula {
+            background: var(--ia-bg);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-top: 16px;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* MOCKUPS CSS */
+        .mock-kpi-card {
+            background: var(--card-bg);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .mock-bar-chart {
+            width: 100%;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .mock-badge {
+            background: var(--success);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .mock-radar {
+            width: 120px;
+            height: 120px;
+            background: repeating-radial-gradient(circle, transparent, transparent 18px, var(--border-color) 19px);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .mock-radar::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            background: rgba(67, 24, 255, 0.2);
+            border: 2px solid var(--primary);
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+        }
+
+        @media (max-width: 768px) {
+            .dic-card {
+                flex-direction: column;
+            }
+
+            .dic-mockup {
+                height: 200px;
+                flex: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid py-5 px-4 px-xl-5">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
+            <div>
+                <h2 class="d-flex align-items-center gap-3">
+                    Inteligencia Analítica
+                    <button class="btn-info-kpi" data-bs-toggle="modal" data-bs-target="#kpiModal"
+                        title="Ver Diccionario de Indicadores">
+                        <i class="bi bi-info-lg"></i>
+                    </button>
+                </h2>
+                <div class="text-muted mt-2">Panel interactivo de monitoreo de cohortes y calidad percibida.</div>
+            </div>
+            <button class="theme-toggle" id="btn-theme"><i class="bi bi-moon-fill me-2"></i>Modo Oscuro</button>
+        </div>
+
+        <div class="row mb-5 g-4">
+            <div class="col-md-8">
+                <select id="selector-curso-base" class="form-select">
+                    <option value="ALL">🌐 Vista Global (Consolidado Institucional)</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id="selector-cohorte" class="form-select"
+                    style="display: none; border: 2px solid var(--primary);">
+                </select>
+            </div>
+        </div>
+
+        <div id="panel-lobby-curso" style="display: none; min-height: 50vh;" class="mb-5"></div>
+
+        <div id="contenedor-tabs" style="display: block;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation"><button class="nav-link active" id="global-tab"
+                        data-bs-toggle="tab" data-bs-target="#panel-global" type="button">Demografía General</button>
+                </li>
+                <li class="nav-item" role="presentation"><button class="nav-link" id="moodle-tab" data-bs-toggle="tab"
+                        data-bs-target="#panel-moodle" type="button">Rendimiento Operativo</button></li>
+                <li class="nav-item" role="presentation"><button class="nav-link" id="radar-tab" data-bs-toggle="tab"
+                        data-bs-target="#panel-radar" type="button">Calidad Percibida</button></li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="panel-global">
+                    <div class="row g-4 mb-5" id="kpi-global-row"></div>
+                    <div class="row g-4 mb-5">
+                        <div class="col-xl-3 col-md-6">
+                            <div class="glass-card">
+                                <h5>Sexo</h5>
+                                <div class="chart-wrapper"><canvas id="chartSexo"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="glass-card">
+                                <h5>Curso de Vida</h5>
+                                <div class="chart-wrapper"><canvas id="chartEdad"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="glass-card">
+                                <h5>Perfil Profesional</h5>
+                                <div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="glass-card">
+                                <h5>Escolaridad</h5>
+                                <div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ia-panel-wrapper" id="panel-ia-demo" style="display: none;">
+                        <div class="ia-card">
+                            <div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico Demográfico Asistido
+                            </div>
+                            <div id="ia-txt-demo"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="panel-moodle">
+                    <div class="row g-4 mb-5" id="kpi-moodle-row"></div>
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <div class="glass-card">
+                                <h5>Distribución del Estado de Capacitación</h5>
+                                <div class="chart-wrapper"><canvas id="chartMoodleBar"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div
+                                class="glass-card text-center d-flex flex-column justify-content-center align-items-center">
+                                <h5>Ritmo de Aprendizaje</h5>
+                                <div class="metric-big mt-4" id="tiempo-consumo-dias">0</div>
+                                <div class="kpi-label">Días Promedio para Finalizar</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ia-panel-wrapper" id="panel-ia-moodle" style="display: none;">
+                        <div class="ia-card">
+                            <div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico de Rendimiento Operativo
+                            </div>
+                            <div id="ia-txt-moodle"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="panel-radar">
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <div class="glass-card">
+                                <h5 id="titulo-radar">Radar de Dimensiones vs Benchmark Global</h5>
+                                <div class="radar-wrapper"><canvas id="chartRadar"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card">
+                                <h5 id="titulo-desglose">Desglose de Calificación (Sobre 5.0)</h5>
+                                <div id="diagnostico-detalles" class="mt-4"></div>
+                            </div>
+                        </div>
+                        <div class="col-12 ia-panel-wrapper" id="panel-ia-radar" style="display: none;">
+                            <div class="ia-card">
+                                <div class="ia-title"><i class="bi bi-robot fs-3"></i> Evaluación Analítica de Calidad
+                                    Percibida</div>
+                                <div id="ia-txt-radar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="kpiModal" tabindex="-1" aria-labelledby="kpiModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h3 class="modal-title fw-bold" id="kpiModalLabel" style="color: var(--primary);"><i
+                                class="bi bi-journal-code me-2"></i> Diccionario de Indicadores (KPIs)</h3>
+                        <div class="text-muted mt-1">Definición técnica y visualización de las métricas utilizadas en el
+                            Dashboard.</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="dic-card">
+                        <div class="dic-info">
+                            <span class="dic-tag">Métrica Compuesta</span>
+                            <h4 class="dic-title">Puntaje de Salud (CHS)</h4>
+                            <p class="dic-desc">El <strong>Course Health Score</strong> es el indicador macro
+                                institucional. Mide la viabilidad y el éxito general de una capacitación cruzando datos
+                                operativos de Moodle con datos de satisfacción emocional de Forms.</p>
+                            <div class="dic-formula">
+                                <i class="bi bi-calculator me-2"></i> Fórmula: (Finalización * 40%) + (ISG * 30%) + (IUP
+                                * 20%) + (UX * 10%)
+                            </div>
+                        </div>
+                        <div class="dic-mockup">
+                            <span
+                                style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización
+                                en Dashboard:</span>
+                            <div class="mock-kpi-card">
+                                <div class="kpi-value">85.4</div>
+                                <div class="kpi-label" style="font-size: 0.7rem;">Score Salud (CHS)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dic-card">
+                        <div class="dic-info">
+                            <span class="dic-tag"
+                                style="background: rgba(5, 205, 153, 0.1); color: var(--success);">Métrica
+                                Operativa</span>
+                            <h4 class="dic-title">Tasas de Embudo Académico</h4>
+                            <p class="dic-desc">Mide el flujo del estudiante en Moodle. <br>
+                                • <strong>Tasa de Finalización:</strong> % de inscritos que aprobaron el curso.<br>
+                                • <strong>Tasa de Abandono:</strong> % que inició pero no terminó (Fuga).<br>
+                                • <strong>Tasa de Inactividad:</strong> % que se matriculó pero nunca ingresó (Barrera).
+                            </p>
+                            <div class="dic-formula"><i class="bi bi-bar-chart-steps me-2"></i> Se visualiza apilado
+                                para evidenciar en qué fase se pierden los usuarios.</div>
+                        </div>
+                        <div class="dic-mockup">
+                            <span
+                                style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización
+                                en Dashboard:</span>
+                            <div class="w-100 px-3">
+                                <div class="mock-bar-chart">
+                                    <div style="width: 60%; background: var(--success);" title="Finalización"></div>
+                                    <div style="width: 30%; background: var(--warning);" title="Abandono"></div>
+                                    <div style="width: 10%; background: var(--danger);" title="Inactividad"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-2"
+                                    style="font-size: 0.7rem; color: var(--text-muted);">
+                                    <span>60% Fin.</span><span>30% Abd.</span><span>10% Inac.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dic-card">
+                        <div class="dic-info">
+                            <span class="dic-tag"
+                                style="background: rgba(255, 181, 71, 0.1); color: var(--warning);">Métrica de
+                                Calidad</span>
+                            <h4 class="dic-title">Net Promoter Score (e-NPS)</h4>
+                            <p class="dic-desc">Mide la lealtad y satisfacción general del estudiante respondiendo a la
+                                pregunta: <em>"En general, ¿Cómo se sintió con la actividad?"</em>. Un puntaje positivo
+                                significa que hay más promotores que detractores.</p>
+                            <div class="dic-formula"><i class="bi bi-star-fill me-2"></i> Escala de -100 a +100. Valores
+                                > 20 se consideran excelentes.</div>
+                        </div>
+                        <div class="dic-mockup">
+                            <span
+                                style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización
+                                en IA:</span>
+                            <div class="mock-badge">NPS: +45</div>
+                        </div>
+                    </div>
+
+                    <div class="dic-card">
+                        <div class="dic-info">
+                            <span class="dic-tag"
+                                style="background: rgba(14, 165, 233, 0.1); color: var(--info);">Métrica
+                                Dimensional</span>
+                            <h4 class="dic-title">Índices de Calidad (IUP, ICD, UX, Brecha)</h4>
+                            <p class="dic-desc">Agrupa preguntas del formulario en variables clave sobre 5.0:<br>
+                                • <strong>IUP (Utilidad Práctica):</strong> ¿Los conceptos se aplican al trabajo?<br>
+                                • <strong>ICD (Competencia Docente):</strong> Dominio del facilitador.<br>
+                                • <strong>UX (Plataforma):</strong> Calidad del entorno virtual y materiales.<br>
+                                • <strong>Brecha Expectativa:</strong> Resta entre objetivo cumplido y prometido.
+                            </p>
+                        </div>
+                        <div class="dic-mockup">
+                            <span
+                                style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización
+                                en Radar:</span>
+                            <div class="mock-radar"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let chartInstances = {}; let promediosGlobalesPreguntas = {};
+
+        const mapeoPreguntas = { "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Objetivo Cumplido", "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia Temática", "¿Los temas se desarrollaron en el tiempo previsto?": "Manejo del Tiempo", "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Innovación (Conceptos)", "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Utilidad Práctica", "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente", "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Resolución Dudas", "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "Experiencia Plataforma (UX)", "¿El material utilizado permitió el entendimiento del tema?": "Calidad Materiales", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General" };
+        const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
+
+        const btnTheme = document.getElementById('btn-theme');
+        btnTheme.addEventListener('click', () => {
+            const html = document.documentElement; const isLight = html.getAttribute('data-theme') === 'light';
+            html.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            btnTheme.innerHTML = isLight ? '<i class="bi bi-sun-fill me-2"></i>Modo Claro' : '<i class="bi bi-moon-fill me-2"></i>Modo Oscuro';
+            Chart.defaults.color = getComputedStyle(html).getPropertyValue('--text-main');
+            if (cursoActual) actualizarPantallaCurso(); else actualizarPantallaGlobal();
+        });
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch('dashboard_data.json'); dashboardData = await response.json();
+                Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); Chart.defaults.font.family = 'Inter';
+                calcularBenchmarkGlobal(); agruparCursos();
+                document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
+                document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
+                actualizarPantallaGlobal();
+            } catch (error) { console.error("Error cargando datos", error); }
+        });
+
+        function calcularBenchmarkGlobal() {
+            const sum = {}; const count = {};
+            dashboardData.cursos.forEach(curso => {
+                if (curso.Detalle_Preguntas && curso.Total_Encuestas > 0) {
+                    for (let k in curso.Detalle_Preguntas) { if (curso.Detalle_Preguntas[k] > 0) { sum[k] = (sum[k] || 0) + curso.Detalle_Preguntas[k]; count[k] = (count[k] || 0) + 1; } }
+                }
+            });
+            for (let k in sum) { promediosGlobalesPreguntas[k] = sum[k] / count[k]; }
+        }
+
+        function agruparCursos() {
+            const sel = document.getElementById('selector-curso-base');
+            dashboardData.cursos.forEach(c => {
+                const base = c.Curso_Base || c.Nombre_Curso;
+                if (!cursosPorBase[base]) cursosPorBase[base] = [];
+                cursosPorBase[base].push(c);
+            });
+            Object.keys(cursosPorBase).sort().forEach(base => { sel.appendChild(new Option(base, base)); });
+        }
+
+        function manejarCambioBase() {
+            const seleccion = this.value;
+            const selectorCohorte = document.getElementById('selector-cohorte');
+            const lobby = document.getElementById('panel-lobby-curso');
+            const tabs = document.getElementById('contenedor-tabs');
+
+            if (seleccion === "ALL") {
+                selectorCohorte.style.display = "none"; cursoActual = null;
+                lobby.style.display = "none"; tabs.style.display = "block";
+                actualizarPantallaGlobal();
+            } else {
+                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion));
+                selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>';
+                cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); });
+                selectorCohorte.style.display = "block"; selectorCohorte.value = "";
+
+                tabs.style.display = "none"; lobby.style.display = "block"; apagarPanelesIA();
+
+                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;"><i class="bi bi-journal-bookmark-fill me-2"></i>${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizar su rendimiento detallado</p></div><div class="row g-4 justify-content-center">`;
+
+                let porAnio = {};
+                cohortes.forEach(c => {
+                    let anio = c.Edicion.split(' - ')[0];
+                    if (!porAnio[anio]) porAnio[anio] = [];
+                    porAnio[anio].push(c);
+                });
+
+                let anios = Object.keys(porAnio).sort((a, b) => b - a);
+                anios.forEach(anio => {
+                    htmlLobby += `<div class="col-12 mt-5"><h4 class="fw-bold mb-4" style="color: var(--text-main); border-bottom: 2px solid var(--border-color); padding-bottom: 15px;"><i class="bi bi-calendar3 me-2"></i>Año ${anio}</h4></div>`;
+                    porAnio[anio].forEach(c => {
+                        let nombreCohorte = c.Edicion.split(' - ')[1] || "Edición Única";
+                        htmlLobby += `
+                    <div class="col-md-4 col-lg-3">
+                        <div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')">
+                            <div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div>
+                            <h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${nombreCohorte}</h5>
+                            <span class="badge bg-indigo-soft px-3 py-2 text-primary" style="font-size:0.9rem;">${c.Total_Inscritos} Inscritos</span>
+                        </div>
+                    </div>`;
+                    });
+                });
+                htmlLobby += `</div>`;
+                lobby.innerHTML = htmlLobby;
+            }
+        }
+
+        function seleccionarCohorteDesdeLobby(nombreCurso) {
+            document.getElementById('selector-cohorte').value = nombreCurso;
+            document.getElementById('panel-lobby-curso').style.display = 'none';
+            document.getElementById('contenedor-tabs').style.display = 'block';
+
+            const base = document.getElementById('selector-curso-base').value;
+            cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === nombreCurso);
+            actualizarPantallaCurso();
+        }
+
+        function manejarCambioCohorte() {
+            if (!this.value) {
+                document.getElementById('panel-lobby-curso').style.display = 'block';
+                document.getElementById('contenedor-tabs').style.display = 'none';
+                apagarPanelesIA(); return;
+            }
+            document.getElementById('panel-lobby-curso').style.display = 'none';
+            document.getElementById('contenedor-tabs').style.display = 'block';
+
+            const base = document.getElementById('selector-curso-base').value;
+            cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === this.value);
+            actualizarPantallaCurso();
+        }
+
+        function generarInsightIA(curso) {
+            if (!curso) return;
+            const chs = curso.Salud_Curso_CHS || 0; const nps = curso.e_NPS || 0;
+            const fin = curso['Tasa_Finalizacion_%'] || 0; const abd = curso['Tasa_Abandono_%'] || 0; const inact = curso['Tasa_Inactividad_%'] || 0;
+            const iup = curso.IUP_Promedio || 0; const icd = curso.ICD_Promedio || 0; const ux = curso.UX_Promedio || 0; const brecha = curso.Brecha_Expectativa || 0; const encuestas = curso.Total_Encuestas || 0;
+
+            let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A";
+            try {
+                let totalG = Object.values(curso.Demografia.Sexo).reduce((a, b) => a + b, 0);
+                if (totalG > 0) {
+                    pMujeres = Math.round(((curso.Demografia.Sexo['Femenino'] || 0) / totalG) * 100);
+                    let pKeys = Object.keys(curso.Demografia.Perfil); perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => curso.Demografia.Perfil[a] > curso.Demografia.Perfil[b] ? a : b) : "N/A"; pPerfil = Math.round(((curso.Demografia.Perfil[perfilDom] || 0) / totalG) * 100);
+                    let eKeys = Object.keys(curso.Demografia.Edad); edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => curso.Demografia.Edad[a] > curso.Demografia.Edad[b] ? a : b) : "N/A";
+                }
+            } catch (e) { }
+
+            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(curso.Total_Inscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "La analítica revela un grupo sesgado hacia profesionales de", "Esto sugiere que los ejemplos deben orientarse a este sector.");
+            document.getElementById('panel-ia-demo').style.display = 'block';
+            document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs); document.getElementById('panel-ia-moodle').style.display = 'block';
+            document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, "Índice de recomendación basado en"); document.getElementById('panel-ia-radar').style.display = 'block';
+        }
+
+        function generarInsightIAGlobal(totInscritos, fin, abd, inact, iup, icd, ux, brecha, encuestas) {
+            const chs = dashboardData.kpis_globales.chs_promedio_secretaria; const nps = dashboardData.kpis_globales.nps_global;
+            let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A";
+            try {
+                let totalG = Object.values(dashboardData.demografia_global['Sexo']).reduce((a, b) => a + b, 0);
+                if (totalG > 0) {
+                    pMujeres = Math.round(((dashboardData.demografia_global['Sexo']['Femenino'] || 0) / totalG) * 100);
+                    let pKeys = Object.keys(dashboardData.demografia_global['Perfil']); perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => dashboardData.demografia_global['Perfil'][a] > dashboardData.demografia_global['Perfil'][b] ? a : b) : "N/A"; pPerfil = Math.round(((dashboardData.demografia_global['Perfil'][perfilDom] || 0) / totalG) * 100);
+                    let eKeys = Object.keys(dashboardData.demografia_global['Curso de Vida']); edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => dashboardData.demografia_global['Curso de Vida'][a] > dashboardData.demografia_global['Curso de Vida'][b] ? a : b) : "N/A";
+                }
+            } catch (e) { }
+
+            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(totInscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "A nivel consolidado, la Secretaría impacta principalmente a", "Las futuras políticas deben considerar este perfil como estándar institucional.");
+            document.getElementById('panel-ia-demo').style.display = 'block';
+            document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs, true); document.getElementById('panel-ia-moodle').style.display = 'block';
+            document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas.toLocaleString(), nps, iup, icd, ux, brecha, "Sentimiento consolidado institucional basado en"); document.getElementById('panel-ia-radar').style.display = 'block';
+        }
+
+        function renderHTMLDemo(tot, pM, pDom, pP, eDom, t1, t2) { return `<div class="row g-4 mb-4"><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${tot}</div><div class="ia-lbl">Total Matriculados</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pM}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div></div><p class="mb-0 fs-6" style="color: var(--text-main); line-height: 1.6;"><strong>Conclusión:</strong> ${t1} <strong>${pDom}</strong>. ${t2}</p>`; }
+        function renderHTMLMoodle(fin, inact, abd, chs, isGlobal = false) { let mIcon = "", mColor = "", mText = ""; if (fin >= 80) { mIcon = "bi-check-circle-fill"; mColor = "success"; mText = "<strong>Excelente Eficiencia Terminal.</strong> El modelo pedagógico logra retener al estudiante efectivamente."; } else if (inact > fin && inact > 40) { mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; mText = `<strong>Fricción Severa en Onboarding.</strong> El mayor porcentaje (${inact}%) nunca inició la capacitación. Se requiere auditar los accesos.`; } else if (abd > 30) { mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; mText = `<strong>Alerta de Deserción Intermedia.</strong> Existe una fuga masiva del ${abd}%. Los módulos podrían estar sobrecargados o ser confusos.`; } else { mIcon = "bi-info-circle-fill"; mColor = "primary"; mText = "<strong>Comportamiento Operativo Estándar.</strong> Tasas de aprobación y abandono dentro de los márgenes normales de educación virtual."; } let lblFuga = isGlobal ? "Fuga Histórica" : "Fuga Académica"; let lblInac = isGlobal ? "Inactividad Histórica" : "Barrera de Entrada"; return `<div class="alert alert-${mColor} d-flex align-items-center mb-5 p-4 border-0 shadow-sm rounded-4"><i class="bi ${mIcon} fs-1 me-4"></i> <div class="fs-6">${mText}</div></div><div class="row g-4"><div class="col-md-4"><div class="ia-mini-card border-${mColor}"><div class="ia-lbl">Puntaje de Salud (CHS)</div><div class="ia-val mt-2 text-${mColor}">${chs} <span style="font-size: 1rem; color: var(--text-muted);">/ 100</span></div><div class="ia-desc">Indicador compuesto de viabilidad operativa.</div></div></div><div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${lblFuga}</div><div class="ia-val mt-2">${abd}%</div><div class="ia-desc">Iniciaron pero no lograron concluir.</div></div></div><div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${lblInac}</div><div class="ia-val mt-2">${inact}%</div><div class="ia-desc">Matriculados que nunca registraron actividad.</div></div></div></div>`; }
+        function renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, msgNps) { if (encuestas < 5) return `<div class="alert bg-indigo-soft border-0 p-4 rounded-4 d-flex align-items-center"><i class="bi bi-bar-chart-fill fs-1 me-4"></i><div class="fs-6">Muestra estadística muy baja (<strong>${encuestas} respuestas</strong>). No es posible emitir un diagnóstico con significancia estadística.</div></div>`; let npsColor = nps > 20 ? "success" : (nps < 0 ? "danger" : "warning"); let iupHtml = iup >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Alta Aplicabilidad.</strong> Excelente transferencia de conocimiento a la vida cotidiana o laboral.</div></div></div>` : (iup >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Aplicabilidad Estable.</strong> Contenido útil, con margen para incluir más casos prácticos reales.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Disonancia Teórica.</strong> Fuerte desconexión entre la teoría impartida y la realidad de los participantes.</div></div></div>`); let icdHtml = icd >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Dominio Experto.</strong> El facilitador demostró un excelente manejo del tema y metodología.</div></div></div>` : (icd >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Desempeño Sólido.</strong> La facilitación cumplió con los estándares esperados.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-warning"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Oportunidad de Mejora.</strong> Deficiencias en la claridad metodológica o en el dominio percibido.</div></div></div>`); let uxHtml = ux >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Entorno Óptimo.</strong> Moodle y los materiales didácticos facilitaron el aprendizaje.</div></div></div>` : (ux >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Entorno Funcional.</strong> El entorno virtual cumple su propósito sin fricciones significativas.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Fricción Tecnológica.</strong> La calidad del material o la navegación actuaron como un obstáculo.</div></div></div>`); let brechaHtml = brecha >= 0 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-bullseye"></i></div><div class="ia-lbl">Brecha Expectativa: ${brecha}</div><div class="ia-desc"><strong>Promesa Cumplida.</strong> Se lograron o superaron los objetivos que se prometieron al inicio.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-bullseye"></i></div><div class="ia-lbl">Brecha Expectativa: ${brecha}</div><div class="ia-desc"><strong>Riesgo de Percepción.</strong> Los estudiantes sienten que lo prometido al inicio no se entregó.</div></div></div>`; return `<div class="d-flex align-items-center mb-5 pb-4 border-bottom border-light"><span class="badge bg-${npsColor} text-white fs-4 py-3 px-4 me-4 shadow-sm rounded-3" style="font-variant-numeric: tabular-nums;">NPS: ${nps}</span><span class="fs-6" style="color: var(--text-main); line-height: 1.5;">${msgNps} <strong>${encuestas} encuestas totales</strong>. Diagnóstico individual por ítem crítico:</span></div><div class="row g-4">${icdHtml}${iupHtml}${uxHtml}${brechaHtml}</div>`; }
+        function apagarPanelesIA() { document.getElementById('panel-ia-demo').style.display = 'none'; document.getElementById('panel-ia-moodle').style.display = 'none'; document.getElementById('panel-ia-radar').style.display = 'none'; }
+
+        function actualizarPantallaGlobal() {
+            const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0);
+            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}${crearTarjetaKPI("Inscritos Históricos", totalInscritos.toLocaleString())}${crearTarjetaKPI("Encuestas Recibidas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}${crearTarjetaKPI("CHS Institucional", dashboardData.kpis_globales.chs_promedio_secretaria)}${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}`;
+            dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dashboardData.demografia_global['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dashboardData.demografia_global['Escolaridad'], 'right');
+            let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0;
+            dashboardData.cursos.forEach(c => { let insc = c.Total_Inscritos || 0; totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } });
+            let pctFin = totalInscritos ? Math.round((totalFin / totalInscritos) * 100) : 0; let pctAbd = totalInscritos ? Math.round((totalAbd / totalInscritos) * 100) : 0; let pctInac = totalInscritos ? Math.round((totalInac / totalInscritos) * 100) : 0; let promDias = countCursosDias ? Math.round(sumDias / countCursosDias) : 0;
+            document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Tasa Finalización Global", pctFin + "%")}${crearTarjetaKPI("Tasa Abandono Histórico", pctAbd + "%")}${crearTarjetaKPI("Inactividad Institucional", pctInac + "%")}`; document.getElementById('tiempo-consumo-dias').innerText = promDias; dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pctFin, 'Tasa_Abandono_%': pctAbd, 'Tasa_Inactividad_%': pctInac });
+            let sumIUP = 0, sumICD = 0, sumUX = 0, sumBrecha = 0, countEnc = 0;
+            dashboardData.cursos.forEach(c => { if (c.Total_Encuestas > 0) { sumIUP += (c.IUP_Promedio * c.Total_Encuestas); sumICD += (c.ICD_Promedio * c.Total_Encuestas); sumUX += (c.UX_Promedio * c.Total_Encuestas); sumBrecha += (c.Brecha_Expectativa * c.Total_Encuestas); countEnc += c.Total_Encuestas; } });
+            let globIUP = countEnc ? (sumIUP / countEnc).toFixed(2) : 0; let globICD = countEnc ? (sumICD / countEnc).toFixed(2) : 0; let globUX = countEnc ? (sumUX / countEnc).toFixed(2) : 0; let globBrecha = countEnc ? (sumBrecha / countEnc).toFixed(2) : 0;
+            document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; document.getElementById('titulo-desglose').innerText = "Calificación Institucional Global (Sobre 5.0)"; dibujarRadar(promediosGlobalesPreguntas, true);
+            document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${globIUP} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${globICD} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${globUX} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${globBrecha < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${globBrecha < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${globBrecha}</span></li></ul>`;
+            generarInsightIAGlobal(totalInscritos, pctFin, pctAbd, pctInac, globIUP, globICD, globUX, globBrecha, countEnc);
+        }
+
+        function actualizarPantallaCurso() {
+            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Inscritos", cursoActual.Total_Inscritos)}${crearTarjetaKPI("Encuestas", cursoActual.Total_Encuestas)}${crearTarjetaKPI("Participación", cursoActual.Total_Inscritos > 0 ? Math.round((cursoActual.Total_Encuestas / cursoActual.Total_Inscritos) * 100) + "%" : "0%")}${crearTarjetaKPI("Score Salud (CHS)", cursoActual.Salud_Curso_CHS)}${crearTarjetaKPI("e-NPS", cursoActual.e_NPS)}`;
+            dibujarGraficoDona('chartSexo', cursoActual.Demografia['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', cursoActual.Demografia['Edad'], 'right'); dibujarGraficoDona('chartPerfil', cursoActual.Demografia['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', cursoActual.Demografia['Escolaridad'], 'right');
+            document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Tasa Finalización", cursoActual['Tasa_Finalizacion_%'] + "%")}${crearTarjetaKPI("Tasa Abandono", cursoActual['Tasa_Abandono_%'] + "%")}${crearTarjetaKPI("Tasa Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual);
+            document.getElementById('titulo-radar').innerText = "Radar de Dimensiones vs Benchmark Global"; document.getElementById('titulo-desglose').innerText = "Desglose de Calificación (Sobre 5.0)"; dibujarRadar(cursoActual.Detalle_Preguntas, false);
+            document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${cursoActual.IUP_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${cursoActual.ICD_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${cursoActual.UX_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${cursoActual.Brecha_Expectativa < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${cursoActual.Brecha_Expectativa < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${cursoActual.Brecha_Expectativa || 0}</span></li></ul>`;
+            generarInsightIA(cursoActual);
+        }
+
+        function crearTarjetaKPI(label, valor) { return `<div class="col"><div class="glass-card kpi-card"><div class="kpi-value">${valor}</div><div class="kpi-label">${label}</div></div></div>`; }
+        function dibujarGraficoDona(canvasId, dataObject, legendPosition) { if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); if (!dataObject || Object.keys(dataObject).length === 0) return; chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'doughnut', data: { labels: Object.keys(dataObject), datasets: [{ data: Object.values(dataObject), backgroundColor: coloresDona, borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } } } } } }); }
+        function dibujarBarraMoodle(canvasId, curso) { if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); const style = getComputedStyle(document.documentElement); chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [{ label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: style.getPropertyValue('--success').trim(), borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: style.getPropertyValue('--warning').trim() }, { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: style.getPropertyValue('--danger').trim(), borderRadius: { topRight: 6, bottomRight: 6 } }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, grid: { display: false }, border: { display: false } }, y: { stacked: true, display: false, grid: { display: false }, border: { display: false } } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 14, font: { family: 'Inter', size: 13 } } } } } }); }
+        function dibujarRadar(preguntasCurso, isGlobal = false) { if (chartInstances['chartRadar']) chartInstances['chartRadar'].destroy(); if (!preguntasCurso || Object.keys(preguntasCurso).length === 0) return; const etiquetasLargas = Object.keys(preguntasCurso); const etiquetasCortas = etiquetasLargas.map(q => mapeoPreguntas[q] || "Pregunta"); const dataCurso = Object.values(preguntasCurso); const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim(); let datasetsArray = []; if (isGlobal) { datasetsArray.push({ label: 'Promedio Institucional', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); } else { const dataGlobal = etiquetasLargas.map(q => promediosGlobalesPreguntas[q] || 0); datasetsArray.push({ label: 'Esta Cohorte', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); datasetsArray.push({ label: 'Benchmark Global', data: dataGlobal, backgroundColor: 'transparent', borderColor: mutedColor, borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); } chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: etiquetasCortas, datasets: datasetsArray }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent', font: { family: 'Inter' } }, grid: { color: 'rgba(0,0,0,0.05)' }, angleLines: { color: 'rgba(0,0,0,0.05)' }, pointLabels: { font: { size: 11, family: 'Inter', weight: '600' } } } }, plugins: { tooltip: { padding: 12, callbacks: { title: (context) => { const textoCompleto = etiquetasLargas[context[0].dataIndex]; const palabras = textoCompleto.split(' '); let lineas = []; let lineaActual = ''; palabras.forEach(palabra => { if ((lineaActual + palabra).length > 40) { lineas.push(lineaActual.trim()); lineaActual = palabra + ' '; } else { lineaActual += palabra + ' '; } }); lineas.push(lineaActual.trim()); return lineas; } } } } } }); }
+    </script>
+</body>
+
+</html>
