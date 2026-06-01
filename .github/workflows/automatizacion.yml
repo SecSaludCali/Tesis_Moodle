@@ -2,7 +2,7 @@ name: Automatizacion Scraping y Dashboard
 
 on:
   schedule:
-    # Se ejecuta automáticamente todos los días a las 3:00 AM hora Colombia
+    # Se ejecuta automáticamente todos los días a las 3:00 AM hora Colombia (8:00 AM UTC)
     - cron: '0 8 * * *'
   workflow_dispatch: # Activa un botón en GitHub para actualizarlo manualmente cuando quieras
 
@@ -26,8 +26,7 @@ jobs:
     - name: Reconstruir Credenciales de Google desde los Secrets
       run: |
         echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
-        # Descomenta la línea de abajo si también configuraste el token en los secretos:
-        # echo '${{ secrets.GOOGLE_TOKEN }}' > token.json
+        echo '${{ secrets.GOOGLE_TOKEN }}' > token.json
 
     - name: Ejecutar Extractor y Procesamiento
       run: |
