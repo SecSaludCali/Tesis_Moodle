@@ -742,7 +742,19 @@
 
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                const response = await fetch('dashboard_data.json'); dashboardData = await response.json();
+                // 👈 TRUCO ANTICACHÉ: Se agrega un timestamp único a la URL
+                const urlFresca = 'dashboard_data.json?v=' + new Date().getTime();
+                
+                // 👈 DOBLE SEGURIDAD: Se añaden headers para ignorar la memoria del navegador
+                const response = await fetch(urlFresca, {
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                }); 
+                
+                dashboardData = await response.json();
                 Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); Chart.defaults.font.family = 'Inter';
                 calcularBenchmarkGlobal(); agruparCursos();
                 document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
