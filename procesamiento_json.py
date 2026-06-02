@@ -74,17 +74,11 @@ class MotorAnalitico:
                 
                 # Caso B: Múltiples Bloques (Análisis de Ruptura Temporal vs Paralelismo)
                 # Evaluamos si las encuestas se comportan como cursos paralelos en el mismo bloque de tiempo
-                # Si el rango de tiempo de las encuestas es muy estrecho o comparten la misma edición, clonamos todo.
-                
-                # REGLA DE INTEGRIDAD: Si el nombre del formulario indica que es la misma edición/cohorte
-                # pero para cursos paralelos (ej. misma cohorte en los paréntesis), clonamos el grupo completo.
                 es_paralelo = False
                 if "012026" in nombre_str or "01_2026" in nombre_str: 
-                    # Puedes agregar aquí palabras clave si detectas más casos paralelos
                     es_paralelo = True
 
                 if es_paralelo:
-                    # CLONACIÓN TOTAL: Las 149 respuestas aplican para ambos cursos simultáneamente
                     for bloque in cohortes_temporales:
                         for mid in bloque:
                             g_copy = grupo.copy()
@@ -92,7 +86,6 @@ class MotorAnalitico:
                             filas_procesadas.append(g_copy)
                     continue
 
-                # Si NO es paralelo, ejecutamos la ruptura temporal original (Caso secuencial)
                 if not col_fecha:
                     partes_df = np.array_split(grupo, num_bloques)
                     for i, segmento in enumerate(partes_df):
@@ -102,17 +95,10 @@ class MotorAnalitico:
                             filas_procesadas.append(seg_c)
                     continue
                 
-                # ALGORITMO ADAPTATIVO ORIGINAL PARA CURSOS SECUENCIALES (DEJAR IGUAL ABAJO)
-                grupo = grupo.sort_values(by=col_fecha).copy()
-                grupo['Diferencia'] = grupo[col_fecha].diff().dt.total_seconds()
-                # ... (el resto del código del algoritmo adaptativo se queda exactamente igual)
-                
-                # ALGORITMO ADAPTATIVO: Encuentra los mayores vacíos de tiempo, sean de los días que sean
                 grupo = grupo.sort_values(by=col_fecha).copy()
                 grupo['Diferencia'] = grupo[col_fecha].diff().dt.total_seconds()
                 
                 n_cuts = num_bloques - 1
-                # Obtiene los índices exactos de las separaciones más largas
                 largest_gaps = grupo['Diferencia'].nlargest(n_cuts).index
                 cortes_internos = sorted([grupo.index.get_loc(idx) for idx in largest_gaps])
                 cortes = [0] + cortes_internos + [len(grupo)]
@@ -123,7 +109,6 @@ class MotorAnalitico:
                     segmento = grupo.iloc[start:end].copy()
                     if not segmento.empty:
                         segmento = segmento.drop(columns=['Diferencia'], errors='ignore')
-                        # Clona las encuestas de este tiempo para los cursos simultáneos que hubo en este tiempo
                         for mid in cohortes_temporales[i]:
                             seg_c = segmento.copy()
                             seg_c['Llave_PK'] = mid
@@ -138,10 +123,8 @@ class MotorAnalitico:
         # ========================================================
         # 3. CRUCE RELACIONAL DE DEMOGRAFÍA (GARANTIZA INTEGRIDAD)
         # ========================================================
-        # Al extraer el mapeo desde df_sat, nos aseguramos que df_perf herede las mismas particiones temporales
         if not df_sat.empty and 'ID_Formulario' in df_sat.columns and 'ID_Formulario' in df_perf_raw.columns:
             mapa_llaves = df_sat[['ID_Formulario', 'Llave_PK']].drop_duplicates()
-            # Quitamos llaves residuales por si acaso antes de cruzar
             df_perf_limpio = df_perf_raw.drop(columns=['Llave_PK', 'Llaves_List'], errors='ignore')
             df_perf = pd.merge(df_perf_limpio, mapa_llaves, on='ID_Formulario', how='inner')
         else:
@@ -152,21 +135,15 @@ class MotorAnalitico:
         # Limpiar registros nulos
         df_sat = df_sat[df_sat['Llave_PK'].notna()]
         df_perf = df_perf[df_perf['Llave_PK'].notna()]
-        
-        # Continuamos con la estabilización de Moodle
-        total_encuestas_validas = df_sat[['ID_Formulario', 'Nombre_Curso']].drop_duplicates().shape[0]
 
         df_moodle['Llave_PK'] = df_moodle['ID_Moodle_Original']
         df_moodle = df_moodle.drop_duplicates(subset=['Llave_PK'])
 
-        # 4. Ingeniería de Características en Satisfacción (CON LA CORRECCIÓN DE "SÍ" y "NO")
+        # 4. Ingeniería de Características en Satisfacción
         cols_preguntas = [c for c in df_sat.columns if '¿' in c]
         for c in cols_preguntas:
-            # Primero traducimos los textos "Sí" y "No" a números (5 y 1)
             df_sat[c] = df_sat[c].astype(str).str.strip().str.lower()
             df_sat[c] = df_sat[c].replace({'sí': 5, 'si': 5, 'no': 1})
-            
-            # Luego convertimos a número
             df_sat[c] = pd.to_numeric(df_sat[c], errors='coerce')
 
         col_dominio = next((c for c in cols_preguntas if 'dominio' in c.lower()), cols_preguntas[0])
@@ -244,6 +221,7 @@ class MotorAnalitico:
         demo_comuna = df_perf.groupby(['Llave_PK', 'Comuna_Unificada']).size().unstack(fill_value=0).to_dict(orient='index')
         demo_escolaridad = df_perf.groupby(['Llave_PK', 'Escolaridad']).size().unstack(fill_value=0).to_dict(orient='index') if 'Escolaridad' in df_perf.columns else {}
 
+        # Mantiene la suma exacta de las 3834 encuestas originales para las gráficas
         demografia_global = {
             "Sexo": df_perf_raw['Sexo'].value_counts().to_dict(),
             "Perfil": df_perf_raw['Perfil'].value_counts().to_dict(),
@@ -252,7 +230,7 @@ class MotorAnalitico:
             "Escolaridad": df_perf_raw['Escolaridad'].value_counts().to_dict() if 'Escolaridad' in df_perf_raw.columns else {}
         }
 
-        # 7. Construcción de Estructura JSON (Split Guiones)
+        # 7. Construcción de Estructura JSON
         cursos_lista = df_final.to_dict(orient='records')
         for c in cursos_lista:
             llave = c['Llave_PK']
@@ -285,7 +263,7 @@ class MotorAnalitico:
         dashboard_json = {
             "metadata": {
                 "total_cursos_analizados": len(cursos_lista),
-                "total_encuestas_historicas": total_encuestas_validas 
+                "total_encuestas_historicas": len(df_sat_raw)
             },
             "kpis_globales": {
                 "chs_promedio_secretaria": round(df_final['Salud_Curso_CHS'].mean(), 1) if len(df_final) > 0 else 0,
