@@ -35,13 +35,24 @@ jobs:
     - name: Ejecutar Extractor y Procesamiento
       run: |
         python scraper_forms.py
+        python procesamiento.py
         python procesamiento_json.py
 
     - name: Autoguardar Cambios en GitHub
       run: |
         git config --global user.name 'Automated Scraper'
         git config --global user.email 'actions@github.com'
+        
+        # 1. Asegurar que estamos en la rama correcta ANTES de añadir archivos
+        git checkout main
+        
+        # 2. Forzar la adición de archivos clave (por si están en el .gitignore) y de todo lo demás
+        git add -A
         git add -f dashboard_data.json
         git add -f *.csv
-        git checkout main
-        git diff-index --quiet HEAD || (git commit -m "Bot: Datos actualizados automáticamente con 3836+ respuestas" && git push origin main)
+        
+        # 3. Imprimir el estado para que podamos verlo en los logs si algo falla
+        git status
+        
+        # 4. Hacer commit y push SOLO si hay archivos en la zona de preparación
+        git diff-index --quiet HEAD || (git commit -m "Bot: Datos actualizados automáticamente con procesamiento completo" && git push origin main)
