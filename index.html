@@ -229,7 +229,7 @@
                         </div>
                         <div class="col-lg-7 col-md-12">
                             <div class="glass-card">
-                                <h5>Distribución por Comuna (Incluye Sin Dato)</h5>
+                                <h5>Distribución por Ubicación</h5>
                                 <div class="chart-wrapper" style="height: 550px; margin-top: 0;">
                                     <canvas id="chartComunas"></canvas>
                                 </div>
@@ -479,17 +479,64 @@
         });
 
         // ---------------------------------------------
-        // LÓGICA GEOESPACIAL Y GRÁFICO DE COMUNAS
+        // TRADUCTOR Y FORMATEADOR DE NOMBRES
         // ---------------------------------------------
-        
+        function normalizarLlaveComuna(texto) {
+            if (texto === null || texto === undefined) return "N/A";
+            
+            let t = String(texto).trim();
+            let upperT = t.toUpperCase();
+            
+            // Atrapa variantes de nulos o "Sin Dato"
+            if (upperT === "" || upperT === "N/A" || upperT === "NULL" || upperT === "SIN DATO") {
+                return "N/A";
+            }
+            
+            let numStr = t.replace(/\D/g, ''); 
+            let num = parseInt(numStr, 10); 
+            
+            // Si no hay números válidos, se retorna el texto original (Ej: "Comuna C. DE LA PAZ")
+            if (isNaN(num)) {
+                return t;
+            } else {
+                return String(num); // Ej: "1", "22"
+            }
+        }
+
+        // Formatea el nombre para que se vea estético en el Gráfico de Barras
+        function formatearNombreUbicacion(llave) {
+            if (llave === "N/A") return "Fuera de Cali / Sin Dato";
+            
+            // Si es un número (Ej: "1"), es una Comuna
+            if (!isNaN(llave) && llave.trim() !== "") return "Comuna " + llave;
+            
+            // Si es un texto, limpiamos el error "Comuna C."
+            let texto = llave.replace(/Comuna\s+C\.\s*/i, 'Corregimiento ')
+                             .replace(/^C\.\s*/i, 'Corregimiento ')
+                             .replace(/^C\s+/i, 'Corregimiento ');
+            
+            // Aseguramos que tenga el prefijo
+            if (!texto.toLowerCase().includes("corregimiento") && !texto.toLowerCase().includes("comuna")) {
+                texto = "Corregimiento " + texto;
+            }
+            
+            // Capitalización correcta (Title Case)
+            return texto.toLowerCase().split(' ').map(word => {
+                if (word.length === 0) return word;
+                if (["de", "la", "el", "los", "las", "y", "en"].includes(word)) return word; 
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join(' ').replace(/^./, str => str.toUpperCase());
+        }
+
+        // ---------------------------------------------
+        // LÓGICA GEOESPACIAL Y GRÁFICOS
+        // ---------------------------------------------
         function proyectarGeoJson(data) {
             let newData = JSON.parse(JSON.stringify(data)); 
-            
             newData.features.forEach((feature, index) => {
                 try {
                     if (feature.geometry && feature.geometry.coordinates) {
                         const tipo = feature.geometry.type;
-
                         if (tipo === "Polygon") {
                             feature.geometry.coordinates = feature.geometry.coordinates.map(ring => 
                                 ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))
@@ -503,10 +550,9 @@
                         }
                     }
                 } catch (error) {
-                    console.error(`Error proyectando comuna:`, error);
+                    console.error(`Error proyectando la comuna en el índice ${index}:`, error);
                 }
             });
-            
             return newData;
         }
         
@@ -522,13 +568,6 @@
                 subdomains: 'abcd',
                 maxZoom: 20
             }).addTo(mapInstance);
-        }
-
-        function normalizarLlaveComuna(texto) {
-            if (!texto || texto === "N/A" || texto === "null") return "N/A";
-            let numStr = String(texto).replace(/\D/g, ''); 
-            let num = parseInt(numStr, 10); 
-            return isNaN(num) ? String(texto).trim() : String(num);
         }
 
         function getColorMapa(valor, maxValor) {
@@ -547,18 +586,21 @@
             let mapaDatosNormalizado = {};
             let maxParticipantes = 0;
 
+            // Filtramos y buscamos solo los números para el Mapa
             for (let nombreComunaEnData in dataComunasBackend) {
                 let idLimpio = normalizarLlaveComuna(nombreComunaEnData);
                 let cantidad = dataComunasBackend[nombreComunaEnData] || 0;
                 mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + cantidad;
-                if (mapaDatosNormalizado[idLimpio] > maxParticipantes && idLimpio !== "N/A") {
+                
+                // Ignoramos los textos y "N/A" para calcular el máximo color del mapa
+                if (mapaDatosNormalizado[idLimpio] > maxParticipantes && !isNaN(idLimpio)) {
                     maxParticipantes = mapaDatosNormalizado[idLimpio];
                 }
             }
 
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, {
                 style: function (feature) {
-                    let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.NOMBRE || feature.properties.id;
+                    let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id;
                     let idLimpio = normalizarLlaveComuna(idGeo);
                     let participantes = mapaDatosNormalizado[idLimpio] || 0;
                     return {
@@ -573,6 +615,7 @@
                     let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id;
                     let idLimpio = normalizarLlaveComuna(idGeo);
                     let participantes = mapaDatosNormalizado[idLimpio] || 0;
+                    
                     let tooltipHtml = `
                         <div style="font-family:'Inter'; text-align:center;">
                             <strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br>
@@ -596,7 +639,7 @@
             for (let key in dataObject) {
                 let val = dataObject[key];
                 let cleanKey = normalizarLlaveComuna(key);
-                let label = (cleanKey === "N/A" || cleanKey === "" || cleanKey === "null") ? "Sin Dato / N/A" : "Comuna " + cleanKey;
+                let label = formatearNombreUbicacion(cleanKey); 
                 agrupadito[label] = (agrupadito[label] || 0) + val;
             }
 
@@ -619,21 +662,13 @@
                     }]
                 },
                 options: {
-                    indexAxis: 'y', // Barra horizontal para encajar las 23 filas
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
-                        x: { 
-                            beginAtZero: true, 
-                            grid: { color: 'rgba(0,0,0,0.05)' } 
-                        },
-                        y: { 
-                            grid: { display: false }, 
-                            ticks: { font: { family: 'Inter', size: 11 } } 
-                        }
+                        x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } }
                     }
                 }
             });
