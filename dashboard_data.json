@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 41,
-        "total_encuestas_historicas": 3836
+        "total_encuestas_historicas": 3837
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 56.6,
@@ -9,17 +9,17 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2811,
+            "Femenino": 2812,
             "Masculino": 1021,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2756,
+            "Área de la salud": 2757,
             "Estudiante": 701,
             "Otro": 379
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2261,
+            "Adultez (29 - 59 años)": 2262,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 694,
             "Vejez (60 años o más)": 160
@@ -66,7 +66,7 @@
         "Escolaridad": {
             "Pregrado": 1722,
             "Bachiller": 1084,
-            "Postgrado": 974,
+            "Postgrado": 975,
             "Ninguna": 56
         }
     },
@@ -605,30 +605,30 @@
             "Tasa_Abandono_%": 21.6,
             "Tasa_Inactividad_%": 64.7,
             "Tiempo_Promedio_Dias": 1.4,
-            "Total_Encuestas": 62.0,
+            "Total_Encuestas": 63.0,
             "ISG_Promedio": 4.86,
             "ICD_Promedio": 4.84,
             "IUP_Promedio": 4.9,
-            "UX_Promedio": 4.85,
+            "UX_Promedio": 4.86,
             "Brecha_Expectativa": -0.03,
-            "e_NPS": 87.1,
+            "e_NPS": 87.3,
             "Salud_Curso_CHS": 64.0,
             "Curso_Base": "TUBERCULOSIS FARMACORRESISTENTE",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 48,
+                    "Femenino": 49,
                     "Intersexual": 0,
                     "Masculino": 14
                 },
                 "Perfil": {
                     "Estudiante": 1,
                     "Otro": 2,
-                    "Área de la salud": 59
+                    "Área de la salud": 60
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 49,
+                    "Adultez (29 - 59 años)": 50,
                     "Juventud (18 - 28 años)": 13,
                     "Vejez (60 años o más)": 0
                 },
@@ -674,7 +674,7 @@
                 "Escolaridad": {
                     "Bachiller": 6,
                     "Ninguna": 0,
-                    "Postgrado": 28,
+                    "Postgrado": 29,
                     "Pregrado": 28
                 }
             },
@@ -682,15 +682,15 @@
                 "¿Se dio a conocer el objetivo de la capacitación?": 4.87,
                 "¿Se cumplió el objetivo de la capacitación?": 4.84,
                 "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.84,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.85,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.86,
                 "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.9,
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.9,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.85,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.86,
                 "¿El facilitador demostró el dominio del tema brindado?": 4.87,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.85,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.86,
                 "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.79,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.85,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.85,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.86,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.86,
                 "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.87
             }
         },
