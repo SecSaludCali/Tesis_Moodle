@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
         /* PALETA ACCESIBLE Y MINIMALISTA */
@@ -61,20 +62,8 @@
             transition: all 0.3s ease;
         }
 
-        h2 {
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 0;
-            font-size: 2.2rem;
-        }
-
-        h5 {
-            font-size: 1.05rem;
-            margin-bottom: 24px;
-            color: var(--text-muted);
-            font-weight: 600;
-            letter-spacing: 0.02em;
-        }
+        h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
+        h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; }
 
         .glass-card {
             background: var(--card-bg);
@@ -86,321 +75,72 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .kpi-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
+        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
+        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
 
-        .kpi-card {
-            border-left: 5px solid var(--primary);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 28px 32px;
-        }
+        .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
 
-        .kpi-value {
-            font-size: 2.2rem;
-            font-weight: 800;
-            line-height: 1;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: -0.04em;
-            color: var(--text-main);
-        }
+        .form-select { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px 24px; font-weight: 500; box-shadow: var(--card-shadow); transition: all 0.2s ease; font-size: 1.05rem; }
+        .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); outline: none; }
 
-        .kpi-label {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-top: 12px;
-        }
+        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: background-color 0.2s; box-shadow: var(--card-shadow); }
 
-        .metric-big {
-            font-size: 4.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-            margin-bottom: 10px;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: -0.05em;
-        }
+        .chart-wrapper { position: relative; height: 280px; width: 100%; margin-top: 10px; }
+        .radar-wrapper { position: relative; height: 420px; width: 100%; display: flex; justify-content: center; }
 
-        .form-select {
-            background-color: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 16px 24px;
-            font-weight: 500;
-            box-shadow: var(--card-shadow);
-            transition: all 0.2s ease;
-            font-size: 1.05rem;
-        }
+        .nav-tabs { border-bottom: 2px solid rgba(163, 174, 208, 0.3); margin-bottom: 40px; margin-top: 10px; }
+        .nav-tabs .nav-link { color: var(--text-muted); font-weight: 600; border: none; padding: 16px 32px; font-size: 1.05rem; transition: color 0.2s; }
+        .nav-tabs .nav-link:hover { color: var(--primary); }
+        .nav-tabs .nav-link.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: transparent; font-weight: 700; }
 
-        .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15);
-            outline: none;
-        }
-
-        .theme-toggle {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: background-color 0.2s;
-            box-shadow: var(--card-shadow);
-        }
-
-        .chart-wrapper {
-            position: relative;
-            height: 280px;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .radar-wrapper {
-            position: relative;
-            height: 420px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .nav-tabs {
-            border-bottom: 2px solid rgba(163, 174, 208, 0.3);
-            margin-bottom: 40px;
-            margin-top: 10px;
-        }
-
-        .nav-tabs .nav-link {
-            color: var(--text-muted);
-            font-weight: 600;
-            border: none;
-            padding: 16px 32px;
-            font-size: 1.05rem;
-            transition: color 0.2s;
-        }
-
-        .nav-tabs .nav-link:hover {
-            color: var(--primary);
-        }
-
-        .nav-tabs .nav-link.active {
-            color: var(--primary);
-            border-bottom: 3px solid var(--primary);
-            background: transparent;
-            font-weight: 700;
-        }
-
-        .list-group-item {
-            padding: 16px 0;
-        }
-
-        .list-group-item.bg-transparent {
-            color: var(--text-main) !important;
-            border-color: rgba(163, 174, 208, 0.2) !important;
-        }
+        .list-group-item { padding: 16px 0; }
+        .list-group-item.bg-transparent { color: var(--text-main) !important; border-color: rgba(163, 174, 208, 0.2) !important; }
 
         /* ESTILOS IA */
-        .ia-panel-wrapper {
-            margin-top: 40px;
-            padding-top: 10px;
-        }
-
-        .ia-card {
-            background-color: var(--ia-bg);
-            border-radius: 20px;
-            padding: 40px;
-            border: 1px solid var(--ia-border);
-            box-shadow: var(--card-shadow);
-        }
-
-        .ia-title {
-            color: var(--primary);
-            font-weight: 800;
-            font-size: 1.2rem;
-            margin-bottom: 28px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .ia-mini-card {
-            background: var(--ia-card-bg);
-            border: 1px solid var(--ia-border);
-            border-radius: 16px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            transition: transform 0.2s;
-        }
-
-        .ia-mini-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .ia-icon-wrapper {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            margin-bottom: 16px;
-        }
-
-        .ia-val {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1;
-            margin-bottom: 8px;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .ia-lbl {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .ia-desc {
-            font-size: 0.95rem;
-            color: var(--text-main);
-            margin-top: 12px;
-            line-height: 1.5;
-            font-weight: 400;
-        }
+        .ia-panel-wrapper { margin-top: 40px; padding-top: 10px; }
+        .ia-card { background-color: var(--ia-bg); border-radius: 20px; padding: 40px; border: 1px solid var(--ia-border); box-shadow: var(--card-shadow); }
+        .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
+        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; height: 100%; transition: transform 0.2s; }
+        .ia-mini-card:hover { transform: translateY(-4px); }
+        .ia-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px; }
+        .ia-val { font-size: 1.8rem; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+        .ia-lbl { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .ia-desc { font-size: 0.95rem; color: var(--text-main); margin-top: 12px; line-height: 1.5; font-weight: 400; }
 
         .bg-indigo-soft { background-color: rgba(67, 24, 255, 0.1); color: var(--primary); }
         .bg-emerald-soft { background-color: rgba(5, 205, 153, 0.1); color: var(--success); }
         .bg-amber-soft { background-color: rgba(255, 181, 71, 0.1); color: var(--warning); }
         .bg-rose-soft { background-color: rgba(238, 93, 80, 0.1); color: var(--danger); }
 
-        .lobby-card {
-            cursor: pointer;
-            border: 2px solid transparent;
-            padding: 40px 20px;
-        }
+        .lobby-card { cursor: pointer; border: 2px solid transparent; padding: 40px 20px; }
+        .lobby-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(67, 24, 255, 0.15); }
 
-        .lobby-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(67, 24, 255, 0.15);
-        }
-
-        /* ESTILOS DEL MODAL DICCIONARIO */
-        .modal-content {
-            background-color: var(--modal-bg);
-            color: var(--text-main);
-            border-radius: 24px;
-            border: 1px solid var(--border-color);
-        }
-
-        .modal-header {
-            border-bottom: 1px solid var(--border-color);
-            padding: 24px 40px;
-        }
-
-        .modal-body {
-            padding: 40px;
-            background-color: var(--bg-color);
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
-        }
-
-        .btn-info-kpi {
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            border: none;
-            transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3);
-        }
-
+        /* MODAL */
+        .modal-content { background-color: var(--modal-bg); color: var(--text-main); border-radius: 24px; border: 1px solid var(--border-color); }
+        .modal-header { border-bottom: 1px solid var(--border-color); padding: 24px 40px; }
+        .modal-body { padding: 40px; background-color: var(--bg-color); border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; }
+        .btn-info-kpi { background: var(--primary); color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: none; transition: all 0.2s; box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3); }
         .btn-info-kpi:hover { transform: scale(1.1); color: white; }
-
-        .dic-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 32px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 24px;
-            display: flex;
-            gap: 30px;
-            align-items: stretch;
-            box-shadow: var(--card-shadow);
-        }
-
+        
+        .dic-card { background: var(--card-bg); border-radius: 20px; padding: 32px; border: 1px solid var(--border-color); margin-bottom: 24px; display: flex; gap: 30px; align-items: stretch; box-shadow: var(--card-shadow); }
         .dic-info { flex: 1; }
-
-        .dic-mockup {
-            flex: 0 0 280px;
-            background: var(--bg-color);
-            border-radius: 16px;
-            border: 1px dashed var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-        }
-
-        .dic-tag {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 700;
-            color: var(--primary);
-            background: rgba(67, 24, 255, 0.1);
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            display: inline-block;
-        }
-
+        .dic-mockup { flex: 0 0 280px; background: var(--bg-color); border-radius: 16px; border: 1px dashed var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .dic-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--primary); background: rgba(67, 24, 255, 0.1); padding: 4px 10px; border-radius: 20px; margin-bottom: 12px; display: inline-block; }
         .dic-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: var(--text-main); }
         .dic-desc { color: var(--text-muted); line-height: 1.6; font-size: 1rem; }
+        .dic-formula { background: var(--ia-bg); padding: 12px 16px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: var(--text-main); margin-top: 16px; border-left: 3px solid var(--primary); }
 
-        .dic-formula {
-            background: var(--ia-bg);
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: var(--text-main);
-            margin-top: 16px;
-            border-left: 3px solid var(--primary);
-        }
-
-        /* MOCKUPS CSS */
         .mock-kpi-card { background: var(--card-bg); border-left: 4px solid var(--primary); padding: 20px; border-radius: 12px; width: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); }
         .mock-bar-chart { width: 100%; height: 30px; border-radius: 6px; display: flex; overflow: hidden; }
         .mock-badge { background: var(--success); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 1.2rem; }
         .mock-radar { width: 120px; height: 120px; background: repeating-radial-gradient(circle, transparent, transparent 18px, var(--border-color) 19px); border-radius: 50%; position: relative; }
         .mock-radar::after { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; background: rgba(67, 24, 255, 0.2); border: 2px solid var(--primary); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
 
-        @media (max-width: 768px) {
-            .dic-card { flex-direction: column; }
-            .dic-mockup { height: 200px; flex: auto; }
-        }
+        @media (max-width: 768px) { .dic-card { flex-direction: column; } .dic-mockup { height: 200px; flex: auto; } }
 
-        /* FIX MAPA LEAFLET Z-INDEX Y THEME */
+        /* FIX MAPA LEAFLET */
         #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); }
         .leaflet-container { background: var(--card-bg); font-family: 'Inter', sans-serif; }
     </style>
@@ -452,6 +192,7 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="panel-global">
                     <div class="row g-4 mb-5" id="kpi-global-row"></div>
+                    
                     <div class="row g-4 mb-5">
                         <div class="col-xl-3 col-md-6">
                             <div class="glass-card">
@@ -564,7 +305,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
                     <div class="dic-card">
                         <div class="dic-info">
                             <span class="dic-tag">Métrica Compuesta</span>
@@ -660,7 +400,6 @@
                             <div class="mock-radar"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -668,10 +407,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Registrar el sistema de coordenadas MAGNA-SIRGAS Origen Oeste (EPSG:3115) que usa la Alcaldía de Cali
+        proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+
         let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let chartInstances = {}; let promediosGlobalesPreguntas = {};
         
-        // NUEVAS VARIABLES GLOBALES PARA EL MAPA
-        let mapInstance = null; let geoJsonLayer = null; let mapTilesLayer = null; let geoJsonDataRaw = null;
+        // Variables globales del Mapa
+        let mapInstance = null;
+        let geoJsonLayer = null;
+        let mapTilesLayer = null;
+        let geoJsonDataRaw = null;
 
         const mapeoPreguntas = { "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Objetivo Cumplido", "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia Temática", "¿Los temas se desarrollaron en el tiempo previsto?": "Manejo del Tiempo", "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Innovación (Conceptos)", "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Utilidad Práctica", "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente", "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Resolución Dudas", "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "Experiencia Plataforma (UX)", "¿El material utilizado permitió el entendimiento del tema?": "Calidad Materiales", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General" };
         const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
@@ -683,82 +428,94 @@
             btnTheme.innerHTML = isLight ? '<i class="bi bi-sun-fill me-2"></i>Modo Claro' : '<i class="bi bi-moon-fill me-2"></i>Modo Oscuro';
             Chart.defaults.color = getComputedStyle(html).getPropertyValue('--text-main');
             
-            // Actualizar mosaicos del mapa de acuerdo al tema
             if(mapInstance) {
                 if(mapTilesLayer) mapInstance.removeLayer(mapTilesLayer);
                 let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
                 mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
             }
-            
+
             if (cursoActual) actualizarPantallaCurso(); else actualizarPantallaGlobal();
         });
 
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // TRUCO ANTICACHÉ
+                // Truco Anticaché
                 const urlFresca = 'dashboard_data.json?v=' + new Date().getTime();
-                
-                // DOBLE SEGURIDAD
-                const response = await fetch(urlFresca, {
-                    headers: {
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
-                    }
-                }); 
-                
+                const response = await fetch(urlFresca, { headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' } }); 
                 dashboardData = await response.json();
-                Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); Chart.defaults.font.family = 'Inter';
                 
-                // Cargar archivo GeoJSON para el Mapa de Comunas
+                // Cargar archivo GeoJSON de Comunas
                 try {
                     const geoResponse = await fetch('mc_comunas.json');
-                    geoJsonDataRaw = await geoResponse.json();
-                } catch(e) { console.warn("No se pudo cargar mc_comunas.json", e); }
+                    const rawData = await geoResponse.json();
+                    geoJsonDataRaw = proyectarGeoJson(rawData); // 👈 AQUÍ TRADUCIMOS EL MAPA AL VUELO
+                } catch(e) { console.warn("No se pudo cargar o proyectar mc_comunas.json", e); }
+
+                Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); Chart.defaults.font.family = 'Inter';
                 
                 inicializarMapa();
-                
+
                 calcularBenchmarkGlobal(); agruparCursos();
                 document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
                 document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
                 
-                // Solución al bug de Leaflet cuando el mapa se dibuja dentro de un tab oculto
                 const tabGlobal = document.getElementById('global-tab');
                 if (tabGlobal) {
                     tabGlobal.addEventListener('shown.bs.tab', () => {
                         if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 200);
                     });
                 }
-                
+
                 actualizarPantallaGlobal();
             } catch (error) { console.error("Error cargando datos", error); }
         });
 
         // ---------------------------------------------
-        // FUNCIONES DEL MAPA COROPLÉTICO (LEAFLET)
+        // LÓGICA GEOESPACIAL (TRADUCTOR Y MAPA)
         // ---------------------------------------------
+        
+        function proyectarGeoJson(data) {
+            let newData = JSON.parse(JSON.stringify(data)); // Clonar el objeto
+            newData.features.forEach(feature => {
+                if (feature.geometry && feature.geometry.coordinates) {
+                    feature.geometry.coordinates = feature.geometry.coordinates.map(polygon => 
+                        polygon.map(ring => 
+                            ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))
+                        )
+                    );
+                }
+            });
+            return newData;
+        }
+        
         function inicializarMapa() {
             if (mapInstance) return;
-            mapInstance = L.map('map-container').setView([3.42158, -76.5205], 11);
+            mapInstance = L.map('map-container').setView([3.42158, -76.5205], 11); 
+            
             const isLight = document.documentElement.getAttribute('data-theme') === 'light';
             let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-            mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
+            
+            mapTilesLayer = L.tileLayer(tileUrl, {
+                attribution: '&copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(mapInstance);
         }
 
         function normalizarLlaveComuna(texto) {
             if (!texto) return "N/A";
-            let numStr = String(texto).replace(/\D/g, '');
-            let num = parseInt(numStr, 10);
+            let numStr = String(texto).replace(/\D/g, ''); 
+            let num = parseInt(numStr, 10); 
             return isNaN(num) ? String(texto).trim() : String(num);
         }
 
         function getColorMapa(valor, maxValor) {
             if (valor === 0) return 'transparent';
-            if (valor > maxValor * 0.8) return '#4318ff';
+            if (valor > maxValor * 0.8) return '#4318ff'; 
             if (valor > maxValor * 0.6) return '#7551ff';
             if (valor > maxValor * 0.4) return '#a389ff';
             if (valor > maxValor * 0.2) return '#d1c4ff';
-            return '#ece6ff';
+            return '#ece6ff'; 
         }
 
         function dibujarMapaCoropletico(dataComunasBackend) {
@@ -772,7 +529,9 @@
                 let idLimpio = normalizarLlaveComuna(nombreComunaEnData);
                 let cantidad = dataComunasBackend[nombreComunaEnData] || 0;
                 mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + cantidad;
-                if (mapaDatosNormalizado[idLimpio] > maxParticipantes) { maxParticipantes = mapaDatosNormalizado[idLimpio]; }
+                if (mapaDatosNormalizado[idLimpio] > maxParticipantes) {
+                    maxParticipantes = mapaDatosNormalizado[idLimpio];
+                }
             }
 
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, {
@@ -792,7 +551,12 @@
                     let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id;
                     let idLimpio = normalizarLlaveComuna(idGeo);
                     let participantes = mapaDatosNormalizado[idLimpio] || 0;
-                    let tooltipHtml = `<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${participantes} Participantes</span></div>`;
+                    let tooltipHtml = `
+                        <div style="font-family:'Inter'; text-align:center;">
+                            <strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br>
+                            <span style="font-size:1rem;">${participantes} Participantes</span>
+                        </div>
+                    `;
                     layer.bindTooltip(tooltipHtml, { sticky: true, className: 'custom-map-tooltip' });
                 }
             }).addTo(mapInstance);
@@ -801,9 +565,9 @@
                 mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
             }
         }
-
+        
         // ---------------------------------------------
-        // RESTO DE FUNCIONES
+        // RESTO DE TU LÓGICA INTACTA
         // ---------------------------------------------
 
         function calcularBenchmarkGlobal() {
@@ -984,5 +748,4 @@
         function dibujarRadar(preguntasCurso, isGlobal = false) { if (chartInstances['chartRadar']) chartInstances['chartRadar'].destroy(); if (!preguntasCurso || Object.keys(preguntasCurso).length === 0) return; const etiquetasLargas = Object.keys(preguntasCurso); const etiquetasCortas = etiquetasLargas.map(q => mapeoPreguntas[q] || "Pregunta"); const dataCurso = Object.values(preguntasCurso); const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim(); let datasetsArray = []; if (isGlobal) { datasetsArray.push({ label: 'Promedio Institucional', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); } else { const dataGlobal = etiquetasLargas.map(q => promediosGlobalesPreguntas[q] || 0); datasetsArray.push({ label: 'Esta Cohorte', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); datasetsArray.push({ label: 'Benchmark Global', data: dataGlobal, backgroundColor: 'transparent', borderColor: mutedColor, borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); } chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: etiquetasCortas, datasets: datasetsArray }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent', font: { family: 'Inter' } }, grid: { color: 'rgba(0,0,0,0.05)' }, angleLines: { color: 'rgba(0,0,0,0.05)' }, pointLabels: { font: { size: 11, family: 'Inter', weight: '600' } } } }, plugins: { tooltip: { padding: 12, callbacks: { title: (context) => { const textoCompleto = etiquetasLargas[context[0].dataIndex]; const palabras = textoCompleto.split(' '); let lineas = []; let lineaActual = ''; palabras.forEach(palabra => { if ((lineaActual + palabra).length > 40) { lineas.push(lineaActual.trim()); lineaActual = palabra + ' '; } else { lineaActual += palabra + ' '; } }); lineas.push(lineaActual.trim()); return lineas; } } } } } }); }
     </script>
 </body>
-
 </html>
