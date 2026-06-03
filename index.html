@@ -9,7 +9,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         /* PALETA ACCESIBLE Y MINIMALISTA */
         :root[data-theme="light"] {
@@ -277,25 +281,10 @@
             font-weight: 400;
         }
 
-        .bg-indigo-soft {
-            background-color: rgba(67, 24, 255, 0.1);
-            color: var(--primary);
-        }
-
-        .bg-emerald-soft {
-            background-color: rgba(5, 205, 153, 0.1);
-            color: var(--success);
-        }
-
-        .bg-amber-soft {
-            background-color: rgba(255, 181, 71, 0.1);
-            color: var(--warning);
-        }
-
-        .bg-rose-soft {
-            background-color: rgba(238, 93, 80, 0.1);
-            color: var(--danger);
-        }
+        .bg-indigo-soft { background-color: rgba(67, 24, 255, 0.1); color: var(--primary); }
+        .bg-emerald-soft { background-color: rgba(5, 205, 153, 0.1); color: var(--success); }
+        .bg-amber-soft { background-color: rgba(255, 181, 71, 0.1); color: var(--warning); }
+        .bg-rose-soft { background-color: rgba(238, 93, 80, 0.1); color: var(--danger); }
 
         .lobby-card {
             cursor: pointer;
@@ -309,7 +298,7 @@
             box-shadow: 0 15px 25px rgba(67, 24, 255, 0.15);
         }
 
-        /* ESTILOS DEL MODAL DICCIONARIO (LANDING DE KPIs) */
+        /* ESTILOS DEL MODAL DICCIONARIO */
         .modal-content {
             background-color: var(--modal-bg);
             color: var(--text-main);
@@ -344,10 +333,7 @@
             box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3);
         }
 
-        .btn-info-kpi:hover {
-            transform: scale(1.1);
-            color: white;
-        }
+        .btn-info-kpi:hover { transform: scale(1.1); color: white; }
 
         .dic-card {
             background: var(--card-bg);
@@ -361,9 +347,7 @@
             box-shadow: var(--card-shadow);
         }
 
-        .dic-info {
-            flex: 1;
-        }
+        .dic-info { flex: 1; }
 
         .dic-mockup {
             flex: 0 0 280px;
@@ -390,18 +374,8 @@
             display: inline-block;
         }
 
-        .dic-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-            color: var(--text-main);
-        }
-
-        .dic-desc {
-            color: var(--text-muted);
-            line-height: 1.6;
-            font-size: 1rem;
-        }
+        .dic-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: var(--text-main); }
+        .dic-desc { color: var(--text-muted); line-height: 1.6; font-size: 1rem; }
 
         .dic-formula {
             background: var(--ia-bg);
@@ -415,62 +389,20 @@
         }
 
         /* MOCKUPS CSS */
-        .mock-kpi-card {
-            background: var(--card-bg);
-            border-left: 4px solid var(--primary);
-            padding: 20px;
-            border-radius: 12px;
-            width: 100%;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .mock-bar-chart {
-            width: 100%;
-            height: 30px;
-            border-radius: 6px;
-            display: flex;
-            overflow: hidden;
-        }
-
-        .mock-badge {
-            background: var(--success);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .mock-radar {
-            width: 120px;
-            height: 120px;
-            background: repeating-radial-gradient(circle, transparent, transparent 18px, var(--border-color) 19px);
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .mock-radar::after {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            background: rgba(67, 24, 255, 0.2);
-            border: 2px solid var(--primary);
-            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-        }
+        .mock-kpi-card { background: var(--card-bg); border-left: 4px solid var(--primary); padding: 20px; border-radius: 12px; width: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); }
+        .mock-bar-chart { width: 100%; height: 30px; border-radius: 6px; display: flex; overflow: hidden; }
+        .mock-badge { background: var(--success); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 1.2rem; }
+        .mock-radar { width: 120px; height: 120px; background: repeating-radial-gradient(circle, transparent, transparent 18px, var(--border-color) 19px); border-radius: 50%; position: relative; }
+        .mock-radar::after { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; background: rgba(67, 24, 255, 0.2); border: 2px solid var(--primary); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
 
         @media (max-width: 768px) {
-            .dic-card {
-                flex-direction: column;
-            }
-
-            .dic-mockup {
-                height: 200px;
-                flex: auto;
-            }
+            .dic-card { flex-direction: column; }
+            .dic-mockup { height: 200px; flex: auto; }
         }
+
+        /* FIX MAPA LEAFLET Z-INDEX Y THEME */
+        #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); }
+        .leaflet-container { background: var(--card-bg); font-family: 'Inter', sans-serif; }
     </style>
 </head>
 
@@ -546,6 +478,16 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-12">
+                            <div class="glass-card">
+                                <h5>Distribución Geográfica de Participantes por Comunas</h5>
+                                <div id="map-container" style="height: 450px; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="ia-panel-wrapper" id="panel-ia-demo" style="display: none;">
                         <div class="ia-card">
                             <div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico Demográfico Asistido
@@ -727,6 +669,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let chartInstances = {}; let promediosGlobalesPreguntas = {};
+        
+        // NUEVAS VARIABLES GLOBALES PARA EL MAPA
+        let mapInstance = null; let geoJsonLayer = null; let mapTilesLayer = null; let geoJsonDataRaw = null;
 
         const mapeoPreguntas = { "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Objetivo Cumplido", "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia Temática", "¿Los temas se desarrollaron en el tiempo previsto?": "Manejo del Tiempo", "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Innovación (Conceptos)", "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Utilidad Práctica", "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente", "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Resolución Dudas", "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "Experiencia Plataforma (UX)", "¿El material utilizado permitió el entendimiento del tema?": "Calidad Materiales", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General" };
         const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
@@ -737,15 +682,23 @@
             html.setAttribute('data-theme', isLight ? 'dark' : 'light');
             btnTheme.innerHTML = isLight ? '<i class="bi bi-sun-fill me-2"></i>Modo Claro' : '<i class="bi bi-moon-fill me-2"></i>Modo Oscuro';
             Chart.defaults.color = getComputedStyle(html).getPropertyValue('--text-main');
+            
+            // Actualizar mosaicos del mapa de acuerdo al tema
+            if(mapInstance) {
+                if(mapTilesLayer) mapInstance.removeLayer(mapTilesLayer);
+                let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+                mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
+            }
+            
             if (cursoActual) actualizarPantallaCurso(); else actualizarPantallaGlobal();
         });
 
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // 👈 TRUCO ANTICACHÉ: Se agrega un timestamp único a la URL
+                // TRUCO ANTICACHÉ
                 const urlFresca = 'dashboard_data.json?v=' + new Date().getTime();
                 
-                // 👈 DOBLE SEGURIDAD: Se añaden headers para ignorar la memoria del navegador
+                // DOBLE SEGURIDAD
                 const response = await fetch(urlFresca, {
                     headers: {
                         'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -756,12 +709,102 @@
                 
                 dashboardData = await response.json();
                 Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); Chart.defaults.font.family = 'Inter';
+                
+                // Cargar archivo GeoJSON para el Mapa de Comunas
+                try {
+                    const geoResponse = await fetch('mc_comunas.json');
+                    geoJsonDataRaw = await geoResponse.json();
+                } catch(e) { console.warn("No se pudo cargar mc_comunas.json", e); }
+                
+                inicializarMapa();
+                
                 calcularBenchmarkGlobal(); agruparCursos();
                 document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
                 document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
+                
+                // Solución al bug de Leaflet cuando el mapa se dibuja dentro de un tab oculto
+                const tabGlobal = document.getElementById('global-tab');
+                if (tabGlobal) {
+                    tabGlobal.addEventListener('shown.bs.tab', () => {
+                        if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 200);
+                    });
+                }
+                
                 actualizarPantallaGlobal();
             } catch (error) { console.error("Error cargando datos", error); }
         });
+
+        // ---------------------------------------------
+        // FUNCIONES DEL MAPA COROPLÉTICO (LEAFLET)
+        // ---------------------------------------------
+        function inicializarMapa() {
+            if (mapInstance) return;
+            mapInstance = L.map('map-container').setView([3.42158, -76.5205], 11);
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+            mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
+        }
+
+        function normalizarLlaveComuna(texto) {
+            if (!texto) return "N/A";
+            let numStr = String(texto).replace(/\D/g, '');
+            let num = parseInt(numStr, 10);
+            return isNaN(num) ? String(texto).trim() : String(num);
+        }
+
+        function getColorMapa(valor, maxValor) {
+            if (valor === 0) return 'transparent';
+            if (valor > maxValor * 0.8) return '#4318ff';
+            if (valor > maxValor * 0.6) return '#7551ff';
+            if (valor > maxValor * 0.4) return '#a389ff';
+            if (valor > maxValor * 0.2) return '#d1c4ff';
+            return '#ece6ff';
+        }
+
+        function dibujarMapaCoropletico(dataComunasBackend) {
+            if (!mapInstance || !geoJsonDataRaw) return;
+            if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer);
+
+            let mapaDatosNormalizado = {};
+            let maxParticipantes = 0;
+
+            for (let nombreComunaEnData in dataComunasBackend) {
+                let idLimpio = normalizarLlaveComuna(nombreComunaEnData);
+                let cantidad = dataComunasBackend[nombreComunaEnData] || 0;
+                mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + cantidad;
+                if (mapaDatosNormalizado[idLimpio] > maxParticipantes) { maxParticipantes = mapaDatosNormalizado[idLimpio]; }
+            }
+
+            geoJsonLayer = L.geoJSON(geoJsonDataRaw, {
+                style: function (feature) {
+                    let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.NOMBRE || feature.properties.id;
+                    let idLimpio = normalizarLlaveComuna(idGeo);
+                    let participantes = mapaDatosNormalizado[idLimpio] || 0;
+                    return {
+                        fillColor: getColorMapa(participantes, maxParticipantes),
+                        weight: 1.5,
+                        opacity: 1,
+                        color: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#111c44',
+                        fillOpacity: participantes > 0 ? 0.8 : 0.1
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id;
+                    let idLimpio = normalizarLlaveComuna(idGeo);
+                    let participantes = mapaDatosNormalizado[idLimpio] || 0;
+                    let tooltipHtml = `<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${participantes} Participantes</span></div>`;
+                    layer.bindTooltip(tooltipHtml, { sticky: true, className: 'custom-map-tooltip' });
+                }
+            }).addTo(mapInstance);
+
+            if (geoJsonLayer.getBounds().isValid()) {
+                mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+            }
+        }
+
+        // ---------------------------------------------
+        // RESTO DE FUNCIONES
+        // ---------------------------------------------
 
         function calcularBenchmarkGlobal() {
             const sum = {}; const count = {};
@@ -828,6 +871,7 @@
                 htmlLobby += `</div>`;
                 lobby.innerHTML = htmlLobby;
             }
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300);
         }
 
         function seleccionarCohorteDesdeLobby(nombreCurso) {
@@ -903,6 +947,9 @@
             const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0);
             document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}${crearTarjetaKPI("Inscritos Históricos", totalInscritos.toLocaleString())}${crearTarjetaKPI("Encuestas Recibidas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}${crearTarjetaKPI("CHS Institucional", dashboardData.kpis_globales.chs_promedio_secretaria)}${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}`;
             dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dashboardData.demografia_global['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dashboardData.demografia_global['Escolaridad'], 'right');
+            
+            dibujarMapaCoropletico(dashboardData.demografia_global['Comuna']);
+            
             let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0;
             dashboardData.cursos.forEach(c => { let insc = c.Total_Inscritos || 0; totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } });
             let pctFin = totalInscritos ? Math.round((totalFin / totalInscritos) * 100) : 0; let pctAbd = totalInscritos ? Math.round((totalAbd / totalInscritos) * 100) : 0; let pctInac = totalInscritos ? Math.round((totalInac / totalInscritos) * 100) : 0; let promDias = countCursosDias ? Math.round(sumDias / countCursosDias) : 0;
@@ -913,15 +960,22 @@
             document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; document.getElementById('titulo-desglose').innerText = "Calificación Institucional Global (Sobre 5.0)"; dibujarRadar(promediosGlobalesPreguntas, true);
             document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${globIUP} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${globICD} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${globUX} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${globBrecha < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${globBrecha < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${globBrecha}</span></li></ul>`;
             generarInsightIAGlobal(totalInscritos, pctFin, pctAbd, pctInac, globIUP, globICD, globUX, globBrecha, countEnc);
+            
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300);
         }
 
         function actualizarPantallaCurso() {
             document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Inscritos", cursoActual.Total_Inscritos)}${crearTarjetaKPI("Encuestas", cursoActual.Total_Encuestas)}${crearTarjetaKPI("Participación", cursoActual.Total_Inscritos > 0 ? Math.round((cursoActual.Total_Encuestas / cursoActual.Total_Inscritos) * 100) + "%" : "0%")}${crearTarjetaKPI("Score Salud (CHS)", cursoActual.Salud_Curso_CHS)}${crearTarjetaKPI("e-NPS", cursoActual.e_NPS)}`;
             dibujarGraficoDona('chartSexo', cursoActual.Demografia['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', cursoActual.Demografia['Edad'], 'right'); dibujarGraficoDona('chartPerfil', cursoActual.Demografia['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', cursoActual.Demografia['Escolaridad'], 'right');
+            
+            dibujarMapaCoropletico(cursoActual.Demografia['Comuna']);
+
             document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Tasa Finalización", cursoActual['Tasa_Finalizacion_%'] + "%")}${crearTarjetaKPI("Tasa Abandono", cursoActual['Tasa_Abandono_%'] + "%")}${crearTarjetaKPI("Tasa Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual);
             document.getElementById('titulo-radar').innerText = "Radar de Dimensiones vs Benchmark Global"; document.getElementById('titulo-desglose').innerText = "Desglose de Calificación (Sobre 5.0)"; dibujarRadar(cursoActual.Detalle_Preguntas, false);
             document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${cursoActual.IUP_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${cursoActual.ICD_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${cursoActual.UX_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${cursoActual.Brecha_Expectativa < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${cursoActual.Brecha_Expectativa < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${cursoActual.Brecha_Expectativa || 0}</span></li></ul>`;
             generarInsightIA(cursoActual);
+            
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300);
         }
 
         function crearTarjetaKPI(label, valor) { return `<div class="col"><div class="glass-card kpi-card"><div class="kpi-value">${valor}</div><div class="kpi-label">${label}</div></div></div>`; }
