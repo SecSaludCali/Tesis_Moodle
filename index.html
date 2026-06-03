@@ -221,10 +221,18 @@
                     </div>
                     
                     <div class="row g-4 mb-5">
-                        <div class="col-12">
+                        <div class="col-lg-5 col-md-12">
+                            <div class="glass-card d-flex flex-column">
+                                <h5>Mapa de Participación Geográfica</h5>
+                                <div id="map-container" style="flex-grow: 1; min-height: 550px; width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-12">
                             <div class="glass-card">
-                                <h5>Distribución Geográfica de Participantes por Comunas</h5>
-                                <div id="map-container" style="height: 450px; width: 100%;"></div>
+                                <h5>Distribución por Comuna (Incluye Sin Dato)</h5>
+                                <div class="chart-wrapper" style="height: 550px; margin-top: 0;">
+                                    <canvas id="chartComunas"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -444,11 +452,11 @@
                 const response = await fetch(urlFresca, { headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' } }); 
                 dashboardData = await response.json();
                 
-                // Cargar archivo GeoJSON de Comunas
+                // Cargar y traducir archivo GeoJSON
                 try {
                     const geoResponse = await fetch('mc_comunas.json');
                     const rawData = await geoResponse.json();
-                    geoJsonDataRaw = proyectarGeoJson(rawData); // 👈 AQUÍ TRADUCIMOS EL MAPA AL VUELO
+                    geoJsonDataRaw = proyectarGeoJson(rawData); 
                 } catch(e) { console.warn("No se pudo cargar o proyectar mc_comunas.json", e); }
 
                 Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); Chart.defaults.font.family = 'Inter';
@@ -471,20 +479,34 @@
         });
 
         // ---------------------------------------------
-        // LÓGICA GEOESPACIAL (TRADUCTOR Y MAPA)
+        // LÓGICA GEOESPACIAL Y GRÁFICO DE COMUNAS
         // ---------------------------------------------
         
         function proyectarGeoJson(data) {
-            let newData = JSON.parse(JSON.stringify(data)); // Clonar el objeto
-            newData.features.forEach(feature => {
-                if (feature.geometry && feature.geometry.coordinates) {
-                    feature.geometry.coordinates = feature.geometry.coordinates.map(polygon => 
-                        polygon.map(ring => 
-                            ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))
-                        )
-                    );
+            let newData = JSON.parse(JSON.stringify(data)); 
+            
+            newData.features.forEach((feature, index) => {
+                try {
+                    if (feature.geometry && feature.geometry.coordinates) {
+                        const tipo = feature.geometry.type;
+
+                        if (tipo === "Polygon") {
+                            feature.geometry.coordinates = feature.geometry.coordinates.map(ring => 
+                                ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))
+                            );
+                        } else if (tipo === "MultiPolygon") {
+                            feature.geometry.coordinates = feature.geometry.coordinates.map(polygon => 
+                                polygon.map(ring => 
+                                    ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))
+                                )
+                            );
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Error proyectando comuna:`, error);
                 }
             });
+            
             return newData;
         }
         
@@ -503,7 +525,7 @@
         }
 
         function normalizarLlaveComuna(texto) {
-            if (!texto) return "N/A";
+            if (!texto || texto === "N/A" || texto === "null") return "N/A";
             let numStr = String(texto).replace(/\D/g, ''); 
             let num = parseInt(numStr, 10); 
             return isNaN(num) ? String(texto).trim() : String(num);
@@ -529,7 +551,7 @@
                 let idLimpio = normalizarLlaveComuna(nombreComunaEnData);
                 let cantidad = dataComunasBackend[nombreComunaEnData] || 0;
                 mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + cantidad;
-                if (mapaDatosNormalizado[idLimpio] > maxParticipantes) {
+                if (mapaDatosNormalizado[idLimpio] > maxParticipantes && idLimpio !== "N/A") {
                     maxParticipantes = mapaDatosNormalizado[idLimpio];
                 }
             }
@@ -562,8 +584,59 @@
             }).addTo(mapInstance);
 
             if (geoJsonLayer.getBounds().isValid()) {
-                mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [20, 20] });
+                mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] });
             }
+        }
+
+        function dibujarGraficoComunas(canvasId, dataObject) {
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+            if (!dataObject || Object.keys(dataObject).length === 0) return;
+
+            let agrupadito = {};
+            for (let key in dataObject) {
+                let val = dataObject[key];
+                let cleanKey = normalizarLlaveComuna(key);
+                let label = (cleanKey === "N/A" || cleanKey === "" || cleanKey === "null") ? "Sin Dato / N/A" : "Comuna " + cleanKey;
+                agrupadito[label] = (agrupadito[label] || 0) + val;
+            }
+
+            // Ordenar de mayor a menor cantidad
+            let sortedArray = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]);
+            let labels = sortedArray.map(item => item[0]);
+            let data = sortedArray.map(item => item[1]);
+
+            const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+
+            chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Participantes',
+                        data: data,
+                        backgroundColor: primColor,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Barra horizontal para encajar las 23 filas
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { 
+                            beginAtZero: true, 
+                            grid: { color: 'rgba(0,0,0,0.05)' } 
+                        },
+                        y: { 
+                            grid: { display: false }, 
+                            ticks: { font: { family: 'Inter', size: 11 } } 
+                        }
+                    }
+                }
+            });
         }
         
         // ---------------------------------------------
@@ -713,6 +786,7 @@
             dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dashboardData.demografia_global['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dashboardData.demografia_global['Escolaridad'], 'right');
             
             dibujarMapaCoropletico(dashboardData.demografia_global['Comuna']);
+            dibujarGraficoComunas('chartComunas', dashboardData.demografia_global['Comuna']);
             
             let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0;
             dashboardData.cursos.forEach(c => { let insc = c.Total_Inscritos || 0; totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } });
@@ -733,6 +807,7 @@
             dibujarGraficoDona('chartSexo', cursoActual.Demografia['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', cursoActual.Demografia['Edad'], 'right'); dibujarGraficoDona('chartPerfil', cursoActual.Demografia['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', cursoActual.Demografia['Escolaridad'], 'right');
             
             dibujarMapaCoropletico(cursoActual.Demografia['Comuna']);
+            dibujarGraficoComunas('chartComunas', cursoActual.Demografia['Comuna']);
 
             document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Tasa Finalización", cursoActual['Tasa_Finalizacion_%'] + "%")}${crearTarjetaKPI("Tasa Abandono", cursoActual['Tasa_Abandono_%'] + "%")}${crearTarjetaKPI("Tasa Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual);
             document.getElementById('titulo-radar').innerText = "Radar de Dimensiones vs Benchmark Global"; document.getElementById('titulo-desglose').innerText = "Desglose de Calificación (Sobre 5.0)"; dibujarRadar(cursoActual.Detalle_Preguntas, false);
