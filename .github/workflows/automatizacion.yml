@@ -3,7 +3,7 @@ name: Automatizacion Scraping y Dashboard
 on:
   schedule:
     # Corre a las 3:17 AM hora Colombia (8:17 AM UTC) para evitar filas en los servidores
-    - cron: '17 8 * * *'
+    - cron: '0 4 * * *'
   workflow_dispatch: # Botón manual
 
 jobs:
