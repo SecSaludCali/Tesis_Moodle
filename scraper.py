@@ -7,6 +7,7 @@ import pandas as pd
 from urllib.parse import unquote
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options # Añadido para opciones explícitas
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -50,9 +51,14 @@ class MoodleDataExtractor:
             logging.info("Directorio de descargas limpiado exitosamente para la extracción de hoy.")
 
     def _initialize_driver(self):
-        options = webdriver.ChromeOptions()
+        """Inicializa el WebDriver de Chrome con opciones optimizadas para servidores."""
+        options = Options()
+        
+        # Opciones CRÍTICAS para ejecución en la nube (GitHub Actions / Servidores Linux)
+        options.add_argument('--headless') # Ejecución sin interfaz gráfica
+        options.add_argument('--no-sandbox') # Evita errores de permisos en contenedores
+        options.add_argument('--disable-dev-shm-usage') # Evita problemas de memoria compartida
         options.add_argument('--window-size=1920,1080')
-        # options.add_argument('--headless') # Descomentar para ejecución en segundo plano
         
         prefs = {
             "download.default_directory": self.download_dir,
