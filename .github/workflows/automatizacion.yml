@@ -2,7 +2,7 @@ name: Automatizacion Scraping y Dashboard
 
 on:
   schedule:
-    # Corre a las 3:17 AM hora Colombia (8:17 AM UTC) para evitar filas en los servidores
+    # Corre a las 11:00 PM hora Colombia (4:00 AM UTC) para evitar filas en los servidores
     - cron: '0 4 * * *'
   workflow_dispatch: # Botón manual
 
@@ -25,7 +25,7 @@ jobs:
     - name: Instalar Dependencias
       run: |
         python -m pip install --upgrade pip
-        pip install pandas numpy requests google-auth google-auth-oauthlib google-api-python-client
+        pip install pandas numpy requests google-auth google-auth-oauthlib google-api-python-client selenium webdriver-manager
         
     - name: Reconstruir Credenciales de Google desde los Secrets
       run: |
@@ -34,6 +34,7 @@ jobs:
 
     - name: Ejecutar Extractor y Procesamiento
       run: |
+        python scraper.py
         python scraper_forms.py
         python procesamiento.py
         python procesamiento_json.py
@@ -49,10 +50,11 @@ jobs:
         # 2. Forzar la adición de archivos clave (por si están en el .gitignore) y de todo lo demás
         git add -A
         git add -f dashboard_data.json
+        git add -f descargas_moodle/*.csv
         git add -f *.csv
         
         # 3. Imprimir el estado para que podamos verlo en los logs si algo falla
         git status
         
         # 4. Hacer commit y push SOLO si hay archivos en la zona de preparación
-        git diff-index --quiet HEAD || (git commit -m "Bot: Datos actualizados automáticamente con procesamiento completo" && git push origin main)
+        git diff-index --quiet HEAD || (git commit -m "Bot: Datos actualizados automáticamente con Moodle y Forms" && git push origin main)
