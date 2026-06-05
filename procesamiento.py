@@ -24,6 +24,23 @@ class PipelineAnalitico:
         df = pd.read_csv(self.ruta_forms_crudo, encoding='utf-8')
         df['Nombre_Curso'] = df['Nombre_Curso'].str.replace(r'^-?\s*Satisfacción del Curso virtual\s*-\s*', '', regex=True).str.strip()
         
+        # =====================================================================
+        # 🛠️ PARCHE QUIRÚRGICO: FRACCIONAR FORMULARIO DOBLE (RPMS PI e I 012026)
+        # =====================================================================
+        # Buscamos todas las filas que tengan el nombre larguísimo con ambas ediciones
+        mask_doble = df['Nombre_Curso'].str.contains('AISPPMSCVPI_01_2026', na=False) & \
+                     df['Nombre_Curso'].str.contains('AISPPMSCVPI_02_2026', na=False)
+        
+        indices_doble = df[mask_doble].index
+        
+        if len(indices_doble) > 0:
+            logging.info(f"Separando formulario doble: {len(indices_doble)} respuestas encontradas.")
+            # Los primeros 416 se asignan a la Edición 01
+            df.loc[indices_doble[:416], 'Nombre_Curso'] = 'RPMS PI e I 012026 - (AISPPMSCVPI_01_2026, AISPPMSCVI_01_2026)'
+            # Los restantes (del 416 en adelante) se asignan a la Edición 02
+            df.loc[indices_doble[416:], 'Nombre_Curso'] = 'RPMS PI e I 012026 - (AISPPMSCVPI_02_2026, AISPPMSCVI_02_2026)'
+        # =====================================================================
+
         self.nombres_forms_unicos = df['Nombre_Curso'].dropna().unique().tolist()
 
         col_c1 = 'Comuna o corregimiento de residencia (Si no es de Cali, seleccionar la opción N/A)'
