@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 41,
-        "total_encuestas_historicas": 3847
+        "total_encuestas_historicas": 3850
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 57.3,
@@ -9,23 +9,23 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2820,
-            "Masculino": 1023,
+            "Femenino": 2822,
+            "Masculino": 1024,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2767,
-            "Estudiante": 701,
+            "Área de la salud": 2769,
+            "Estudiante": 702,
             "Otro": 379
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2271,
+            "Adultez (29 - 59 años)": 2274,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 695,
             "Vejez (60 años o más)": 160
         },
         "Comuna": {
-            "COMUNA 17": 435,
+            "COMUNA 17": 437,
             "COMUNA 19": 226,
             "COMUNA 1": 222,
             "COMUNA 2": 198,
@@ -42,7 +42,7 @@
             "COMUNA 3": 104,
             "COMUNA 22": 103,
             "COMUNA 4": 99,
-            "COMUNA 21": 97,
+            "COMUNA 21": 98,
             "COMUNA 11": 91,
             "COMUNA 14": 90,
             "COMUNA 20": 84,
@@ -64,7 +64,7 @@
             "C. DE LA ELVIRA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1730,
+            "Pregrado": 1733,
             "Bachiller": 1084,
             "Postgrado": 977,
             "Ninguna": 56
@@ -410,7 +410,7 @@
             "Tasa_Finalizacion_%": 6.2,
             "Tasa_Abandono_%": 17.7,
             "Tasa_Inactividad_%": 76.0,
-            "Tiempo_Promedio_Dias": 14.8,
+            "Tiempo_Promedio_Dias": 17.2,
             "Total_Encuestas": 46.0,
             "ISG_Promedio": 4.67,
             "ICD_Promedio": 4.64,
@@ -601,34 +601,34 @@
             "Nombre_Curso": "TUBERCULOSIS FARMACORRESISTENTE - 2026 - 01",
             "ID_Moodle_Original": "tbfr_012026",
             "Total_Inscritos": 116,
-            "Tasa_Finalizacion_%": 63.8,
-            "Tasa_Abandono_%": 6.0,
-            "Tasa_Inactividad_%": 30.2,
-            "Tiempo_Promedio_Dias": 3.3,
-            "Total_Encuestas": 69.0,
+            "Tasa_Finalizacion_%": 65.5,
+            "Tasa_Abandono_%": 6.9,
+            "Tasa_Inactividad_%": 27.6,
+            "Tiempo_Promedio_Dias": 3.2,
+            "Total_Encuestas": 70.0,
             "ISG_Promedio": 4.87,
             "ICD_Promedio": 4.86,
             "IUP_Promedio": 4.91,
             "UX_Promedio": 4.87,
             "Brecha_Expectativa": -0.03,
-            "e_NPS": 88.4,
-            "Salud_Curso_CHS": 84.1,
+            "e_NPS": 88.6,
+            "Salud_Curso_CHS": 84.8,
             "Curso_Base": "TUBERCULOSIS FARMACORRESISTENTE",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 55,
+                    "Femenino": 56,
                     "Intersexual": 0,
                     "Masculino": 14
                 },
                 "Perfil": {
                     "Estudiante": 1,
                     "Otro": 2,
-                    "Área de la salud": 66
+                    "Área de la salud": 67
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 55,
+                    "Adultez (29 - 59 años)": 56,
                     "Juventud (18 - 28 años)": 14,
                     "Vejez (60 años o más)": 0
                 },
@@ -661,7 +661,7 @@
                     "COMUNA 19": 4,
                     "COMUNA 2": 1,
                     "COMUNA 20": 1,
-                    "COMUNA 21": 1,
+                    "COMUNA 21": 2,
                     "COMUNA 22": 1,
                     "COMUNA 3": 1,
                     "COMUNA 4": 1,
@@ -675,23 +675,23 @@
                     "Bachiller": 6,
                     "Ninguna": 0,
                     "Postgrado": 31,
-                    "Pregrado": 32
+                    "Pregrado": 33
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.88,
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.89,
                 "¿Se cumplió el objetivo de la capacitación?": 4.86,
                 "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.86,
                 "¿Los temas se desarrollaron en el tiempo previsto?": 4.87,
                 "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.91,
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.91,
                 "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.87,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.88,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.89,
                 "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.87,
                 "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.81,
                 "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.87,
                 "¿El material utilizado permitió el entendimiento del tema?": 4.87,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.88
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.89
             }
         },
         {
@@ -2498,7 +2498,7 @@
             "Total_Inscritos": 1244,
             "Tasa_Finalizacion_%": 77.5,
             "Tasa_Abandono_%": 2.3,
-            "Tasa_Inactividad_%": 20.3,
+            "Tasa_Inactividad_%": 20.2,
             "Tiempo_Promedio_Dias": 2.4,
             "Total_Encuestas": 651.0,
             "ISG_Promedio": 4.55,
@@ -2675,9 +2675,9 @@
             "Nombre_Curso": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD - 2025 - 01",
             "ID_Moodle_Original": "pir_sspm_2025",
             "Total_Inscritos": 1244,
-            "Tasa_Finalizacion_%": 83.9,
+            "Tasa_Finalizacion_%": 84.0,
             "Tasa_Abandono_%": 2.3,
-            "Tasa_Inactividad_%": 13.8,
+            "Tasa_Inactividad_%": 13.7,
             "Tiempo_Promedio_Dias": 2.3,
             "Total_Encuestas": 619.0,
             "ISG_Promedio": 4.57,
@@ -2686,7 +2686,7 @@
             "UX_Promedio": 4.58,
             "Brecha_Expectativa": -0.01,
             "e_NPS": 61.6,
-            "Salud_Curso_CHS": 88.8,
+            "Salud_Curso_CHS": 88.9,
             "Curso_Base": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
@@ -2772,34 +2772,34 @@
             "Nombre_Curso": "ATENCIÓN EN CÁNCER DE MAMA - 2026 - 02",
             "ID_Moodle_Original": "acm_02_2026",
             "Total_Inscritos": 42,
-            "Tasa_Finalizacion_%": 19.0,
+            "Tasa_Finalizacion_%": 23.8,
             "Tasa_Abandono_%": 9.5,
-            "Tasa_Inactividad_%": 71.4,
-            "Tiempo_Promedio_Dias": 2.2,
-            "Total_Encuestas": 6.0,
-            "ISG_Promedio": 4.9,
-            "ICD_Promedio": 4.83,
-            "IUP_Promedio": 4.83,
+            "Tasa_Inactividad_%": 66.7,
+            "Tiempo_Promedio_Dias": 1.8,
+            "Total_Encuestas": 8.0,
+            "ISG_Promedio": 4.91,
+            "ICD_Promedio": 4.88,
+            "IUP_Promedio": 4.81,
             "UX_Promedio": 5.0,
             "Brecha_Expectativa": 0.0,
             "e_NPS": 100.0,
-            "Salud_Curso_CHS": 66.3,
+            "Salud_Curso_CHS": 68.2,
             "Curso_Base": "ATENCIÓN EN CÁNCER DE MAMA",
             "Edicion": "2026 - Cohorte 2",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 5,
+                    "Femenino": 6,
                     "Intersexual": 0,
-                    "Masculino": 1
+                    "Masculino": 2
                 },
                 "Perfil": {
-                    "Estudiante": 0,
+                    "Estudiante": 1,
                     "Otro": 0,
-                    "Área de la salud": 6
+                    "Área de la salud": 7
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 5,
+                    "Adultez (29 - 59 años)": 7,
                     "Juventud (18 - 28 años)": 0,
                     "Vejez (60 años o más)": 1
                 },
@@ -2827,7 +2827,7 @@
                     "COMUNA 14": 0,
                     "COMUNA 15": 0,
                     "COMUNA 16": 0,
-                    "COMUNA 17": 4,
+                    "COMUNA 17": 6,
                     "COMUNA 18": 0,
                     "COMUNA 19": 0,
                     "COMUNA 2": 0,
@@ -2846,7 +2846,7 @@
                     "Bachiller": 2,
                     "Ninguna": 0,
                     "Postgrado": 2,
-                    "Pregrado": 2
+                    "Pregrado": 4
                 }
             },
             "Detalle_Preguntas": {
@@ -2854,12 +2854,12 @@
                 "¿Se cumplió el objetivo de la capacitación?": 5.0,
                 "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5.0,
                 "¿Los temas se desarrollaron en el tiempo previsto?": 5.0,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.67,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.62,
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5.0,
                 "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5.0,
                 "¿El facilitador demostró el dominio del tema brindado?": 5.0,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.5,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.62,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.62,
                 "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5.0,
                 "¿El material utilizado permitió el entendimiento del tema?": 5.0,
                 "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5.0
