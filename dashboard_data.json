@@ -1,35 +1,35 @@
 {
     "metadata": {
         "total_cursos_analizados": 41,
-        "total_encuestas_historicas": 3850
+        "total_encuestas_historicas": 3851
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 57.3,
+        "chs_promedio_secretaria": 57.4,
         "nps_global": 67.6
     },
     "demografia_global": {
         "Sexo": {
             "Femenino": 2822,
-            "Masculino": 1024,
+            "Masculino": 1025,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2769,
+            "Área de la salud": 2770,
             "Estudiante": 702,
             "Otro": 379
         },
         "Curso de Vida": {
             "Adultez (29 - 59 años)": 2274,
             "Adolescencia (12 - 17 años)": 721,
-            "Juventud (18 - 28 años)": 695,
+            "Juventud (18 - 28 años)": 696,
             "Vejez (60 años o más)": 160
         },
         "Comuna": {
             "COMUNA 17": 437,
             "COMUNA 19": 226,
             "COMUNA 1": 222,
+            "COMUNA 10": 198,
             "COMUNA 2": 198,
-            "COMUNA 10": 197,
             "COMUNA 15": 168,
             "COMUNA 6": 164,
             "COMUNA 18": 156,
@@ -65,7 +65,7 @@
         },
         "Escolaridad": {
             "Pregrado": 1733,
-            "Bachiller": 1084,
+            "Bachiller": 1085,
             "Postgrado": 977,
             "Ninguna": 56
         }
@@ -601,35 +601,35 @@
             "Nombre_Curso": "TUBERCULOSIS FARMACORRESISTENTE - 2026 - 01",
             "ID_Moodle_Original": "tbfr_012026",
             "Total_Inscritos": 116,
-            "Tasa_Finalizacion_%": 65.5,
-            "Tasa_Abandono_%": 6.9,
+            "Tasa_Finalizacion_%": 66.4,
+            "Tasa_Abandono_%": 6.0,
             "Tasa_Inactividad_%": 27.6,
             "Tiempo_Promedio_Dias": 3.2,
-            "Total_Encuestas": 70.0,
-            "ISG_Promedio": 4.87,
+            "Total_Encuestas": 71.0,
+            "ISG_Promedio": 4.88,
             "ICD_Promedio": 4.86,
-            "IUP_Promedio": 4.91,
+            "IUP_Promedio": 4.92,
             "UX_Promedio": 4.87,
             "Brecha_Expectativa": -0.03,
-            "e_NPS": 88.6,
-            "Salud_Curso_CHS": 84.8,
+            "e_NPS": 88.7,
+            "Salud_Curso_CHS": 85.3,
             "Curso_Base": "TUBERCULOSIS FARMACORRESISTENTE",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
                     "Femenino": 56,
                     "Intersexual": 0,
-                    "Masculino": 14
+                    "Masculino": 15
                 },
                 "Perfil": {
                     "Estudiante": 1,
                     "Otro": 2,
-                    "Área de la salud": 67
+                    "Área de la salud": 68
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
                     "Adultez (29 - 59 años)": 56,
-                    "Juventud (18 - 28 años)": 14,
+                    "Juventud (18 - 28 años)": 15,
                     "Vejez (60 años o más)": 0
                 },
                 "Comuna": {
@@ -649,7 +649,7 @@
                     "C. DE PICHINDE": 0,
                     "C. DE VILLACARMELO": 0,
                     "COMUNA 1": 3,
-                    "COMUNA 10": 5,
+                    "COMUNA 10": 6,
                     "COMUNA 11": 1,
                     "COMUNA 12": 2,
                     "COMUNA 13": 2,
@@ -672,7 +672,7 @@
                     "COMUNA 9": 1
                 },
                 "Escolaridad": {
-                    "Bachiller": 6,
+                    "Bachiller": 7,
                     "Ninguna": 0,
                     "Postgrado": 31,
                     "Pregrado": 33
@@ -683,12 +683,12 @@
                 "¿Se cumplió el objetivo de la capacitación?": 4.86,
                 "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.86,
                 "¿Los temas se desarrollaron en el tiempo previsto?": 4.87,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.91,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.91,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.92,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.92,
                 "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.87,
                 "¿El facilitador demostró el dominio del tema brindado?": 4.89,
                 "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.87,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.81,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.82,
                 "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.87,
                 "¿El material utilizado permitió el entendimiento del tema?": 4.87,
                 "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.89
@@ -2775,7 +2775,7 @@
             "Tasa_Finalizacion_%": 23.8,
             "Tasa_Abandono_%": 9.5,
             "Tasa_Inactividad_%": 66.7,
-            "Tiempo_Promedio_Dias": 1.8,
+            "Tiempo_Promedio_Dias": 3.0,
             "Total_Encuestas": 8.0,
             "ISG_Promedio": 4.91,
             "ICD_Promedio": 4.88,
