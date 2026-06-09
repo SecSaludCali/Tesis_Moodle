@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 41,
-        "total_encuestas_historicas": 3851
+        "total_encuestas_historicas": 3852
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 57.4,
@@ -10,23 +10,23 @@
     "demografia_global": {
         "Sexo": {
             "Femenino": 2822,
-            "Masculino": 1025,
+            "Masculino": 1026,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2770,
+            "Área de la salud": 2771,
             "Estudiante": 702,
             "Otro": 379
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2274,
+            "Adultez (29 - 59 años)": 2275,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 696,
             "Vejez (60 años o más)": 160
         },
         "Comuna": {
             "COMUNA 17": 437,
-            "COMUNA 19": 226,
+            "COMUNA 19": 227,
             "COMUNA 1": 222,
             "COMUNA 10": 198,
             "COMUNA 2": 198,
@@ -66,7 +66,7 @@
         "Escolaridad": {
             "Pregrado": 1733,
             "Bachiller": 1085,
-            "Postgrado": 977,
+            "Postgrado": 978,
             "Ninguna": 56
         }
     },
@@ -2679,7 +2679,7 @@
             "Tasa_Abandono_%": 2.3,
             "Tasa_Inactividad_%": 13.7,
             "Tiempo_Promedio_Dias": 2.3,
-            "Total_Encuestas": 619.0,
+            "Total_Encuestas": 620.0,
             "ISG_Promedio": 4.57,
             "ICD_Promedio": 4.45,
             "IUP_Promedio": 4.67,
@@ -2693,16 +2693,16 @@
                 "Sexo": {
                     "Femenino": 387,
                     "Intersexual": 0,
-                    "Masculino": 232
+                    "Masculino": 233
                 },
                 "Perfil": {
                     "Estudiante": 11,
                     "Otro": 192,
-                    "Área de la salud": 416
+                    "Área de la salud": 417
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 1,
-                    "Adultez (29 - 59 años)": 486,
+                    "Adultez (29 - 59 años)": 487,
                     "Juventud (18 - 28 años)": 81,
                     "Vejez (60 años o más)": 51
                 },
@@ -2732,7 +2732,7 @@
                     "COMUNA 16": 22,
                     "COMUNA 17": 115,
                     "COMUNA 18": 19,
-                    "COMUNA 19": 68,
+                    "COMUNA 19": 69,
                     "COMUNA 2": 39,
                     "COMUNA 20": 10,
                     "COMUNA 21": 12,
@@ -2748,7 +2748,7 @@
                 "Escolaridad": {
                     "Bachiller": 93,
                     "Ninguna": 3,
-                    "Postgrado": 229,
+                    "Postgrado": 230,
                     "Pregrado": 294
                 }
             },
