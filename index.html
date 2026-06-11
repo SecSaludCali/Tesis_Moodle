@@ -16,10 +16,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
-        /* PALETA ACCESIBLE Y MINIMALISTA */
+        /* PALETA CON EFECTO LIQUID GLASS */
         :root[data-theme="light"] {
-            --bg-color: #f4f7fe;
-            --card-bg: #ffffff;
+            /* Fondo con gradiente sutil para que el vidrio se note */
+            --bg-color: linear-gradient(135deg, #e0e7ff 0%, #f4f7fe 100%);
+            /* Tarjetas translúcidas */
+            --card-bg: rgba(255, 255, 255, 0.6);
             --text-main: #1e293b;
             --text-muted: #64748b;
             --primary: #4318ff;
@@ -27,18 +29,25 @@
             --warning: #ffb547;
             --danger: #ee5d50;
             --info: #0ea5e9;
-            --card-shadow: 0 14px 24px -10px rgba(0, 0, 0, 0.05), 0 4px 10px -5px rgba(0, 0, 0, 0.03);
-            --border-color: rgba(0, 0, 0, 0.03);
-            --ia-bg: #ffffff;
-            --ia-border: #e2e8f0;
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            /* Borde blanco semi-transparente para simular el borde del vidrio */
+            --border-color: rgba(255, 255, 255, 0.4);
+            
+            --ia-bg: rgba(255, 255, 255, 0.7);
+            --ia-border: rgba(255, 255, 255, 0.5);
             --ia-text: #334155;
-            --ia-card-bg: #f8fafc;
-            --modal-bg: #ffffff;
+            --ia-card-bg: rgba(248, 250, 252, 0.6);
+            --modal-bg: rgba(255, 255, 255, 0.9);
+            
+            /* Blur effect */
+            --glass-blur: blur(12px);
         }
 
         :root[data-theme="dark"] {
-            --bg-color: #0b1437;
-            --card-bg: #111c44;
+            /* Fondo oscuro con gradiente */
+            --bg-color: linear-gradient(135deg, #0b1437 0%, #1a235a 100%);
+            /* Tarjetas oscuras translúcidas */
+            --card-bg: rgba(17, 28, 68, 0.6);
             --text-main: #f8fafc;
             --text-muted: #8f9bba;
             --primary: #7551ff;
@@ -46,25 +55,33 @@
             --warning: #ffb547;
             --danger: #ee5d50;
             --info: #38bdf8;
-            --card-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.4);
-            --border-color: rgba(255, 255, 255, 0.02);
-            --ia-bg: #111c44;
-            --ia-border: #1b2559;
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            /* Borde claro para resaltar en oscuro */
+            --border-color: rgba(255, 255, 255, 0.1);
+            
+            --ia-bg: rgba(17, 28, 68, 0.7);
+            --ia-border: rgba(255, 255, 255, 0.1);
             --ia-text: #e2e8f0;
-            --ia-card-bg: #0b1437;
-            --modal-bg: #0b1437;
+            --ia-card-bg: rgba(11, 20, 55, 0.6);
+            --modal-bg: rgba(11, 20, 55, 0.9);
+            
+            --glass-blur: blur(16px);
         }
 
         body {
-            background-color: var(--bg-color);
+            /* Aplicar el gradiente al body */
+            background: var(--bg-color);
+            background-attachment: fixed; /* Evita que el fondo se mueva al scrollear */
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
             transition: all 0.3s ease;
+            min-height: 100vh;
         }
 
         h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
         h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; }
 
+        /* CLASE PRINCIPAL DEL EFECTO LIQUID GLASS */
         .glass-card {
             background: var(--card-bg);
             border-radius: 20px;
@@ -72,20 +89,54 @@
             padding: 32px;
             height: 100%;
             border: 1px solid var(--border-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            /* El filtro de desenfoque mágico */
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur); /* Safari */
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
         }
 
-        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px 0 rgba(31, 38, 135, 0.25); }
         .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
         .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
         .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
 
         .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
 
-        .form-select { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px 24px; font-weight: 500; box-shadow: var(--card-shadow); transition: all 0.2s ease; font-size: 1.05rem; }
+        .form-select { 
+            background-color: var(--card-bg); 
+            color: var(--text-main); 
+            border: 1px solid var(--border-color); 
+            border-radius: 14px; 
+            padding: 16px 24px; 
+            font-weight: 500; 
+            box-shadow: var(--card-shadow); 
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: all 0.2s ease; 
+            font-size: 1.05rem; 
+        }
         .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); outline: none; }
+        
+        /* Asegurar que las opciones del select tengan fondo sólido para que se lean bien */
+        .form-select option {
+            background-color: var(--modal-bg);
+            color: var(--text-main);
+        }
 
-        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: background-color 0.2s; box-shadow: var(--card-shadow); }
+        .theme-toggle { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border-color); 
+            color: var(--text-main); 
+            padding: 10px 20px; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            transition: background-color 0.2s; 
+            box-shadow: var(--card-shadow);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+        }
 
         .chart-wrapper { position: relative; height: 280px; width: 100%; margin-top: 10px; }
         .radar-wrapper { position: relative; height: 420px; width: 100%; display: flex; justify-content: center; }
@@ -98,39 +149,77 @@
         .list-group-item { padding: 16px 0; }
         .list-group-item.bg-transparent { color: var(--text-main) !important; border-color: rgba(163, 174, 208, 0.2) !important; }
 
-        /* ESTILOS IA */
+        /* ESTILOS IA CON LIQUID GLASS */
         .ia-panel-wrapper { margin-top: 40px; padding-top: 10px; }
-        .ia-card { background-color: var(--ia-bg); border-radius: 20px; padding: 40px; border: 1px solid var(--ia-border); box-shadow: var(--card-shadow); }
+        .ia-card { 
+            background-color: var(--ia-bg); 
+            border-radius: 20px; 
+            padding: 40px; 
+            border: 1px solid var(--ia-border); 
+            box-shadow: var(--card-shadow);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+        }
         .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
-        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; height: 100%; transition: transform 0.2s; }
+        .ia-mini-card { 
+            background: var(--ia-card-bg); 
+            border: 1px solid var(--ia-border); 
+            border-radius: 16px; 
+            padding: 24px; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            transition: transform 0.2s; 
+            /* Desenfoque un poco menor para mini tarjetas dentro de la tarjeta IA */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
         .ia-mini-card:hover { transform: translateY(-4px); }
         .ia-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px; }
         .ia-val { font-size: 1.8rem; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
         .ia-lbl { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .ia-desc { font-size: 0.95rem; color: var(--text-main); margin-top: 12px; line-height: 1.5; font-weight: 400; }
 
-        .bg-indigo-soft { background-color: rgba(67, 24, 255, 0.1); color: var(--primary); }
-        .bg-emerald-soft { background-color: rgba(5, 205, 153, 0.1); color: var(--success); }
-        .bg-amber-soft { background-color: rgba(255, 181, 71, 0.1); color: var(--warning); }
-        .bg-rose-soft { background-color: rgba(238, 93, 80, 0.1); color: var(--danger); }
+        .bg-indigo-soft { background-color: rgba(67, 24, 255, 0.15); color: var(--primary); }
+        .bg-emerald-soft { background-color: rgba(5, 205, 153, 0.15); color: var(--success); }
+        .bg-amber-soft { background-color: rgba(255, 181, 71, 0.15); color: var(--warning); }
+        .bg-rose-soft { background-color: rgba(238, 93, 80, 0.15); color: var(--danger); }
 
         .lobby-card { cursor: pointer; border: 2px solid transparent; padding: 40px 20px; }
-        .lobby-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(67, 24, 255, 0.15); }
+        .lobby-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(67, 24, 255, 0.2); }
 
         /* MODAL */
-        .modal-content { background-color: var(--modal-bg); color: var(--text-main); border-radius: 24px; border: 1px solid var(--border-color); }
+        .modal-content { 
+            background-color: var(--modal-bg); 
+            color: var(--text-main); 
+            border-radius: 24px; 
+            border: 1px solid var(--border-color);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+        }
         .modal-header { border-bottom: 1px solid var(--border-color); padding: 24px 40px; }
-        .modal-body { padding: 40px; background-color: var(--bg-color); border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; }
+        /* Ajuste para que el cuerpo del modal no rompa el efecto */
+        .modal-body { padding: 40px; background-color: transparent; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; }
         .btn-info-kpi { background: var(--primary); color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: none; transition: all 0.2s; box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3); }
         .btn-info-kpi:hover { transform: scale(1.1); color: white; }
         
-        .dic-card { background: var(--card-bg); border-radius: 20px; padding: 32px; border: 1px solid var(--border-color); margin-bottom: 24px; display: flex; gap: 30px; align-items: stretch; box-shadow: var(--card-shadow); }
+        .dic-card { 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            padding: 32px; 
+            border: 1px solid var(--border-color); 
+            margin-bottom: 24px; 
+            display: flex; 
+            gap: 30px; 
+            align-items: stretch; 
+            box-shadow: var(--card-shadow);
+        }
         .dic-info { flex: 1; }
-        .dic-mockup { flex: 0 0 280px; background: var(--bg-color); border-radius: 16px; border: 1px dashed var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
-        .dic-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--primary); background: rgba(67, 24, 255, 0.1); padding: 4px 10px; border-radius: 20px; margin-bottom: 12px; display: inline-block; }
+        .dic-mockup { flex: 0 0 280px; background: rgba(0,0,0,0.02); border-radius: 16px; border: 1px dashed var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .dic-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--primary); background: rgba(67, 24, 255, 0.15); padding: 4px 10px; border-radius: 20px; margin-bottom: 12px; display: inline-block; }
         .dic-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: var(--text-main); }
         .dic-desc { color: var(--text-muted); line-height: 1.6; font-size: 1rem; }
-        .dic-formula { background: var(--ia-bg); padding: 12px 16px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: var(--text-main); margin-top: 16px; border-left: 3px solid var(--primary); }
+        .dic-formula { background: var(--ia-card-bg); padding: 12px 16px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: var(--text-main); margin-top: 16px; border-left: 3px solid var(--primary); }
 
         .mock-kpi-card { background: var(--card-bg); border-left: 4px solid var(--primary); padding: 20px; border-radius: 12px; width: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); }
         .mock-bar-chart { width: 100%; height: 30px; border-radius: 6px; display: flex; overflow: hidden; }
@@ -140,9 +229,9 @@
 
         @media (max-width: 768px) { .dic-card { flex-direction: column; } .dic-mockup { height: 200px; flex: auto; } }
 
-        /* FIX MAPA LEAFLET */
+        /* FIX MAPA LEAFLET PARA QUE SE INTEGRE BIEN */
         #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); }
-        .leaflet-container { background: var(--card-bg); font-family: 'Inter', sans-serif; }
+        .leaflet-container { background: rgba(255,255,255,0.2); font-family: 'Inter', sans-serif; }
     </style>
 </head>
 
@@ -447,12 +536,10 @@
 
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // Truco Anticaché
                 const urlFresca = 'dashboard_data.json?v=' + new Date().getTime();
                 const response = await fetch(urlFresca, { headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' } }); 
                 dashboardData = await response.json();
                 
-                // Cargar y traducir archivo GeoJSON
                 try {
                     const geoResponse = await fetch('mc_comunas.json');
                     const rawData = await geoResponse.json();
@@ -478,49 +565,21 @@
             } catch (error) { console.error("Error cargando datos", error); }
         });
 
-        // ---------------------------------------------
-        // TRADUCTOR Y FORMATEADOR DE NOMBRES
-        // ---------------------------------------------
         function normalizarLlaveComuna(texto) {
             if (texto === null || texto === undefined) return "N/A";
-            
             let t = String(texto).trim();
             let upperT = t.toUpperCase();
-            
-            // Atrapa variantes de nulos o "Sin Dato"
-            if (upperT === "" || upperT === "N/A" || upperT === "NULL" || upperT === "SIN DATO") {
-                return "N/A";
-            }
-            
+            if (upperT === "" || upperT === "N/A" || upperT === "NULL" || upperT === "SIN DATO") return "N/A";
             let numStr = t.replace(/\D/g, ''); 
             let num = parseInt(numStr, 10); 
-            
-            // Si no hay números válidos, se retorna el texto original (Ej: "Comuna C. DE LA PAZ")
-            if (isNaN(num)) {
-                return t;
-            } else {
-                return String(num); // Ej: "1", "22"
-            }
+            if (isNaN(num)) return t; else return String(num); 
         }
 
-        // Formatea el nombre para que se vea estético en el Gráfico de Barras
         function formatearNombreUbicacion(llave) {
             if (llave === "N/A") return "Fuera de Cali / Sin Dato";
-            
-            // Si es un número (Ej: "1"), es una Comuna
             if (!isNaN(llave) && llave.trim() !== "") return "Comuna " + llave;
-            
-            // Si es un texto, limpiamos el error "Comuna C."
-            let texto = llave.replace(/Comuna\s+C\.\s*/i, 'Corregimiento ')
-                             .replace(/^C\.\s*/i, 'Corregimiento ')
-                             .replace(/^C\s+/i, 'Corregimiento ');
-            
-            // Aseguramos que tenga el prefijo
-            if (!texto.toLowerCase().includes("corregimiento") && !texto.toLowerCase().includes("comuna")) {
-                texto = "Corregimiento " + texto;
-            }
-            
-            // Capitalización correcta (Title Case)
+            let texto = llave.replace(/Comuna\s+C\.\s*/i, 'Corregimiento ').replace(/^C\.\s*/i, 'Corregimiento ').replace(/^C\s+/i, 'Corregimiento ');
+            if (!texto.toLowerCase().includes("corregimiento") && !texto.toLowerCase().includes("comuna")) texto = "Corregimiento " + texto;
             return texto.toLowerCase().split(' ').map(word => {
                 if (word.length === 0) return word;
                 if (["de", "la", "el", "los", "las", "y", "en"].includes(word)) return word; 
@@ -528,9 +587,6 @@
             }).join(' ').replace(/^./, str => str.toUpperCase());
         }
 
-        // ---------------------------------------------
-        // LÓGICA GEOESPACIAL Y GRÁFICOS
-        // ---------------------------------------------
         function proyectarGeoJson(data) {
             let newData = JSON.parse(JSON.stringify(data)); 
             newData.features.forEach((feature, index) => {
@@ -549,9 +605,7 @@
                             );
                         }
                     }
-                } catch (error) {
-                    console.error(`Error proyectando la comuna en el índice ${index}:`, error);
-                }
+                } catch (error) { console.error(`Error proyectando comuna:`, error); }
             });
             return newData;
         }
@@ -559,15 +613,9 @@
         function inicializarMapa() {
             if (mapInstance) return;
             mapInstance = L.map('map-container').setView([3.42158, -76.5205], 11); 
-            
             const isLight = document.documentElement.getAttribute('data-theme') === 'light';
             let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-            
-            mapTilesLayer = L.tileLayer(tileUrl, {
-                attribution: '&copy; CARTO',
-                subdomains: 'abcd',
-                maxZoom: 20
-            }).addTo(mapInstance);
+            mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
         }
 
         function getColorMapa(valor, maxValor) {
@@ -582,22 +630,13 @@
         function dibujarMapaCoropletico(dataComunasBackend) {
             if (!mapInstance || !geoJsonDataRaw) return;
             if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer);
-
-            let mapaDatosNormalizado = {};
-            let maxParticipantes = 0;
-
-            // Filtramos y buscamos solo los números para el Mapa
+            let mapaDatosNormalizado = {}; let maxParticipantes = 0;
             for (let nombreComunaEnData in dataComunasBackend) {
                 let idLimpio = normalizarLlaveComuna(nombreComunaEnData);
                 let cantidad = dataComunasBackend[nombreComunaEnData] || 0;
                 mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + cantidad;
-                
-                // Ignoramos los textos y "N/A" para calcular el máximo color del mapa
-                if (mapaDatosNormalizado[idLimpio] > maxParticipantes && !isNaN(idLimpio)) {
-                    maxParticipantes = mapaDatosNormalizado[idLimpio];
-                }
+                if (mapaDatosNormalizado[idLimpio] > maxParticipantes && !isNaN(idLimpio)) maxParticipantes = mapaDatosNormalizado[idLimpio];
             }
-
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, {
                 style: function (feature) {
                     let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id;
@@ -605,36 +644,25 @@
                     let participantes = mapaDatosNormalizado[idLimpio] || 0;
                     return {
                         fillColor: getColorMapa(participantes, maxParticipantes),
-                        weight: 1.5,
-                        opacity: 1,
-                        color: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#111c44',
-                        fillOpacity: participantes > 0 ? 0.8 : 0.1
+                        weight: 1.5, opacity: 1,
+                        color: document.documentElement.getAttribute('data-theme') === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(11,20,55,0.7)',
+                        fillOpacity: participantes > 0 ? 0.8 : 0.2
                     };
                 },
                 onEachFeature: function (feature, layer) {
                     let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id;
                     let idLimpio = normalizarLlaveComuna(idGeo);
                     let participantes = mapaDatosNormalizado[idLimpio] || 0;
-                    
-                    let tooltipHtml = `
-                        <div style="font-family:'Inter'; text-align:center;">
-                            <strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br>
-                            <span style="font-size:1rem;">${participantes} Participantes</span>
-                        </div>
-                    `;
+                    let tooltipHtml = `<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${participantes} Participantes</span></div>`;
                     layer.bindTooltip(tooltipHtml, { sticky: true, className: 'custom-map-tooltip' });
                 }
             }).addTo(mapInstance);
-
-            if (geoJsonLayer.getBounds().isValid()) {
-                mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] });
-            }
+            if (geoJsonLayer.getBounds().isValid()) mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] });
         }
 
         function dibujarGraficoComunas(canvasId, dataObject) {
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
             if (!dataObject || Object.keys(dataObject).length === 0) return;
-
             let agrupadito = {};
             for (let key in dataObject) {
                 let val = dataObject[key];
@@ -642,41 +670,15 @@
                 let label = formatearNombreUbicacion(cleanKey); 
                 agrupadito[label] = (agrupadito[label] || 0) + val;
             }
-
-            // Ordenar de mayor a menor cantidad
             let sortedArray = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]);
-            let labels = sortedArray.map(item => item[0]);
-            let data = sortedArray.map(item => item[1]);
-
+            let labels = sortedArray.map(item => item[0]); let data = sortedArray.map(item => item[1]);
             const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), {
                 type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Participantes',
-                        data: data,
-                        backgroundColor: primColor,
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
-                        y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } }
-                    }
-                }
+                data: { labels: labels, datasets: [{ label: 'Participantes', data: data, backgroundColor: primColor, borderRadius: 4 }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } } } }
             });
         }
-        
-        // ---------------------------------------------
-        // RESTO DE TU LÓGICA INTACTA
-        // ---------------------------------------------
 
         function calcularBenchmarkGlobal() {
             const sum = {}; const count = {};
@@ -713,101 +715,46 @@
                 selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>';
                 cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); });
                 selectorCohorte.style.display = "block"; selectorCohorte.value = "";
-
                 tabs.style.display = "none"; lobby.style.display = "block"; apagarPanelesIA();
-
                 let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;"><i class="bi bi-journal-bookmark-fill me-2"></i>${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizar su rendimiento detallado</p></div><div class="row g-4 justify-content-center">`;
-
                 let porAnio = {};
-                cohortes.forEach(c => {
-                    let anio = c.Edicion.split(' - ')[0];
-                    if (!porAnio[anio]) porAnio[anio] = [];
-                    porAnio[anio].push(c);
-                });
-
+                cohortes.forEach(c => { let anio = c.Edicion.split(' - ')[0]; if (!porAnio[anio]) porAnio[anio] = []; porAnio[anio].push(c); });
                 let anios = Object.keys(porAnio).sort((a, b) => b - a);
                 anios.forEach(anio => {
                     htmlLobby += `<div class="col-12 mt-5"><h4 class="fw-bold mb-4" style="color: var(--text-main); border-bottom: 2px solid var(--border-color); padding-bottom: 15px;"><i class="bi bi-calendar3 me-2"></i>Año ${anio}</h4></div>`;
                     porAnio[anio].forEach(c => {
                         let nombreCohorte = c.Edicion.split(' - ')[1] || "Edición Única";
-                        htmlLobby += `
-                    <div class="col-md-4 col-lg-3">
-                        <div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')">
-                            <div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div>
-                            <h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${nombreCohorte}</h5>
-                            <span class="badge bg-indigo-soft px-3 py-2 text-primary" style="font-size:0.9rem;">${c.Total_Inscritos} Inscritos</span>
-                        </div>
-                    </div>`;
+                        htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${nombreCohorte}</h5><span class="badge bg-indigo-soft px-3 py-2 text-primary" style="font-size:0.9rem;">${c.Total_Inscritos} Inscritos</span></div></div>`;
                     });
                 });
-                htmlLobby += `</div>`;
-                lobby.innerHTML = htmlLobby;
+                htmlLobby += `</div>`; lobby.innerHTML = htmlLobby;
             }
             if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300);
         }
 
         function seleccionarCohorteDesdeLobby(nombreCurso) {
-            document.getElementById('selector-cohorte').value = nombreCurso;
-            document.getElementById('panel-lobby-curso').style.display = 'none';
-            document.getElementById('contenedor-tabs').style.display = 'block';
-
-            const base = document.getElementById('selector-curso-base').value;
-            cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === nombreCurso);
-            actualizarPantallaCurso();
+            document.getElementById('selector-cohorte').value = nombreCurso; document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block';
+            const base = document.getElementById('selector-curso-base').value; cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === nombreCurso); actualizarPantallaCurso();
         }
 
         function manejarCambioCohorte() {
-            if (!this.value) {
-                document.getElementById('panel-lobby-curso').style.display = 'block';
-                document.getElementById('contenedor-tabs').style.display = 'none';
-                apagarPanelesIA(); return;
-            }
-            document.getElementById('panel-lobby-curso').style.display = 'none';
-            document.getElementById('contenedor-tabs').style.display = 'block';
-
-            const base = document.getElementById('selector-curso-base').value;
-            cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === this.value);
-            actualizarPantallaCurso();
+            if (!this.value) { document.getElementById('panel-lobby-curso').style.display = 'block'; document.getElementById('contenedor-tabs').style.display = 'none'; apagarPanelesIA(); return; }
+            document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block';
+            const base = document.getElementById('selector-curso-base').value; cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === this.value); actualizarPantallaCurso();
         }
 
         function generarInsightIA(curso) {
             if (!curso) return;
-            const chs = curso.Salud_Curso_CHS || 0; const nps = curso.e_NPS || 0;
-            const fin = curso['Tasa_Finalizacion_%'] || 0; const abd = curso['Tasa_Abandono_%'] || 0; const inact = curso['Tasa_Inactividad_%'] || 0;
-            const iup = curso.IUP_Promedio || 0; const icd = curso.ICD_Promedio || 0; const ux = curso.UX_Promedio || 0; const brecha = curso.Brecha_Expectativa || 0; const encuestas = curso.Total_Encuestas || 0;
-
+            const chs = curso.Salud_Curso_CHS || 0; const nps = curso.e_NPS || 0; const fin = curso['Tasa_Finalizacion_%'] || 0; const abd = curso['Tasa_Abandono_%'] || 0; const inact = curso['Tasa_Inactividad_%'] || 0; const iup = curso.IUP_Promedio || 0; const icd = curso.ICD_Promedio || 0; const ux = curso.UX_Promedio || 0; const brecha = curso.Brecha_Expectativa || 0; const encuestas = curso.Total_Encuestas || 0;
             let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A";
-            try {
-                let totalG = Object.values(curso.Demografia.Sexo).reduce((a, b) => a + b, 0);
-                if (totalG > 0) {
-                    pMujeres = Math.round(((curso.Demografia.Sexo['Femenino'] || 0) / totalG) * 100);
-                    let pKeys = Object.keys(curso.Demografia.Perfil); perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => curso.Demografia.Perfil[a] > curso.Demografia.Perfil[b] ? a : b) : "N/A"; pPerfil = Math.round(((curso.Demografia.Perfil[perfilDom] || 0) / totalG) * 100);
-                    let eKeys = Object.keys(curso.Demografia.Edad); edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => curso.Demografia.Edad[a] > curso.Demografia.Edad[b] ? a : b) : "N/A";
-                }
-            } catch (e) { }
-
-            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(curso.Total_Inscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "La analítica revela un grupo sesgado hacia profesionales de", "Esto sugiere que los ejemplos deben orientarse a este sector.");
-            document.getElementById('panel-ia-demo').style.display = 'block';
-            document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs); document.getElementById('panel-ia-moodle').style.display = 'block';
-            document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, "Índice de recomendación basado en"); document.getElementById('panel-ia-radar').style.display = 'block';
+            try { let totalG = Object.values(curso.Demografia.Sexo).reduce((a, b) => a + b, 0); if (totalG > 0) { pMujeres = Math.round(((curso.Demografia.Sexo['Femenino'] || 0) / totalG) * 100); let pKeys = Object.keys(curso.Demografia.Perfil); perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => curso.Demografia.Perfil[a] > curso.Demografia.Perfil[b] ? a : b) : "N/A"; pPerfil = Math.round(((curso.Demografia.Perfil[perfilDom] || 0) / totalG) * 100); let eKeys = Object.keys(curso.Demografia.Edad); edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => curso.Demografia.Edad[a] > curso.Demografia.Edad[b] ? a : b) : "N/A"; } } catch (e) { }
+            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(curso.Total_Inscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "La analítica revela un grupo sesgado hacia profesionales de", "Esto sugiere que los ejemplos deben orientarse a este sector."); document.getElementById('panel-ia-demo').style.display = 'block'; document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs); document.getElementById('panel-ia-moodle').style.display = 'block'; document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, "Índice de recomendación basado en"); document.getElementById('panel-ia-radar').style.display = 'block';
         }
 
         function generarInsightIAGlobal(totInscritos, fin, abd, inact, iup, icd, ux, brecha, encuestas) {
-            const chs = dashboardData.kpis_globales.chs_promedio_secretaria; const nps = dashboardData.kpis_globales.nps_global;
-            let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A";
-            try {
-                let totalG = Object.values(dashboardData.demografia_global['Sexo']).reduce((a, b) => a + b, 0);
-                if (totalG > 0) {
-                    pMujeres = Math.round(((dashboardData.demografia_global['Sexo']['Femenino'] || 0) / totalG) * 100);
-                    let pKeys = Object.keys(dashboardData.demografia_global['Perfil']); perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => dashboardData.demografia_global['Perfil'][a] > dashboardData.demografia_global['Perfil'][b] ? a : b) : "N/A"; pPerfil = Math.round(((dashboardData.demografia_global['Perfil'][perfilDom] || 0) / totalG) * 100);
-                    let eKeys = Object.keys(dashboardData.demografia_global['Curso de Vida']); edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => dashboardData.demografia_global['Curso de Vida'][a] > dashboardData.demografia_global['Curso de Vida'][b] ? a : b) : "N/A";
-                }
-            } catch (e) { }
-
-            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(totInscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "A nivel consolidado, la Secretaría impacta principalmente a", "Las futuras políticas deben considerar este perfil como estándar institucional.");
-            document.getElementById('panel-ia-demo').style.display = 'block';
-            document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs, true); document.getElementById('panel-ia-moodle').style.display = 'block';
-            document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas.toLocaleString(), nps, iup, icd, ux, brecha, "Sentimiento consolidado institucional basado en"); document.getElementById('panel-ia-radar').style.display = 'block';
+            const chs = dashboardData.kpis_globales.chs_promedio_secretaria; const nps = dashboardData.kpis_globales.nps_global; let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A";
+            try { let totalG = Object.values(dashboardData.demografia_global['Sexo']).reduce((a, b) => a + b, 0); if (totalG > 0) { pMujeres = Math.round(((dashboardData.demografia_global['Sexo']['Femenino'] || 0) / totalG) * 100); let pKeys = Object.keys(dashboardData.demografia_global['Perfil']); perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => dashboardData.demografia_global['Perfil'][a] > dashboardData.demografia_global['Perfil'][b] ? a : b) : "N/A"; pPerfil = Math.round(((dashboardData.demografia_global['Perfil'][perfilDom] || 0) / totalG) * 100); let eKeys = Object.keys(dashboardData.demografia_global['Curso de Vida']); edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => dashboardData.demografia_global['Curso de Vida'][a] > dashboardData.demografia_global['Curso de Vida'][b] ? a : b) : "N/A"; } } catch (e) { }
+            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(totInscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "A nivel consolidado, la Secretaría impacta principalmente a", "Las futuras políticas deben considerar este perfil como estándar institucional."); document.getElementById('panel-ia-demo').style.display = 'block'; document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs, true); document.getElementById('panel-ia-moodle').style.display = 'block'; document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas.toLocaleString(), nps, iup, icd, ux, brecha, "Sentimiento consolidado institucional basado en"); document.getElementById('panel-ia-radar').style.display = 'block';
         }
 
         function renderHTMLDemo(tot, pM, pDom, pP, eDom, t1, t2) { return `<div class="row g-4 mb-4"><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${tot}</div><div class="ia-lbl">Total Matriculados</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pM}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div></div><p class="mb-0 fs-6" style="color: var(--text-main); line-height: 1.6;"><strong>Conclusión:</strong> ${t1} <strong>${pDom}</strong>. ${t2}</p>`; }
