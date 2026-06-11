@@ -1,31 +1,31 @@
 {
     "metadata": {
         "total_cursos_analizados": 41,
-        "total_encuestas_historicas": 3853
+        "total_encuestas_historicas": 3854
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 57.4,
-        "nps_global": 67.6
+        "nps_global": 67.5
     },
     "demografia_global": {
         "Sexo": {
             "Femenino": 2822,
-            "Masculino": 1027,
+            "Masculino": 1028,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2772,
+            "Área de la salud": 2773,
             "Estudiante": 702,
             "Otro": 379
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2276,
+            "Adultez (29 - 59 años)": 2277,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 696,
             "Vejez (60 años o más)": 160
         },
         "Comuna": {
-            "COMUNA 17": 437,
+            "COMUNA 17": 438,
             "COMUNA 19": 228,
             "COMUNA 1": 222,
             "COMUNA 10": 198,
@@ -66,7 +66,7 @@
         "Escolaridad": {
             "Pregrado": 1733,
             "Bachiller": 1085,
-            "Postgrado": 979,
+            "Postgrado": 980,
             "Ninguna": 56
         }
     },
@@ -407,34 +407,34 @@
             "Nombre_Curso": "DIPLOMADO AIEPI CLÍNICO - 2026 - 01",
             "ID_Moodle_Original": "dac_01_2026",
             "Total_Inscritos": 96,
-            "Tasa_Finalizacion_%": 6.2,
-            "Tasa_Abandono_%": 17.7,
+            "Tasa_Finalizacion_%": 7.3,
+            "Tasa_Abandono_%": 16.7,
             "Tasa_Inactividad_%": 76.0,
-            "Tiempo_Promedio_Dias": 17.5,
-            "Total_Encuestas": 46.0,
+            "Tiempo_Promedio_Dias": 17.7,
+            "Total_Encuestas": 47.0,
             "ISG_Promedio": 4.67,
-            "ICD_Promedio": 4.64,
-            "IUP_Promedio": 4.68,
-            "UX_Promedio": 4.66,
+            "ICD_Promedio": 4.65,
+            "IUP_Promedio": 4.69,
+            "UX_Promedio": 4.65,
             "Brecha_Expectativa": 0.02,
-            "e_NPS": 78.3,
-            "Salud_Curso_CHS": 58.5,
+            "e_NPS": 76.6,
+            "Salud_Curso_CHS": 59.0,
             "Curso_Base": "DIPLOMADO AIEPI CLÍNICO",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
                     "Femenino": 28,
                     "Intersexual": 0,
-                    "Masculino": 18
+                    "Masculino": 19
                 },
                 "Perfil": {
                     "Estudiante": 2,
                     "Otro": 0,
-                    "Área de la salud": 44
+                    "Área de la salud": 45
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 37,
+                    "Adultez (29 - 59 años)": 38,
                     "Juventud (18 - 28 años)": 8,
                     "Vejez (60 años o más)": 1
                 },
@@ -462,7 +462,7 @@
                     "COMUNA 14": 1,
                     "COMUNA 15": 0,
                     "COMUNA 16": 0,
-                    "COMUNA 17": 8,
+                    "COMUNA 17": 9,
                     "COMUNA 18": 0,
                     "COMUNA 19": 3,
                     "COMUNA 2": 7,
@@ -480,24 +480,24 @@
                 "Escolaridad": {
                     "Bachiller": 0,
                     "Ninguna": 0,
-                    "Postgrado": 22,
+                    "Postgrado": 23,
                     "Pregrado": 24
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.67,
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.68,
                 "¿Se cumplió el objetivo de la capacitación?": 4.7,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.63,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.64,
                 "¿Los temas se desarrollaron en el tiempo previsto?": 4.7,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.67,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.68,
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.7,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.61,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.67,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.61,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.65,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.67,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.65,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.74
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.62,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.68,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.62,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.64,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.64,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.66,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.72
             }
         },
         {
@@ -602,8 +602,8 @@
             "ID_Moodle_Original": "tbfr_012026",
             "Total_Inscritos": 116,
             "Tasa_Finalizacion_%": 66.4,
-            "Tasa_Abandono_%": 6.0,
-            "Tasa_Inactividad_%": 27.6,
+            "Tasa_Abandono_%": 6.9,
+            "Tasa_Inactividad_%": 26.7,
             "Tiempo_Promedio_Dias": 3.2,
             "Total_Encuestas": 71.0,
             "ISG_Promedio": 4.88,
@@ -702,30 +702,30 @@
             "Tasa_Abandono_%": 13.7,
             "Tasa_Inactividad_%": 63.2,
             "Tiempo_Promedio_Dias": 32.0,
-            "Total_Encuestas": 46.0,
+            "Total_Encuestas": 47.0,
             "ISG_Promedio": 4.67,
-            "ICD_Promedio": 4.64,
-            "IUP_Promedio": 4.68,
-            "UX_Promedio": 4.66,
+            "ICD_Promedio": 4.65,
+            "IUP_Promedio": 4.69,
+            "UX_Promedio": 4.65,
             "Brecha_Expectativa": 0.02,
-            "e_NPS": 78.3,
-            "Salud_Curso_CHS": 65.3,
+            "e_NPS": 76.6,
+            "Salud_Curso_CHS": 65.4,
             "Curso_Base": "DIPLOMADO AIEPI CLÍNICO",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
                     "Femenino": 28,
                     "Intersexual": 0,
-                    "Masculino": 18
+                    "Masculino": 19
                 },
                 "Perfil": {
                     "Estudiante": 2,
                     "Otro": 0,
-                    "Área de la salud": 44
+                    "Área de la salud": 45
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 37,
+                    "Adultez (29 - 59 años)": 38,
                     "Juventud (18 - 28 años)": 8,
                     "Vejez (60 años o más)": 1
                 },
@@ -753,7 +753,7 @@
                     "COMUNA 14": 1,
                     "COMUNA 15": 0,
                     "COMUNA 16": 0,
-                    "COMUNA 17": 8,
+                    "COMUNA 17": 9,
                     "COMUNA 18": 0,
                     "COMUNA 19": 3,
                     "COMUNA 2": 7,
@@ -771,24 +771,24 @@
                 "Escolaridad": {
                     "Bachiller": 0,
                     "Ninguna": 0,
-                    "Postgrado": 22,
+                    "Postgrado": 23,
                     "Pregrado": 24
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.67,
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.68,
                 "¿Se cumplió el objetivo de la capacitación?": 4.7,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.63,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.64,
                 "¿Los temas se desarrollaron en el tiempo previsto?": 4.7,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.67,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.68,
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.7,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.61,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.67,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.61,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.65,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.67,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.65,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.74
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.62,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.68,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.62,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.64,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.64,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.66,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.72
             }
         },
         {
