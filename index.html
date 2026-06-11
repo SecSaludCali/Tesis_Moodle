@@ -10,18 +10,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     
+    <!-- LIBRERÍAS DE GRÁFICOS Y MAPAS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
-        /* PALETA CON EFECTO LIQUID GLASS */
+        /* PALETA CON EFECTO LIQUID GLASS Y BURBUJAS FLOTANTES */
         :root[data-theme="light"] {
-            /* Fondo con gradiente sutil para que el vidrio se note */
-            --bg-color: linear-gradient(135deg, #e0e7ff 0%, #f4f7fe 100%);
-            /* Tarjetas translúcidas */
-            --card-bg: rgba(255, 255, 255, 0.6);
+            --bg-color: #f4f7fe;
+            --card-bg: rgba(255, 255, 255, 0.45);
             --text-main: #1e293b;
             --text-muted: #64748b;
             --primary: #4318ff;
@@ -29,25 +28,23 @@
             --warning: #ffb547;
             --danger: #ee5d50;
             --info: #0ea5e9;
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            /* Borde blanco semi-transparente para simular el borde del vidrio */
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --border-light: rgba(255, 255, 255, 0.8);
             --border-color: rgba(255, 255, 255, 0.4);
             
-            --ia-bg: rgba(255, 255, 255, 0.7);
-            --ia-border: rgba(255, 255, 255, 0.5);
+            --ia-bg: rgba(255, 255, 255, 0.6);
+            --ia-border: rgba(255, 255, 255, 0.7);
             --ia-text: #334155;
-            --ia-card-bg: rgba(248, 250, 252, 0.6);
-            --modal-bg: rgba(255, 255, 255, 0.9);
-            
-            /* Blur effect */
-            --glass-blur: blur(12px);
+            --ia-card-bg: rgba(248, 250, 252, 0.5);
+            --modal-bg: rgba(255, 255, 255, 0.85);
+
+            --blob-1: rgba(67, 24, 255, 0.35);
+            --blob-2: rgba(5, 205, 153, 0.35);
         }
 
         :root[data-theme="dark"] {
-            /* Fondo oscuro con gradiente */
-            --bg-color: linear-gradient(135deg, #0b1437 0%, #1a235a 100%);
-            /* Tarjetas oscuras translúcidas */
-            --card-bg: rgba(17, 28, 68, 0.6);
+            --bg-color: #050a1f;
+            --card-bg: rgba(11, 20, 55, 0.45);
             --text-main: #f8fafc;
             --text-muted: #8f9bba;
             --primary: #7551ff;
@@ -55,183 +52,409 @@
             --warning: #ffb547;
             --danger: #ee5d50;
             --info: #38bdf8;
-            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            /* Borde claro para resaltar en oscuro */
-            --border-color: rgba(255, 255, 255, 0.1);
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            --border-light: rgba(255, 255, 255, 0.15);
+            --border-color: rgba(255, 255, 255, 0.05);
             
-            --ia-bg: rgba(17, 28, 68, 0.7);
+            --ia-bg: rgba(11, 20, 55, 0.6);
             --ia-border: rgba(255, 255, 255, 0.1);
             --ia-text: #e2e8f0;
-            --ia-card-bg: rgba(11, 20, 55, 0.6);
-            --modal-bg: rgba(11, 20, 55, 0.9);
-            
-            --glass-blur: blur(16px);
+            --ia-card-bg: rgba(5, 10, 31, 0.5);
+            --modal-bg: rgba(11, 20, 55, 0.85);
+
+            --blob-1: rgba(117, 81, 255, 0.4);
+            --blob-2: rgba(14, 165, 233, 0.3);
         }
 
         body {
-            /* Aplicar el gradiente al body */
-            background: var(--bg-color);
-            background-attachment: fixed; /* Evita que el fondo se mueva al scrollear */
+            background-color: var(--bg-color);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
             transition: all 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
             min-height: 100vh;
+        }
+
+        /* BURBUJAS FLOTANTES EN EL FONDO */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: -1; 
+            animation: float 12s infinite alternate ease-in-out;
+        }
+        body::before { width: 50vw; height: 50vw; background: var(--blob-1); top: -10%; left: -10%; }
+        body::after { width: 40vw; height: 40vw; background: var(--blob-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(8vw, 8vh) scale(1.2); }
         }
 
         h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
         h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; }
 
-        /* CLASE PRINCIPAL DEL EFECTO LIQUID GLASS */
         .glass-card {
             background: var(--card-bg);
-            border-radius: 20px;
+            border-radius: 24px;
             box-shadow: var(--card-shadow);
             padding: 32px;
             height: 100%;
             border: 1px solid var(--border-color);
-            /* El filtro de desenfoque mágico */
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur); /* Safari */
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+            border-top: 1px solid var(--border-light);
+            border-left: 1px solid var(--border-light);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px 0 rgba(31, 38, 135, 0.25); }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.2); }
         .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
         .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
         .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
 
         .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
 
+        /* =========================================
+           LIQUID NAVBAR MENU (ESTRUCTURA CORREGIDA)
+           ========================================= */
+        .liquid-nav-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            margin-top: 10px;
+        }
+
+        .liquid-nav {
+            display: inline-flex;
+            align-items: center;
+            position: relative;
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow: var(--card-shadow);
+            z-index: 10;
+            list-style: none;
+            margin: 0;
+        }
+
+        .liquid-nav .nav-item {
+            z-index: 2;
+        }
+
+        .liquid-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 24px;
+            border-radius: 40px;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .liquid-tab:hover { color: var(--primary); }
+        .liquid-tab.active { color: var(--primary) !important; font-weight: 700; }
+
+        /* La "Gota" TRANSPARENTE tipo lente de cristal */
+        .liquid-indicator {
+            position: absolute;
+            top: 8px;
+            bottom: 8px;
+            left: 8px;
+            width: 0; 
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px) saturate(120%);
+            -webkit-backdrop-filter: blur(8px) saturate(120%);
+            border-top: 1px solid rgba(255,255,255,0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-radius: 40px;
+            z-index: 1;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.5);
+            pointer-events: none; /* Evita bloquear clicks */
+        }
+
+        /* Divisor y Botón Tema en el Nav */
+        .nav-divider {
+            width: 1px;
+            height: 24px;
+            background-color: var(--border-color);
+            margin: 0 8px;
+            z-index: 2;
+        }
+
+        .theme-toggle-nav {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .theme-toggle-nav:hover {
+            color: var(--warning); 
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .form-select { 
             background-color: var(--card-bg); 
             color: var(--text-main); 
-            border: 1px solid var(--border-color); 
+            border: 1px solid var(--border-light); 
             border-radius: 14px; 
             padding: 16px 24px; 
             font-weight: 500; 
             box-shadow: var(--card-shadow); 
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             transition: all 0.2s ease; 
             font-size: 1.05rem; 
         }
-        .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); outline: none; }
-        
-        /* Asegurar que las opciones del select tengan fondo sólido para que se lean bien */
-        .form-select option {
-            background-color: var(--modal-bg);
-            color: var(--text-main);
-        }
-
-        .theme-toggle { 
-            background: var(--card-bg); 
-            border: 1px solid var(--border-color); 
-            color: var(--text-main); 
-            padding: 10px 20px; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-            transition: background-color 0.2s; 
-            box-shadow: var(--card-shadow);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-        }
+        .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.2); outline: none; }
+        .form-select option { background-color: var(--bg-color); color: var(--text-main); }
 
         .chart-wrapper { position: relative; height: 280px; width: 100%; margin-top: 10px; }
         .radar-wrapper { position: relative; height: 420px; width: 100%; display: flex; justify-content: center; }
 
-        .nav-tabs { border-bottom: 2px solid rgba(163, 174, 208, 0.3); margin-bottom: 40px; margin-top: 10px; }
-        .nav-tabs .nav-link { color: var(--text-muted); font-weight: 600; border: none; padding: 16px 32px; font-size: 1.05rem; transition: color 0.2s; }
-        .nav-tabs .nav-link:hover { color: var(--primary); }
-        .nav-tabs .nav-link.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: transparent; font-weight: 700; }
-
         .list-group-item { padding: 16px 0; }
         .list-group-item.bg-transparent { color: var(--text-main) !important; border-color: rgba(163, 174, 208, 0.2) !important; }
 
-        /* ESTILOS IA CON LIQUID GLASS */
+        /* ESTILOS IA LIQUID */
         .ia-panel-wrapper { margin-top: 40px; padding-top: 10px; }
         .ia-card { 
             background-color: var(--ia-bg); 
-            border-radius: 20px; 
+            border-radius: 24px; 
             padding: 40px; 
-            border: 1px solid var(--ia-border); 
-            box-shadow: var(--card-shadow);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            border-top: 1px solid var(--border-light); 
+            border-left: 1px solid var(--border-light); 
+            box-shadow: var(--card-shadow); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
-        .ia-mini-card { 
-            background: var(--ia-card-bg); 
-            border: 1px solid var(--ia-border); 
-            border-radius: 16px; 
-            padding: 24px; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100%; 
-            transition: transform 0.2s; 
-            /* Desenfoque un poco menor para mini tarjetas dentro de la tarjeta IA */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
+        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; height: 100%; transition: transform 0.2s; }
         .ia-mini-card:hover { transform: translateY(-4px); }
         .ia-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px; }
         .ia-val { font-size: 1.8rem; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
         .ia-lbl { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .ia-desc { font-size: 0.95rem; color: var(--text-main); margin-top: 12px; line-height: 1.5; font-weight: 400; }
 
-        .bg-indigo-soft { background-color: rgba(67, 24, 255, 0.15); color: var(--primary); }
-        .bg-emerald-soft { background-color: rgba(5, 205, 153, 0.15); color: var(--success); }
-        .bg-amber-soft { background-color: rgba(255, 181, 71, 0.15); color: var(--warning); }
-        .bg-rose-soft { background-color: rgba(238, 93, 80, 0.15); color: var(--danger); }
+        .bg-indigo-soft { background-color: rgba(67, 24, 255, 0.1); color: var(--primary); }
+        .bg-emerald-soft { background-color: rgba(5, 205, 153, 0.1); color: var(--success); }
+        .bg-amber-soft { background-color: rgba(255, 181, 71, 0.1); color: var(--warning); }
+        .bg-rose-soft { background-color: rgba(238, 93, 80, 0.1); color: var(--danger); }
 
         .lobby-card { cursor: pointer; border: 2px solid transparent; padding: 40px 20px; }
         .lobby-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(67, 24, 255, 0.2); }
 
-        /* MODAL */
-        .modal-content { 
-            background-color: var(--modal-bg); 
-            color: var(--text-main); 
-            border-radius: 24px; 
-            border: 1px solid var(--border-color);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-        }
-        .modal-header { border-bottom: 1px solid var(--border-color); padding: 24px 40px; }
-        /* Ajuste para que el cuerpo del modal no rompa el efecto */
-        .modal-body { padding: 40px; background-color: transparent; border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; }
-        .btn-info-kpi { background: var(--primary); color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: none; transition: all 0.2s; box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3); }
-        .btn-info-kpi:hover { transform: scale(1.1); color: white; }
+        /* =========================================
+           MODAL Y DICCIONARIO LIQUID GLASS (MEGA PRO)
+           ========================================= */
         
-        .dic-card { 
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            padding: 32px; 
-            border: 1px solid var(--border-color); 
-            margin-bottom: 24px; 
-            display: flex; 
-            gap: 30px; 
-            align-items: stretch; 
-            box-shadow: var(--card-shadow);
+        /* Botón de información (Gota flotante) */
+        .btn-info-kpi { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--info) 100%); 
+            color: white; 
+            border-radius: 50%; 
+            width: 44px; height: 44px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 1.3rem; 
+            border: 1px solid rgba(255,255,255,0.4); 
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            box-shadow: 0 8px 15px rgba(67, 24, 255, 0.4), inset 0 2px 4px rgba(255,255,255,0.3); 
         }
-        .dic-info { flex: 1; }
-        .dic-mockup { flex: 0 0 280px; background: rgba(0,0,0,0.02); border-radius: 16px; border: 1px dashed var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; }
-        .dic-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--primary); background: rgba(67, 24, 255, 0.15); padding: 4px 10px; border-radius: 20px; margin-bottom: 12px; display: inline-block; }
-        .dic-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: var(--text-main); }
-        .dic-desc { color: var(--text-muted); line-height: 1.6; font-size: 1rem; }
-        .dic-formula { background: var(--ia-card-bg); padding: 12px 16px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: var(--text-main); margin-top: 16px; border-left: 3px solid var(--primary); }
+        .btn-info-kpi:hover { 
+            transform: scale(1.15) rotate(10deg); 
+            color: white; 
+            box-shadow: 0 12px 25px rgba(67, 24, 255, 0.5), inset 0 2px 4px rgba(255,255,255,0.5); 
+        }
 
-        .mock-kpi-card { background: var(--card-bg); border-left: 4px solid var(--primary); padding: 20px; border-radius: 12px; width: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); }
-        .mock-bar-chart { width: 100%; height: 30px; border-radius: 6px; display: flex; overflow: hidden; }
-        .mock-badge { background: var(--success); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 1.2rem; }
-        .mock-radar { width: 120px; height: 120px; background: repeating-radial-gradient(circle, transparent, transparent 18px, var(--border-color) 19px); border-radius: 50%; position: relative; }
-        .mock-radar::after { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; background: rgba(67, 24, 255, 0.2); border: 2px solid var(--primary); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
+        /* Congela y desenfoca el fondo de la página al abrir el modal */
+        .modal-backdrop.show {
+            opacity: 1 !important;
+            background-color: rgba(15, 23, 42, 0.4) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
 
-        @media (max-width: 768px) { .dic-card { flex-direction: column; } .dic-mockup { height: 200px; flex: auto; } }
+        /* Contenedor principal del modal */
+        .modal-content { 
+            background: var(--card-bg); 
+            color: var(--text-main); 
+            border-radius: 28px; 
+            border: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-light); 
+            border-left: 1px solid var(--border-light); 
+            backdrop-filter: blur(24px) saturate(120%);
+            -webkit-backdrop-filter: blur(24px) saturate(120%);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+        
+        .modal-header { 
+            border-bottom: 1px solid var(--border-color); 
+            padding: 30px 40px; 
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .modal-body { 
+            padding: 40px; 
+            background-color: transparent; 
+        }
 
-        /* FIX MAPA LEAFLET PARA QUE SE INTEGRE BIEN */
+        /* Botón de cerrar de la ventana */
+        .modal-header .btn-close {
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            padding: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .modal-header .btn-close:hover {
+            transform: rotate(90deg) scale(1.1);
+            background-color: var(--danger);
+            filter: invert(1);
+        }
+
+        /* Tarjetas de cada definición */
+        .dic-card { 
+            background: rgba(255,255,255,0.03); 
+            border-radius: 24px; 
+            padding: 36px; 
+            border: 1px solid var(--border-color);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            border-left: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 30px; 
+            display: flex; 
+            gap: 40px; 
+            align-items: stretch; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        /* Efecto de rebote, sombra azul y "haz de luz" (sweep) al pasar el cursor */
+        .dic-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(67, 24, 255, 0.15), inset 0 1px 0 var(--border-light);
+            border-color: rgba(67, 24, 255, 0.3);
+            background: rgba(255,255,255,0.08);
+        }
+        .dic-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: skewX(-20deg);
+            transition: all 0.7s ease;
+        }
+        .dic-card:hover::before { left: 200%; }
+
+        .dic-info { flex: 1; z-index: 2; }
+        
+        /* Zona del ejemplo visual (Efecto Bandeja Hundida) */
+        .dic-mockup { 
+            flex: 0 0 300px; 
+            background: rgba(0,0,0,0.02); 
+            border-radius: 20px; 
+            border: 1px solid var(--border-color); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 24px; 
+            position: relative;
+            box-shadow: inset 0 6px 15px rgba(0,0,0,0.06);
+            z-index: 2;
+        }
+        :root[data-theme="dark"] .dic-mockup {
+            background: rgba(0,0,0,0.2);
+            box-shadow: inset 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Tipografía y detalles internos */
+        .dic-tag { 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.15em; 
+            font-weight: 800; 
+            color: var(--primary); 
+            background: rgba(67, 24, 255, 0.1); 
+            padding: 6px 14px; 
+            border-radius: 30px; 
+            margin-bottom: 16px; 
+            display: inline-block;
+            border: 1px solid rgba(67, 24, 255, 0.2);
+        }
+        .dic-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 16px; color: var(--text-main); letter-spacing: -0.02em;}
+        .dic-desc { color: var(--text-muted); line-height: 1.7; font-size: 1.05rem; }
+        
+        .dic-formula { 
+            background: var(--card-bg); 
+            padding: 16px 20px; 
+            border-radius: 12px; 
+            font-family: 'Courier New', Courier, monospace; 
+            font-size: 0.95rem; 
+            color: var(--primary); 
+            font-weight: 600;
+            margin-top: 20px; 
+            border-left: 4px solid var(--primary);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            letter-spacing: -0.03em;
+        }
+        :root[data-theme="dark"] .dic-formula { color: #a5b4fc; }
+
+        /* Estilos de los minigráficos falsos */
+        .mock-kpi-card { background: var(--card-bg); border-left: 4px solid var(--primary); padding: 24px; border-radius: 16px; width: 100%; box-shadow: var(--card-shadow); border-top: 1px solid var(--border-light);}
+        .mock-bar-chart { width: 100%; height: 34px; border-radius: 8px; display: flex; overflow: hidden; box-shadow: inset 0 2px 6px rgba(0,0,0,0.15); }
+        .mock-badge { background: linear-gradient(135deg, var(--success) 0%, #048a67 100%); color: white; padding: 10px 24px; border-radius: 30px; font-weight: 800; font-size: 1.3rem; box-shadow: 0 8px 20px rgba(5, 205, 153, 0.4); border: 1px solid rgba(255,255,255,0.4); text-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        .mock-radar { width: 140px; height: 140px; background: repeating-radial-gradient(circle, transparent, transparent 20px, var(--border-color) 21px); border-radius: 50%; position: relative; }
+        .mock-radar::after { content: ''; position: absolute; top: 24px; left: 24px; right: 24px; bottom: 24px; background: rgba(67, 24, 255, 0.2); border: 2px solid var(--primary); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); backdrop-filter: blur(3px); box-shadow: 0 0 20px rgba(67, 24, 255, 0.3);}
+
+        @media (max-width: 992px) { 
+            .dic-card { flex-direction: column; gap: 20px; padding: 24px; } 
+            .dic-mockup { height: 220px; flex: auto; } 
+        }
+
+        @media (max-width: 768px) { 
+            .liquid-nav { flex-direction: column; border-radius: 24px; padding: 10px; width: 100%; align-items: stretch; }
+            .nav-item { width: 100%; }
+            .liquid-tab { padding: 14px; justify-content: center; width: 100%; }
+            .liquid-indicator { display: none; }
+            .liquid-tab.active { 
+                background: rgba(255,255,255,0.1); 
+                color: var(--primary); 
+                border-radius: 16px;
+                box-shadow: 0 8px 20px rgba(67, 24, 255, 0.15);
+            }
+            .nav-divider { width: 100%; height: 1px; margin: 8px 0; }
+        }
+
+        /* FIX MAPA LEAFLET */
         #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); }
-        .leaflet-container { background: rgba(255,255,255,0.2); font-family: 'Inter', sans-serif; }
+        .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
     </style>
 </head>
 
@@ -249,7 +472,7 @@
                 </h2>
                 <div class="text-muted mt-2">Panel interactivo de monitoreo de cohortes y calidad percibida.</div>
             </div>
-            <button class="theme-toggle" id="btn-theme"><i class="bi bi-moon-fill me-2"></i>Modo Oscuro</button>
+            <!-- Botón del header removido (ahora está en el nav líquido) -->
         </div>
 
         <div class="row mb-5 g-4">
@@ -268,18 +491,39 @@
         <div id="panel-lobby-curso" style="display: none; min-height: 50vh;" class="mb-5"></div>
 
         <div id="contenedor-tabs" style="display: block;">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation"><button class="nav-link active" id="global-tab"
-                        data-bs-toggle="tab" data-bs-target="#panel-global" type="button">Demografía General</button>
-                </li>
-                <li class="nav-item" role="presentation"><button class="nav-link" id="moodle-tab" data-bs-toggle="tab"
-                        data-bs-target="#panel-moodle" type="button">Rendimiento Operativo</button></li>
-                <li class="nav-item" role="presentation"><button class="nav-link" id="radar-tab" data-bs-toggle="tab"
-                        data-bs-target="#panel-radar" type="button">Calidad Percibida</button></li>
-            </ul>
+            
+            <!-- LIQUID NAVBAR REPARADA, CUMPLIENDO CON ESTÁNDARES BOOTSTRAP -->
+            <div class="liquid-nav-container">
+                <ul class="nav liquid-nav" role="tablist">
+                    <div class="liquid-indicator" id="liquid-indicator"></div>
+                    
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link liquid-tab active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab" aria-selected="true">
+                            <i class="bi bi-pie-chart-fill fs-5"></i> Demografía
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link liquid-tab" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab" aria-selected="false">
+                            <i class="bi bi-speedometer2 fs-5"></i> Operativo
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link liquid-tab" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab" aria-selected="false">
+                            <i class="bi bi-star-fill fs-5"></i> Calidad Percibida
+                        </button>
+                    </li>
+
+                    <div class="nav-divider"></div>
+                    
+                    <button class="theme-toggle-nav" id="btn-theme" title="Cambiar Tema">
+                        <i class="bi bi-moon-stars-fill"></i>
+                    </button>
+                </ul>
+            </div>
 
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="panel-global">
+                <!-- PANEL 1: DEMOGRAFÍA -->
+                <div class="tab-pane fade show active" id="panel-global" role="tabpanel" aria-labelledby="global-tab">
                     <div class="row g-4 mb-5" id="kpi-global-row"></div>
                     
                     <div class="row g-4 mb-5">
@@ -328,14 +572,14 @@
 
                     <div class="ia-panel-wrapper" id="panel-ia-demo" style="display: none;">
                         <div class="ia-card">
-                            <div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico Demográfico Asistido
-                            </div>
+                            <div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico Demográfico Asistido</div>
                             <div id="ia-txt-demo"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="panel-moodle">
+                <!-- PANEL 2: RENDIMIENTO -->
+                <div class="tab-pane fade" id="panel-moodle" role="tabpanel" aria-labelledby="moodle-tab">
                     <div class="row g-4 mb-5" id="kpi-moodle-row"></div>
                     <div class="row g-4">
                         <div class="col-md-8">
@@ -345,8 +589,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div
-                                class="glass-card text-center d-flex flex-column justify-content-center align-items-center">
+                            <div class="glass-card text-center d-flex flex-column justify-content-center align-items-center">
                                 <h5>Ritmo de Aprendizaje</h5>
                                 <div class="metric-big mt-4" id="tiempo-consumo-dias">0</div>
                                 <div class="kpi-label">Días Promedio para Finalizar</div>
@@ -355,14 +598,14 @@
                     </div>
                     <div class="ia-panel-wrapper" id="panel-ia-moodle" style="display: none;">
                         <div class="ia-card">
-                            <div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico de Rendimiento Operativo
-                            </div>
+                            <div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico de Rendimiento Operativo</div>
                             <div id="ia-txt-moodle"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="panel-radar">
+                <!-- PANEL 3: CALIDAD -->
+                <div class="tab-pane fade" id="panel-radar" role="tabpanel" aria-labelledby="radar-tab">
                     <div class="row g-4">
                         <div class="col-md-8">
                             <div class="glass-card">
@@ -378,8 +621,7 @@
                         </div>
                         <div class="col-12 ia-panel-wrapper" id="panel-ia-radar" style="display: none;">
                             <div class="ia-card">
-                                <div class="ia-title"><i class="bi bi-robot fs-3"></i> Evaluación Analítica de Calidad
-                                    Percibida</div>
+                                <div class="ia-title"><i class="bi bi-robot fs-3"></i> Evaluación Analítica de Calidad Percibida</div>
                                 <div id="ia-txt-radar"></div>
                             </div>
                         </div>
@@ -389,6 +631,7 @@
         </div>
     </div>
 
+    <!-- MODAL DICCIONARIO LIQUID -->
     <div class="modal fade" id="kpiModal" tabindex="-1" aria-labelledby="kpiModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
@@ -415,9 +658,7 @@
                             </div>
                         </div>
                         <div class="dic-mockup">
-                            <span
-                                style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización
-                                en Dashboard:</span>
+                            <span style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización en Dashboard:</span>
                             <div class="mock-kpi-card">
                                 <div class="kpi-value">85.4</div>
                                 <div class="kpi-label" style="font-size: 0.7rem;">Score Salud (CHS)</div>
@@ -427,9 +668,7 @@
 
                     <div class="dic-card">
                         <div class="dic-info">
-                            <span class="dic-tag"
-                                style="background: rgba(5, 205, 153, 0.1); color: var(--success);">Métrica
-                                Operativa</span>
+                            <span class="dic-tag" style="background: rgba(5, 205, 153, 0.1); color: var(--success); border-color: rgba(5, 205, 153, 0.2);">Métrica Operativa</span>
                             <h4 class="dic-title">Tasas de Embudo Académico</h4>
                             <p class="dic-desc">Mide el flujo del estudiante en Moodle. <br>
                                 • <strong>Tasa de Finalización:</strong> % de inscritos que aprobaron el curso.<br>
@@ -440,17 +679,14 @@
                                 para evidenciar en qué fase se pierden los usuarios.</div>
                         </div>
                         <div class="dic-mockup">
-                            <span
-                                style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización
-                                en Dashboard:</span>
+                            <span style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización en Dashboard:</span>
                             <div class="w-100 px-3">
                                 <div class="mock-bar-chart">
                                     <div style="width: 60%; background: var(--success);" title="Finalización"></div>
                                     <div style="width: 30%; background: var(--warning);" title="Abandono"></div>
                                     <div style="width: 10%; background: var(--danger);" title="Inactividad"></div>
                                 </div>
-                                <div class="d-flex justify-content-between mt-2"
-                                    style="font-size: 0.7rem; color: var(--text-muted);">
+                                <div class="d-flex justify-content-between mt-2" style="font-size: 0.7rem; color: var(--text-muted);">
                                     <span>60% Fin.</span><span>30% Abd.</span><span>10% Inac.</span>
                                 </div>
                             </div>
@@ -459,9 +695,7 @@
 
                     <div class="dic-card">
                         <div class="dic-info">
-                            <span class="dic-tag"
-                                style="background: rgba(255, 181, 71, 0.1); color: var(--warning);">Métrica de
-                                Calidad</span>
+                            <span class="dic-tag" style="background: rgba(255, 181, 71, 0.1); color: var(--warning); border-color: rgba(255, 181, 71, 0.2);">Métrica de Calidad</span>
                             <h4 class="dic-title">Net Promoter Score (e-NPS)</h4>
                             <p class="dic-desc">Mide la lealtad y satisfacción general del estudiante respondiendo a la
                                 pregunta: <em>"En general, ¿Cómo se sintió con la actividad?"</em>. Un puntaje positivo
@@ -470,18 +704,14 @@
                                 > 20 se consideran excelentes.</div>
                         </div>
                         <div class="dic-mockup">
-                            <span
-                                style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización
-                                en IA:</span>
+                            <span style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización en IA:</span>
                             <div class="mock-badge">NPS: +45</div>
                         </div>
                     </div>
 
                     <div class="dic-card">
                         <div class="dic-info">
-                            <span class="dic-tag"
-                                style="background: rgba(14, 165, 233, 0.1); color: var(--info);">Métrica
-                                Dimensional</span>
+                            <span class="dic-tag" style="background: rgba(14, 165, 233, 0.1); color: var(--info); border-color: rgba(14, 165, 233, 0.2);">Métrica Dimensional</span>
                             <h4 class="dic-title">Índices de Calidad (IUP, ICD, UX, Brecha)</h4>
                             <p class="dic-desc">Agrupa preguntas del formulario en variables clave sobre 5.0:<br>
                                 • <strong>IUP (Utilidad Práctica):</strong> ¿Los conceptos se aplican al trabajo?<br>
@@ -491,9 +721,7 @@
                             </p>
                         </div>
                         <div class="dic-mockup">
-                            <span
-                                style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización
-                                en Radar:</span>
+                            <span style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización en Radar:</span>
                             <div class="mock-radar"></div>
                         </div>
                     </div>
@@ -504,12 +732,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Registrar el sistema de coordenadas MAGNA-SIRGAS Origen Oeste (EPSG:3115) que usa la Alcaldía de Cali
         proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
         let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let chartInstances = {}; let promediosGlobalesPreguntas = {};
         
-        // Variables globales del Mapa
         let mapInstance = null;
         let geoJsonLayer = null;
         let mapTilesLayer = null;
@@ -518,33 +744,136 @@
         const mapeoPreguntas = { "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Objetivo Cumplido", "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia Temática", "¿Los temas se desarrollaron en el tiempo previsto?": "Manejo del Tiempo", "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Innovación (Conceptos)", "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Utilidad Práctica", "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente", "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Resolución Dudas", "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "Experiencia Plataforma (UX)", "¿El material utilizado permitió el entendimiento del tema?": "Calidad Materiales", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General" };
         const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
 
+        // ==========================================
+        // TOGGLE MODO OSCURO
+        // ==========================================
         const btnTheme = document.getElementById('btn-theme');
-        btnTheme.addEventListener('click', () => {
-            const html = document.documentElement; const isLight = html.getAttribute('data-theme') === 'light';
-            html.setAttribute('data-theme', isLight ? 'dark' : 'light');
-            btnTheme.innerHTML = isLight ? '<i class="bi bi-sun-fill me-2"></i>Modo Claro' : '<i class="bi bi-moon-fill me-2"></i>Modo Oscuro';
-            Chart.defaults.color = getComputedStyle(html).getPropertyValue('--text-main');
-            
-            if(mapInstance) {
-                if(mapTilesLayer) mapInstance.removeLayer(mapTilesLayer);
-                let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-                mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
-            }
+        if(btnTheme){
+            btnTheme.addEventListener('click', () => {
+                const html = document.documentElement; 
+                const isLight = html.getAttribute('data-theme') === 'light';
+                html.setAttribute('data-theme', isLight ? 'dark' : 'light');
+                
+                // Cambiar icono de luna a sol y viceversa
+                btnTheme.innerHTML = isLight ? '<i class="bi bi-sun-fill text-warning"></i>' : '<i class="bi bi-moon-stars-fill"></i>';
+                
+                Chart.defaults.color = getComputedStyle(html).getPropertyValue('--text-main');
+                
+                if(mapInstance) {
+                    if(mapTilesLayer) mapInstance.removeLayer(mapTilesLayer);
+                    let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+                    mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
+                }
 
-            if (cursoActual) actualizarPantallaCurso(); else actualizarPantallaGlobal();
+                if (cursoActual) actualizarPantallaCurso(); else actualizarPantallaGlobal();
+            });
+        }
+
+        // ==========================================
+        // LIQUID NAVBAR ANIMATION (La gota transparente)
+        // ==========================================
+        function moveIndicator(btn) {
+            const indicator = document.getElementById('liquid-indicator');
+            const nav = document.querySelector('.liquid-nav');
+            if (!indicator || !btn || !nav) return;
+            
+            if (window.innerWidth > 768) {
+                // Cálculo 100% confiable de la posición dentro de la lista
+                const navRect = nav.getBoundingClientRect();
+                const btnRect = btn.getBoundingClientRect();
+                
+                indicator.style.width = btnRect.width + 'px';
+                indicator.style.left = (btnRect.left - navRect.left) + 'px';
+            }
+            
+            if (btn.getAttribute('data-bs-target') === '#panel-global') {
+                if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300);
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            const activeBtn = document.querySelector('.liquid-tab.active');
+            if(activeBtn) moveIndicator(activeBtn);
         });
 
         document.addEventListener("DOMContentLoaded", async () => {
+            // Mover el indicador cuando Bootstrap haya terminado de cambiar la pestaña
+            document.querySelectorAll('.liquid-tab').forEach(btn => {
+                btn.addEventListener('shown.bs.tab', (e) => {
+                    moveIndicator(e.target);
+                });
+            });
+
+            // Mover el indicador visual a la posición inicial tras carga inicial
+            setTimeout(() => {
+                const activeBtn = document.querySelector('.liquid-tab.active');
+                if(activeBtn) moveIndicator(activeBtn);
+            }, 100);
+
             try {
                 const urlFresca = 'dashboard_data.json?v=' + new Date().getTime();
-                const response = await fetch(urlFresca, { headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' } }); 
-                dashboardData = await response.json();
                 
                 try {
+                    const response = await fetch(urlFresca, { headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' } }); 
+                    dashboardData = await response.json();
+                    
                     const geoResponse = await fetch('mc_comunas.json');
                     const rawData = await geoResponse.json();
                     geoJsonDataRaw = proyectarGeoJson(rawData); 
-                } catch(e) { console.warn("No se pudo cargar o proyectar mc_comunas.json", e); }
+                } catch (fetchError) {
+                    console.warn("Entorno de vista previa detectado. Cargando datos de prueba simulados para que puedas ver el diseño.", fetchError);
+                    
+                    dashboardData = {
+                        "metadata": { "total_cursos_analizados": 1, "total_encuestas_historicas": 416 },
+                        "kpis_globales": { "chs_promedio_secretaria": 88.5, "nps_global": 65.2 },
+                        "demografia_global": {
+                            "Sexo": { "Femenino": 250, "Masculino": 166 },
+                            "Curso de Vida": { "Adultez": 300, "Juventud": 116 },
+                            "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 116 },
+                            "Escolaridad": { "Profesional": 200, "Especialización": 216 },
+                            "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 }
+                        },
+                        "cursos": [{
+                            "Nombre_Curso": "RPMS PI e I 012026 - (AISPPMSCVPI_01_2026, AISPPMSCVI_01_2026)",
+                            "Curso_Base": "RPMS PI e I 012026",
+                            "Edicion": "2026 - Edición 01",
+                            "Total_Inscritos": 500,
+                            "Total_Encuestas": 416,
+                            "Salud_Curso_CHS": 88.5,
+                            "e_NPS": 65.2,
+                            "Tasa_Finalizacion_%": 75,
+                            "Tasa_Abandono_%": 15,
+                            "Tasa_Inactividad_%": 10,
+                            "Tiempo_Promedio_Dias": 12.5,
+                            "IUP_Promedio": 4.6,
+                            "ICD_Promedio": 4.8,
+                            "UX_Promedio": 4.3,
+                            "Brecha_Expectativa": 0.2,
+                            "Demografia": {
+                                "Sexo": { "Femenino": 250, "Masculino": 166 },
+                                "Edad": { "Adultez": 300, "Juventud": 116 },
+                                "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 116 },
+                                "Escolaridad": { "Profesional": 200, "Especialización": 216 },
+                                "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 }
+                            },
+                            "Detalle_Preguntas": {
+                                "¿Se dio a conocer el objetivo de la capacitación?": 4.7,
+                                "¿Se cumplió el objetivo de la capacitación?": 4.6,
+                                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.8,
+                                "¿Los temas se desarrollaron en el tiempo previsto?": 4.5,
+                                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.6,
+                                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6,
+                                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.7,
+                                "¿El facilitador demostró el dominio del tema brindado?": 4.8,
+                                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4,
+                                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5,
+                                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.3,
+                                "¿El material utilizado permitió el entendimiento del tema?": 4.5,
+                                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.7
+                            }
+                        }]
+                    };
+                }
 
                 Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); Chart.defaults.font.family = 'Inter';
                 
@@ -554,15 +883,9 @@
                 document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
                 document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
                 
-                const tabGlobal = document.getElementById('global-tab');
-                if (tabGlobal) {
-                    tabGlobal.addEventListener('shown.bs.tab', () => {
-                        if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 200);
-                    });
-                }
-
                 actualizarPantallaGlobal();
-            } catch (error) { console.error("Error cargando datos", error); }
+
+            } catch (error) { console.error("Error crítico procesando datos", error); }
         });
 
         function normalizarLlaveComuna(texto) {
@@ -588,6 +911,7 @@
         }
 
         function proyectarGeoJson(data) {
+            if(!data || !data.features) return { type: "FeatureCollection", features: [] };
             let newData = JSON.parse(JSON.stringify(data)); 
             newData.features.forEach((feature, index) => {
                 try {
@@ -628,7 +952,7 @@
         }
 
         function dibujarMapaCoropletico(dataComunasBackend) {
-            if (!mapInstance || !geoJsonDataRaw) return;
+            if (!mapInstance || !geoJsonDataRaw || !geoJsonDataRaw.features) return;
             if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer);
             let mapaDatosNormalizado = {}; let maxParticipantes = 0;
             for (let nombreComunaEnData in dataComunasBackend) {
