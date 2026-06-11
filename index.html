@@ -1124,7 +1124,82 @@
         }
 
         function crearTarjetaKPI(label, valor) { return `<div class="col"><div class="glass-card kpi-card"><div class="kpi-value">${valor}</div><div class="kpi-label">${label}</div></div></div>`; }
-        function dibujarGraficoDona(canvasId, dataObject, legendPosition) { if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); if (!dataObject || Object.keys(dataObject).length === 0) return; chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'doughnut', data: { labels: Object.keys(dataObject), datasets: [{ data: Object.values(dataObject), backgroundColor: coloresDona, borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } } } } } }); }
+        
+        // ==========================================
+        // DIBUJAR GRÁFICOS DONA CON EFECTOS DE HOVER
+        // ==========================================
+        function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
+            if (!dataObject || Object.keys(dataObject).length === 0) return; 
+
+            let activeHoverIndex = null;
+            const currentData = Object.values(dataObject);
+            const currentLabels = Object.keys(dataObject);
+            // Emparejar cada etiqueta con un color de la paleta
+            const baseColors = currentLabels.map((_, i) => coloresDona[i % coloresDona.length]);
+
+            chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
+                type: 'doughnut', 
+                data: { 
+                    labels: currentLabels, 
+                    datasets: [{ 
+                        data: currentData, 
+                        backgroundColor: [...baseColors], 
+                        borderWidth: 2, 
+                        borderColor: 'transparent',
+                        hoverOffset: 12, /* Este es el efecto que empuja el fragmento hacia afuera */
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    cutout: '75%',
+                    layout: { padding: 10 }, /* Espacio extra para que el hoverOffset no se recorte en la caja */
+                    
+                    // Lógica para atenuar los demás fragmentos
+                    onHover: (event, elements, chart) => {
+                        if (elements && elements.length) {
+                            const index = elements[0].index;
+                            if (activeHoverIndex !== index) {
+                                activeHoverIndex = index;
+                                // Ponemos todos grises excepto el que estamos tocando
+                                chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => 
+                                    i === index ? color : 'rgba(100, 116, 139, 0.15)' 
+                                );
+                                chart.update('none'); // Update sin animación para no interrumpir el salto
+                            }
+                        } else if (activeHoverIndex !== null) {
+                            // Al salir, restablecemos los colores de todos
+                            activeHoverIndex = null;
+                            chart.data.datasets[0].backgroundColor = [...baseColors];
+                            chart.update('none');
+                        }
+                    },
+                    
+                    plugins: { 
+                        legend: { 
+                            position: legendPosition, 
+                            labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } },
+                            // Si pasamos el mouse por los nombres de la leyenda, también atenuamos el gráfico
+                            onHover: function(event, legendItem, legend) {
+                                const index = legendItem.index;
+                                const chart = legend.chart;
+                                chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => 
+                                    i === index ? color : 'rgba(100, 116, 139, 0.15)'
+                                );
+                                chart.update('none');
+                            },
+                            onLeave: function(event, legendItem, legend) {
+                                const chart = legend.chart;
+                                chart.data.datasets[0].backgroundColor = [...baseColors];
+                                chart.update('none');
+                            }
+                        } 
+                    } 
+                } 
+            }); 
+        }
+
         function dibujarBarraMoodle(canvasId, curso) { if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); const style = getComputedStyle(document.documentElement); chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [{ label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: style.getPropertyValue('--success').trim(), borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: style.getPropertyValue('--warning').trim() }, { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: style.getPropertyValue('--danger').trim(), borderRadius: { topRight: 6, bottomRight: 6 } }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, grid: { display: false }, border: { display: false } }, y: { stacked: true, display: false, grid: { display: false }, border: { display: false } } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 14, font: { family: 'Inter', size: 13 } } } } } }); }
         function dibujarRadar(preguntasCurso, isGlobal = false) { if (chartInstances['chartRadar']) chartInstances['chartRadar'].destroy(); if (!preguntasCurso || Object.keys(preguntasCurso).length === 0) return; const etiquetasLargas = Object.keys(preguntasCurso); const etiquetasCortas = etiquetasLargas.map(q => mapeoPreguntas[q] || "Pregunta"); const dataCurso = Object.values(preguntasCurso); const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim(); let datasetsArray = []; if (isGlobal) { datasetsArray.push({ label: 'Promedio Institucional', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); } else { const dataGlobal = etiquetasLargas.map(q => promediosGlobalesPreguntas[q] || 0); datasetsArray.push({ label: 'Esta Cohorte', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); datasetsArray.push({ label: 'Benchmark Global', data: dataGlobal, backgroundColor: 'transparent', borderColor: mutedColor, borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); } chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: etiquetasCortas, datasets: datasetsArray }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent', font: { family: 'Inter' } }, grid: { color: 'rgba(0,0,0,0.05)' }, angleLines: { color: 'rgba(0,0,0,0.05)' }, pointLabels: { font: { size: 11, family: 'Inter', weight: '600' } } } }, plugins: { tooltip: { padding: 12, callbacks: { title: (context) => { const textoCompleto = etiquetasLargas[context[0].dataIndex]; const palabras = textoCompleto.split(' '); let lineas = []; let lineaActual = ''; palabras.forEach(palabra => { if ((lineaActual + palabra).length > 40) { lineas.push(lineaActual.trim()); lineaActual = palabra + ' '; } else { lineaActual += palabra + ' '; } }); lineas.push(lineaActual.trim()); return lineas; } } } } } }); }
     </script>
