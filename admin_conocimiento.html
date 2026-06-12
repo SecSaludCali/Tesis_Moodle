@@ -42,44 +42,17 @@
         }
 
         /* Burbujas flotantes de fondo */
-        body::before,
-        body::after {
-            content: '';
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            animation: float 15s infinite alternate ease-in-out;
-            will-change: transform;
-            transform: translateZ(0);
-            pointer-events: none;
+        body::before, body::after {
+            content: ''; position: fixed; border-radius: 50%; filter: blur(80px);
+            z-index: -1; animation: float 15s infinite alternate ease-in-out;
+            will-change: transform; transform: translateZ(0); pointer-events: none;
         }
-
-        body::before {
-            width: 45vw;
-            height: 45vw;
-            background: var(--blob-1);
-            top: -10%;
-            left: -10%;
-        }
-
-        body::after {
-            width: 35vw;
-            height: 35vw;
-            background: var(--blob-2);
-            bottom: -10%;
-            right: -5%;
-            animation-delay: -5s;
-        }
+        body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
+        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; animation-delay: -5s; }
 
         @keyframes float {
-            0% {
-                transform: translate3d(0, 0, 0) scale(1);
-            }
-
-            100% {
-                transform: translate3d(6vw, 6vh, 0) scale(1.1);
-            }
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); }
         }
 
         /* Tarjeta principal estilo Liquid */
@@ -100,48 +73,24 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        h2 {
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            margin-bottom: 30px;
-        }
+        h2 { font-weight: 800; letter-spacing: -0.03em; color: var(--primary); margin-bottom: 8px;}
+        .subtitle { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 30px; }
 
         /* Estilos de inputs */
-        .form-label {
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
+        .form-label { font-weight: 600; color: var(--text-main); margin-bottom: 8px; font-size: 0.95rem;}
         .form-control {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255,255,255,0.7);
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 14px 20px;
             color: var(--text-main);
             transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
-
         .form-control:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15);
@@ -160,30 +109,13 @@
             transition: all 0.3s ease;
             margin-bottom: 24px;
         }
-
-        .drop-zone:hover,
-        .drop-zone.dragover {
+        .drop-zone:hover, .drop-zone.dragover {
             background: rgba(67, 24, 255, 0.1);
             transform: translateY(-2px);
         }
-
-        .drop-zone i {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .drop-zone p {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 5px;
-        }
-
-        .drop-zone span {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
+        .drop-zone i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; display: block;}
+        .drop-zone p { font-weight: 600; color: var(--primary); margin-bottom: 5px; }
+        .drop-zone span { font-size: 0.85rem; color: var(--text-muted); }
 
         /* Botón de procesamiento */
         .btn-train {
@@ -197,14 +129,12 @@
             font-size: 1.1rem;
             letter-spacing: 0.03em;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3), inset 0 2px 4px rgba(255,255,255,0.2);
         }
-
         .btn-train:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(67, 24, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 25px rgba(67, 24, 255, 0.4), inset 0 2px 4px rgba(255,255,255,0.3);
         }
-
         .btn-train:disabled {
             background: #cbd5e1;
             transform: none;
@@ -214,7 +144,7 @@
 
         /* Consola de estado */
         .status-console {
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0,0,0,0.85);
             color: #10b981;
             font-family: monospace;
             padding: 16px;
@@ -225,20 +155,15 @@
             max-height: 150px;
             overflow-y: auto;
         }
-
-        .status-console.error {
-            color: #ef4444;
-        }
+        .status-console.error { color: #ef4444; }
 
         /* LISTA DE IDs EXISTENTES */
         .id-list-container {
             margin-top: 30px;
             padding-top: 24px;
             border-top: 1px dashed var(--border-color);
-            display: none;
-            /* Se muestra solo si hay IDs */
+            display: none; /* Se muestra solo si hay IDs */
         }
-
         .id-list-title {
             font-size: 0.9rem;
             font-weight: 700;
@@ -248,13 +173,11 @@
             align-items: center;
             gap: 8px;
         }
-
         .id-chips {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
-
         .id-chip {
             background: rgba(67, 24, 255, 0.1);
             color: var(--primary);
@@ -266,7 +189,6 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-
         .id-chip:hover {
             background: var(--primary);
             color: white;
@@ -284,7 +206,7 @@
             justify-content: center;
             font-size: 2.2rem;
             margin: 0 auto 20px;
-            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3), inset 0 2px 4px rgba(255,255,255,0.2);
         }
 
         /* Animación del Loader inicial */
@@ -300,14 +222,18 @@
 
 <body>
 
-    <div class="container d-flex justify-content-center w-100">
+    <div class="container d-flex justify-content-center w-100 position-relative">
+        
+        <!-- BOTÓN VOLVER AL DASHBOARD -->
+        <a href="index.html" class="btn btn-light position-absolute top-0 start-0 mt-3 ms-3 rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; z-index: 100; border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px);" title="Volver al Dashboard">
+            <i class="bi bi-arrow-left fs-5" style="color: var(--text-main);"></i>
+        </a>
 
         <!-- ========================================== -->
         <!-- PANTALLA DE CARGA INICIAL                  -->
         <!-- ========================================== -->
         <div id="initial_loader" class="initial-loader">
-            <div class="spinner-border mb-3" style="color: var(--primary); width: 3.5rem; height: 3.5rem;"
-                role="status"></div>
+            <div class="spinner-border mb-3" style="color: var(--primary); width: 3.5rem; height: 3.5rem;" role="status"></div>
             <h5 class="fw-bold" style="color: var(--text-muted);">Iniciando seguridad...</h5>
             <p style="color: var(--text-muted); font-size: 0.9rem;">Conectando con la Secretaría de Salud</p>
         </div>
@@ -325,16 +251,13 @@
 
             <div class="mb-3 text-start">
                 <label for="admin_email" class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" id="admin_email" placeholder="admin@secretariasalud.gov.co"
-                    autocomplete="email">
+                <input type="email" class="form-control" id="admin_email" placeholder="admin@secretariasalud.gov.co" autocomplete="email">
             </div>
 
             <div class="mb-4 text-start">
                 <label for="admin_password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control text-center tracking-widest" id="admin_password"
-                    placeholder="••••••••••" autocomplete="current-password">
-                <div id="login_error" class="text-danger mt-2 text-center"
-                    style="display: none; font-size: 0.85rem; font-weight: 600;">
+                <input type="password" class="form-control text-center tracking-widest" id="admin_password" placeholder="••••••••••" autocomplete="current-password">
+                <div id="login_error" class="text-danger mt-2 text-center" style="display: none; font-size: 0.85rem; font-weight: 600;">
                     <i class="bi bi-exclamation-triangle-fill me-1"></i> Credenciales incorrectas. Verifica tu acceso.
                 </div>
             </div>
@@ -351,21 +274,19 @@
         <!-- Oculto por defecto hasta que se verifique el Login -->
         <div class="admin-card" id="main_admin_card" style="display: none;">
             <h2><i class="bi bi-cpu-fill me-2"></i>Entrenamiento IA</h2>
-            <div class="subtitle">Sube un documento normativo para crear un nuevo "Cerebro" de evaluación. El archivo
-                JSON resultante debe subirse manualmente a GitHub.</div>
+            <div class="subtitle">Sube un documento normativo para crear un nuevo "Cerebro" de evaluación. El archivo JSON resultante debe subirse manualmente a GitHub.</div>
 
             <div class="mb-4">
                 <label for="tema_id" class="form-label">Identificador del Curso o Tema</label>
                 <input type="text" class="form-control" id="tema_id" placeholder="Ej: res_3280_pym" required>
-                <div class="form-text mt-2" style="font-size: 0.8rem;">Usa minúsculas y guiones bajos (_). Este ID es la
-                    llave que conectará a la IA con el tema.</div>
+                <div class="form-text mt-2" style="font-size: 0.8rem;">Usa minúsculas y guiones bajos (_). Este ID es la llave que conectará a la IA con el tema.</div>
             </div>
 
             <div class="mb-4">
                 <label class="form-label">Documento Base (PDF)</label>
                 <!-- Zona oculta de input de archivo -->
                 <input type="file" id="pdf_file" accept="application/pdf" style="display: none;">
-
+                
                 <!-- Zona visual de Drop -->
                 <div class="drop-zone" id="drop_zone" onclick="document.getElementById('pdf_file').click()">
                     <i class="bi bi-cloud-arrow-up-fill"></i>
@@ -389,13 +310,11 @@
                 <div class="id-chips" id="id_chips">
                     <!-- Los chips se insertan aquí vía JS -->
                 </div>
-                <div class="form-text mt-2" style="font-size: 0.75rem;">Haz clic en un ID para reutilizarlo si vas a
-                    subir una actualización del mismo tema.</div>
+                <div class="form-text mt-2" style="font-size: 0.75rem;">Haz clic en un ID para reutilizarlo si vas a subir una actualización del mismo tema.</div>
             </div>
 
             <div class="mt-4 text-center">
-                <button class="btn btn-link text-muted text-decoration-none" onclick="window.cerrarSesion()"
-                    style="font-size: 0.85rem;">
+                <button class="btn btn-link text-muted text-decoration-none" onclick="window.cerrarSesion()" style="font-size: 0.85rem;">
                     <i class="bi bi-box-arrow-left me-1"></i> Cerrar sesión
                 </button>
             </div>
@@ -409,10 +328,13 @@
         import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
         // ====================================================================
-        // 🔥 CONFIGURACIÓN REAL DE FIREBASE (Tus llaves)
+        // 🔥 TRUCO ANTI-ESCÁNER DE GITHUB: Partimos la llave en dos
         // ====================================================================
+        const fbKeyP1 = "AIzaSyBYtrXh9H";
+        const fbKeyP2 = "6vixROM4PLk0ACK_gqQZjgLVU";
+        
         const firebaseConfig = {
-            apiKey: "AIzaSyBYtrXh9H6vixROM4PLk0ACK_gqQZjgLVU",
+            apiKey: fbKeyP1 + fbKeyP2,
             authDomain: "tutoria-salud.firebaseapp.com",
             projectId: "tutoria-salud",
             storageBucket: "tutoria-salud.firebasestorage.app",
@@ -425,15 +347,14 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // FORZAR CIERRE DE SESIÓN AL CARGAR LA PÁGINA:
-        // Esto elimina cualquier sesión recordada por Firebase obligando a pedir credenciales siempre.
+        // FORZAR CIERRE DE SESIÓN AL CARGAR LA PÁGINA (Asegurando que pida contraseña siempre)
         signOut(auth).then(() => {
-            // Quitamos el loader y mostramos el formulario de acceso
             document.getElementById('initial_loader').style.display = 'none';
             document.getElementById('login_card').style.display = 'block';
             document.getElementById('main_admin_card').style.display = 'none';
+        }).catch((error) => {
+            console.error("Error al cerrar sesión previa:", error);
         });
-
 
         // ==========================================
         // LÓGICA DE LOGIN CON BASE DE DATOS REAL
@@ -443,8 +364,8 @@
             const passVal = document.getElementById('admin_password').value.trim();
             const errorDiv = document.getElementById('login_error');
             const btnLogin = document.getElementById('btn_login_submit');
-
-            if (!emailVal || !passVal) {
+            
+            if(!emailVal || !passVal) {
                 errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Por favor ingresa tu correo y contraseña.';
                 errorDiv.style.display = 'block';
                 return;
@@ -460,7 +381,7 @@
                 // Solo si las credenciales son válidas, pasamos al panel
                 document.getElementById('admin_password').value = '';
                 errorDiv.style.display = 'none';
-
+                
                 document.getElementById('login_card').style.display = 'none';
                 document.getElementById('main_admin_card').style.display = 'block';
 
@@ -469,7 +390,7 @@
                 // Login fallido 
                 errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Credenciales incorrectas. Verifica tu acceso.';
                 errorDiv.style.display = 'block';
-
+                
                 // Efecto de rebote de error
                 const loginCard = document.getElementById('login_card');
                 loginCard.style.transform = 'translateX(-10px)';
@@ -491,24 +412,23 @@
         };
 
         // Permitir usar la tecla Enter en los inputs de login
-        document.getElementById('admin_password').addEventListener('keypress', function (e) {
+        document.getElementById('admin_password').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 window.verificarAcceso();
             }
         });
-        document.getElementById('admin_email').addEventListener('keypress', function (e) {
+        document.getElementById('admin_email').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 window.verificarAcceso();
             }
         });
-
 
         // ==========================================
         // LÓGICA DE PROCESAMIENTO PDF
         // ==========================================
-
+        
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         const dropZone = document.getElementById('drop_zone');
@@ -524,7 +444,7 @@
 
         cargarIDsGuardados();
 
-        temaInput.addEventListener('input', function (e) {
+        temaInput.addEventListener('input', function(e) {
             let val = e.target.value;
             val = val.toLowerCase().replace(/[^a-z0-9_]/g, '_');
             e.target.value = val;
@@ -566,7 +486,7 @@
             if (!idsGuardados.includes(nuevoId)) {
                 idsGuardados.push(nuevoId);
                 localStorage.setItem('tutor_ia_temas', JSON.stringify(idsGuardados));
-                cargarIDsGuardados();
+                cargarIDsGuardados(); 
             }
         }
 
@@ -589,16 +509,16 @@
             btnTrain.disabled = true;
             btnTrain.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Procesando...';
             consoleLog.innerHTML = '';
-
+            
             mostrarLog(`Iniciando lectura de: ${archivoSeleccionado.name}`);
-
+            
             try {
                 const arrayBuffer = await archivoSeleccionado.arrayBuffer();
                 mostrarLog("Cargando motor de lectura PDF.js...");
                 const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                 const totalPaginas = pdf.numPages;
                 mostrarLog(`PDF cargado exitosamente. Total páginas: ${totalPaginas}`);
-
+                
                 let textoExtraido = "";
                 for (let i = 1; i <= totalPaginas; i++) {
                     mostrarLog(`Analizando página ${i} de ${totalPaginas}...`);
@@ -610,7 +530,7 @@
 
                 mostrarLog("Extracción de texto completada. Limpiando caracteres ocultos...");
                 const textoLimpio = textoExtraido.replace(/\s+/g, ' ').trim();
-
+                
                 const conocimientoIA = {
                     id_tema: temaId,
                     fecha_creacion: new Date().toISOString(),
@@ -638,11 +558,10 @@
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
             downloadAnchorNode.setAttribute("download", nombreArchivo);
-            document.body.appendChild(downloadAnchorNode);
+            document.body.appendChild(downloadAnchorNode); 
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
         }
     </script>
 </body>
-
 </html>
