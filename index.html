@@ -20,7 +20,7 @@
         /* PALETA CON EFECTO LIQUID GLASS Y BURBUJAS FLOTANTES */
         :root[data-theme="light"] {
             --bg-color: #f4f7fe;
-            --card-bg: rgba(255, 255, 255, 0.45);
+            --card-bg: rgba(255, 255, 255, 0.6);
             --text-main: #1e293b;
             --text-muted: #64748b;
             --primary: #4318ff;
@@ -28,23 +28,23 @@
             --warning: #ffb547;
             --danger: #ee5d50;
             --info: #0ea5e9;
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
             --border-light: rgba(255, 255, 255, 0.8);
-            --border-color: rgba(255, 255, 255, 0.4);
+            --border-color: rgba(255, 255, 255, 0.5);
             
-            --ia-bg: rgba(255, 255, 255, 0.6);
-            --ia-border: rgba(255, 255, 255, 0.7);
+            --ia-bg: rgba(255, 255, 255, 0.7);
+            --ia-border: rgba(255, 255, 255, 0.8);
             --ia-text: #334155;
-            --ia-card-bg: rgba(248, 250, 252, 0.5);
-            --modal-bg: rgba(255, 255, 255, 0.85);
+            --ia-card-bg: rgba(248, 250, 252, 0.7);
+            --modal-bg: rgba(255, 255, 255, 0.95); /* Más sólido para legibilidad */
 
-            --blob-1: rgba(67, 24, 255, 0.35);
-            --blob-2: rgba(5, 205, 153, 0.35);
+            --blob-1: rgba(67, 24, 255, 0.25);
+            --blob-2: rgba(5, 205, 153, 0.25);
         }
 
         :root[data-theme="dark"] {
             --bg-color: #050a1f;
-            --card-bg: rgba(11, 20, 55, 0.45);
+            --card-bg: rgba(11, 20, 55, 0.6);
             --text-main: #f8fafc;
             --text-muted: #8f9bba;
             --primary: #7551ff;
@@ -54,16 +54,16 @@
             --info: #38bdf8;
             --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
             --border-light: rgba(255, 255, 255, 0.15);
-            --border-color: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.08);
             
-            --ia-bg: rgba(11, 20, 55, 0.6);
-            --ia-border: rgba(255, 255, 255, 0.1);
+            --ia-bg: rgba(11, 20, 55, 0.7);
+            --ia-border: rgba(255, 255, 255, 0.15);
             --ia-text: #e2e8f0;
-            --ia-card-bg: rgba(5, 10, 31, 0.5);
-            --modal-bg: rgba(11, 20, 55, 0.85);
+            --ia-card-bg: rgba(5, 10, 31, 0.6);
+            --modal-bg: rgba(11, 20, 55, 0.95); /* Más sólido para legibilidad */
 
-            --blob-1: rgba(117, 81, 255, 0.4);
-            --blob-2: rgba(14, 165, 233, 0.3);
+            --blob-1: rgba(117, 81, 255, 0.3);
+            --blob-2: rgba(14, 165, 233, 0.2);
         }
 
         body {
@@ -76,21 +76,25 @@
             min-height: 100vh;
         }
 
-        /* BURBUJAS FLOTANTES EN EL FONDO */
+        /* BURBUJAS FLOTANTES EN EL FONDO CON ACELERACIÓN GPU (Anti-Lag) */
         body::before, body::after {
             content: '';
             position: fixed;
             border-radius: 50%;
-            filter: blur(90px);
+            filter: blur(80px); /* Blur un poco menor para optimizar */
             z-index: -1; 
-            animation: float 12s infinite alternate ease-in-out;
+            animation: float 15s infinite alternate ease-in-out;
+            /* Aceleración por hardware para quitar el lag */
+            will-change: transform;
+            transform: translateZ(0);
+            pointer-events: none;
         }
-        body::before { width: 50vw; height: 50vw; background: var(--blob-1); top: -10%; left: -10%; }
-        body::after { width: 40vw; height: 40vw; background: var(--blob-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+        body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
+        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; animation-delay: -5s; }
 
         @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(8vw, 8vh) scale(1.2); }
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); }
         }
 
         h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
@@ -105,12 +109,13 @@
             border: 1px solid var(--border-color);
             border-top: 1px solid var(--border-light);
             border-left: 1px solid var(--border-light);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            will-change: transform, box-shadow; /* Optimización */
         }
 
-        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.2); }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
         .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
         .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
         .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
@@ -118,7 +123,7 @@
         .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
 
         /* =========================================
-           LIQUID NAVBAR MENU (ESTRUCTURA CORREGIDA)
+           LIQUID NAVBAR MENU 
            ========================================= */
         .liquid-nav-container {
             display: flex;
@@ -132,8 +137,8 @@
             align-items: center;
             position: relative;
             background: var(--card-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-light);
             border-radius: 50px;
             padding: 8px;
@@ -141,6 +146,7 @@
             z-index: 10;
             list-style: none;
             margin: 0;
+            transform: translateZ(0); /* Aceleración HW */
         }
 
         .liquid-nav .nav-item {
@@ -173,26 +179,21 @@
             bottom: 8px;
             left: 8px;
             width: 0; 
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px) saturate(120%);
-            -webkit-backdrop-filter: blur(8px) saturate(120%);
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px) saturate(150%);
+            -webkit-backdrop-filter: blur(4px) saturate(150%);
             border-top: 1px solid rgba(255,255,255,0.8);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
             border-radius: 40px;
             z-index: 1;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.5);
-            pointer-events: none; /* Evita bloquear clicks */
+            pointer-events: none; 
+            will-change: left, width;
         }
 
         /* Divisor y Botón Tema en el Nav */
-        .nav-divider {
-            width: 1px;
-            height: 24px;
-            background-color: var(--border-color);
-            margin: 0 8px;
-            z-index: 2;
-        }
+        .nav-divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 8px; z-index: 2; }
 
         .theme-toggle-nav {
             background: transparent;
@@ -209,10 +210,7 @@
             justify-content: center;
         }
         
-        .theme-toggle-nav:hover {
-            color: var(--warning); 
-            background: rgba(255, 255, 255, 0.1);
-        }
+        .theme-toggle-nav:hover { color: var(--warning); background: rgba(255, 255, 255, 0.2); }
 
         .form-select { 
             background-color: var(--card-bg); 
@@ -222,8 +220,8 @@
             padding: 16px 24px; 
             font-weight: 500; 
             box-shadow: var(--card-shadow); 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             transition: all 0.2s ease; 
             font-size: 1.05rem; 
         }
@@ -245,8 +243,9 @@
             border-top: 1px solid var(--border-light); 
             border-left: 1px solid var(--border-light); 
             box-shadow: var(--card-shadow); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transform: translateZ(0);
         }
         .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
         .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; height: 100%; transition: transform 0.2s; }
@@ -262,13 +261,12 @@
         .bg-rose-soft { background-color: rgba(238, 93, 80, 0.1); color: var(--danger); }
 
         .lobby-card { cursor: pointer; border: 2px solid transparent; padding: 40px 20px; }
-        .lobby-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(67, 24, 255, 0.2); }
+        .lobby-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(67, 24, 255, 0.15); }
 
         /* =========================================
-           MODAL Y DICCIONARIO LIQUID GLASS (MEGA PRO)
+           MODAL Y DICCIONARIO LIQUID GLASS OPTIMIZADO
            ========================================= */
         
-        /* Botón de información (Gota flotante) */
         .btn-info-kpi { 
             background: linear-gradient(135deg, var(--primary) 0%, var(--info) 100%); 
             color: white; 
@@ -277,41 +275,42 @@
             display: flex; align-items: center; justify-content: center; 
             font-size: 1.3rem; 
             border: 1px solid rgba(255,255,255,0.4); 
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            transition: all 0.3s ease; 
             box-shadow: 0 8px 15px rgba(67, 24, 255, 0.4), inset 0 2px 4px rgba(255,255,255,0.3); 
         }
         .btn-info-kpi:hover { 
-            transform: scale(1.15) rotate(10deg); 
+            transform: scale(1.1) rotate(5deg); 
             color: white; 
             box-shadow: 0 12px 25px rgba(67, 24, 255, 0.5), inset 0 2px 4px rgba(255,255,255,0.5); 
         }
 
-        /* Congela y desenfoca el fondo de la página al abrir el modal */
+        /* Congela y desenfoca el fondo de la página al abrir el modal (optimizado) */
         .modal-backdrop.show {
             opacity: 1 !important;
-            background-color: rgba(15, 23, 42, 0.4) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background-color: rgba(15, 23, 42, 0.6) !important;
+            backdrop-filter: blur(8px); /* Menos blur para evitar lag */
+            -webkit-backdrop-filter: blur(8px);
         }
 
-        /* Contenedor principal del modal */
+        /* Contenedor principal del modal: MUCHO MÁS SÓLIDO Y LEGIBLE */
         .modal-content { 
-            background: var(--card-bg); 
+            background: var(--modal-bg); 
             color: var(--text-main); 
             border-radius: 28px; 
             border: 1px solid var(--border-color);
             border-top: 1px solid var(--border-light); 
             border-left: 1px solid var(--border-light); 
-            backdrop-filter: blur(24px) saturate(120%);
-            -webkit-backdrop-filter: blur(24px) saturate(120%);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255,255,255,0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255,255,255,0.1);
             overflow: hidden;
+            transform: translateZ(0);
         }
         
         .modal-header { 
             border-bottom: 1px solid var(--border-color); 
             padding: 30px 40px; 
-            background: rgba(255,255,255,0.02);
+            background: transparent;
         }
         
         .modal-body { 
@@ -319,7 +318,6 @@
             background-color: transparent; 
         }
 
-        /* Botón de cerrar de la ventana */
         .modal-header .btn-close {
             background-color: var(--card-bg);
             border-radius: 50%;
@@ -334,39 +332,42 @@
             filter: invert(1);
         }
 
-        /* Tarjetas de cada definición */
+        /* Tarjetas de cada definición: MÁS SÓLIDAS Y LEGIBLES */
         .dic-card { 
-            background: rgba(255,255,255,0.03); 
+            background: var(--card-bg); /* Fondo más opaco para leer fácil */
             border-radius: 24px; 
             padding: 36px; 
             border: 1px solid var(--border-color);
-            border-top: 1px solid rgba(255,255,255,0.15);
-            border-left: 1px solid rgba(255,255,255,0.15);
+            border-top: 1px solid rgba(255,255,255,0.4);
+            border-left: 1px solid rgba(255,255,255,0.4);
             margin-bottom: 30px; 
             display: flex; 
             gap: 40px; 
             align-items: stretch; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform;
         }
         
-        /* Efecto de rebote, sombra azul y "haz de luz" (sweep) al pasar el cursor */
         .dic-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(67, 24, 255, 0.15), inset 0 1px 0 var(--border-light);
-            border-color: rgba(67, 24, 255, 0.3);
-            background: rgba(255,255,255,0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(67, 24, 255, 0.1), inset 0 1px 0 var(--border-light);
+            border-color: rgba(67, 24, 255, 0.2);
         }
+        
+        /* Animación de barrido de luz optimizada */
         .dic-card::before {
             content: '';
             position: absolute;
             top: 0; left: -100%;
             width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
             transform: skewX(-20deg);
-            transition: all 0.7s ease;
+            transition: left 0.6s ease;
+            will-change: left;
+            pointer-events: none;
         }
         .dic-card:hover::before { left: 200%; }
 
@@ -375,7 +376,7 @@
         /* Zona del ejemplo visual (Efecto Bandeja Hundida) */
         .dic-mockup { 
             flex: 0 0 300px; 
-            background: rgba(0,0,0,0.02); 
+            background: var(--ia-card-bg); /* Color coherente con el panel */
             border-radius: 20px; 
             border: 1px solid var(--border-color); 
             display: flex; 
@@ -383,15 +384,10 @@
             justify-content: center; 
             padding: 24px; 
             position: relative;
-            box-shadow: inset 0 6px 15px rgba(0,0,0,0.06);
+            box-shadow: inset 0 6px 15px rgba(0,0,0,0.04);
             z-index: 2;
         }
-        :root[data-theme="dark"] .dic-mockup {
-            background: rgba(0,0,0,0.2);
-            box-shadow: inset 0 6px 20px rgba(0,0,0,0.4);
-        }
 
-        /* Tipografía y detalles internos */
         .dic-tag { 
             font-size: 0.75rem; 
             text-transform: uppercase; 
@@ -409,7 +405,7 @@
         .dic-desc { color: var(--text-muted); line-height: 1.7; font-size: 1.05rem; }
         
         .dic-formula { 
-            background: var(--card-bg); 
+            background: var(--ia-card-bg); 
             padding: 16px 20px; 
             border-radius: 12px; 
             font-family: 'Courier New', Courier, monospace; 
@@ -453,7 +449,7 @@
         }
 
         /* FIX MAPA LEAFLET */
-        #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); }
+        #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); }
         .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
     </style>
 </head>
@@ -492,7 +488,6 @@
 
         <div id="contenedor-tabs" style="display: block;">
             
-            <!-- LIQUID NAVBAR REPARADA, CUMPLIENDO CON ESTÁNDARES BOOTSTRAP -->
             <div class="liquid-nav-container">
                 <ul class="nav liquid-nav" role="tablist">
                     <div class="liquid-indicator" id="liquid-indicator"></div>
@@ -1135,7 +1130,6 @@
             let activeHoverIndex = null;
             const currentData = Object.values(dataObject);
             const currentLabels = Object.keys(dataObject);
-            // Emparejar cada etiqueta con un color de la paleta
             const baseColors = currentLabels.map((_, i) => coloresDona[i % coloresDona.length]);
 
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
@@ -1147,40 +1141,34 @@
                         backgroundColor: [...baseColors], 
                         borderWidth: 2, 
                         borderColor: 'transparent',
-                        hoverOffset: 12, /* Este es el efecto que empuja el fragmento hacia afuera */
+                        hoverOffset: 12,
                     }] 
                 }, 
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
                     cutout: '75%',
-                    layout: { padding: 10 }, /* Espacio extra para que el hoverOffset no se recorte en la caja */
-                    
-                    // Lógica para atenuar los demás fragmentos
+                    layout: { padding: 10 },
                     onHover: (event, elements, chart) => {
                         if (elements && elements.length) {
                             const index = elements[0].index;
                             if (activeHoverIndex !== index) {
                                 activeHoverIndex = index;
-                                // Ponemos todos grises excepto el que estamos tocando
                                 chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => 
                                     i === index ? color : 'rgba(100, 116, 139, 0.15)' 
                                 );
-                                chart.update('none'); // Update sin animación para no interrumpir el salto
+                                chart.update('none'); 
                             }
                         } else if (activeHoverIndex !== null) {
-                            // Al salir, restablecemos los colores de todos
                             activeHoverIndex = null;
                             chart.data.datasets[0].backgroundColor = [...baseColors];
                             chart.update('none');
                         }
                     },
-                    
                     plugins: { 
                         legend: { 
                             position: legendPosition, 
                             labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } },
-                            // Si pasamos el mouse por los nombres de la leyenda, también atenuamos el gráfico
                             onHover: function(event, legendItem, legend) {
                                 const index = legendItem.index;
                                 const chart = legend.chart;
