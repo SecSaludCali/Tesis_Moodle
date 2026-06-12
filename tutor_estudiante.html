@@ -339,7 +339,7 @@
         // ==========================================
         // 🔑 CONFIGURACIÓN DE GEMINI API PROTEGIDA
         // ==========================================
-        const MODEL = "gemini-2.5-flash-preview-09-2025"; 
+        const MODEL = "gemini-1.5-flash"; 
         
         // TRUCO ANTI-ESCÁNER: Partimos tu llave real de Gemini en dos para que GitHub no la lea.
         // Pega tu llave de Google AI Studio (NO la de Firebase) rellenando estas dos variables.
@@ -548,7 +548,7 @@
         // ==========================================
         async function procesarGeminiAPI(mensajeUsuario, esPrimerMensaje = false) {
             // --- MODO SIMULACIÓN PARA EVITAR CAÍDAS (SIN LLAVE) ---
-            if (!apiKey || apiKey === "") {
+            if (!apiKey || apiKey === "AQUÍ_TU_MITAD_1AQUÍ_TU_MITAD_2") {
                 await new Promise(res => setTimeout(res, 1500)); // Tiempo simulado de pensamiento
                 if (esPrimerMensaje) {
                     return "¡Hola! Soy tu Tutor IA 🏥. Te estoy hablando desde el **Modo Simulación** porque aún no se ha configurado una llave real en el código.\n\nPara empezar la demo: **Según la Ruta, ¿cuál es la principal escala que debes aplicar a un niño de 3 años en consulta?**";
