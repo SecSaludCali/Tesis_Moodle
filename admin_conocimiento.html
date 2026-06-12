@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenamiento IA - Secretaría de Salud</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- LIBRERÍA MÁGICA: PDF.js para leer PDFs en el navegador sin backend -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <style>
+        /* Reutilizamos nuestra paleta Liquid Glass */
+        :root[data-theme="light"] {
+            --bg-color: #f4f7fe;
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #4318ff;
+            --success: #05cd99;
+            --border-light: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(255, 255, 255, 0.5);
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+            --blob-1: rgba(67, 24, 255, 0.25);
+            --blob-2: rgba(5, 205, 153, 0.25);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px 0;
+        }
+
+        /* Burbujas flotantes de fondo */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 15s infinite alternate ease-in-out;
+            will-change: transform;
+            transform: translateZ(0);
+            pointer-events: none;
+        }
+
+        body::before {
+            width: 45vw;
+            height: 45vw;
+            background: var(--blob-1);
+            top: -10%;
+            left: -10%;
+        }
+
+        body::after {
+            width: 35vw;
+            height: 35vw;
+            background: var(--blob-2);
+            bottom: -10%;
+            right: -5%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate3d(6vw, 6vh, 0) scale(1.1);
+            }
+        }
+
+        /* Tarjeta principal estilo Liquid */
+        .admin-card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            box-shadow: var(--card-shadow);
+            padding: 40px;
+            width: 100%;
+            max-width: 700px;
+            border: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-light);
+            border-left: 1px solid var(--border-light);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 10;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+        }
+
+        /* Estilos de inputs */
+        .form-label {
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 20px;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15);
+            background: #ffffff;
+            outline: none;
+        }
+
+        /* Zona de Drop para el PDF */
+        .drop-zone {
+            border: 2px dashed var(--primary);
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(67, 24, 255, 0.03);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            background: rgba(67, 24, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .drop-zone i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .drop-zone p {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .drop-zone span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Botón de procesamiento */
+        .btn-train {
+            background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            width: 100%;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.03em;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-train:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(67, 24, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-train:disabled {
+            background: #cbd5e1;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* Consola de estado */
+        .status-console {
+            background: rgba(0, 0, 0, 0.85);
+            color: #10b981;
+            font-family: monospace;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 24px;
+            font-size: 0.85rem;
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .status-console.error {
+            color: #ef4444;
+        }
+
+        /* LISTA DE IDs EXISTENTES */
+        .id-list-container {
+            margin-top: 30px;
+            padding-top: 24px;
+            border-top: 1px dashed var(--border-color);
+            display: none;
+            /* Se muestra solo si hay IDs */
+        }
+
+        .id-list-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .id-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .id-chip {
+            background: rgba(67, 24, 255, 0.1);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(67, 24, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .id-chip:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Estilos específicos del Login */
+        .login-icon-container {
+            background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%);
+            color: white;
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Animación del Loader inicial */
+        .initial-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container d-flex justify-content-center w-100">
+
+        <!-- ========================================== -->
+        <!-- PANTALLA DE CARGA INICIAL                  -->
+        <!-- ========================================== -->
+        <div id="initial_loader" class="initial-loader">
+            <div class="spinner-border mb-3" style="color: var(--primary); width: 3.5rem; height: 3.5rem;"
+                role="status"></div>
+            <h5 class="fw-bold" style="color: var(--text-muted);">Iniciando seguridad...</h5>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Conectando con la Secretaría de Salud</p>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- PANTALLA DE LOGIN CON FIREBASE REAL        -->
+        <!-- ========================================== -->
+        <!-- Oculto por defecto hasta que el loader termine -->
+        <div class="admin-card text-center" id="login_card" style="max-width: 450px; display: none;">
+            <div class="login-icon-container">
+                <i class="bi bi-shield-lock-fill"></i>
+            </div>
+            <h2>Acceso Restringido</h2>
+            <div class="subtitle">Portal exclusivo para el Curador de Inteligencia Analítica.</div>
+
+            <div class="mb-3 text-start">
+                <label for="admin_email" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" id="admin_email" placeholder="admin@secretariasalud.gov.co"
+                    autocomplete="email">
+            </div>
+
+            <div class="mb-4 text-start">
+                <label for="admin_password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control text-center tracking-widest" id="admin_password"
+                    placeholder="••••••••••" autocomplete="current-password">
+                <div id="login_error" class="text-danger mt-2 text-center"
+                    style="display: none; font-size: 0.85rem; font-weight: 600;">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Credenciales incorrectas. Verifica tu acceso.
+                </div>
+            </div>
+
+            <button class="btn-train" id="btn_login_submit" onclick="window.verificarAcceso()">
+                <i class="bi bi-box-arrow-in-right me-2"></i> Ingresar al Sistema
+            </button>
+        </div>
+
+
+        <!-- ========================================== -->
+        <!-- PANTALLA DE ENTRENAMIENTO IA               -->
+        <!-- ========================================== -->
+        <!-- Oculto por defecto hasta que se verifique el Login -->
+        <div class="admin-card" id="main_admin_card" style="display: none;">
+            <h2><i class="bi bi-cpu-fill me-2"></i>Entrenamiento IA</h2>
+            <div class="subtitle">Sube un documento normativo para crear un nuevo "Cerebro" de evaluación. El archivo
+                JSON resultante debe subirse manualmente a GitHub.</div>
+
+            <div class="mb-4">
+                <label for="tema_id" class="form-label">Identificador del Curso o Tema</label>
+                <input type="text" class="form-control" id="tema_id" placeholder="Ej: res_3280_pym" required>
+                <div class="form-text mt-2" style="font-size: 0.8rem;">Usa minúsculas y guiones bajos (_). Este ID es la
+                    llave que conectará a la IA con el tema.</div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Documento Base (PDF)</label>
+                <!-- Zona oculta de input de archivo -->
+                <input type="file" id="pdf_file" accept="application/pdf" style="display: none;">
+
+                <!-- Zona visual de Drop -->
+                <div class="drop-zone" id="drop_zone" onclick="document.getElementById('pdf_file').click()">
+                    <i class="bi bi-cloud-arrow-up-fill"></i>
+                    <p id="drop_text">Haz clic o arrastra un PDF aquí</p>
+                    <span id="drop_subtext">Solo archivos .pdf (Máx. 10MB)</span>
+                </div>
+            </div>
+
+            <button class="btn-train" id="btn_train" disabled onclick="window.procesarPDF()">
+                <i class="bi bi-magic me-2"></i> Procesar y Descargar Cerebro (JSON)
+            </button>
+
+            <!-- Consola de salida -->
+            <div class="status-console" id="status_console"></div>
+
+            <!-- Lista de IDs previos (Memoria Local) -->
+            <div class="id-list-container" id="id_list_container">
+                <div class="id-list-title">
+                    <i class="bi bi-tags-fill text-primary"></i> Temas generados previamente en este equipo:
+                </div>
+                <div class="id-chips" id="id_chips">
+                    <!-- Los chips se insertan aquí vía JS -->
+                </div>
+                <div class="form-text mt-2" style="font-size: 0.75rem;">Haz clic en un ID para reutilizarlo si vas a
+                    subir una actualización del mismo tema.</div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button class="btn btn-link text-muted text-decoration-none" onclick="window.cerrarSesion()"
+                    style="font-size: 0.85rem;">
+                    <i class="bi bi-box-arrow-left me-1"></i> Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Convertimos el script en módulo para usar la versión moderna de Firebase -->
+    <script type="module">
+        // 1. IMPORTACIONES OFICIALES DE FIREBASE (Actualizado a v12.14.0)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+        // ====================================================================
+        // 🔥 CONFIGURACIÓN REAL DE FIREBASE (Tus llaves)
+        // ====================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBYtrXh9H6vixROM4PLk0ACK_gqQZjgLVU",
+            authDomain: "tutoria-salud.firebaseapp.com",
+            projectId: "tutoria-salud",
+            storageBucket: "tutoria-salud.firebasestorage.app",
+            messagingSenderId: "562525969759",
+            appId: "1:562525969759:web:c59dc5c99818057b466aea"
+        };
+        // ====================================================================
+
+        // Inicializamos Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // FORZAR CIERRE DE SESIÓN AL CARGAR LA PÁGINA:
+        // Esto elimina cualquier sesión recordada por Firebase obligando a pedir credenciales siempre.
+        signOut(auth).then(() => {
+            // Quitamos el loader y mostramos el formulario de acceso
+            document.getElementById('initial_loader').style.display = 'none';
+            document.getElementById('login_card').style.display = 'block';
+            document.getElementById('main_admin_card').style.display = 'none';
+        });
+
+
+        // ==========================================
+        // LÓGICA DE LOGIN CON BASE DE DATOS REAL
+        // ==========================================
+        window.verificarAcceso = async () => {
+            const emailVal = document.getElementById('admin_email').value.trim();
+            const passVal = document.getElementById('admin_password').value.trim();
+            const errorDiv = document.getElementById('login_error');
+            const btnLogin = document.getElementById('btn_login_submit');
+
+            if (!emailVal || !passVal) {
+                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Por favor ingresa tu correo y contraseña.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            btnLogin.disabled = true;
+            btnLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Autenticando...';
+
+            try {
+                // CONEXIÓN REAL A TU FIREBASE
+                await signInWithEmailAndPassword(auth, emailVal, passVal);
+
+                // Solo si las credenciales son válidas, pasamos al panel
+                document.getElementById('admin_password').value = '';
+                errorDiv.style.display = 'none';
+
+                document.getElementById('login_card').style.display = 'none';
+                document.getElementById('main_admin_card').style.display = 'block';
+
+            } catch (error) {
+                console.error("Error devuelto por Firebase:", error.message);
+                // Login fallido 
+                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Credenciales incorrectas. Verifica tu acceso.';
+                errorDiv.style.display = 'block';
+
+                // Efecto de rebote de error
+                const loginCard = document.getElementById('login_card');
+                loginCard.style.transform = 'translateX(-10px)';
+                setTimeout(() => loginCard.style.transform = 'translateX(10px)', 100);
+                setTimeout(() => loginCard.style.transform = 'translateX(-10px)', 200);
+                setTimeout(() => loginCard.style.transform = 'translateX(0)', 300);
+            } finally {
+                btnLogin.disabled = false;
+                btnLogin.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i> Ingresar al Sistema';
+            }
+        };
+
+        window.cerrarSesion = async () => {
+            await signOut(auth);
+            document.getElementById('main_admin_card').style.display = 'none';
+            document.getElementById('login_card').style.display = 'block';
+            document.getElementById('admin_email').value = '';
+            document.getElementById('admin_password').value = '';
+        };
+
+        // Permitir usar la tecla Enter en los inputs de login
+        document.getElementById('admin_password').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                window.verificarAcceso();
+            }
+        });
+        document.getElementById('admin_email').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                window.verificarAcceso();
+            }
+        });
+
+
+        // ==========================================
+        // LÓGICA DE PROCESAMIENTO PDF
+        // ==========================================
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const dropZone = document.getElementById('drop_zone');
+        const fileInput = document.getElementById('pdf_file');
+        const btnTrain = document.getElementById('btn_train');
+        const dropText = document.getElementById('drop_text');
+        const temaInput = document.getElementById('tema_id');
+        const consoleLog = document.getElementById('status_console');
+        const idListContainer = document.getElementById('id_list_container');
+        const idChipsContainer = document.getElementById('id_chips');
+
+        let archivoSeleccionado = null;
+
+        cargarIDsGuardados();
+
+        temaInput.addEventListener('input', function (e) {
+            let val = e.target.value;
+            val = val.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+            e.target.value = val;
+            validarFormulario();
+        });
+
+        // Manejo drag and drop
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault(); dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) { fileInput.files = e.dataTransfer.files; manejarArchivo(e.dataTransfer.files[0]); }
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) manejarArchivo(e.target.files[0]);
+        });
+
+        function manejarArchivo(file) {
+            if (file.type !== "application/pdf") { mostrarLog("Error: El archivo debe ser un PDF.", true); return; }
+            archivoSeleccionado = file;
+            dropText.innerHTML = `<i class="bi bi-file-earmark-pdf-fill text-danger me-2"></i> ${file.name}`;
+            validarFormulario();
+        }
+
+        function validarFormulario() {
+            if (archivoSeleccionado && temaInput.value.trim().length > 2) btnTrain.disabled = false;
+            else btnTrain.disabled = true;
+        }
+
+        function mostrarLog(mensaje, esError = false) {
+            consoleLog.style.display = 'block';
+            consoleLog.className = `status-console ${esError ? 'error' : ''}`;
+            consoleLog.innerHTML += `> ${mensaje}<br>`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        }
+
+        function guardarID(nuevoId) {
+            let idsGuardados = JSON.parse(localStorage.getItem('tutor_ia_temas')) || [];
+            if (!idsGuardados.includes(nuevoId)) {
+                idsGuardados.push(nuevoId);
+                localStorage.setItem('tutor_ia_temas', JSON.stringify(idsGuardados));
+                cargarIDsGuardados();
+            }
+        }
+
+        function cargarIDsGuardados() {
+            let idsGuardados = JSON.parse(localStorage.getItem('tutor_ia_temas')) || [];
+            if (idsGuardados.length > 0) {
+                idListContainer.style.display = 'block';
+                idChipsContainer.innerHTML = '';
+                idsGuardados.forEach(id => {
+                    let chip = document.createElement('div'); chip.className = 'id-chip'; chip.innerText = id;
+                    chip.onclick = () => { temaInput.value = id; validarFormulario(); };
+                    idChipsContainer.appendChild(chip);
+                });
+            }
+        }
+
+        // Exponemos la función al entorno global para el onclick del HTML
+        window.procesarPDF = async () => {
+            const temaId = temaInput.value.trim();
+            btnTrain.disabled = true;
+            btnTrain.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Procesando...';
+            consoleLog.innerHTML = '';
+
+            mostrarLog(`Iniciando lectura de: ${archivoSeleccionado.name}`);
+
+            try {
+                const arrayBuffer = await archivoSeleccionado.arrayBuffer();
+                mostrarLog("Cargando motor de lectura PDF.js...");
+                const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                const totalPaginas = pdf.numPages;
+                mostrarLog(`PDF cargado exitosamente. Total páginas: ${totalPaginas}`);
+
+                let textoExtraido = "";
+                for (let i = 1; i <= totalPaginas; i++) {
+                    mostrarLog(`Analizando página ${i} de ${totalPaginas}...`);
+                    const pagina = await pdf.getPage(i);
+                    const contenido = await pagina.getTextContent();
+                    const textoPagina = contenido.items.map(item => item.str).join(' ');
+                    textoExtraido += textoPagina + "\n\n";
+                }
+
+                mostrarLog("Extracción de texto completada. Limpiando caracteres ocultos...");
+                const textoLimpio = textoExtraido.replace(/\s+/g, ' ').trim();
+
+                const conocimientoIA = {
+                    id_tema: temaId,
+                    fecha_creacion: new Date().toISOString(),
+                    origen_archivo: archivoSeleccionado.name,
+                    contexto_base: textoLimpio
+                };
+
+                mostrarLog("Empaquetando cerebro (JSON) completado.");
+                descargarArchivoJSON(conocimientoIA, `conocimiento_${temaId}.json`);
+                guardarID(temaId);
+
+                mostrarLog("¡PROCESO EXITOSO! Sube el archivo .json descargado a tu repositorio en GitHub.");
+                btnTrain.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i> Completado (Descargado)';
+                btnTrain.classList.replace('btn-train', 'btn-success');
+            } catch (error) {
+                console.error(error);
+                mostrarLog(`ERROR FATAL: No se pudo procesar el PDF. ${error.message}`, true);
+                btnTrain.innerHTML = '<i class="bi bi-magic me-2"></i> Procesar y Descargar Cerebro (JSON)';
+                btnTrain.disabled = false;
+            }
+        };
+
+        function descargarArchivoJSON(objeto, nombreArchivo) {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(objeto));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", nombreArchivo);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+    </script>
+</body>
+
+</html>
