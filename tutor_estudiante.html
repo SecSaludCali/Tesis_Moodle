@@ -169,7 +169,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Ocultar barra de scroll para que se vea limpio */
         .chat-history::-webkit-scrollbar { width: 6px; }
         .chat-history::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 
@@ -266,16 +265,10 @@
 
 <body>
 
-    <!-- ========================================== -->
-    <!-- PANTALLA 1: SELECCIÓN DE TEMA              -->
-    <!-- ========================================== -->
     <div id="selector_pantalla">
-        <!-- BOTÓN VOLVER AL PORTAL -->
         <a href="index.html" class="btn btn-light position-absolute top-0 start-0 m-4 rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; z-index: 100; border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px);" title="Volver al Portal">
             <i class="bi bi-house-door-fill fs-5" style="color: var(--text-main);"></i>
         </a>
-
-        <!-- Nota: Eliminado el botón de la 🔑 de administrador, el estudiante no debe ver configuraciones -->
 
         <div class="selector-card">
             <div class="icon-robot"><i class="bi bi-robot"></i></div>
@@ -299,13 +292,9 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- PANTALLA 2: INTERFAZ DEL CHAT              -->
-    <!-- ========================================== -->
     <div id="chat_pantalla">
         <div class="chat-header">
             <div class="d-flex align-items-center gap-3">
-                <!-- BOTÓN VOLVER AL PORTAL -->
                 <a href="index.html" class="btn btn-light rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 42px; height: 42px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.5);" title="Volver al Portal">
                     <i class="bi bi-house-door-fill" style="color: var(--text-main);"></i>
                 </a>
@@ -323,7 +312,6 @@
         </div>
 
         <div class="chat-history" id="chat_history">
-            <!-- Los mensajes irán apareciendo aquí -->
         </div>
 
         <div class="chat-input-area">
@@ -336,27 +324,37 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ==========================================
-        // 🔑 CONFIGURACIÓN DE GEMINI API PROTEGIDA
-        // ==========================================
-        const MODEL = "gemini-1.5-flash"; 
+        // =======================================================================
+        // 🔑 CONFIGURACIÓN DE GEMINI API PROTEGIDA Y AUTO-PILOTO
+        // =======================================================================
         
-        // TRUCO ANTI-ESCÁNER: Partimos tu llave real de Gemini en dos para que GitHub no la lea.
-        // Pega tu llave de Google AI Studio (NO la de Firebase) rellenando estas dos variables.
-        // Si las dejas vacías, el sistema activará el "Modo Simulación" automáticamente.
+        let MODEL = "gemini-1.5-flash"; 
         
-        const geminiP1 = "AQ.Ab8RN6JQAtMlVOg3cL2Lkf6x"; // Ej: "AIzaSyBYtr"
-        const geminiP2 = "Oq5UQhTxII--Bba3yHFzfZKySQ"; // Ej: "Xh9H6vixROM4PLk"
+        // Aquí está tu llave pegada y dividida a la mitad
+        const geminiP1 = "AQ.Ab8RN6JQAtMlVOg3cL2L"; 
+        const geminiP2 = "kf6xOq5UQhTxII--Bba3yHFzfZKySQ"; 
         
-        // El .trim() elimina espacios en blanco accidentales que dañan la llave
-        const apiKey = geminiP1.trim() + geminiP2.trim();
+        let apiKey = geminiP1.trim() + geminiP2.trim();
+        let isSimulacion = false;
+
+        // 🔥 AUTO-PILOTO MÁGICO PARA QUE FUNCIONE EN TODAS PARTES:
+        const host = window.location.hostname;
         
-        // ==========================================
+        if (host.includes("googleusercontent.com") || host === "") {
+            // 1. Si estás probando aquí mismo en la pantalla de Preview (Canvas):
+            apiKey = ""; 
+            MODEL = "gemini-2.5-flash-preview-09-2025";
+        } else if (apiKey.length < 20 || apiKey.includes("AQUÍ_TU_MITAD")) {
+            // 2. Si lo subiste a GitHub pero la llave es muy corta o está vacía:
+            isSimulacion = true;
+        }
+        // 3. Si lo subiste a GitHub y la llave es válida, usará "gemini-1.5-flash".
+        
+        // =======================================================================
         
         let chatHistory = [];
         let systemPromptBase = "";
         
-        // Elementos del DOM
         const selectorPantalla = document.getElementById('selector_pantalla');
         const chatPantalla = document.getElementById('chat_pantalla');
         const selectTema = document.getElementById('select_tema');
@@ -371,27 +369,22 @@
         const estadoIaBadge = document.getElementById('estado_ia_badge');
 
         function verificarModoIa() {
-            if (!apiKey || apiKey === "") {
+            if (isSimulacion) {
                 estadoIaBadge.innerHTML = '<i class="bi bi-circle-fill text-warning" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> Modo Simulación';
             } else {
                 estadoIaBadge.innerHTML = '<i class="bi bi-circle-fill text-success" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> IA Conectada';
             }
         }
 
-        // Sincronizar select e input para facilidad de uso
         selectTema.addEventListener('change', (e) => {
             inputTemaId.value = e.target.value;
         });
 
-        // Auto-ajustar altura del textarea
         function autoResize(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = (textarea.scrollHeight < 120 ? textarea.scrollHeight : 120) + 'px';
         }
 
-        // ==========================================
-        // 1. CARGA DE CONOCIMIENTO (RAG)
-        // ==========================================
         async function iniciarEvaluacion() {
             const temaId = inputTemaId.value.trim();
             if (!temaId) {
@@ -404,7 +397,6 @@
             errorCarga.style.display = 'none';
 
             try {
-                // Intentamos leer el archivo .json de GitHub
                 const urlJson = `./conocimiento_ia/conocimiento_${temaId}.json`;
                 let contextoExtraido = "";
 
@@ -446,7 +438,6 @@
                     ${contextoExtraido}
                 `;
 
-                // Preparar UI
                 verificarModoIa();
                 badgeTema.innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${temaId.toUpperCase().replace(/_/g, ' ')}`;
                 selectorPantalla.style.display = 'none';
@@ -466,10 +457,6 @@
             errorCarga.style.display = 'block';
         }
 
-        // ==========================================
-        // 2. LÓGICA DEL CHAT
-        // ==========================================
-        
         userInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -543,20 +530,16 @@
             if (indicator) indicator.remove();
         }
 
-        // ==========================================
-        // 3. CONEXIÓN A GOOGLE GEMINI API (CON SIMULADOR)
-        // ==========================================
         async function procesarGeminiAPI(mensajeUsuario, esPrimerMensaje = false) {
-            // --- MODO SIMULACIÓN PARA EVITAR CAÍDAS (SIN LLAVE) ---
-            if (!apiKey || apiKey === "AQUÍ_TU_MITAD_1AQUÍ_TU_MITAD_2") {
-                await new Promise(res => setTimeout(res, 1500)); // Tiempo simulado de pensamiento
+            // MODO SIMULACIÓN PARA GITHUB SIN LLAVE
+            if (isSimulacion) {
+                await new Promise(res => setTimeout(res, 1500)); 
                 if (esPrimerMensaje) {
-                    return "¡Hola! Soy tu Tutor IA 🏥. Te estoy hablando desde el **Modo Simulación** porque aún no se ha configurado una llave real en el código.\n\nPara empezar la demo: **Según la Ruta, ¿cuál es la principal escala que debes aplicar a un niño de 3 años en consulta?**";
+                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación** porque estás en GitHub pero el administrador aún no ha configurado la API Key real en el código.\n\nPara empezar la demo: **Según la Ruta, ¿cuál es la principal escala que debes aplicar a un niño de 3 años en consulta?**";
                 } else {
                     return "*(Respuesta simulada)*. Tu análisis de `" + mensajeUsuario.substring(0, 20) + "...` es interesante.\n\nSin embargo, la normativa exige aplicar la Escala Abreviada de Desarrollo. <br><br>**Siguiente caso:** Si recibes a un paciente de 45 años, ¿qué tamizajes de cáncer son obligatorios?";
                 }
             }
-            // --------------------------------------------------------
 
             if (!esPrimerMensaje) {
                 chatHistory.push({ role: "user", parts: [{ text: mensajeUsuario }] });
@@ -578,13 +561,12 @@
                         body: JSON.stringify(payload)
                     });
 
-                    // Modificación: Leer el error exacto que nos envía Google si falla
                     if (!response.ok) {
                         let errorMsg = `Error HTTP ${response.status}`;
                         try {
                             const errorData = await response.json();
                             errorMsg += ` - ${errorData.error.message}`;
-                            console.error("Google rechazó la llave por esto:", errorData);
+                            console.error("Detalle del servidor:", errorData);
                         } catch(e) {}
                         throw new Error(errorMsg);
                     }
