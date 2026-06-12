@@ -183,6 +183,7 @@
             animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             position: relative;
+            word-wrap: break-word;
         }
 
         @keyframes slideUp {
@@ -338,7 +339,7 @@
         // ==========================================
         // 🔑 CONFIGURACIÓN DE GEMINI API PROTEGIDA
         // ==========================================
-        const MODEL = "gemini-1.5-flash"; 
+        const MODEL = "gemini-2.5-flash-preview-09-2025"; 
         
         // TRUCO ANTI-ESCÁNER: Partimos tu llave real de Gemini en dos para que GitHub no la lea.
         // Pega tu llave de Google AI Studio (NO la de Firebase) rellenando estas dos variables.
@@ -347,7 +348,8 @@
         const geminiP1 = "AQ.Ab8RN6JQAtMlVOg3cL2Lkf6x"; // Ej: "AIzaSyBYtr"
         const geminiP2 = "Oq5UQhTxII--Bba3yHFzfZKySQ"; // Ej: "Xh9H6vixROM4PLk"
         
-        const apiKey = geminiP1 + geminiP2;
+        // El .trim() elimina espacios en blanco accidentales que dañan la llave
+        const apiKey = geminiP1.trim() + geminiP2.trim();
         
         // ==========================================
         
@@ -484,7 +486,8 @@
                 agregarMensaje(respuesta, 'bot');
             } catch (error) {
                 quitarTyping();
-                agregarMensaje("❌ Error de conexión. El servidor de IA rechazó la comunicación. Verifica que la llave en el código sea válida.", 'bot');
+                agregarMensaje(`❌ Error de conexión con Gemini. <strong>Detalle:</strong> ${error.message}`, 'bot');
+                console.error("Error completo de IA:", error);
             }
         }
 
@@ -506,8 +509,8 @@
                 agregarMensaje(respuesta, 'bot');
             } catch (error) {
                 quitarTyping();
-                agregarMensaje("⚠️ Falló la conexión con la IA. Intenta enviar tu mensaje de nuevo.", 'bot');
-                console.error(error);
+                agregarMensaje(`⚠️ Falló la conexión con la IA. <strong>Detalle:</strong> ${error.message}`, 'bot');
+                console.error("Error completo de IA:", error);
             } finally {
                 btnSend.disabled = false;
             }
@@ -575,7 +578,16 @@
                         body: JSON.stringify(payload)
                     });
 
-                    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                    // Modificación: Leer el error exacto que nos envía Google si falla
+                    if (!response.ok) {
+                        let errorMsg = `Error HTTP ${response.status}`;
+                        try {
+                            const errorData = await response.json();
+                            errorMsg += ` - ${errorData.error.message}`;
+                            console.error("Google rechazó la llave por esto:", errorData);
+                        } catch(e) {}
+                        throw new Error(errorMsg);
+                    }
                     
                     const data = await response.json();
                     const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No pude generar una respuesta válida.";
