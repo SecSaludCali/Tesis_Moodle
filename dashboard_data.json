@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 41,
-        "total_encuestas_historicas": 3855
+        "total_encuestas_historicas": 3856
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 57.4,
@@ -9,23 +9,23 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2823,
+            "Femenino": 2824,
             "Masculino": 1028,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2774,
+            "Área de la salud": 2775,
             "Estudiante": 702,
             "Otro": 379
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2277,
+            "Adultez (29 - 59 años)": 2278,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 697,
             "Vejez (60 años o más)": 160
         },
         "Comuna": {
-            "COMUNA 17": 438,
+            "COMUNA 17": 439,
             "COMUNA 19": 228,
             "COMUNA 1": 222,
             "COMUNA 10": 199,
@@ -66,7 +66,7 @@
         "Escolaridad": {
             "Pregrado": 1734,
             "Bachiller": 1085,
-            "Postgrado": 980,
+            "Postgrado": 981,
             "Ninguna": 56
         }
     },
@@ -2481,34 +2481,34 @@
             "Nombre_Curso": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD - 2025 - 01",
             "ID_Moodle_Original": "pir_sspm_2025",
             "Total_Inscritos": 1244,
-            "Tasa_Finalizacion_%": 84.0,
+            "Tasa_Finalizacion_%": 84.1,
             "Tasa_Abandono_%": 2.3,
             "Tasa_Inactividad_%": 13.7,
             "Tiempo_Promedio_Dias": 2.3,
-            "Total_Encuestas": 620.0,
+            "Total_Encuestas": 621.0,
             "ISG_Promedio": 4.57,
             "ICD_Promedio": 4.45,
             "IUP_Promedio": 4.67,
             "UX_Promedio": 4.58,
             "Brecha_Expectativa": -0.01,
-            "e_NPS": 61.6,
+            "e_NPS": 61.7,
             "Salud_Curso_CHS": 88.9,
             "Curso_Base": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 387,
+                    "Femenino": 388,
                     "Intersexual": 0,
                     "Masculino": 233
                 },
                 "Perfil": {
                     "Estudiante": 11,
                     "Otro": 192,
-                    "Área de la salud": 417
+                    "Área de la salud": 418
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 1,
-                    "Adultez (29 - 59 años)": 487,
+                    "Adultez (29 - 59 años)": 488,
                     "Juventud (18 - 28 años)": 81,
                     "Vejez (60 años o más)": 51
                 },
@@ -2536,7 +2536,7 @@
                     "COMUNA 14": 6,
                     "COMUNA 15": 22,
                     "COMUNA 16": 22,
-                    "COMUNA 17": 115,
+                    "COMUNA 17": 116,
                     "COMUNA 18": 19,
                     "COMUNA 19": 69,
                     "COMUNA 2": 39,
@@ -2554,7 +2554,7 @@
                 "Escolaridad": {
                     "Bachiller": 93,
                     "Ninguna": 3,
-                    "Postgrado": 230,
+                    "Postgrado": 231,
                     "Pregrado": 294
                 }
             },
@@ -2774,7 +2774,7 @@
             "Total_Inscritos": 1244,
             "Tasa_Finalizacion_%": 77.6,
             "Tasa_Abandono_%": 2.3,
-            "Tasa_Inactividad_%": 20.2,
+            "Tasa_Inactividad_%": 20.1,
             "Tiempo_Promedio_Dias": 2.4,
             "Total_Encuestas": 652.0,
             "ISG_Promedio": 4.55,
@@ -3066,7 +3066,7 @@
             "Tasa_Finalizacion_%": 7.3,
             "Tasa_Abandono_%": 16.7,
             "Tasa_Inactividad_%": 76.0,
-            "Tiempo_Promedio_Dias": 17.8,
+            "Tiempo_Promedio_Dias": 18.0,
             "Total_Encuestas": 47.0,
             "ISG_Promedio": 4.67,
             "ICD_Promedio": 4.65,
