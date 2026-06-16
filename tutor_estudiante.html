@@ -328,9 +328,10 @@
         // 🔑 CONFIGURACIÓN DE GEMINI API PROTEGIDA Y AUTO-PILOTO
         // =======================================================================
         
-        let MODEL = "gemini-1.5-flash"; 
+        // ¡ACTUALIZADO! Las nuevas llaves AQ. exigen los modelos más recientes.
+        let MODEL = "gemini-2.5-flash"; 
         
-        // Aquí está tu llave pegada y dividida a la mitad
+        // Tu llave AQ... (Authentication Key) dividida y lista:
         const geminiP1 = "AQ.Ab8RN6JQAtMlVOg3cL2L"; 
         const geminiP2 = "kf6xOq5UQhTxII--Bba3yHFzfZKySQ"; 
         
@@ -341,15 +342,13 @@
         const host = window.location.hostname;
         
         if (host.includes("googleusercontent.com") || host === "") {
-            // 1. Si estás probando aquí mismo en la pantalla de Preview (Canvas):
+            // 1. Entorno de pruebas Canvas (Botón Preview)
             apiKey = ""; 
             MODEL = "gemini-2.5-flash-preview-09-2025";
         } else if (apiKey.length < 20 || apiKey.includes("AQUÍ_TU_MITAD")) {
-            // 2. Si lo subiste a GitHub pero la llave es muy corta o está vacía:
+            // 2. Simulador si alguien borra la llave en GitHub
             isSimulacion = true;
         }
-        // 3. Si lo subiste a GitHub y la llave es válida, usará "gemini-1.5-flash".
-        
         // =======================================================================
         
         let chatHistory = [];
@@ -531,11 +530,11 @@
         }
 
         async function procesarGeminiAPI(mensajeUsuario, esPrimerMensaje = false) {
-            // MODO SIMULACIÓN PARA GITHUB SIN LLAVE
+            // MODO SIMULACIÓN PARA GITHUB SIN LLAVE VALIDA
             if (isSimulacion) {
                 await new Promise(res => setTimeout(res, 1500)); 
                 if (esPrimerMensaje) {
-                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación** porque estás en GitHub pero el administrador aún no ha configurado la API Key real en el código.\n\nPara empezar la demo: **Según la Ruta, ¿cuál es la principal escala que debes aplicar a un niño de 3 años en consulta?**";
+                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación** porque tu API Key es inválida (debe empezar por AIza...).\n\nPara empezar la demo: **Según la Ruta, ¿cuál es la principal escala que debes aplicar a un niño de 3 años en consulta?**";
                 } else {
                     return "*(Respuesta simulada)*. Tu análisis de `" + mensajeUsuario.substring(0, 20) + "...` es interesante.\n\nSin embargo, la normativa exige aplicar la Escala Abreviada de Desarrollo. <br><br>**Siguiente caso:** Si recibes a un paciente de 45 años, ¿qué tamizajes de cáncer son obligatorios?";
                 }
