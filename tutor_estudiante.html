@@ -273,7 +273,7 @@
         <div class="selector-card">
             <div class="icon-robot"><i class="bi bi-robot"></i></div>
             <h2 class="fw-bold mb-2">Evaluador Clínico IA</h2>
-            <p class="text-muted mb-4">Selecciona el módulo normativo sobre el cual deseas ser evaluado para generar tu ruta de aprendizaje.</p>
+            <p class="text-muted mb-4">Selecciona el módulo normativo sobre el cual deseas ser evaluado para generar tu ruta de aprendizaje en Moodle.</p>
 
             <select id="select_tema" class="form-select-custom">
                 <option value="" disabled selected>Selecciona un tema...</option>
@@ -325,20 +325,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // =======================================================================
-        // 🔑 CONFIGURACIÓN DE GEMINI API (MODO DIETA DE TOKENS)
+        // 🔑 CONFIGURACIÓN DE GEMINI API (MODO OPTIMIZADO Y ESTRUCTURADO)
         // =======================================================================
         
-        // ¡ACTUALIZADO AL MODELO CORRECTO PARA TU LLAVE AQ.!
         let MODEL = "gemini-2.5-flash"; 
         
-        // Pega tu llave de Google AI Studio (NO la de Firebase) aquí:
         const geminiP1 = "AQ.Ab8RN6JQAtMlVOg3cL2L"; 
         const geminiP2 = "kf6xOq5UQhTxII--Bba3yHFzfZKySQ"; 
         
         let apiKey = geminiP1.trim() + geminiP2.trim();
         let isSimulacion = false;
 
-        // 🔥 AUTO-PILOTO MÁGICO PARA QUE FUNCIONE EN TODAS PARTES:
         const host = window.location.hostname;
         
         if (host.includes("googleusercontent.com") || host === "") {
@@ -391,74 +388,45 @@
             }
 
             btnIniciar.disabled = true;
-            btnIniciar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Cargando conocimiento...';
+            btnIniciar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Preparando entorno...';
             errorCarga.style.display = 'none';
 
-            try {
-                const urlJson = `./conocimiento_ia/conocimiento_${temaId}.json`;
-                let contextoExtraido = "";
+            // 🛡️ SÚPER OPTIMIZACIÓN: Ya no dependemos de cargar el PDF gigante. 
+            // Le enseñamos a la IA exactamente la estructura de Moodle y los cursos de vida.
+            systemPromptBase = `
+                Eres un Evaluador Clínico Experto y Estricto de la Secretaría de Salud.
+                Tu objetivo es evaluar al estudiante sobre la Resolución 3280 para definir su "Ruta de Aprendizaje" en la plataforma virtual Moodle.
+                
+                ESTRUCTURA DE LOS CURSOS EN MOODLE (A RECOMENDAR AL FINAL):
+                La capacitación está dividida en 6 "Cursos de Vida". A su vez, cada curso de vida adentro está estructurado exactamente en los siguientes 6 Módulos:
+                Módulo 1: Generalidades y Enfoque Diferencial
+                Módulo 2: Descripción del Procedimiento: Anamnesis
+                Módulo 3: Descripción del Procedimiento: Examen Físico
+                Módulo 4: Información en Salud
+                Módulo 5: Plan de Cuidado
+                Módulo 6: Instrumentos, Insumos y Dispositivos
 
-                try {
-                    const response = await fetch(urlJson);
-                    if (!response.ok) throw new Error("Archivo no encontrado en el servidor");
-                    const data = await response.json();
-                    
-                    // 🛡️ DIETA DE TOKENS (SÚPER OPTIMIZADO PARA LA CAPA GRATUITA)
-                    // Bajamos de 80,000 a 12,000 caracteres. Esto consume casi cero tokens por mensaje
-                    // y evita por completo el bloqueo por exceso de cuota.
-                    let textoCompleto = data.contexto_base || "";
-                    if (textoCompleto.length > 12000) {
-                        contextoExtraido = textoCompleto.substring(0, 12000) + "... [Fin del extracto optimizado]";
-                        console.log("✅ Conocimiento empaquetado y comprimido exitosamente para el Tier Gratuito.");
-                    } else {
-                        contextoExtraido = textoCompleto;
-                    }
-                    
-                } catch (fetchError) {
-                    console.warn("Usando conocimiento de respaldo (Mockup) para el MVP.");
-                    if (temaId === "res_3280_pym") {
-                        contextoExtraido = `
-                            RESOLUCIÓN 3280 DE 2018 - RUTA DE PROMOCIÓN Y MANTENIMIENTO DE LA SALUD.
-                            CURSOS DE VIDA:
-                            1. Primera Infancia (0 - 5 años): Se aplica escala abreviada de desarrollo, tamizaje visual y auditivo, esquema de vacunación, valoración nutricional.
-                            2. Infancia (6 - 11 años): Valoración de crecimiento, tamizaje agudeza visual, educación en higiene oral, valoración familiar.
-                            3. Adolescencia (12 - 17 años): Asesoría en salud sexual y reproductiva (anticoncepción), prevención de consumo de sustancias, tamizaje de hemoglobina.
-                            4. Juventud (18 - 28 años): Valoración de riesgo cardiovascular, tamizaje de citología/VPH (mujeres), asesoría para el proyecto de vida.
-                            5. Adultez (29 - 59 años): Tamizaje de cáncer de mama, cuello uterino, próstata y colon. Perfil lipídico y glicemia. 
-                            6. Vejez (60 años y más): Escalas de valoración geriátrica integral (Barthel, Lawton), despistaje de deterioro cognitivo (Mini-Mental), prevención de caídas.
-                        `;
-                    } else {
-                        throw new Error(`El tema '${temaId}' no existe en la base de datos.`);
-                    }
-                }
+                LOS 6 CURSOS DE VIDA (RES 3280) SON:
+                1. Primera Infancia (0 - 5 años)
+                2. Infancia (6 - 11 años)
+                3. Adolescencia (12 - 17 años)
+                4. Juventud (18 - 28 años)
+                5. Adultez (29 - 59 años)
+                6. Vejez (60 años y más)
+                
+                REGLAS OBLIGATORIAS DE INTERACCIÓN (SÍGUELAS PASO A PASO):
+                PASO 1 (INICIO): Preséntate cordialmente y pregúntale al estudiante SOBRE CUÁL de los 6 "Cursos de Vida" mencionados desea ser evaluado hoy. NO hagas preguntas clínicas todavía. Espera su respuesta.
+                PASO 2 (EVALUACIÓN): Una vez el estudiante elija su curso de vida, formula UN (1) caso clínico corto correspondiente a un paciente de esa edad. Hazle una sola pregunta práctica relacionada con UNO de los 6 Módulos de Moodle (por ejemplo: ¿Qué antecedente clave buscarías en la Anamnesis? o ¿Qué escala usarías en el Examen Físico?).
+                PASO 3 (FLUJO DE PREGUNTAS): Espera la respuesta del estudiante. Dile claramente si es CORRECTO o INCORRECTO según la normativa médica colombiana, dale una brevísima retroalimentación, y lanza la siguiente pregunta abordando un Módulo diferente. Haz un máximo de 3 a 4 preguntas en total.
+                PASO 4 (VEREDICTO FINAL): Tras finalizar las preguntas, despídete. Dile explícitamente cuáles de los 6 Módulos domina y cuáles falló. Finalmente, recomiéndale ir a la plataforma Moodle a estudiar EXCLUSIVAMENTE los Módulos específicos en los que falló.
+            `;
 
-                systemPromptBase = `
-                    Eres un Evaluador Clínico Experto y Estricto de la Secretaría de Salud.
-                    Tu objetivo es evaluar al estudiante para definir su "Ruta de Aprendizaje".
-                    
-                    REGLAS OBLIGATORIAS:
-                    1. INICIO: Preséntate y dile que le harás preguntas prácticas sobre el documento normativo.
-                    2. FLUJO: Haz SOLO UNA (1) pregunta a la vez. Espera la respuesta del estudiante. NUNCA hagas múltiples preguntas de golpe.
-                    3. PREGUNTAS: Formula casos clínicos cortos basados EXCLUSIVAMENTE en el "Contexto Base". (Ej: "Te llega a consulta un paciente de X años, según la norma, ¿qué tamizajes son obligatorios?").
-                    4. EVALUACIÓN: Cuando el estudiante responda, dile claramente si es CORRECTO o INCORRECTO basándote en la norma, retroalimenta brevemente, y lanza la siguiente pregunta.
-                    5. VEREDICTO FINAL: Tras hacer unas 3 o 4 preguntas en total, finaliza la conversación. Dile explícitamente qué temas domina y cuáles falló. Recomienda una "Ruta de Aprendizaje" indicando que solo debe tomar los módulos donde falló.
-                    
-                    DOCUMENTO NORMATIVO (CONTEXTO BASE RESUMIDO):
-                    ${contextoExtraido}
-                `;
+            verificarModoIa();
+            badgeTema.innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${temaId.toUpperCase().replace(/_/g, ' ')}`;
+            selectorPantalla.style.display = 'none';
+            chatPantalla.style.display = 'flex';
 
-                verificarModoIa();
-                badgeTema.innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${temaId.toUpperCase().replace(/_/g, ' ')}`;
-                selectorPantalla.style.display = 'none';
-                chatPantalla.style.display = 'flex';
-
-                arrancarConversacion();
-
-            } catch (error) {
-                mostrarError(`<i class="bi bi-exclamation-triangle-fill me-1"></i> Error: ${error.message}. Verifica que el archivo JSON esté subido correctamente.`);
-                btnIniciar.disabled = false;
-                btnIniciar.innerHTML = '<i class="bi bi-play-fill me-1"></i> Iniciar Evaluación';
-            }
+            arrancarConversacion();
         }
 
         function mostrarError(msg) {
@@ -476,7 +444,8 @@
         async function arrancarConversacion() {
             mostrarTyping();
             try {
-                const promptOculto = "Hola, soy el estudiante. Por favor preséntate y hazme la primera pregunta clínica para iniciar mi evaluación.";
+                // Modificamos el prompt inicial oculto para forzar a la IA a ejecutar el PASO 1.
+                const promptOculto = "Hola, soy el estudiante. Por favor preséntate y pregúntame sobre cuál de los 6 cursos de vida deseo ser evaluado hoy para iniciar.";
                 const respuesta = await procesarGeminiAPI(promptOculto, true);
                 quitarTyping();
                 agregarMensaje(respuesta, 'bot');
@@ -541,9 +510,9 @@
             if (isSimulacion) {
                 await new Promise(res => setTimeout(res, 1500)); 
                 if (esPrimerMensaje) {
-                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación** porque tu API Key no está configurada.\n\nPara empezar la demo: **Según la Ruta, ¿cuál es la principal escala que debes aplicar a un niño de 3 años en consulta?**";
+                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación**.\n\nPara empezar nuestra sesión, por favor indícame: **¿Sobre cuál de los 6 Cursos de Vida (Primera Infancia, Infancia, Adolescencia, Juventud, Adultez o Vejez) deseas ser evaluado hoy?**";
                 } else {
-                    return "*(Respuesta simulada)*. Tu análisis de `" + mensajeUsuario.substring(0, 20) + "...` es interesante.\n\nSin embargo, la normativa exige aplicar la Escala Abreviada de Desarrollo. <br><br>**Siguiente caso:** Si recibes a un paciente de 45 años, ¿qué tamizajes de cáncer son obligatorios?";
+                    return "*(Respuesta simulada)*. Tu análisis es interesante.\n\nSin embargo, la normativa exige otra aproximación en el módulo de Plan de Cuidado. Como fallaste en este punto, mi veredicto es que debes dirigirte a Moodle y repasar exclusivamente el **Módulo 5: Plan de Cuidado** y el **Módulo 2: Anamnesis**.";
                 }
             }
 
@@ -569,7 +538,7 @@
 
                     if (!response.ok) {
                         if (response.status === 429) {
-                            throw new Error("El Tutor IA está analizando las respuestas anteriores. Por favor, <strong>espera 20 segundos</strong> y vuelve a intentar. (Modo de protección gratuito activo).");
+                            throw new Error("El Tutor IA está analizando las respuestas anteriores. Por favor, <strong>espera 20 segundos</strong> y vuelve a intentar.");
                         }
 
                         let errorMsg = `Error HTTP ${response.status}`;
@@ -586,7 +555,7 @@
                     
                     if(esPrimerMensaje) {
                         chatHistory = [
-                            { role: "user", parts: [{ text: "Inicia la evaluación." }] },
+                            { role: "user", parts: [{ text: "Hola, soy el estudiante. Por favor preséntate y pregúntame sobre cuál de los 6 cursos de vida deseo ser evaluado hoy para iniciar." }] },
                             { role: "model", parts: [{ text: aiText }] }
                         ];
                     } else {
