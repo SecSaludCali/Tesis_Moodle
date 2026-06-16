@@ -273,10 +273,10 @@
         <div class="selector-card">
             <div class="icon-robot"><i class="bi bi-robot"></i></div>
             <h2 class="fw-bold mb-2">Evaluador Clínico IA</h2>
-            <p class="text-muted mb-4">Digita el identificador del módulo normativo o curso sobre el cual deseas ser evaluado para generar tu ruta de aprendizaje.</p>
-            
+            <p class="text-muted mb-4">Ingresa el identificador (ID) del módulo normativo o curso que deseas evaluar.</p>
+
             <div class="mb-4">
-                <input type="text" id="input_tema_id" class="form-select-custom py-3 text-center fw-bold" placeholder="Ej: res_3280_pym" style="font-size: 1.1rem; margin-bottom: 0; letter-spacing: 0.05em;">
+                <input type="text" id="input_tema_id" class="form-select-custom py-3 text-center fw-bold" placeholder="Ej: primera_infancia" style="font-size: 1.1rem; margin-bottom: 0; letter-spacing: 1px;">
             </div>
 
             <button class="btn-start" id="btn_iniciar" onclick="iniciarEvaluacion()">
@@ -319,11 +319,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // =======================================================================
-        // 🔑 CONFIGURACIÓN DE GEMINI API (MODO OPTIMIZADO Y ESTRUCTURADO)
+        // 🔑 CONFIGURACIÓN DE GEMINI API (TUTOR UNIVERSAL)
         // =======================================================================
         
         let MODEL = "gemini-2.5-flash"; 
         
+        // Pega tu llave de Google AI Studio aquí:
         const geminiP1 = "AQ.Ab8RN6JQAtMlVOg3cL2L"; 
         const geminiP2 = "kf6xOq5UQhTxII--Bba3yHFzfZKySQ"; 
         
@@ -344,24 +345,38 @@
         let chatHistory = [];
         let systemPromptBase = "";
         
-        const selectorPantalla = document.getElementById('selector_pantalla');
-        const chatPantalla = document.getElementById('chat_pantalla');
-        const selectTema = document.getElementById('select_tema');
-        const inputTemaId = document.getElementById('input_tema_id');
-        const btnIniciar = document.getElementById('btn_iniciar');
-        const errorCarga = document.getElementById('error_carga');
-        
-        const chatHistoryDiv = document.getElementById('chat_history');
-        const userInput = document.getElementById('user_input');
-        const btnSend = document.getElementById('btn_send');
-        const badgeTema = document.getElementById('tema_actual_badge');
-        const estadoIaBadge = document.getElementById('estado_ia_badge');
+        // Se asegura que los eventos y variables del DOM solo se capturen tras cargar la página
+        // para prevenir errores del tipo 'Cannot read properties of null'.
+        document.addEventListener('DOMContentLoaded', () => {
+            const userInput = document.getElementById('user_input');
+            if (userInput) {
+                userInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        enviarMensaje();
+                    }
+                });
+            }
+
+            const inputTemaId = document.getElementById('input_tema_id');
+            if (inputTemaId) {
+                inputTemaId.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        iniciarEvaluacion();
+                    }
+                });
+            }
+        });
 
         function verificarModoIa() {
+            const estadoIaBadge = document.getElementById('estado_ia_badge');
+            if (!estadoIaBadge) return;
+            
             if (isSimulacion) {
                 estadoIaBadge.innerHTML = '<i class="bi bi-circle-fill text-warning" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> Modo Simulación (MVP)';
             } else {
-                estadoIaBadge.innerHTML = '<i class="bi bi-circle-fill text-success" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> IA Optimizada';
+                estadoIaBadge.innerHTML = '<i class="bi bi-circle-fill text-success" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> IA Universal Optimizada';
             }
         }
 
@@ -371,15 +386,24 @@
         }
 
         async function iniciarEvaluacion() {
-            const temaId = inputTemaId.value.trim();
+            const inputTemaId = document.getElementById('input_tema_id');
+            const btnIniciar = document.getElementById('btn_iniciar');
+            const errorCarga = document.getElementById('error_carga');
+            const badgeTema = document.getElementById('tema_actual_badge');
+            const selectorPantalla = document.getElementById('selector_pantalla');
+            const chatPantalla = document.getElementById('chat_pantalla');
+
+            const temaId = inputTemaId ? inputTemaId.value.trim() : "";
             if (!temaId) {
-                mostrarError("Por favor selecciona o escribe un ID de tema válido.");
+                mostrarError("Por favor escribe un ID de tema válido.");
                 return;
             }
 
-            btnIniciar.disabled = true;
-            btnIniciar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Cargando conocimiento...';
-            errorCarga.style.display = 'none';
+            if (btnIniciar) {
+                btnIniciar.disabled = true;
+                btnIniciar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Analizando documento...';
+            }
+            if (errorCarga) errorCarga.style.display = 'none';
 
             try {
                 const urlJson = `./conocimiento_ia/conocimiento_${temaId}.json`;
@@ -390,80 +414,72 @@
                     if (!response.ok) throw new Error("Archivo no encontrado en el servidor");
                     const data = await response.json();
                     
-                    // 🛡️ DIETA DE TOKENS DINÁMICA
-                    // 40.000 caracteres permiten a la IA entender capítulos y módulos de casi cualquier PDF
+                    // 🛡️ DIETA DE TOKENS AJUSTADA PARA CURSOS SEGMENTADOS (50.000 caracteres)
+                    // Permite leer unas 10 a 15 páginas de texto completo sin truncar.
                     let textoCompleto = data.contexto_base || "";
-                    if (textoCompleto.length > 40000) {
-                        contextoExtraido = textoCompleto.substring(0, 40000) + "... [Fin del extracto optimizado]";
-                        console.log("✅ Conocimiento nuevo cargado y ajustado al Tier Gratuito.");
+                    if (textoCompleto.length > 50000) {
+                        contextoExtraido = textoCompleto.substring(0, 50000) + "... [Fin del extracto]";
                     } else {
                         contextoExtraido = textoCompleto;
                     }
                     
                 } catch (fetchError) {
-                    console.warn("Usando conocimiento de respaldo (Mockup) para el MVP.");
-                    if (temaId === "res_3280_pym") {
-                        contextoExtraido = `
-                            RESOLUCIÓN 3280 DE 2018 - RUTA DE PROMOCIÓN Y MANTENIMIENTO DE LA SALUD.
-                            CURSOS DE VIDA Y SUS MÓDULOS:
-                            1. Primera Infancia (0 - 5 años): Se aplica escala abreviada de desarrollo, tamizaje visual y auditivo, esquema de vacunación, valoración nutricional.
-                            2. Infancia (6 - 11 años): Valoración de crecimiento, tamizaje agudeza visual, educación en higiene oral, valoración familiar.
-                            3. Adolescencia (12 - 17 años): Asesoría en salud sexual y reproductiva (anticoncepción), prevención de consumo de sustancias, tamizaje de hemoglobina.
-                            4. Juventud (18 - 28 años): Valoración de riesgo cardiovascular, tamizaje de citología/VPH (mujeres), asesoría para el proyecto de vida.
-                            5. Adultez (29 - 59 años): Tamizaje de cáncer de mama, cuello uterino, próstata y colon. Perfil lipídico y glicemia. 
-                            6. Vejez (60 años y más): Escalas de valoración geriátrica integral (Barthel, Lawton), despistaje de deterioro cognitivo (Mini-Mental), prevención de caídas.
-                        `;
-                    } else {
+                    console.warn("Usando conocimiento de respaldo genérico.");
+                    if (!isSimulacion) {
                         throw new Error(`El tema '${temaId}' no existe en la base de datos.`);
                     }
+                    // Respaldo 100% genérico para el simulador
+                    contextoExtraido = `
+                        DOCUMENTO DE EJEMPLO GENÉRICO
+                        Capítulo 1: Introducción a los Conceptos Básicos. Define los fundamentos teóricos de la materia.
+                        Capítulo 2: Aplicación Práctica. Explica cómo llevar la teoría a escenarios reales usando herramientas estándar.
+                        Capítulo 3: Evaluación y Seguimiento. Detalla los indicadores de éxito y cómo medir el impacto de las acciones tomadas.
+                    `;
                 }
 
-                // 🧠 PROMPT UNIVERSAL: Ahora la IA se adapta a cualquier PDF que subas
+                // 🧠 PROMPT UNIVERSAL, ADAPTATIVO Y PORCENTUAL
                 systemPromptBase = `
-                    Eres un Tutor y Evaluador Académico Experto. Tu objetivo es guiar y evaluar al estudiante basándote ESTRICTAMENTE en el siguiente DOCUMENTO BASE.
-
-                    DOCUMENTO BASE:
+                    Eres un Tutor y Evaluador Experto. Tu objetivo es evaluar el nivel de comprensión del estudiante sobre el documento cargado y generar una "Ruta de Aprendizaje" personalizada.
+                    
+                    DOCUMENTO BASE DE CONOCIMIENTO (RESUMIDO):
                     ${contextoExtraido}
 
-                    INSTRUCCIONES OBLIGATORIAS (PASO A PASO):
-                    1. ANÁLISIS INTERNO: Identifica la estructura del DOCUMENTO BASE (¿Cuáles son sus capítulos, módulos, ejes, temas principales o cursos de vida?).
-                    2. PASO 1 (INICIO): Preséntate. Dile al estudiante cuáles temas o capítulos principales detectaste en el documento y pregúntale sobre cuál de ellos desea ser evaluado hoy para iniciar la sesión. Espera su respuesta.
-                    3. PASO 2 (PREGUNTAS): Formula UNA (1) pregunta práctica o caso aplicativo a la vez sobre el tema elegido. Espera la respuesta del estudiante. (NUNCA hagas múltiples preguntas de golpe).
-                    4. PASO 3 (CORRECCIÓN): Dile si su respuesta es CORRECTA o INCORRECTA según el documento. Dale un feedback corto y haz otra pregunta sobre el mismo tema u otro del documento. (Haz unas 3 o 4 preguntas en total).
-                    5. PASO 4 (VEREDICTO FINAL): Finaliza la sesión. Hazle un resumen de su desempeño y dile EXPLÍCITAMENTE qué capítulos o módulos específicos del documento debe ir a repasar a su plataforma de estudio (Moodle) debido a los errores que cometió.
+                    REGLAS OBLIGATORIAS DE INTERACCIÓN (SÍGUELAS PASO A PASO):
+                    PASO 1 (INICIO): Analiza el documento base y extrae mentalmente sus temas, capítulos o módulos principales. Preséntate cordialmente, enumera brevemente estos temas y pregúntale al estudiante SOBRE CUÁL de ellos desea ser evaluado hoy. NO hagas preguntas evaluativas todavía. Espera su respuesta.
+                    PASO 2 (EVALUACIÓN): Una vez el estudiante elija su tema, formula UN (1) caso práctico o pregunta de análisis correspondiente a esa sección del documento. Hazle una sola pregunta a la vez.
+                    PASO 3 (EVALUACIÓN FLEXIBLE Y PORCENTUAL): Espera la respuesta del estudiante. Analiza el sentido de su respuesta (no exijas palabras exactas, valora el análisis crítico). Califícalo con una ESCALA PORCENTUAL (Ej: "Tu respuesta es 80% acertada", "Tienes un 60% de precisión"). Explícale amablemente qué le faltó para llegar al 100% o felicítalo, y lanza la siguiente pregunta sobre un tema diferente del documento. Haz un máximo de 3 a 4 preguntas en total.
+                    PASO 4 (VEREDICTO FINAL): Tras finalizar las preguntas, despídete. Dile explícitamente cuáles temas domina y en cuáles falló. Finalmente, recomiéndale ir a su plataforma de estudio y repasar EXCLUSIVAMENTE los capítulos o temas específicos en los que tuvo menor porcentaje.
                 `;
 
                 verificarModoIa();
-                badgeTema.innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${temaId.toUpperCase().replace(/_/g, ' ')}`;
-                selectorPantalla.style.display = 'none';
-                chatPantalla.style.display = 'flex';
+                if (badgeTema) badgeTema.innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${temaId.toUpperCase().replace(/_/g, ' ')}`;
+                if (selectorPantalla) selectorPantalla.style.display = 'none';
+                if (chatPantalla) chatPantalla.style.display = 'flex';
 
                 arrancarConversacion();
 
             } catch (error) {
-                mostrarError(`<i class="bi bi-exclamation-triangle-fill me-1"></i> Error: ${error.message}. Verifica que el archivo JSON esté subido correctamente.`);
-                btnIniciar.disabled = false;
-                btnIniciar.innerHTML = '<i class="bi bi-play-fill me-1"></i> Iniciar Evaluación';
+                mostrarError(`<i class="bi bi-exclamation-triangle-fill me-1"></i> Error: ${error.message}. Verifica que el archivo JSON esté subido.`);
+                if (btnIniciar) {
+                    btnIniciar.disabled = false;
+                    btnIniciar.innerHTML = '<i class="bi bi-play-fill me-1"></i> Iniciar Evaluación';
+                }
             }
         }
 
         function mostrarError(msg) {
-            errorCarga.innerHTML = msg;
-            errorCarga.style.display = 'block';
-        }
-
-        userInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                enviarMensaje();
+            const errorCarga = document.getElementById('error_carga');
+            if (errorCarga) {
+                errorCarga.innerHTML = msg;
+                errorCarga.style.display = 'block';
             }
-        });
+        }
 
         async function arrancarConversacion() {
             mostrarTyping();
             try {
-                // Prompt oculto genérico para que dispare el inicio universal
-                const promptOculto = "Hola, soy el estudiante. Por favor preséntate, indícame de forma resumida qué temas o módulos principales detectaste en el documento cargado y pregúntame sobre cuál de ellos deseo ser evaluado hoy.";
+                // Gatillo oculto GENÉRICO
+                const promptOculto = "Hola, soy el estudiante. Por favor preséntate, indícame de forma resumida qué temas o capítulos principales detectaste en el documento cargado y pregúntame sobre cuál de ellos deseo ser evaluado hoy.";
                 const respuesta = await procesarGeminiAPI(promptOculto, true);
                 quitarTyping();
                 agregarMensaje(respuesta, 'bot');
@@ -474,6 +490,10 @@
         }
 
         async function enviarMensaje() {
+            const userInput = document.getElementById('user_input');
+            const btnSend = document.getElementById('btn_send');
+            
+            if (!userInput) return;
             const texto = userInput.value.trim();
             if (!texto) return;
 
@@ -482,7 +502,7 @@
             userInput.style.height = 'auto';
             userInput.focus();
             
-            btnSend.disabled = true;
+            if (btnSend) btnSend.disabled = true;
             mostrarTyping();
 
             try {
@@ -493,11 +513,14 @@
                 quitarTyping();
                 agregarMensaje(`⚠️ <strong>Aviso del Sistema:</strong> ${error.message}`, 'bot');
             } finally {
-                btnSend.disabled = false;
+                if (btnSend) btnSend.disabled = false;
             }
         }
 
         function agregarMensaje(texto, remitente) {
+            const chatHistoryDiv = document.getElementById('chat_history');
+            if (!chatHistoryDiv) return;
+
             const div = document.createElement('div');
             div.classList.add('msg', `msg-${remitente}`);
             
@@ -511,6 +534,9 @@
         }
 
         function mostrarTyping() {
+            const chatHistoryDiv = document.getElementById('chat_history');
+            if (!chatHistoryDiv) return;
+
             const div = document.createElement('div');
             div.classList.add('msg', 'msg-bot');
             div.id = 'typing_indicator';
@@ -528,9 +554,9 @@
             if (isSimulacion) {
                 await new Promise(res => setTimeout(res, 1500)); 
                 if (esPrimerMensaje) {
-                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación**.\n\nHe analizado el documento seleccionado. Para empezar nuestra sesión, por favor indícame: **¿Sobre qué capítulo o tema principal del documento deseas que te evalúe hoy?**";
+                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación**.\n\nHe analizado el documento cargado y veo que trata sobre 3 capítulos principales: Introducción, Aplicación Práctica y Evaluación. **¿Sobre cuál de estos temas deseas que te evalúe hoy?**";
                 } else {
-                    return "*(Respuesta simulada)*. Tu análisis es interesante.\n\nSin embargo, el documento base indica algo diferente en este punto. Como fallaste en esta parte, mi veredicto es que debes dirigirte a tu plataforma (Moodle) y repasar ese capítulo o módulo de forma específica.";
+                    return "*(Respuesta simulada)*. Tu análisis tiene un **75% de precisión**. Captaste la idea principal de forma excelente, pero olvidaste mencionar un detalle clave del protocolo.\n\nSiguiente caso: Si te encuentras en la fase de Evaluación, ¿qué indicadores analizarías primero?";
                 }
             }
 
@@ -556,14 +582,13 @@
 
                     if (!response.ok) {
                         if (response.status === 429) {
-                            throw new Error("El Tutor IA está analizando las respuestas anteriores. Por favor, <strong>espera 20 segundos</strong> y vuelve a intentar.");
+                            throw new Error("El Tutor IA está analizando la información. Por favor, <strong>espera 20 segundos</strong> y vuelve a intentar.");
                         }
 
                         let errorMsg = `Error HTTP ${response.status}`;
                         try {
                             const errorData = await response.json();
                             errorMsg += ` - ${errorData.error.message}`;
-                            console.error("Detalle del servidor:", errorData);
                         } catch(e) {}
                         throw new Error(errorMsg);
                     }
@@ -573,7 +598,7 @@
                     
                     if(esPrimerMensaje) {
                         chatHistory = [
-                            { role: "user", parts: [{ text: "Hola, soy el estudiante. Por favor preséntate, indícame de forma resumida qué temas o módulos principales detectaste en el documento cargado y pregúntame sobre cuál de ellos deseo ser evaluado hoy." }] },
+                            { role: "user", parts: [{ text: "Hola, soy el estudiante. Por favor preséntate, indícame qué temas detectaste en el documento y pregúntame por dónde iniciar." }] },
                             { role: "model", parts: [{ text: aiText }] }
                         ];
                     } else {
