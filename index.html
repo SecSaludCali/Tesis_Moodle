@@ -116,26 +116,22 @@
         /* BARRAS DE PROGRESO CALIDAD */
         .progress-bar-container { margin-bottom: 20px; }
         .progress-label { display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-main); font-weight: 500;}
-        .progress-label span:first-child { flex: 1; line-height: 1.3; } /* Evita que preguntas largas se monten en el número */
+        .progress-label span:first-child { flex: 1; line-height: 1.3; }
         .progress-val { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .progress-bg { height: 10px; background: rgba(0,0,0,0.05); border-radius: 5px; overflow: hidden; }
         :root[data-theme="dark"] .progress-bg { background: rgba(255,255,255,0.05); }
         .progress-fill { height: 100%; border-radius: 5px; transition: width 1s ease-out; }
 
-        /* IA PANELS Y LOBBY */
-        .ia-panel-wrapper { margin-top: 40px; padding-top: 10px; }
-        .ia-card { background-color: var(--ia-bg); border-radius: 24px; padding: 40px; border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); box-shadow: var(--card-shadow); backdrop-filter: blur(16px); }
-        .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; gap: 12px; }
-        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; height: 100%; }
-        .ia-val { font-size: 1.8rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; color: var(--text-main);}
-        .ia-lbl { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-        .lobby-card { cursor: pointer; border: 2px solid transparent; padding: 40px 20px; }
-        .lobby-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(67, 24, 255, 0.15); }
-
-        /* FIX MAPA LEAFLET Y EFECTO HOVER */
+        /* FIX MAPA LEAFLET Y EFECTO SOMBRA ELEGANTE */
         #map-container { border-radius: 24px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); box-shadow: var(--card-shadow); }
         .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
-        path.leaflet-interactive { transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease, stroke-width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), stroke 0.3s ease !important; }
+        path.leaflet-interactive { transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease, stroke-width 0.3s ease, stroke 0.3s ease !important; }
+        
+        /* Clase añadida dinámicamente en JS para el efecto sombra */
+        .map-polygon-hover {
+            filter: drop-shadow(0 10px 15px rgba(67, 24, 255, 0.6));
+            outline: none;
+        }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
@@ -325,6 +321,9 @@
         </div>
     </div>
 
+    <!-- EL ARCHIVO DE BOOTSTRAP FALTANTE QUE HACE FUNCIONAR LAS PESTAÑAS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         // ==========================================
         // VARIABLES GLOBALES Y DICCIONARIOS
@@ -367,7 +366,6 @@
                 indicator.style.width = btnRect.width + 'px';
                 indicator.style.left = (btnRect.left - navRect.left) + 'px';
             }
-            if (btn.getAttribute('data-bs-target') === '#panel-global') { if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); }
         }
         window.addEventListener('resize', () => { const activeBtn = document.querySelector('.liquid-tab.active'); if(activeBtn) moveIndicator(activeBtn); });
 
@@ -388,7 +386,18 @@
         // INICIALIZACIÓN
         // ==========================================
         document.addEventListener("DOMContentLoaded", async () => {
-            document.querySelectorAll('.liquid-tab').forEach(btn => { btn.addEventListener('shown.bs.tab', (e) => { moveIndicator(e.target); }); });
+            
+            // Reparación de Pestañas: Fuerza el redibujado de los gráficos y mapa al cambiar la pestaña
+            document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(btn => { 
+                btn.addEventListener('shown.bs.tab', (e) => { 
+                    moveIndicator(e.target); 
+                    Object.values(chartInstances).forEach(chart => { if (chart) chart.resize(); });
+                    if (e.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) {
+                        setTimeout(() => mapInstance.invalidateSize(), 100);
+                    }
+                }); 
+            });
+            
             proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
             try {
@@ -702,7 +711,7 @@
                     layer.bindTooltip(tooltipHtml, { sticky: true, className: 'custom-map-tooltip' }); 
                     
                     // ==========================================
-                    // EFECTO INTERACTIVO HOVER (ATENUAR Y CRECER)
+                    // EFECTO INTERACTIVO HOVER (SOMBRA ELEGANTE)
                     // ==========================================
                     layer.on({
                         mouseover: function (e) {
@@ -711,29 +720,28 @@
                             // 1. Atenuar todas las demás comunas suavemente
                             geoJsonLayer.eachLayer(function (l) {
                                 if (l !== targetLayer) {
-                                    l.setStyle({
-                                        fillOpacity: 0.1,  // Casi transparente
-                                        opacity: 0.2,      // Borde atenuado
-                                        weight: 1
-                                    });
+                                    l.setStyle({ fillOpacity: 0.1, opacity: 0.2, weight: 1 });
                                 }
                             });
 
-                            // 2. Hacer "crecer" visualmente la capa actual resaltando el borde oscuro y grueso
-                            let borderColor = document.documentElement.getAttribute('data-theme') === 'light' ? '#1e293b' : '#ffffff';
-                            targetLayer.setStyle({
-                                weight: 4, // Borde ancho genera la ilusión de crecimiento
-                                color: borderColor,
-                                fillOpacity: 1 // Color sólido total
-                            });
+                            // 2. Darle a la comuna actual un borde ultra limpio y grueso
+                            targetLayer.setStyle({ weight: 3, color: '#ffffff', fillOpacity: 1 });
                             
-                            // 3. Traer al frente para que no se superpongan los bordes vecinos
+                            // 3. Añadirle la clase de CSS para generar la sombra "Glow"
+                            if (targetLayer._path) {
+                                targetLayer._path.classList.add('map-polygon-hover');
+                            }
+                            
                             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                                 targetLayer.bringToFront();
                             }
                         },
                         mouseout: function (e) {
-                            // Al quitar el ratón, el mapa resetea el estilo original de TODAS las capas
+                            // Remover la clase de sombra al salir
+                            if (e.target._path) {
+                                e.target._path.classList.remove('map-polygon-hover');
+                            }
+                            // Resetear estilos
                             geoJsonLayer.eachLayer(function (l) {
                                 geoJsonLayer.resetStyle(l);
                             });
@@ -757,7 +765,21 @@
             let sorted = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]); 
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
                 type: 'bar', data: { labels: sorted.map(i => i[0]), datasets: [{ data: sorted.map(i => i[1]), backgroundColor: '#4318ff', borderRadius: 4 }] }, 
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 11 } } } } } 
+                options: { 
+                    indexAxis: 'y', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        x: { beginAtZero: true }, 
+                        y: { 
+                            ticks: { 
+                                autoSkip: false,  // ESTO FUERZA A MOSTRAR TODAS LAS ETIQUETAS
+                                font: { family: 'Inter', size: 10 } 
+                            } 
+                        } 
+                    } 
+                } 
             }); 
         }
 
