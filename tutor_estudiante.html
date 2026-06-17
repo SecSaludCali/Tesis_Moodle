@@ -43,14 +43,22 @@
             margin: 0;
         }
 
-        /* Burbujas flotantes de fondo optimizadas */
+        /* Burbujas flotantes de fondo super optimizadas (Cero Lag) */
         body::before, body::after {
-            content: ''; position: fixed; border-radius: 50%; filter: blur(80px);
+            content: ''; position: fixed; border-radius: 50%;
             z-index: -1; animation: float 15s infinite alternate ease-in-out;
-            will-change: transform; transform: translateZ(0); pointer-events: none;
+            will-change: transform; pointer-events: none;
         }
-        body::before { width: 45vw; height: 45vw; background: rgba(67, 24, 255, 0.15); top: -10%; left: -10%; }
-        body::after { width: 35vw; height: 35vw; background: rgba(5, 205, 153, 0.15); bottom: -10%; right: -5%; animation-delay: -5s; }
+        body::before { 
+            width: 50vw; height: 50vw; 
+            background: radial-gradient(circle, rgba(67, 24, 255, 0.12) 0%, transparent 70%); 
+            top: -15%; left: -15%; 
+        }
+        body::after { 
+            width: 40vw; height: 40vw; 
+            background: radial-gradient(circle, rgba(5, 205, 153, 0.12) 0%, transparent 70%); 
+            bottom: -15%; right: -5%; animation-delay: -5s; 
+        }
 
         @keyframes float {
             0% { transform: translate3d(0, 0, 0) scale(1); }
@@ -345,8 +353,7 @@
         let chatHistory = [];
         let systemPromptBase = "";
         
-        // Se asegura que los eventos y variables del DOM solo se capturen tras cargar la página
-        // para prevenir errores del tipo 'Cannot read properties of null'.
+        // Cargar eventos una vez el DOM esté listo (Solución del TypeError)
         document.addEventListener('DOMContentLoaded', () => {
             const userInput = document.getElementById('user_input');
             if (userInput) {
@@ -414,8 +421,6 @@
                     if (!response.ok) throw new Error("Archivo no encontrado en el servidor");
                     const data = await response.json();
                     
-                    // 🛡️ DIETA DE TOKENS AJUSTADA PARA CURSOS SEGMENTADOS (50.000 caracteres)
-                    // Permite leer unas 10 a 15 páginas de texto completo sin truncar.
                     let textoCompleto = data.contexto_base || "";
                     if (textoCompleto.length > 50000) {
                         contextoExtraido = textoCompleto.substring(0, 50000) + "... [Fin del extracto]";
@@ -428,7 +433,7 @@
                     if (!isSimulacion) {
                         throw new Error(`El tema '${temaId}' no existe en la base de datos.`);
                     }
-                    // Respaldo 100% genérico para el simulador
+                    // Respaldo genérico
                     contextoExtraido = `
                         DOCUMENTO DE EJEMPLO GENÉRICO
                         Capítulo 1: Introducción a los Conceptos Básicos. Define los fundamentos teóricos de la materia.
@@ -437,7 +442,6 @@
                     `;
                 }
 
-                // 🧠 PROMPT UNIVERSAL, ADAPTATIVO Y PORCENTUAL
                 systemPromptBase = `
                     Eres un Tutor y Evaluador Experto. Tu objetivo es evaluar el nivel de comprensión del estudiante sobre el documento cargado y generar una "Ruta de Aprendizaje" personalizada.
                     
@@ -478,7 +482,6 @@
         async function arrancarConversacion() {
             mostrarTyping();
             try {
-                // Gatillo oculto GENÉRICO
                 const promptOculto = "Hola, soy el estudiante. Por favor preséntate, indícame de forma resumida qué temas o capítulos principales detectaste en el documento cargado y pregúntame sobre cuál de ellos deseo ser evaluado hoy.";
                 const respuesta = await procesarGeminiAPI(promptOculto, true);
                 quitarTyping();
