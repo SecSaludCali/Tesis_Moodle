@@ -4,7 +4,7 @@ import json
 import os
 import logging
 import re
-import glob  # <-- NUEVO IMPORT NECESARIO
+import glob
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -15,7 +15,7 @@ class MotorAnalitico:
         self.ruta_sat = os.path.join(self.base_dir, 'fact_satisfaccion.csv')
         self.ruta_perf = os.path.join(self.base_dir, 'dim_perfiles.csv')
         self.ruta_catalogo = os.path.join(self.base_dir, 'catalogo_cursos.csv')
-        self.carpeta_moodle = os.path.join(self.base_dir, 'descargas_moodle') # <-- NUEVA RUTA PARA LEER CORREOS
+        self.carpeta_moodle = os.path.join(self.base_dir, 'descargas_moodle')
 
     def ejecutar(self):
         logging.info("Iniciando Motor Analítico (Arquitectura Híbrida: Tiempo Adaptativo + Enlace Relacional)...")
@@ -50,7 +50,6 @@ class MotorAnalitico:
             for nombre_form, grupo in df_crudo.groupby('Nombre_Curso'):
                 nombre_str = str(nombre_form).lower()
                 
-                # Extraer bloques temporales desde los paréntesis
                 bloques_parentesis = re.findall(r'\(([^)]+)\)', nombre_str)
                 cohortes_temporales = []
                 for bloque in bloques_parentesis:
@@ -66,7 +65,6 @@ class MotorAnalitico:
                 num_bloques = len(cohortes_temporales)
                 if num_bloques == 0: continue
                 
-                # Caso A: Un solo bloque temporal (Puede tener 1 o más IDs simultáneos)
                 if num_bloques == 1:
                     for mid in cohortes_temporales[0]:
                         g_copy = grupo.copy()
@@ -74,8 +72,6 @@ class MotorAnalitico:
                         filas_procesadas.append(g_copy)
                     continue
                 
-                # Caso B: Múltiples Bloques (Análisis de Ruptura Temporal vs Paralelismo)
-                # Evaluamos si las encuestas se comportan como cursos paralelos en el mismo bloque de tiempo
                 es_paralelo = False
                 if "012026" in nombre_str or "01_2026" in nombre_str: 
                     es_paralelo = True
@@ -134,7 +130,6 @@ class MotorAnalitico:
             df_perf['Llave_PK'] = None
             logging.error("No se pudo cruzar la demografía: falta columna ID_Formulario.")
 
-        # Limpiar registros nulos
         df_sat = df_sat[df_sat['Llave_PK'].notna()]
         df_perf = df_perf[df_perf['Llave_PK'].notna()]
 
@@ -223,7 +218,6 @@ class MotorAnalitico:
         demo_comuna = df_perf.groupby(['Llave_PK', 'Comuna_Unificada']).size().unstack(fill_value=0).to_dict(orient='index')
         demo_escolaridad = df_perf.groupby(['Llave_PK', 'Escolaridad']).size().unstack(fill_value=0).to_dict(orient='index') if 'Escolaridad' in df_perf.columns else {}
 
-        # Mantiene la suma exacta de las 3834 encuestas originales para las gráficas
         demografia_global = {
             "Sexo": df_perf_raw['Sexo'].value_counts().to_dict(),
             "Perfil": df_perf_raw['Perfil'].value_counts().to_dict(),
@@ -233,27 +227,52 @@ class MotorAnalitico:
         }
 
         # ========================================================
-        # NUEVO: CÁLCULO DE ESTUDIANTES ÚNICOS (MÉTRICA GLOBAL)
+        # NUEVO: EXTRACCIÓN ROBUSTA DE ESTUDIANTES ÚNICOS
         # ========================================================
         estudiantes_unicos = set()
-        if os.path.exists(self.carpeta_moodle):
-            for file_path in glob.glob(os.path.join(self.carpeta_moodle, '*.csv')):
-                try:
-                    df_raw = pd.read_csv(file_path, sep=',')
-                    if len(df_raw.columns) < 3: df_raw = pd.read_csv(file_path, sep=';')
-                    
-                    # Buscar la columna de correo
-                    col_correo = next((col for col in df_raw.columns if 'correo' in str(col).lower() or 'email' in str(col).lower()), df_raw.columns[1] if len(df_raw.columns) > 1 else None)
-                    
-                    if col_correo:
-                        # Limpiar correos y agregar al Set (que elimina duplicados solo)
-                        correos_limpios = df_raw[col_correo].dropna().astype(str).str.strip().str.lower().tolist()
-                        estudiantes_unicos.update(correos_limpios)
-                except Exception as e:
-                    logging.warning(f"No se pudo extraer correos de {file_path}: {e}")
         
+        if os.path.exists(self.carpeta_moodle):
+            archivos_csv = glob.glob(os.path.join(self.carpeta_moodle, '*.csv'))
+            logging.info(f"Escaneando {len(archivos_csv)} archivos CSV en Moodle...")
+            
+            for file_path in archivos_csv:
+                nombre_archivo = os.path.basename(file_path)
+                try:
+                    # Determinamos el separador de forma inteligente leyendo la primera línea
+                    with open(file_path, 'r', encoding='utf-8-sig') as f:
+                        primera_linea = f.readline()
+                        separador = ',' if ',' in primera_linea else ';'
+
+                    # on_bad_lines='skip' evita que el código muera si Moodle exporta filas chuecas
+                    df_raw = pd.read_csv(file_path, sep=separador, encoding='utf-8-sig', on_bad_lines='skip')
+                    
+                    # 1. Limpieza extrema de columnas (Quita espacios, saltos de línea y basuras)
+                    df_raw.columns = [str(c).strip().replace('\n', '').replace('\r', '') for c in df_raw.columns]
+                    
+                    # 2. Búsqueda inteligente de la columna (soporta variaciones de Moodle)
+                    col_correo = next((col for col in df_raw.columns if 'correo' in col.lower() or 'email' in col.lower()), None)
+                    
+                    # 3. Extraer y procesar
+                    if col_correo:
+                        # Extraemos, volvemos minúsculas y limpiamos espacios de los correos
+                        correos = df_raw[col_correo].dropna().astype(str).str.strip().str.lower()
+                        
+                        # Filtramos filas vacías
+                        correos = correos[~correos.isin(['', 'nan', 'null', 'sin dato', '-'])]
+                        
+                        # El SET se encarga de guardar solo los que no existan ya
+                        estudiantes_unicos.update(correos.tolist())
+                        logging.info(f"  -> {nombre_archivo}: Se procesaron {len(correos)} registros (Métrica viva).")
+                    else:
+                        logging.warning(f"  -> {nombre_archivo}: No se encontró columna 'correo'. Columnas disponibles: {df_raw.columns.tolist()}")
+
+                except Exception as e:
+                    logging.error(f"  -> Error procesando {nombre_archivo}: {str(e)}")
+        else:
+            logging.error(f"❌ ATENCIÓN: La carpeta '{self.carpeta_moodle}' NO existe. GitHub Actions podría estar ignorándola.")
+
         total_estudiantes_unicos = len(estudiantes_unicos)
-        logging.info(f"✔ Estudiantes ÚNICOS identificados en la plataforma Moodle: {total_estudiantes_unicos}")
+        logging.info(f"✔ TOTAL INSTITUCIONAL: {total_estudiantes_unicos} Estudiantes Únicos identificados.")
         # ========================================================
 
         # 7. Construcción de Estructura JSON
