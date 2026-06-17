@@ -16,537 +16,250 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
-        /* PALETA CON EFECTO LIQUID GLASS Y BURBUJAS FLOTANTES (CERO LAG) */
+        /* PALETA Y EFECTOS BASE (SIN LAG) */
         :root[data-theme="light"] {
-            --bg-color: #f4f7fe;
-            --card-bg: rgba(255, 255, 255, 0.6);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --primary: #4318ff;
-            --success: #05cd99;
-            --warning: #ffb547;
-            --danger: #ee5d50;
-            --info: #0ea5e9;
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
-            --border-light: rgba(255, 255, 255, 0.8);
-            --border-color: rgba(255, 255, 255, 0.5);
-            
-            --ia-bg: rgba(255, 255, 255, 0.7);
-            --ia-border: rgba(255, 255, 255, 0.8);
-            --ia-text: #334155;
-            --ia-card-bg: rgba(248, 250, 252, 0.7);
-            --modal-bg: rgba(255, 255, 255, 0.95);
-
-            --blob-1: rgba(67, 24, 255, 0.12);
-            --blob-2: rgba(5, 205, 153, 0.12);
-            --blob-3: rgba(238, 93, 80, 0.1);
+            --bg-color: #f4f7fe; --card-bg: rgba(255, 255, 255, 0.6); --text-main: #1e293b; --text-muted: #64748b;
+            --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50; --info: #0ea5e9;
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08); --border-light: rgba(255, 255, 255, 0.8); --border-color: rgba(255, 255, 255, 0.5);
+            --ia-bg: rgba(255, 255, 255, 0.7); --ia-border: rgba(255, 255, 255, 0.8); --ia-text: #334155; --ia-card-bg: rgba(248, 250, 252, 0.7); --modal-bg: rgba(255, 255, 255, 0.95);
+            --blob-1: rgba(67, 24, 255, 0.12); --blob-2: rgba(5, 205, 153, 0.12); --blob-3: rgba(238, 93, 80, 0.1);
         }
 
         :root[data-theme="dark"] {
-            --bg-color: #050a1f;
-            --card-bg: rgba(11, 20, 55, 0.6);
-            --text-main: #f8fafc;
-            --text-muted: #8f9bba;
-            --primary: #7551ff;
-            --success: #01b574;
-            --warning: #ffb547;
-            --danger: #ee5d50;
-            --info: #38bdf8;
-            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-            --border-light: rgba(255, 255, 255, 0.15);
-            --border-color: rgba(255, 255, 255, 0.08);
-            
-            --ia-bg: rgba(11, 20, 55, 0.7);
-            --ia-border: rgba(255, 255, 255, 0.15);
-            --ia-text: #e2e8f0;
-            --ia-card-bg: rgba(5, 10, 31, 0.6);
-            --modal-bg: rgba(11, 20, 55, 0.95);
-
-            --blob-1: rgba(117, 81, 255, 0.15);
-            --blob-2: rgba(14, 165, 233, 0.1);
-            --blob-3: rgba(238, 93, 80, 0.08);
+            --bg-color: #050a1f; --card-bg: rgba(11, 20, 55, 0.6); --text-main: #f8fafc; --text-muted: #8f9bba;
+            --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50; --info: #38bdf8;
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); --border-light: rgba(255, 255, 255, 0.15); --border-color: rgba(255, 255, 255, 0.08);
+            --ia-bg: rgba(11, 20, 55, 0.7); --ia-border: rgba(255, 255, 255, 0.15); --ia-text: #e2e8f0; --ia-card-bg: rgba(5, 10, 31, 0.6); --modal-bg: rgba(11, 20, 55, 0.95);
+            --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1); --blob-3: rgba(238, 93, 80, 0.08);
         }
 
-        body {
-            background-color: var(--bg-color);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-            transition: background-color 0.3s ease, color 0.3s ease;
-            position: relative;
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* BURBUJAS FLOTANTES EN EL FONDO (Optimizadas GPU) */
-        body::before, body::after, .blob-3 {
-            content: ''; position: fixed; border-radius: 50%;
-            z-index: -1; animation: float 15s infinite alternate ease-in-out;
-            pointer-events: none;
-        }
-        body::before { 
-            width: 70vw; height: 70vw; 
-            background: radial-gradient(circle, var(--blob-1) 0%, transparent 65%); 
-            top: -20%; left: -20%; 
-        }
-        body::after { 
-            width: 60vw; height: 60vw; 
-            background: radial-gradient(circle, var(--blob-2) 0%, transparent 60%); 
-            bottom: -20%; right: -10%; animation-delay: -5s; 
-        }
-        .blob-3 { 
-            width: 50vw; height: 50vw; 
-            background: radial-gradient(circle, var(--blob-3) 0%, transparent 60%); 
-            top: 20%; left: 25%; animation-delay: -10s; display: none; 
-        }
-
-        @keyframes float {
-            0% { transform: translate3d(0, 0, 0) scale(1); }
-            100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); }
-        }
+        body { background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); transition: all 0.3s ease; position: relative; overflow-x: hidden; min-height: 100vh; }
+        body::before, body::after, .blob-3 { content: ''; position: fixed; border-radius: 50%; z-index: -1; animation: float 15s infinite alternate ease-in-out; pointer-events: none; }
+        body::before { width: 70vw; height: 70vw; background: radial-gradient(circle, var(--blob-1) 0%, transparent 65%); top: -20%; left: -20%; }
+        body::after { width: 60vw; height: 60vw; background: radial-gradient(circle, var(--blob-2) 0%, transparent 60%); bottom: -20%; right: -10%; animation-delay: -5s; }
+        .blob-3 { width: 50vw; height: 50vw; background: radial-gradient(circle, var(--blob-3) 0%, transparent 60%); top: 20%; left: 25%; animation-delay: -10s; display: none; }
+        @keyframes float { 0% { transform: translate3d(0, 0, 0) scale(1); } 100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); } }
 
         /* =========================================
-           PORTAL DE BIENVENIDA (SPLASH SCREEN / LANDING)
+           LANDING PAGE: BENTO BOX & AURORA PILLS
            ========================================= */
-        #welcome_portal {
-            position: absolute;
-            top: 0; left: 0; right: 0; min-height: 100vh;
-            background: transparent;
-            z-index: 9999;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 40px 20px;
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
+        #welcome_portal { position: absolute; top: 0; left: 0; right: 0; min-height: 100vh; background: transparent; z-index: 9999; display: flex; flex-direction: column; padding: 40px 20px; transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        #welcome_portal.hide-portal { opacity: 0; transform: translateY(-50px) scale(0.98); pointer-events: none; }
+        .portal-content { width: 100%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; animation: fadeIn 0.8s ease-out; }
 
-        #welcome_portal.hide-portal {
-            opacity: 0;
-            transform: translateY(-50px) scale(0.98);
-            pointer-events: none;
-            position: absolute;
-        }
-
-        .portal-content { width: 100%; max-width: 1200px; position: relative; z-index: 10; }
+        .bento-solid { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 32px 24px; box-shadow: var(--card-shadow); text-align: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.3s; }
+        .bento-solid:hover { transform: translateY(-5px); }
+        .bento-pill-1 { background: linear-gradient(135deg, #00D4FF 0%, #5B0FBE 100%); color: white; border-radius: 50px; padding: 32px 40px; box-shadow: 0 15px 35px rgba(91, 15, 190, 0.25); text-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: transform 0.3s; }
+        .bento-pill-2 { background: linear-gradient(135deg, #5B0FBE 0%, #00D4FF 100%); color: white; border-radius: 50px; padding: 32px 40px; box-shadow: 0 15px 35px rgba(0, 212, 255, 0.25); text-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: transform 0.3s; }
+        .bento-pill-1:hover, .bento-pill-2:hover { transform: translateY(-5px); }
         
-        .logo-container { text-align: center; margin-bottom: 1.5rem; animation: slideDown 0.8s ease-out; }
-        .logo-container img { max-height: 90px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-        
-        .header-title { text-align: center; margin-bottom: 40px; animation: slideDown 0.8s ease-out; }
-        .header-title h1 { font-weight: 800; font-size: 2.8rem; color: var(--primary); letter-spacing: -0.03em; margin-bottom: 8px; }
-        .header-title p { font-size: 1.15rem; color: var(--text-muted); font-weight: 500; }
+        .bento-divider { width: 1px; background: rgba(255,255,255,0.3); height: 90px; margin: 0 20px; }
+        .bento-solid-divider { width: 1px; background: var(--border-color); height: 90px; margin: 0 20px; }
+        .bento-val { font-size: 3.8rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
+        .bento-lbl { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+        .pill-badge { background: #ffffff; color: #5B0FBE; font-weight: 800; padding: 6px 16px; border-radius: 30px; font-size: 1.1rem; margin-left: 15px; text-shadow: none; vertical-align: text-bottom; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* BENTO GRID DE LA LANDING */
-        .landing-kpi-val { font-size: 3.2rem; font-weight: 800; line-height: 1; letter-spacing: -0.04em; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
-        .landing-kpi-lbl { font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9; }
-        
-        /* Aurora Cards (Efecto Píldora Redondeada) */
-        .aurora-1 { 
-            background: linear-gradient(135deg, #00D4FF 0%, #5B0FBE 100%); 
-            border-radius: 50px; border: none; transition: transform 0.3s ease, box-shadow 0.3s ease; 
-        }
-        .aurora-2 { 
-            background: linear-gradient(135deg, #5B0FBE 0%, #00D4FF 100%); 
-            border-radius: 50px; border: none; transition: transform 0.3s ease, box-shadow 0.3s ease; 
-        }
-        .aurora-1:hover, .aurora-2:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(91, 15, 190, 0.25); }
-        
-        /* Burbuja blanca para porcentajes en Aurora */
-        .pill-white { 
-            background: white; color: #5B0FBE; font-weight: 800; padding: 6px 14px; 
-            border-radius: 20px; font-size: 0.95rem; display: inline-block; vertical-align: middle; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-        }
-        
-        /* Ajuste responsive para píldoras en móvil */
-        @media (max-width: 768px) {
-            .aurora-1, .aurora-2 { border-radius: 30px; }
-            .landing-kpi-val { font-size: 2.5rem; }
-        }
-
-        /* TARJETAS DEL PORTAL (LIQUID GLASS PREMIUM) */
-        .portal-row { max-width: 1000px; margin: 0 auto; }
-
-        .hub-card {
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(31, 38, 135, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.6);
-            padding: 30px 25px;
-            height: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px) saturate(120%);
-            -webkit-backdrop-filter: blur(20px) saturate(120%);
-            text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center;
-            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-            animation: fadeIn 0.8s ease-out backwards; cursor: pointer; position: relative; overflow: hidden;
-        }
-
-        .hub-card::before {
-            content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
-            transform: skewX(-25deg); transition: left 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-            pointer-events: none; z-index: 1;
-        }
-
-        .hub-card:hover { 
-            transform: translateY(-10px); 
-            box-shadow: 0 20px 40px rgba(67, 24, 255, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.8);
-            border-color: rgba(255, 255, 255, 0.9);
-        }
+        /* NAVEGACIÓN LIQUID GLASS */
+        .portal-row { max-width: 1000px; margin: 60px auto 0; }
+        .hub-card { background: rgba(255, 255, 255, 0.4); border-radius: 24px; box-shadow: 0 10px 30px rgba(31, 38, 135, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.6); padding: 30px 25px; height: 100%; border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px) saturate(120%); -webkit-backdrop-filter: blur(20px) saturate(120%); text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: all 0.5s; cursor: pointer; position: relative; overflow: hidden; }
+        .hub-card::before { content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent); transform: skewX(-25deg); transition: left 0.7s; pointer-events: none; z-index: 1; }
+        .hub-card:hover { transform: translateY(-10px); border-color: rgba(255, 255, 255, 0.9); }
         .hub-card:hover::before { left: 200%; }
-        .hub-card:nth-child(1) { animation-delay: 0.1s; }
-        .hub-card:nth-child(2) { animation-delay: 0.2s; }
-        .hub-card:nth-child(3) { animation-delay: 0.3s; }
-
-        .hub-icon {
-            width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; margin-bottom: 20px; transition: all 0.4s ease; position: relative; z-index: 2;
-            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5);
-        }
-
+        .hub-icon { width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 20px; z-index: 2; position: relative;}
         .card-analytics .hub-icon { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; box-shadow: 0 8px 20px rgba(67, 24, 255, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
         .card-tutor .hub-icon { background: linear-gradient(135deg, var(--success) 0%, #048a67 100%); color: white; box-shadow: 0 8px 20px rgba(5, 205, 153, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
         .card-admin .hub-icon { background: linear-gradient(135deg, var(--danger) 0%, #c43d30 100%); color: white; box-shadow: 0 8px 20px rgba(238, 93, 80, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
+        .hub-title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; z-index: 2; position: relative;}
+        .hub-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; flex-grow: 1; z-index: 2; position: relative;}
+        .hub-btn { background: rgba(255, 255, 255, 0.6); color: var(--primary); font-weight: 700; padding: 8px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.8); z-index: 2; position: relative; display: inline-flex; gap: 8px; align-items: center;}
 
-        .card-analytics:hover .hub-icon { transform: scale(1.08) rotate(-5deg); box-shadow: 0 12px 25px rgba(67, 24, 255, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.6); }
-        .card-tutor:hover .hub-icon { transform: scale(1.08) rotate(5deg); box-shadow: 0 12px 25px rgba(5, 205, 153, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.6); }
-        .card-admin:hover .hub-icon { transform: scale(1.08); box-shadow: 0 12px 25px rgba(238, 93, 80, 0.35), inset 0 2px 4px rgba(255, 255, 255, 0.6); }
+        :root[data-theme="dark"] .hub-card, :root[data-theme="dark"] .bento-solid { background: rgba(11, 20, 55, 0.4); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
 
-        .hub-title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; letter-spacing: -0.02em; z-index: 2; position: relative;}
-        .hub-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; z-index: 2; position: relative; font-weight: 400;}
-        
-        .hub-btn {
-            background: rgba(255, 255, 255, 0.6); color: var(--primary); font-weight: 700; padding: 8px 20px; font-size: 0.85rem;
-            border-radius: 30px; border: 1px solid rgba(255,255,255,0.8); transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px;
-            z-index: 2; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        @media (max-width: 768px) {
+            .bento-pill-1, .bento-pill-2 { border-radius: 30px; flex-direction: column; padding: 30px 20px; }
+            .bento-divider, .bento-solid-divider { width: 100%; height: 1px; margin: 25px 0; }
+            .bento-val { font-size: 3rem; }
+            .pill-badge { display: block; margin: 10px auto 0; width: fit-content; }
+            .bento-solid { padding: 30px 20px; }
         }
-        .hub-card:hover .hub-btn { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(67, 24, 255, 0.2);}
-        
-        .card-tutor:hover .hub-btn { background: var(--success); border-color: var(--success); color: white; box-shadow: 0 6px 15px rgba(5, 205, 153, 0.2); }
-        .card-admin:hover .hub-btn { background: var(--danger); border-color: var(--danger); color: white; box-shadow: 0 6px 15px rgba(238, 93, 80, 0.2); }
-
-        :root[data-theme="dark"] .hub-card {
-            background: rgba(11, 20, 55, 0.4); border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
-        }
-        :root[data-theme="dark"] .hub-btn { background: rgba(255, 255, 255, 0.1); color: var(--text-main); border-color: rgba(255,255,255,0.1); }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* =========================================
-           DASHBOARD ESTILOS ORIGINALES (MODIFICADOS)
+           DASHBOARD INTERNO
            ========================================= */
-        #dashboard_content {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            opacity: 0; 
-            pointer-events: none;
-            transition: opacity 0.8s ease;
-            display: none;
-        }
-
-        #dashboard_content.show-dashboard {
-            opacity: 1;
-            pointer-events: auto;
-            position: relative; 
-            display: block;
-        }
+        #dashboard_content { display: none; opacity: 0; transition: opacity 0.8s ease; }
+        #dashboard_content.show-dashboard { display: block; opacity: 1; position: relative; z-index: 20; }
 
         h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
         h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; }
 
-        .glass-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: var(--card-shadow);
-            padding: 32px;
-            height: 100%;
-            border: 1px solid var(--border-color);
-            border-top: 1px solid var(--border-light);
-            border-left: 1px solid var(--border-light);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        /* KPIs Internos (Minimalistas) */
+        .glass-card { background: var(--card-bg); border-radius: 24px; box-shadow: var(--card-shadow); padding: 32px; height: 100%; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.2s; }
+        
         .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
         .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
         .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
         .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
-
         .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
 
-        /* LIQUID NAVBAR MENU */
+        /* TABS Y CONTROLES */
         .liquid-nav-container { display: flex; justify-content: center; margin-bottom: 40px; margin-top: 10px; }
-        .liquid-nav {
-            display: inline-flex; align-items: center; position: relative; background: var(--card-bg);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-light);
-            border-radius: 50px; padding: 8px; box-shadow: var(--card-shadow); z-index: 10; list-style: none; margin: 0;
-            transform: translateZ(0);
-        }
-        .liquid-nav .nav-item { z-index: 2; }
-        .liquid-tab {
-            background: transparent; border: none; color: var(--text-muted); font-weight: 600; font-size: 1rem;
-            padding: 12px 24px; border-radius: 40px; transition: color 0.3s ease; cursor: pointer; outline: none; display: flex; align-items: center; gap: 8px;
-        }
-        .liquid-tab:hover { color: var(--primary); }
+        .liquid-nav { display: inline-flex; align-items: center; position: relative; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--border-light); border-radius: 50px; padding: 8px; box-shadow: var(--card-shadow); z-index: 10; margin: 0; }
+        .liquid-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; padding: 12px 24px; border-radius: 40px; transition: color 0.3s ease; display: flex; gap: 8px; z-index: 2;}
         .liquid-tab.active { color: var(--primary) !important; font-weight: 700; }
+        .liquid-indicator { position: absolute; top: 8px; bottom: 8px; left: 8px; width: 0; background: rgba(255, 255, 255, 0.25); border-radius: 40px; z-index: 1; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
 
-        .liquid-indicator {
-            position: absolute; top: 8px; bottom: 8px; left: 8px; width: 0; 
-            background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(4px) saturate(150%);
-            -webkit-backdrop-filter: blur(4px) saturate(150%); border-top: 1px solid rgba(255,255,255,0.8);
-            border-bottom: 1px solid rgba(255,255,255,0.3); border-radius: 40px; z-index: 1;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.5); pointer-events: none; 
-        }
-
-        .nav-divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 8px; z-index: 2; }
-        .theme-toggle-nav { background: transparent; border: none; color: var(--text-muted); padding: 10px 16px; border-radius: 40px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s ease; z-index: 2; display: flex; align-items: center; justify-content: center; }
-        .theme-toggle-nav:hover { color: var(--warning); background: rgba(255, 255, 255, 0.2); }
-
-        .form-select { 
-            background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-light); 
-            border-radius: 14px; padding: 16px 24px; font-weight: 500; box-shadow: var(--card-shadow); 
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: all 0.2s ease; font-size: 1.05rem; 
-        }
-        .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); outline: none; }
-        .form-select option { background-color: var(--bg-color); color: var(--text-main); }
-
+        .form-select { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 14px; padding: 16px 24px; font-weight: 500; box-shadow: var(--card-shadow); backdrop-filter: blur(8px); }
+        .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); }
+        
         .chart-wrapper { position: relative; height: 280px; width: 100%; margin-top: 10px; }
         .radar-wrapper { position: relative; height: 420px; width: 100%; display: flex; justify-content: center; }
 
-        /* ESTILOS IA LIQUID */
+        /* BARRAS DE PROGRESO CALIDAD */
+        .progress-bar-container { margin-bottom: 20px; }
+        .progress-label { display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-main); font-weight: 500;}
+        .progress-label span:first-child { flex: 1; line-height: 1.3; } /* Evita que preguntas largas se monten en el número */
+        .progress-val { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .progress-bg { height: 10px; background: rgba(0,0,0,0.05); border-radius: 5px; overflow: hidden; }
+        :root[data-theme="dark"] .progress-bg { background: rgba(255,255,255,0.05); }
+        .progress-fill { height: 100%; border-radius: 5px; transition: width 1s ease-out; }
+
+        /* IA PANELS Y LOBBY */
         .ia-panel-wrapper { margin-top: 40px; padding-top: 10px; }
-        .ia-card { 
-            background-color: var(--ia-bg); border-radius: 24px; padding: 40px; 
-            border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); 
-            box-shadow: var(--card-shadow); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transform: translateZ(0);
-        }
-        .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
-        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; height: 100%; transition: transform 0.2s; }
-        .ia-mini-card:hover { transform: translateY(-4px); }
-        .ia-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 16px; }
-        .ia-val { font-size: 1.8rem; font-weight: 800; color: var(--text-main); line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
-        .ia-lbl { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-        .ia-desc { font-size: 0.95rem; color: var(--text-main); margin-top: 12px; line-height: 1.5; font-weight: 400; }
-
-        .bg-indigo-soft { background-color: rgba(67, 24, 255, 0.1); color: var(--primary); }
-        .bg-emerald-soft { background-color: rgba(5, 205, 153, 0.1); color: var(--success); }
-        .bg-amber-soft { background-color: rgba(255, 181, 71, 0.1); color: var(--warning); }
-        .bg-rose-soft { background-color: rgba(238, 93, 80, 0.1); color: var(--danger); }
-
+        .ia-card { background-color: var(--ia-bg); border-radius: 24px; padding: 40px; border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); box-shadow: var(--card-shadow); backdrop-filter: blur(16px); }
+        .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; gap: 12px; }
+        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; height: 100%; }
+        .ia-val { font-size: 1.8rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; color: var(--text-main);}
+        .ia-lbl { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
         .lobby-card { cursor: pointer; border: 2px solid transparent; padding: 40px 20px; }
         .lobby-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 35px rgba(67, 24, 255, 0.15); }
 
-        /* MODAL Y DICCIONARIO LIQUID GLASS OPTIMIZADO */
-        .btn-info-kpi { 
-            background: linear-gradient(135deg, var(--primary) 0%, var(--info) 100%); color: white; border-radius: 50%; 
-            width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; 
-            border: 1px solid rgba(255,255,255,0.4); transition: all 0.3s ease; box-shadow: 0 8px 15px rgba(67, 24, 255, 0.4), inset 0 2px 4px rgba(255,255,255,0.3); 
-        }
-        .btn-info-kpi:hover { transform: scale(1.1) rotate(5deg); color: white; box-shadow: 0 12px 25px rgba(67, 24, 255, 0.5), inset 0 2px 4px rgba(255,255,255,0.5); }
-        .modal-backdrop.show { opacity: 1 !important; background-color: rgba(15, 23, 42, 0.6) !important; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-        .modal-content { 
-            background: var(--modal-bg); color: var(--text-main); border-radius: 28px; border: 1px solid var(--border-color);
-            border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255,255,255,0.1); overflow: hidden; transform: translateZ(0);
-        }
-        .modal-header { border-bottom: 1px solid var(--border-color); padding: 30px 40px; background: transparent; }
-        .modal-body { padding: 40px; background-color: transparent; }
-        .modal-header .btn-close { background-color: var(--card-bg); border-radius: 50%; padding: 12px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); transition: all 0.3s ease; }
-        .modal-header .btn-close:hover { transform: rotate(90deg) scale(1.1); background-color: var(--danger); filter: invert(1); }
-
-        .dic-card { 
-            background: var(--card-bg); border-radius: 24px; padding: 36px; border: 1px solid var(--border-color);
-            border-top: 1px solid rgba(255,255,255,0.4); border-left: 1px solid rgba(255,255,255,0.4); margin-bottom: 30px; 
-            display: flex; gap: 40px; align-items: stretch; box-shadow: 0 10px 30px rgba(0,0,0,0.05); position: relative;
-            overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .dic-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(67, 24, 255, 0.1), inset 0 1px 0 var(--border-light); border-color: rgba(67, 24, 255, 0.2); }
-        .dic-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); transition: left 0.6s ease; pointer-events: none; }
-        .dic-card:hover::before { left: 200%; }
-        .dic-info { flex: 1; z-index: 2; }
-        .dic-mockup { flex: 0 0 300px; background: var(--ia-card-bg); border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; box-shadow: inset 0 6px 15px rgba(0,0,0,0.04); z-index: 2; }
-
-        .dic-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 800; color: var(--primary); background: rgba(67, 24, 255, 0.1); padding: 6px 14px; border-radius: 30px; margin-bottom: 16px; display: inline-block; border: 1px solid rgba(67, 24, 255, 0.2); }
-        .dic-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 16px; color: var(--text-main); letter-spacing: -0.02em;}
-        .dic-desc { color: var(--text-muted); line-height: 1.7; font-size: 1.05rem; }
-        .dic-formula { background: var(--ia-card-bg); padding: 16px 20px; border-radius: 12px; font-family: 'Courier New', Courier, monospace; font-size: 0.95rem; color: var(--primary); font-weight: 600; margin-top: 20px; border-left: 4px solid var(--primary); border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.02); letter-spacing: -0.03em; }
-        :root[data-theme="dark"] .dic-formula { color: #a5b4fc; }
-
-        .mock-kpi-card { background: var(--card-bg); border-left: 4px solid var(--primary); padding: 24px; border-radius: 16px; width: 100%; box-shadow: var(--card-shadow); border-top: 1px solid var(--border-light);}
-        .mock-bar-chart { width: 100%; height: 34px; border-radius: 8px; display: flex; overflow: hidden; box-shadow: inset 0 2px 6px rgba(0,0,0,0.15); }
-        .mock-badge { background: linear-gradient(135deg, var(--success) 0%, #048a67 100%); color: white; padding: 10px 24px; border-radius: 30px; font-weight: 800; font-size: 1.3rem; box-shadow: 0 8px 20px rgba(5, 205, 153, 0.4); border: 1px solid rgba(255,255,255,0.4); text-shadow: 0 2px 4px rgba(0,0,0,0.2);}
-        .mock-radar { width: 140px; height: 140px; background: repeating-radial-gradient(circle, transparent, transparent 20px, var(--border-color) 21px); border-radius: 50%; position: relative; }
-        .mock-radar::after { content: ''; position: absolute; top: 24px; left: 24px; right: 24px; bottom: 24px; background: rgba(67, 24, 255, 0.2); border: 2px solid var(--primary); clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); backdrop-filter: blur(3px); box-shadow: 0 0 20px rgba(67, 24, 255, 0.3);}
-
-        @media (max-width: 992px) { .dic-card { flex-direction: column; gap: 20px; padding: 24px; } .dic-mockup { height: 220px; flex: auto; } }
-        @media (max-width: 768px) { 
-            .liquid-nav { flex-direction: column; border-radius: 24px; padding: 10px; width: 100%; align-items: stretch; }
-            .nav-item { width: 100%; }
-            .liquid-tab { padding: 14px; justify-content: center; width: 100%; }
-            .liquid-indicator { display: none; }
-            .liquid-tab.active { background: rgba(255,255,255,0.1); color: var(--primary); border-radius: 16px; box-shadow: 0 8px 20px rgba(67, 24, 255, 0.15); }
-            .nav-divider { width: 100%; height: 1px; margin: 8px 0; }
-        }
-
-        /* FIX MAPA LEAFLET */
-        #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); }
+        /* FIX MAPA LEAFLET Y EFECTO HOVER */
+        #map-container { border-radius: 24px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); box-shadow: var(--card-shadow); }
         .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
+        path.leaflet-interactive { transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease, stroke-width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), stroke 0.3s ease !important; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 
 <body>
 
     <!-- ========================================== -->
-    <!-- OVERLAY: PORTAL DE BIENVENIDA MÁGICO       -->
+    <!-- PORTAL DE BIENVENIDA MÁGICO (LANDING)      -->
     <!-- ========================================== -->
     <div id="welcome_portal">
         <div class="blob-3"></div>
-        <div class="portal-content pb-5">
+        <div class="portal-content">
             
-            <!-- ESPACIO PARA LOGO -->
-            <div class="logo-container pt-3 pt-md-5">
-                <!-- Reemplaza el src con la URL de tu logo -->
-                <img src="https://placehold.co/400x120/transparent/4318ff?text=LOGO+SECRETAR%C3%8DA" alt="Logo Institucional" class="img-fluid">
-            </div>
-            
-            <div class="header-title">
-                <h1>Ecosistema Educativo en Salud</h1>
-                <p>Monitoreo inteligente de cohortes y calidad percibida</p>
+            <!-- LOGO INSTITUCIONAL -->
+            <div class="text-center mb-5">
+                <img src="https://placehold.co/400x120/transparent/4318ff?text=LOGO+SECRETARÍA" alt="Logo Institucional" style="max-height: 90px; object-fit: contain;">
+                <p class="mt-3 text-muted fw-bold" style="letter-spacing: 2px; text-transform: uppercase;">Ecosistema Educativo en Salud</p>
             </div>
 
-            <!-- BENTO GRID DE KPIs GLOBALES -->
-            <div class="row g-4 justify-content-center mb-5" style="max-width: 1000px; margin: 0 auto;">
-                
-                <!-- Fila 1 -->
-                <div class="col-md-4">
-                    <div class="glass-card text-center p-4 d-flex flex-column justify-content-center">
-                        <div class="landing-kpi-val text-primary" id="ld-cursos">0</div>
-                        <div class="landing-kpi-lbl text-muted">Cursos Activos</div>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="glass-card p-4 d-flex justify-content-around align-items-center h-100">
-                        <div class="text-center">
-                            <div class="landing-kpi-val text-primary" id="ld-matriculas">0</div>
-                            <div class="landing-kpi-lbl text-muted">Matrículas Totales</div>
-                        </div>
-                        <div style="width: 2px; height: 60px; background: var(--border-color);"></div>
-                        <div class="text-center">
-                            <div class="landing-kpi-val text-primary" id="ld-unicos">0</div>
-                            <div class="landing-kpi-lbl text-muted">Estudiantes Únicos</div>
+            <!-- BENTO BOX: KPIs GLOBALES -->
+            <div id="landing-kpis">
+                <!-- Fila 1: Cursos y Matrículas -->
+                <div class="row g-4 mb-4 justify-content-center">
+                    <div class="col-lg-3 col-md-5">
+                        <div class="bento-solid h-100 d-flex flex-column justify-content-center">
+                            <div class="bento-val text-primary" id="bento-cursos">-</div>
+                            <div class="bento-lbl text-muted">Cursos Activos</div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Fila 2 (Aurora 1) -->
-                <div class="col-12">
-                    <div class="aurora-1 p-4 px-5 d-flex flex-column flex-md-row justify-content-around align-items-center text-center shadow-lg">
-                        <div class="mb-3 mb-md-0">
-                            <div class="d-flex align-items-center justify-content-center gap-3">
-                                <div class="landing-kpi-val text-white" style="text-shadow: 0 4px 10px rgba(0,0,0,0.2);" id="ld-certs">0</div>
-                                <div class="pill-white shadow-sm" id="ld-certs-pct">0%</div>
+                    <div class="col-lg-7 col-md-12">
+                        <div class="bento-solid h-100 d-flex flex-column flex-md-row align-items-center justify-content-around">
+                            <div class="text-center">
+                                <div class="bento-val text-primary" id="bento-matriculas">-</div>
+                                <div class="bento-lbl text-muted">Matrículas Totales</div>
                             </div>
-                            <div class="landing-kpi-lbl text-white">Certificados Emitidos</div>
-                        </div>
-                        <div class="d-none d-md-block" style="width: 2px; height: 60px; background: rgba(255,255,255,0.3);"></div>
-                        <div>
-                            <div class="landing-kpi-val text-white" style="text-shadow: 0 4px 10px rgba(0,0,0,0.2);" id="ld-encuestas">0</div>
-                            <div class="landing-kpi-lbl text-white">Encuestas Recibidas</div>
+                            <div class="bento-solid-divider"></div>
+                            <div class="text-center">
+                                <div class="bento-val text-primary" id="bento-unicos">-</div>
+                                <div class="bento-lbl text-muted">Estudiantes Únicos</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Fila 3 (Aurora 2) -->
-                <div class="col-12">
-                    <div class="aurora-2 p-4 px-5 d-flex flex-column flex-md-row justify-content-around align-items-center text-center shadow-lg">
-                        <div class="mb-3 mb-md-0">
-                            <div class="landing-kpi-val text-white" style="text-shadow: 0 4px 10px rgba(0,0,0,0.2);" id="ld-chs">0</div>
-                            <div class="landing-kpi-lbl text-white">Score de Salud (CHS)</div>
+                <!-- Fila 2: Certificados y Encuestas (Aurora 1) -->
+                <div class="row mb-4 justify-content-center">
+                    <div class="col-lg-10 col-md-12">
+                        <div class="bento-pill-1 h-100 d-flex flex-column flex-md-row align-items-center justify-content-around">
+                            <div class="text-center">
+                                <div class="bento-val d-flex align-items-center justify-content-center">
+                                    <span id="bento-certificados">-</span>
+                                    <span class="pill-badge" id="bento-pct-cert">-</span>
+                                </div>
+                                <div class="bento-lbl">Certificados Emitidos</div>
+                            </div>
+                            <div class="bento-divider"></div>
+                            <div class="text-center">
+                                <div class="bento-val" id="bento-encuestas">-</div>
+                                <div class="bento-lbl">Encuestas Recibidas</div>
+                            </div>
                         </div>
-                        <div class="d-none d-md-block" style="width: 2px; height: 60px; background: rgba(255,255,255,0.3);"></div>
-                        <div>
-                            <div class="landing-kpi-val text-white" style="text-shadow: 0 4px 10px rgba(0,0,0,0.2);" id="ld-nps">0</div>
-                            <div class="landing-kpi-lbl text-white">e-NPS Global</div>
+                    </div>
+                </div>
+
+                <!-- Fila 3: CHS y NPS (Aurora 2) -->
+                <div class="row mb-5 justify-content-center">
+                    <div class="col-lg-10 col-md-12">
+                        <div class="bento-pill-2 h-100 d-flex flex-column flex-md-row align-items-center justify-content-around">
+                            <div class="text-center">
+                                <div class="bento-val" id="bento-chs">-</div>
+                                <div class="bento-lbl">Score Salud (CHS)</div>
+                            </div>
+                            <div class="bento-divider"></div>
+                            <div class="text-center">
+                                <div class="bento-val" id="bento-nps">-</div>
+                                <div class="bento-lbl">e-NPS Global</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TARJETAS DE NAVEGACIÓN -->
+            <!-- NAVEGACIÓN: PORTALES -->
             <div class="row g-4 justify-content-center portal-row">
-                <!-- MÓDULO 1: DASHBOARD -->
                 <div class="col-lg-4 col-md-6">
                     <div class="hub-card card-analytics" onclick="entrarAlDashboard()">
-                        <div class="hub-icon">
-                            <i class="bi bi-bar-chart-line-fill"></i>
-                        </div>
+                        <div class="hub-icon"><i class="bi bi-bar-chart-line-fill"></i></div>
                         <h3 class="hub-title">Dashboard Analítico</h3>
-                        <p class="hub-desc">Análisis profundo, mapas demográficos y desgaste operativo.</p>
-                        <div class="hub-btn">
-                            Ver Gráficos <i class="bi bi-arrow-right"></i>
-                        </div>
+                        <p class="hub-desc">Visualiza métricas, KPIs institucionales, rendimiento demográfico y calidad percibida.</p>
+                        <div class="hub-btn">Ingresar <i class="bi bi-arrow-right"></i></div>
                     </div>
                 </div>
-
-                <!-- MÓDULO 2: ESTUDIANTES (TUTOR IA) -->
                 <div class="col-lg-4 col-md-6">
                     <a href="tutor_estudiante.html" class="hub-card card-tutor text-decoration-none">
-                        <div class="hub-icon">
-                            <i class="bi bi-robot"></i>
-                        </div>
+                        <div class="hub-icon"><i class="bi bi-robot"></i></div>
                         <h3 class="hub-title">Tutor IA (Estudiante)</h3>
                         <p class="hub-desc">Simulador clínico inteligente. Interactúa con el evaluador para trazar tu ruta.</p>
-                        <div class="hub-btn">
-                            Ingresar <i class="bi bi-arrow-right"></i>
-                        </div>
+                        <div class="hub-btn">Ingresar <i class="bi bi-arrow-right"></i></div>
                     </a>
                 </div>
-
-                <!-- MÓDULO 3: ADMIN (ENTRENAMIENTO) -->
                 <div class="col-lg-4 col-md-6">
                     <a href="admin_conocimiento.html" class="hub-card card-admin text-decoration-none">
-                        <div class="hub-icon">
-                            <i class="bi bi-shield-lock-fill"></i>
-                        </div>
+                        <div class="hub-icon"><i class="bi bi-shield-lock-fill"></i></div>
                         <h3 class="hub-title">Entrenamiento IA</h3>
                         <p class="hub-desc">Acceso restringido para el curador. Sube normativas y entrena los cerebros.</p>
-                        <div class="hub-btn">
-                            Ingresar <i class="bi bi-arrow-right"></i>
-                        </div>
+                        <div class="hub-btn">Ingresar <i class="bi bi-arrow-right"></i></div>
                     </a>
                 </div>
             </div>
+
         </div>
     </div>
 
 
     <!-- ========================================== -->
-    <!-- CONTENIDO REAL DEL DASHBOARD (Oculto al inicio) -->
+    <!-- DASHBOARD INTERNO                          -->
     <!-- ========================================== -->
     <div class="container-fluid py-5 px-4 px-xl-5" id="dashboard_content">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
             <div>
-                <h2 class="d-flex align-items-center gap-3">
-                    Inteligencia Analítica
-                    <button class="btn-info-kpi" data-bs-toggle="modal" data-bs-target="#kpiModal"
-                        title="Ver Diccionario de Indicadores">
-                        <i class="bi bi-info-lg"></i>
-                    </button>
-                </h2>
+                <h2 class="d-flex align-items-center gap-3 text-primary">Inteligencia Analítica</h2>
                 <div class="text-muted mt-2">Panel interactivo de monitoreo de cohortes y calidad percibida.</div>
             </div>
-            
-            <!-- Botón para volver a abrir el Portal -->
             <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2" onclick="volverAlPortal()" style="border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px); color: var(--text-main);">
                 <i class="bi bi-house-door-fill text-primary"></i> Volver al Inicio
             </button>
@@ -559,8 +272,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <select id="selector-cohorte" class="form-select" style="display: none; border: 2px solid var(--primary);">
-                </select>
+                <select id="selector-cohorte" class="form-select" style="display: none; border: 2px solid var(--primary);"></select>
             </div>
         </div>
 
@@ -571,184 +283,52 @@
             <div class="liquid-nav-container">
                 <ul class="nav liquid-nav" role="tablist">
                     <div class="liquid-indicator" id="liquid-indicator"></div>
-                    
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link liquid-tab active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab" aria-selected="true">
-                            <i class="bi bi-pie-chart-fill fs-5"></i> Demografía
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link liquid-tab" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-speedometer2 fs-5"></i> Operativo
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link liquid-tab" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-star-fill fs-5"></i> Calidad Percibida
-                        </button>
-                    </li>
-
-                    <div class="nav-divider"></div>
-                    
-                    <button class="theme-toggle-nav" id="btn-theme" title="Cambiar Tema">
-                        <i class="bi bi-moon-stars-fill"></i>
-                    </button>
+                    <li class="nav-item"><button class="nav-link liquid-tab active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab"><i class="bi bi-pie-chart-fill fs-5"></i> Demografía</button></li>
+                    <li class="nav-item"><button class="nav-link liquid-tab" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab"><i class="bi bi-speedometer2 fs-5"></i> Operativo</button></li>
+                    <li class="nav-item"><button class="nav-link liquid-tab" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill fs-5"></i> Calidad Percibida</button></li>
                 </ul>
             </div>
 
             <div class="tab-content" id="myTabContent">
                 <!-- PANEL 1: DEMOGRAFÍA -->
-                <div class="tab-pane fade show active" id="panel-global" role="tabpanel" aria-labelledby="global-tab">
-                    <!-- Fila responsiva para las tarjetas de KPIs -->
+                <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                     <div class="row g-4 mb-5" id="kpi-global-row"></div>
-                    
                     <div class="row g-4 mb-5">
                         <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Sexo</h5><div class="chart-wrapper"><canvas id="chartSexo"></canvas></div></div></div>
                         <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Curso de Vida</h5><div class="chart-wrapper"><canvas id="chartEdad"></canvas></div></div></div>
                         <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Perfil Profesional</h5><div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div></div></div>
                         <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Escolaridad</h5><div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div></div></div>
                     </div>
-                    
                     <div class="row g-4 mb-5">
                         <div class="col-lg-5 col-md-12"><div class="glass-card d-flex flex-column"><h5>Mapa de Participación</h5><div id="map-container" style="flex-grow: 1; min-height: 550px; width: 100%;"></div></div></div>
                         <div class="col-lg-7 col-md-12"><div class="glass-card"><h5>Distribución por Ubicación</h5><div class="chart-wrapper" style="height: 550px; margin-top: 0;"><canvas id="chartComunas"></canvas></div></div></div>
                     </div>
-                    <div class="ia-panel-wrapper" id="panel-ia-demo" style="display: none;"><div class="ia-card"><div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico Demográfico Asistido</div><div id="ia-txt-demo"></div></div></div>
                 </div>
 
                 <!-- PANEL 2: RENDIMIENTO -->
-                <div class="tab-pane fade" id="panel-moodle" role="tabpanel" aria-labelledby="moodle-tab">
+                <div class="tab-pane fade" id="panel-moodle" role="tabpanel">
                     <div class="row g-4 mb-5" id="kpi-moodle-row"></div>
                     <div class="row g-4">
                         <div class="col-md-8"><div class="glass-card"><h5>Distribución del Estado de Capacitación</h5><div class="chart-wrapper"><canvas id="chartMoodleBar"></canvas></div></div></div>
                         <div class="col-md-4"><div class="glass-card text-center d-flex flex-column justify-content-center align-items-center"><h5>Ritmo de Aprendizaje</h5><div class="metric-big mt-4" id="tiempo-consumo-dias">0</div><div class="kpi-label">Días Promedio para Finalizar</div></div></div>
                     </div>
-                    <div class="ia-panel-wrapper" id="panel-ia-moodle" style="display: none;"><div class="ia-card"><div class="ia-title"><i class="bi bi-robot fs-3"></i> Diagnóstico de Rendimiento Operativo</div><div id="ia-txt-moodle"></div></div></div>
                 </div>
 
                 <!-- PANEL 3: CALIDAD -->
-                <div class="tab-pane fade" id="panel-radar" role="tabpanel" aria-labelledby="radar-tab">
+                <div class="tab-pane fade" id="panel-radar" role="tabpanel">
                     <div class="row g-4">
-                        <div class="col-md-6"><div class="glass-card"><h5 id="titulo-radar">Radar de Dimensiones vs Benchmark</h5><div class="radar-wrapper"><canvas id="chartRadar"></canvas></div></div></div>
-                        <div class="col-md-6"><div class="glass-card"><h5 id="titulo-desglose">Desglose Detallado de Calificación</h5><div id="diagnostico-detalles" class="mt-4" style="max-height: 420px; overflow-y: auto; padding-right: 10px;"></div></div></div>
-                        <div class="col-12 ia-panel-wrapper" id="panel-ia-radar" style="display: none;"><div class="ia-card"><div class="ia-title"><i class="bi bi-robot fs-3"></i> Evaluación Analítica de Calidad Percibida</div><div id="ia-txt-radar"></div></div></div>
+                        <div class="col-md-7"><div class="glass-card"><h5 id="titulo-radar">Radar de Dimensiones vs Benchmark</h5><div class="radar-wrapper"><canvas id="chartRadar"></canvas></div></div></div>
+                        <div class="col-md-5"><div class="glass-card"><h5 id="titulo-desglose">Desglose Detallado de la Encuesta (0 - 5.0)</h5><div id="diagnostico-detalles" class="mt-4" style="max-height: 420px; overflow-y: auto; padding-right: 10px;"></div></div></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DICCIONARIO LIQUID -->
-    <div class="modal fade" id="kpiModal" tabindex="-1" aria-labelledby="kpiModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div>
-                        <h3 class="modal-title fw-bold" id="kpiModalLabel" style="color: var(--primary);"><i
-                                class="bi bi-journal-code me-2"></i> Diccionario de Indicadores (KPIs)</h3>
-                        <div class="text-muted mt-1">Definición técnica y visualización de las métricas utilizadas en el
-                            Dashboard.</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="dic-card">
-                        <div class="dic-info">
-                            <span class="dic-tag">Métrica Compuesta</span>
-                            <h4 class="dic-title">Puntaje de Salud (CHS)</h4>
-                            <p class="dic-desc">El <strong>Course Health Score</strong> es el indicador macro
-                                institucional. Mide la viabilidad y el éxito general de una capacitación cruzando datos
-                                operativos de Moodle con datos de satisfacción emocional de Forms.</p>
-                            <div class="dic-formula"><i class="bi bi-calculator me-2"></i> Fórmula: (Finalización * 40%) + (ISG * 30%) + (IUP * 20%) + (UX * 10%)</div>
-                        </div>
-                        <div class="dic-mockup">
-                            <span style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización en Dashboard:</span>
-                            <div class="mock-kpi-card"><div class="kpi-value">85.4</div><div class="kpi-label" style="font-size: 0.7rem;">Score Salud (CHS)</div></div>
-                        </div>
-                    </div>
-
-                    <div class="dic-card">
-                        <div class="dic-info">
-                            <span class="dic-tag" style="background: rgba(5, 205, 153, 0.1); color: var(--success); border-color: rgba(5, 205, 153, 0.2);">Métrica Operativa</span>
-                            <h4 class="dic-title">Tasas de Embudo Académico</h4>
-                            <p class="dic-desc">Mide el flujo del estudiante en Moodle. <br>• <strong>Tasa de Finalización:</strong> % de inscritos que aprobaron el curso.<br>• <strong>Tasa de Abandono:</strong> % que inició pero no terminó (Fuga).<br>• <strong>Tasa de Inactividad:</strong> % que se matriculó pero nunca ingresó.</p>
-                            <div class="dic-formula"><i class="bi bi-bar-chart-steps me-2"></i> Se visualiza apilado para evidenciar en qué fase se pierden los usuarios.</div>
-                        </div>
-                        <div class="dic-mockup">
-                            <span style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización en Dashboard:</span>
-                            <div class="w-100 px-3">
-                                <div class="mock-bar-chart">
-                                    <div style="width: 60%; background: var(--success);" title="Finalización"></div><div style="width: 30%; background: var(--warning);" title="Abandono"></div><div style="width: 10%; background: var(--danger);" title="Inactividad"></div>
-                                </div>
-                                <div class="d-flex justify-content-between mt-2" style="font-size: 0.7rem; color: var(--text-muted);"><span>60% Fin.</span><span>30% Abd.</span><span>10% Inac.</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="dic-card">
-                        <div class="dic-info">
-                            <span class="dic-tag" style="background: rgba(255, 181, 71, 0.1); color: var(--warning); border-color: rgba(255, 181, 71, 0.2);">Métrica de Calidad</span>
-                            <h4 class="dic-title">Net Promoter Score (e-NPS)</h4>
-                            <p class="dic-desc">Mide la lealtad y satisfacción general del estudiante respondiendo a la pregunta: <em>"En general, ¿Cómo se sintió con la actividad?"</em>.</p>
-                            <div class="dic-formula"><i class="bi bi-star-fill me-2"></i> Escala de -100 a +100. Valores > 20 se consideran excelentes.</div>
-                        </div>
-                        <div class="dic-mockup">
-                            <span style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización en IA:</span>
-                            <div class="mock-badge">NPS: +45</div>
-                        </div>
-                    </div>
-
-                    <div class="dic-card">
-                        <div class="dic-info">
-                            <span class="dic-tag" style="background: rgba(14, 165, 233, 0.1); color: var(--info); border-color: rgba(14, 165, 233, 0.2);">Métrica Dimensional</span>
-                            <h4 class="dic-title">Índices de Calidad (IUP, ICD, UX, Brecha)</h4>
-                            <p class="dic-desc">Agrupa preguntas del formulario en variables clave sobre 5.0:<br>• <strong>IUP (Utilidad Práctica)</strong><br>• <strong>ICD (Competencia Docente)</strong><br>• <strong>UX (Plataforma)</strong><br>• <strong>Brecha Expectativa</strong></p>
-                        </div>
-                        <div class="dic-mockup">
-                            <span style="position:absolute; top:10px; left:15px; font-size:0.7rem; color:var(--text-muted);">Visualización en Radar:</span>
-                            <div class="mock-radar"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ==========================================
-        // LÓGICA DEL PORTAL MÁGICO (SPLASH SCREEN)
+        // VARIABLES GLOBALES Y DICCIONARIOS
         // ==========================================
-        function entrarAlDashboard() {
-            const portal = document.getElementById('welcome_portal');
-            const dashboard = document.getElementById('dashboard_content');
-            
-            portal.classList.add('hide-portal');
-            
-            setTimeout(() => {
-                dashboard.classList.add('show-dashboard');
-                if (mapInstance) {
-                    setTimeout(() => mapInstance.invalidateSize(), 300);
-                }
-            }, 300);
-        }
-
-        function volverAlPortal() {
-            const portal = document.getElementById('welcome_portal');
-            const dashboard = document.getElementById('dashboard_content');
-            
-            dashboard.classList.remove('show-dashboard');
-            
-            setTimeout(() => {
-                portal.classList.remove('hide-portal');
-            }, 400); 
-        }
-
-        // ==========================================
-        // RESTO DEL CÓDIGO DEL DASHBOARD ORIGINAL
-        // ==========================================
-        proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-
         let dashboardData = {}; 
         let cursosPorBase = {}; 
         let cursoActual = null; 
@@ -760,40 +340,23 @@
         let geoJsonDataRaw = null;
 
         const mapeoPreguntas = { 
-            "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", 
-            "¿Se cumplió el objetivo de la capacitación?": "Objetivo Cumplido", 
-            "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia Temática", 
+            "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro al Inicio", 
+            "¿Se cumplió el objetivo de la capacitación?": "Objetivo General Cumplido", 
+            "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia de Contenidos", 
             "¿Los temas se desarrollaron en el tiempo previsto?": "Manejo del Tiempo", 
-            "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Innovación (Conceptos)", 
-            "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Utilidad Práctica", 
-            "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", 
-            "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente", 
-            "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", 
-            "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Resolución Dudas", 
-            "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "Experiencia Plataforma (UX)", 
-            "¿El material utilizado permitió el entendimiento del tema?": "Calidad Materiales", 
-            "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General" 
+            "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Aporte de Conceptos Nuevos", 
+            "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Aplicabilidad Práctica", 
+            "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología del Facilitador", 
+            "¿El facilitador demostró el dominio del tema brindado?": "Dominio Temático del Docente", 
+            "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Fomento de la Participación", 
+            "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Resolución de Inquietudes", 
+            "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "Plataforma Virtual (UX)", 
+            "¿El material utilizado permitió el entendimiento del tema?": "Calidad del Material", 
+            "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General (eNPS Base)" 
         };
-        
         const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
 
-        const btnTheme = document.getElementById('btn-theme');
-        if(btnTheme){
-            btnTheme.addEventListener('click', () => {
-                const html = document.documentElement; 
-                const isLight = html.getAttribute('data-theme') === 'light';
-                html.setAttribute('data-theme', isLight ? 'dark' : 'light');
-                btnTheme.innerHTML = isLight ? '<i class="bi bi-sun-fill text-warning"></i>' : '<i class="bi bi-moon-stars-fill"></i>';
-                Chart.defaults.color = getComputedStyle(html).getPropertyValue('--text-main');
-                if(mapInstance) {
-                    if(mapTilesLayer) mapInstance.removeLayer(mapTilesLayer);
-                    let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-                    mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
-                }
-                if (cursoActual) actualizarPantallaCurso(); else actualizarPantallaGlobal();
-            });
-        }
-
+        // Navegación Liquid
         function moveIndicator(btn) {
             const indicator = document.getElementById('liquid-indicator');
             const nav = document.querySelector('.liquid-nav');
@@ -804,39 +367,44 @@
                 indicator.style.width = btnRect.width + 'px';
                 indicator.style.left = (btnRect.left - navRect.left) + 'px';
             }
-            if (btn.getAttribute('data-bs-target') === '#panel-global') {
+            if (btn.getAttribute('data-bs-target') === '#panel-global') { if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); }
+        }
+        window.addEventListener('resize', () => { const activeBtn = document.querySelector('.liquid-tab.active'); if(activeBtn) moveIndicator(activeBtn); });
+
+        // Portales
+        function entrarAlDashboard() {
+            document.getElementById('welcome_portal').classList.add('hide-portal');
+            setTimeout(() => { 
+                document.getElementById('dashboard_content').classList.add('show-dashboard');
                 if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300);
-            }
+            }, 300);
+        }
+        function volverAlPortal() {
+            document.getElementById('dashboard_content').classList.remove('show-dashboard');
+            setTimeout(() => { document.getElementById('welcome_portal').classList.remove('hide-portal'); }, 400); 
         }
 
-        window.addEventListener('resize', () => { 
-            const activeBtn = document.querySelector('.liquid-tab.active'); 
-            if(activeBtn) moveIndicator(activeBtn); 
-        });
-
+        // ==========================================
+        // INICIALIZACIÓN
+        // ==========================================
         document.addEventListener("DOMContentLoaded", async () => {
-            document.querySelectorAll('.liquid-tab').forEach(btn => { 
-                btn.addEventListener('shown.bs.tab', (e) => { moveIndicator(e.target); }); 
-            });
-            setTimeout(() => { 
-                const activeBtn = document.querySelector('.liquid-tab.active'); 
-                if(activeBtn) moveIndicator(activeBtn); 
-            }, 100);
+            document.querySelectorAll('.liquid-tab').forEach(btn => { btn.addEventListener('shown.bs.tab', (e) => { moveIndicator(e.target); }); });
+            proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
             try {
                 const urlFresca = 'dashboard_data.json?v=' + new Date().getTime();
                 try {
-                    const response = await fetch(urlFresca, { headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' } }); 
+                    const response = await fetch(urlFresca, { headers: { 'Cache-Control': 'no-cache' } }); 
                     dashboardData = await response.json();
                     const geoResponse = await fetch('mc_comunas.json');
                     geoJsonDataRaw = proyectarGeoJson(await geoResponse.json()); 
-                } catch (fetchError) {
-                    // Datos quemados para preview (Asegurado el campo total_estudiantes_unicos)
+                } catch (e) {
+                    // MOCK DATA SI FALLA EL FETCH
                     dashboardData = { 
-                        "metadata": { "total_cursos_analizados": 1, "total_encuestas_historicas": 416, "total_estudiantes_unicos": 380 }, 
+                        "metadata": { "total_cursos_analizados": 3, "total_encuestas_historicas": 416, "total_estudiantes_unicos": 350 }, 
                         "kpis_globales": { "chs_promedio_secretaria": 88.5, "nps_global": 65.2 }, 
-                        "demografia_global": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Curso de Vida": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 116 }, "Escolaridad": { "Profesional": 200, "Especialización": 216 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, 
-                        "cursos": [{ "Nombre_Curso": "RPMS PI e I 012026 - (AISPPMSCVPI_01_2026)", "Curso_Base": "RPMS PI e I 012026", "Edicion": "2026 - Edición 01", "Total_Inscritos": 500, "Total_Encuestas": 416, "Salud_Curso_CHS": 88.5, "e_NPS": 65.2, "Tasa_Finalizacion_%": 75, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 10, "Tiempo_Promedio_Dias": 12.5, "IUP_Promedio": 4.6, "ICD_Promedio": 4.8, "UX_Promedio": 4.3, "Brecha_Expectativa": 0.2, "Demografia": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Edad": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 116 }, "Escolaridad": { "Profesional": 200, "Especialización": 216 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.7, "¿Se cumplió el objetivo de la capacitación?": 4.6, "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.8, "¿Los temas se desarrollaron en el tiempo previsto?": 4.5, "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.6, "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.7, "¿El facilitador demostró el dominio del tema brindado?": 4.8, "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4, "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.3, "¿El material utilizado permitió el entendimiento del tema?": 4.5, "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.7 } }] 
+                        "demografia_global": { "Sexo": { "Femenino": 250, "Masculino": 100 }, "Curso de Vida": { "Adultez": 300, "Juventud": 50 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 50 }, "Escolaridad": { "Profesional": 200, "Especialización": 150 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, 
+                        "cursos": [{ "Nombre_Curso": "RPMS PI e I 012026", "Curso_Base": "RPMS PI", "Edicion": "2026 - Ed. 01", "Total_Inscritos": 500, "Total_Encuestas": 416, "Salud_Curso_CHS": 88.5, "e_NPS": 65.2, "Tasa_Finalizacion_%": 75, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 10, "Tiempo_Promedio_Dias": 12.5, "Demografia": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Edad": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150 }, "Escolaridad": { "Profesional": 200 }, "Comuna": { "1": 50 } }, "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.7, "¿Se cumplió el objetivo de la capacitación?": 4.6, "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.8, "¿Los temas se desarrollaron en el tiempo previsto?": 4.5, "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.6, "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.7, "¿El facilitador demostró el dominio del tema brindado?": 4.8, "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4, "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.3, "¿El material utilizado permitió el entendimiento del tema?": 4.5, "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.7 } }] 
                     };
                 }
 
@@ -850,54 +418,233 @@
                 document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
                 document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
                 
+                actualizarLandingKPIs();
                 actualizarPantallaGlobal();
+                setTimeout(() => { const activeBtn = document.querySelector('.liquid-tab.active'); if(activeBtn) moveIndicator(activeBtn); }, 100);
 
-            } catch (error) { 
-                console.error("Error crítico procesando datos", error); 
-            }
+            } catch (error) { console.error("Error", error); }
         });
 
         // ==========================================
-        // FUNCIONES AUXILIARES
+        // LÓGICA DE DATOS Y RENDERIZADO
         // ==========================================
+        function actualizarLandingKPIs() {
+            const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
+            let totalCertificados = 0; 
+            dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
+            const pctCertificados = totalInscritos > 0 ? Math.round((totalCertificados / totalInscritos) * 100) + "%" : "0%";
 
-        function normalizarLlaveComuna(texto) { 
-            if (texto === null || texto === undefined) return "N/A"; 
-            let t = String(texto).trim(); 
-            let upperT = t.toUpperCase(); 
-            if (upperT === "" || upperT === "N/A" || upperT === "NULL" || upperT === "SIN DATO") return "N/A"; 
-            let numStr = t.replace(/\D/g, ''); 
-            let num = parseInt(numStr, 10); 
-            if (isNaN(num)) return t; else return String(num); 
+            document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados || 0;
+            document.getElementById('bento-matriculas').innerText = totalInscritos.toLocaleString();
+            document.getElementById('bento-unicos').innerText = (dashboardData.metadata.total_estudiantes_unicos || totalInscritos).toLocaleString();
+            
+            document.getElementById('bento-certificados').innerText = totalCertificados.toLocaleString();
+            document.getElementById('bento-pct-cert').innerText = pctCertificados;
+            
+            document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString();
+            document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
+            document.getElementById('bento-nps').innerText = dashboardData.kpis_globales.nps_global;
         }
 
+        function actualizarPantallaGlobal() { 
+            const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
+            let totalCertificados = 0; 
+            dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
+            const pctCertificados = totalInscritos > 0 ? Math.round((totalCertificados / totalInscritos) * 100) + "%" : "0%"; 
+            
+            // 7 Tarjetas en Global
+            document.getElementById('kpi-global-row').innerHTML = `
+                ${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}
+                ${crearTarjetaKPI("Matrículas Totales", totalInscritos.toLocaleString())}
+                ${crearTarjetaKPI("Estudiantes Únicos", (dashboardData.metadata.total_estudiantes_unicos || totalInscritos).toLocaleString())}
+                ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
+                ${crearTarjetaKPI("Encuestas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}
+                ${crearTarjetaKPI("Score Salud (CHS)", dashboardData.kpis_globales.chs_promedio_secretaria)}
+                ${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}
+            `; 
+            
+            dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); 
+            dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); 
+            dibujarGraficoDona('chartPerfil', dashboardData.demografia_global['Perfil'], 'right'); 
+            dibujarGraficoDona('chartEscolaridad', dashboardData.demografia_global['Escolaridad'], 'right'); 
+            dibujarMapaCoropletico(dashboardData.demografia_global['Comuna']); 
+            dibujarGraficoComunas('chartComunas', dashboardData.demografia_global['Comuna']); 
+            
+            let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0; 
+            dashboardData.cursos.forEach(c => { 
+                let insc = c.Total_Inscritos || 0; 
+                totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; 
+                totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; 
+                totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; 
+                if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } 
+            }); 
+            
+            let pctFin = totalInscritos ? Math.round((totalFin / totalInscritos) * 100) : 0; 
+            let pctAbd = totalInscritos ? Math.round((totalAbd / totalInscritos) * 100) : 0; 
+            let pctInac = totalInscritos ? Math.round((totalInac / totalInscritos) * 100) : 0; 
+            
+            document.getElementById('kpi-moodle-row').innerHTML = `
+                ${crearTarjetaKPI("Tasa Finalización Global", pctFin + "%")}
+                ${crearTarjetaKPI("Tasa Abandono Histórico", pctAbd + "%")}
+                ${crearTarjetaKPI("Inactividad Institucional", pctInac + "%")}
+            `; 
+            document.getElementById('tiempo-consumo-dias').innerText = countCursosDias ? Math.round(sumDias / countCursosDias) : 0; 
+            dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pctFin, 'Tasa_Abandono_%': pctAbd, 'Tasa_Inactividad_%': pctInac }); 
+            
+            document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; 
+            document.getElementById('titulo-desglose').innerText = "Desglose Institucional (0 - 5.0)"; 
+            dibujarRadar(promediosGlobalesPreguntas, true); 
+            document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
+        }
+
+        function actualizarPantallaCurso() { 
+            const totalCertificados = Math.round((cursoActual.Total_Inscritos || 0) * (cursoActual['Tasa_Finalizacion_%'] || 0) / 100); 
+            const pctCertificados = cursoActual['Tasa_Finalizacion_%'] + "%"; 
+            
+            // 6 Tarjetas en Curso Específico (Sin Estudiantes Únicos)
+            document.getElementById('kpi-global-row').innerHTML = `
+                ${crearTarjetaKPI("Matrículas", cursoActual.Total_Inscritos.toLocaleString())}
+                ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
+                ${crearTarjetaKPI("Encuestas", cursoActual.Total_Encuestas.toLocaleString())}
+                ${crearTarjetaKPI("Participación", cursoActual.Total_Inscritos > 0 ? Math.round((cursoActual.Total_Encuestas / cursoActual.Total_Inscritos) * 100) + "%" : "0%")}
+                ${crearTarjetaKPI("Score Salud (CHS)", cursoActual.Salud_Curso_CHS)}
+                ${crearTarjetaKPI("e-NPS", cursoActual.e_NPS)}
+            `; 
+            
+            dibujarGraficoDona('chartSexo', cursoActual.Demografia['Sexo'], 'bottom'); 
+            dibujarGraficoDona('chartEdad', cursoActual.Demografia['Edad'], 'right'); 
+            dibujarGraficoDona('chartPerfil', cursoActual.Demografia['Perfil'], 'right'); 
+            dibujarGraficoDona('chartEscolaridad', cursoActual.Demografia['Escolaridad'], 'right'); 
+            dibujarMapaCoropletico(cursoActual.Demografia['Comuna']); 
+            dibujarGraficoComunas('chartComunas', cursoActual.Demografia['Comuna']); 
+            
+            document.getElementById('kpi-moodle-row').innerHTML = `
+                ${crearTarjetaKPI("Tasa Finalización", cursoActual['Tasa_Finalizacion_%'] + "%")}
+                ${crearTarjetaKPI("Tasa Abandono", cursoActual['Tasa_Abandono_%'] + "%")}
+                ${crearTarjetaKPI("Tasa Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}
+            `; 
+            document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; 
+            dibujarBarraMoodle('chartMoodleBar', cursoActual); 
+            
+            document.getElementById('titulo-radar').innerText = "Radar vs Benchmark Global"; 
+            document.getElementById('titulo-desglose').innerText = "Desglose de Cohorte (0 - 5.0)"; 
+            dibujarRadar(cursoActual.Detalle_Preguntas, false); 
+            document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(cursoActual.Detalle_Preguntas);
+        }
+
+        // ==========================================
+        // COMPONENTES UI Y LÓGICA DE DIBUJO
+        // ==========================================
+        function crearTarjetaKPI(label, valor, porcentaje = null) { 
+            let htmlPorcentaje = porcentaje ? `<span style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.15); padding: 4px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;">${porcentaje}</span>` : ''; 
+            return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-card h-100"><div class="kpi-value d-flex align-items-center flex-wrap">${valor} ${htmlPorcentaje}</div><div class="kpi-label">${label}</div></div></div>`; 
+        }
+
+        function generarBarrasCalidad(datosPreguntas) {
+            let html = '';
+            for (let q in datosPreguntas) {
+                let val = parseFloat(datosPreguntas[q]) || 0;
+                let colorClass = val >= 4.5 ? 'success' : (val >= 4.0 ? 'info' : 'danger');
+                let widthPct = (val / 5) * 100;
+                // 'q' es la pregunta original completa tal cual viene del JSON
+                html += `
+                <div class="progress-bar-container">
+                    <div class="progress-label">
+                        <span>${q}</span>
+                        <span class="progress-val text-${colorClass}">${val.toFixed(1)}</span>
+                    </div>
+                    <div class="progress-bg">
+                        <div class="progress-fill bg-${colorClass}" style="width: ${widthPct}%"></div>
+                    </div>
+                </div>`;
+            }
+            return html;
+        }
+
+        function calcularBenchmarkGlobal() { 
+            const sum = {}; const count = {}; 
+            dashboardData.cursos.forEach(curso => { 
+                if (curso.Detalle_Preguntas && curso.Total_Encuestas > 0) { 
+                    for (let k in curso.Detalle_Preguntas) { 
+                        if (curso.Detalle_Preguntas[k] > 0) { sum[k] = (sum[k] || 0) + curso.Detalle_Preguntas[k]; count[k] = (count[k] || 0) + 1; } 
+                    } 
+                } 
+            }); 
+            for (let k in sum) promediosGlobalesPreguntas[k] = sum[k] / count[k]; 
+        }
+
+        function agruparCursos() { 
+            const sel = document.getElementById('selector-curso-base'); 
+            dashboardData.cursos.forEach(c => { 
+                const base = c.Curso_Base || c.Nombre_Curso; 
+                if (!cursosPorBase[base]) cursosPorBase[base] = []; 
+                cursosPorBase[base].push(c); 
+            }); 
+            Object.keys(cursosPorBase).sort().forEach(base => { sel.appendChild(new Option(base, base)); }); 
+        }
+
+        function manejarCambioBase() { 
+            const seleccion = this.value; 
+            const selectorCohorte = document.getElementById('selector-cohorte'); 
+            const lobby = document.getElementById('panel-lobby-curso'); 
+            const tabs = document.getElementById('contenedor-tabs'); 
+            
+            if (seleccion === "ALL") { 
+                selectorCohorte.style.display = "none"; cursoActual = null; 
+                lobby.style.display = "none"; tabs.style.display = "block"; 
+                actualizarPantallaGlobal(); 
+            } else { 
+                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; 
+                cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); 
+                selectorCohorte.style.display = "block"; selectorCohorte.value = ""; 
+                tabs.style.display = "none"; lobby.style.display = "block"; 
+                
+                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;">${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizarla</p></div><div class="row g-4 justify-content-center">`; 
+                cohortes.forEach(c => { 
+                    htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${c.Edicion}</h5><span class="badge bg-primary px-3 py-2 text-white" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
+                }); 
+                htmlLobby += `</div>`; lobby.innerHTML = htmlLobby; 
+            } 
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
+        }
+
+        window.seleccionarCohorteDesdeLobby = function(nombreCurso) { 
+            document.getElementById('selector-cohorte').value = nombreCurso; 
+            document.getElementById('panel-lobby-curso').style.display = 'none'; 
+            document.getElementById('contenedor-tabs').style.display = 'block'; 
+            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === nombreCurso); 
+            actualizarPantallaCurso(); 
+        }
+        function manejarCambioCohorte() { 
+            if (!this.value) { document.getElementById('panel-lobby-curso').style.display = 'block'; document.getElementById('contenedor-tabs').style.display = 'none'; return; } 
+            document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block'; 
+            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); 
+            actualizarPantallaCurso(); 
+        }
+
+        // ==========================================
+        // MAPA Y GRÁFICOS (Chart.js / Leaflet)
+        // ==========================================
+        function normalizarLlaveComuna(texto) { 
+            if (!texto) return "N/A"; let t = String(texto).trim().toUpperCase(); 
+            if (t === "" || t === "N/A" || t === "NULL" || t === "SIN DATO") return "N/A"; 
+            let numStr = t.replace(/\D/g, ''); return isNaN(parseInt(numStr, 10)) ? String(texto).trim() : String(parseInt(numStr, 10)); 
+        }
         function formatearNombreUbicacion(llave) { 
             if (llave === "N/A") return "Fuera de Cali / Sin Dato"; 
             if (!isNaN(llave) && llave.trim() !== "") return "Comuna " + llave; 
-            let texto = llave.replace(/Comuna\s+C\.\s*/i, 'Corregimiento ').replace(/^C\.\s*/i, 'Corregimiento ').replace(/^C\s+/i, 'Corregimiento '); 
-            if (!texto.toLowerCase().includes("corregimiento") && !texto.toLowerCase().includes("comuna")) texto = "Corregimiento " + texto; 
-            return texto.toLowerCase().split(' ').map(word => { 
-                if (word.length === 0) return word; 
-                if (["de", "la", "el", "los", "las", "y", "en"].includes(word)) return word; 
-                return word.charAt(0).toUpperCase() + word.slice(1); 
-            }).join(' ').replace(/^./, str => str.toUpperCase()); 
+            let texto = llave.replace(/Comuna\s+C\.\s*/i, 'Correg. ').replace(/^C\.\s*/i, 'Correg. ').replace(/^C\s+/i, 'Correg. '); 
+            if (!texto.toLowerCase().includes("correg") && !texto.toLowerCase().includes("comuna")) texto = "Correg. " + texto; 
+            return texto; 
         }
-
         function proyectarGeoJson(data) { 
             if(!data || !data.features) return { type: "FeatureCollection", features: [] }; 
             let newData = JSON.parse(JSON.stringify(data)); 
-            newData.features.forEach((feature, index) => { 
-                try { 
-                    if (feature.geometry && feature.geometry.coordinates) { 
-                        const tipo = feature.geometry.type; 
-                        if (tipo === "Polygon") { 
-                            feature.geometry.coordinates = feature.geometry.coordinates.map(ring => ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))); 
-                        } else if (tipo === "MultiPolygon") { 
-                            feature.geometry.coordinates = feature.geometry.coordinates.map(polygon => polygon.map(ring => ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord)))); 
-                        } 
-                    } 
-                } catch (error) { 
-                    console.error(`Error proyectando comuna:`, error); 
+            newData.features.forEach(feature => { 
+                if (feature.geometry && feature.geometry.coordinates) { 
+                    if (feature.geometry.type === "Polygon") feature.geometry.coordinates = feature.geometry.coordinates.map(ring => ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))); 
+                    else if (feature.geometry.type === "MultiPolygon") feature.geometry.coordinates = feature.geometry.coordinates.map(poly => poly.map(ring => ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord)))); 
                 } 
             }); 
             return newData; 
@@ -906,9 +653,7 @@
         function inicializarMapa() { 
             if (mapInstance) return; 
             mapInstance = L.map('map-container').setView([3.42158, -76.5205], 11); 
-            const isLight = document.documentElement.getAttribute('data-theme') === 'light'; 
-            let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'; 
-            mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance); 
+            mapTilesLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance); 
         }
 
         function getColorMapa(valor, maxValor) { 
@@ -945,7 +690,7 @@
                         fillColor: getColorMapa(participantes, maxParticipantes), 
                         weight: 1.5, 
                         opacity: 1, 
-                        color: document.documentElement.getAttribute('data-theme') === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(11,20,55,0.7)', 
+                        color: document.documentElement.getAttribute('data-theme') === 'light' ? 'rgba(255,255,255,0.9)' : 'rgba(11,20,55,0.9)', 
                         fillOpacity: participantes > 0 ? 0.8 : 0.2 
                     }; 
                 }, 
@@ -955,6 +700,45 @@
                     let participantes = mapaDatosNormalizado[idLimpio] || 0; 
                     let tooltipHtml = `<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${participantes} Participantes</span></div>`; 
                     layer.bindTooltip(tooltipHtml, { sticky: true, className: 'custom-map-tooltip' }); 
+                    
+                    // ==========================================
+                    // EFECTO INTERACTIVO HOVER (ATENUAR Y CRECER)
+                    // ==========================================
+                    layer.on({
+                        mouseover: function (e) {
+                            var targetLayer = e.target;
+                            
+                            // 1. Atenuar todas las demás comunas suavemente
+                            geoJsonLayer.eachLayer(function (l) {
+                                if (l !== targetLayer) {
+                                    l.setStyle({
+                                        fillOpacity: 0.1,  // Casi transparente
+                                        opacity: 0.2,      // Borde atenuado
+                                        weight: 1
+                                    });
+                                }
+                            });
+
+                            // 2. Hacer "crecer" visualmente la capa actual resaltando el borde oscuro y grueso
+                            let borderColor = document.documentElement.getAttribute('data-theme') === 'light' ? '#1e293b' : '#ffffff';
+                            targetLayer.setStyle({
+                                weight: 4, // Borde ancho genera la ilusión de crecimiento
+                                color: borderColor,
+                                fillOpacity: 1 // Color sólido total
+                            });
+                            
+                            // 3. Traer al frente para que no se superpongan los bordes vecinos
+                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                                targetLayer.bringToFront();
+                            }
+                        },
+                        mouseout: function (e) {
+                            // Al quitar el ratón, el mapa resetea el estilo original de TODAS las capas
+                            geoJsonLayer.eachLayer(function (l) {
+                                geoJsonLayer.resetStyle(l);
+                            });
+                        }
+                    });
                 } 
             }).addTo(mapInstance); 
             
@@ -965,524 +749,46 @@
 
         function dibujarGraficoComunas(canvasId, dataObject) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
-            if (!dataObject || Object.keys(dataObject).length === 0) return; 
-            
             let agrupadito = {}; 
             for (let key in dataObject) { 
-                let val = dataObject[key]; 
-                let cleanKey = normalizarLlaveComuna(key); 
-                let label = formatearNombreUbicacion(cleanKey); 
-                agrupadito[label] = (agrupadito[label] || 0) + val; 
+                let label = formatearNombreUbicacion(normalizarLlaveComuna(key)); 
+                agrupadito[label] = (agrupadito[label] || 0) + dataObject[key]; 
             } 
-            
-            let sortedArray = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]); 
-            let labels = sortedArray.map(item => item[0]); 
-            let data = sortedArray.map(item => item[1]); 
-            const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); 
-            
+            let sorted = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]); 
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
-                type: 'bar', 
-                data: { 
-                    labels: labels, 
-                    datasets: [{ label: 'Participantes', data: data, backgroundColor: primColor, borderRadius: 4 }] 
-                }, 
-                options: { 
-                    indexAxis: 'y', 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } }, 
-                    scales: { 
-                        x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, 
-                        y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } } 
-                    } 
-                } 
+                type: 'bar', data: { labels: sorted.map(i => i[0]), datasets: [{ data: sorted.map(i => i[1]), backgroundColor: '#4318ff', borderRadius: 4 }] }, 
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 11 } } } } } 
             }); 
-        }
-
-        function calcularBenchmarkGlobal() { 
-            const sum = {}; const count = {}; 
-            dashboardData.cursos.forEach(curso => { 
-                if (curso.Detalle_Preguntas && curso.Total_Encuestas > 0) { 
-                    for (let k in curso.Detalle_Preguntas) { 
-                        if (curso.Detalle_Preguntas[k] > 0) { 
-                            sum[k] = (sum[k] || 0) + curso.Detalle_Preguntas[k]; 
-                            count[k] = (count[k] || 0) + 1; 
-                        } 
-                    } 
-                } 
-            }); 
-            for (let k in sum) { 
-                promediosGlobalesPreguntas[k] = sum[k] / count[k]; 
-            } 
-        }
-
-        function agruparCursos() { 
-            const sel = document.getElementById('selector-curso-base'); 
-            dashboardData.cursos.forEach(c => { 
-                const base = c.Curso_Base || c.Nombre_Curso; 
-                if (!cursosPorBase[base]) cursosPorBase[base] = []; 
-                cursosPorBase[base].push(c); 
-            }); 
-            Object.keys(cursosPorBase).sort().forEach(base => { 
-                sel.appendChild(new Option(base, base)); 
-            }); 
-        }
-
-        function manejarCambioBase() { 
-            const seleccion = this.value; 
-            const selectorCohorte = document.getElementById('selector-cohorte'); 
-            const lobby = document.getElementById('panel-lobby-curso'); 
-            const tabs = document.getElementById('contenedor-tabs'); 
-            
-            if (seleccion === "ALL") { 
-                selectorCohorte.style.display = "none"; 
-                cursoActual = null; 
-                lobby.style.display = "none"; 
-                tabs.style.display = "block"; 
-                actualizarPantallaGlobal(); 
-            } else { 
-                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
-                selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; 
-                cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); 
-                selectorCohorte.style.display = "block"; 
-                selectorCohorte.value = ""; 
-                tabs.style.display = "none"; 
-                lobby.style.display = "block"; 
-                apagarPanelesIA(); 
-                
-                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;"><i class="bi bi-journal-bookmark-fill me-2"></i>${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizar su rendimiento detallado</p></div><div class="row g-4 justify-content-center">`; 
-                let porAnio = {}; 
-                cohortes.forEach(c => { 
-                    let anio = c.Edicion.split(' - ')[0]; 
-                    if (!porAnio[anio]) porAnio[anio] = []; 
-                    porAnio[anio].push(c); 
-                }); 
-                
-                let anios = Object.keys(porAnio).sort((a, b) => b - a); 
-                anios.forEach(anio => { 
-                    htmlLobby += `<div class="col-12 mt-5"><h4 class="fw-bold mb-4" style="color: var(--text-main); border-bottom: 2px solid var(--border-color); padding-bottom: 15px;"><i class="bi bi-calendar3 me-2"></i>Año ${anio}</h4></div>`; 
-                    porAnio[anio].forEach(c => { 
-                        let nombreCohorte = c.Edicion.split(' - ')[1] || "Edición Única"; 
-                        htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${nombreCohorte}</h5><span class="badge bg-indigo-soft px-3 py-2 text-primary" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
-                    }); 
-                }); 
-                htmlLobby += `</div>`; 
-                lobby.innerHTML = htmlLobby; 
-            } 
-            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
-        }
-
-        window.seleccionarCohorteDesdeLobby = function(nombreCurso) { 
-            document.getElementById('selector-cohorte').value = nombreCurso; 
-            document.getElementById('panel-lobby-curso').style.display = 'none'; 
-            document.getElementById('contenedor-tabs').style.display = 'block'; 
-            const base = document.getElementById('selector-curso-base').value; 
-            cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === nombreCurso); 
-            actualizarPantallaCurso(); 
-        }
-
-        function manejarCambioCohorte() { 
-            if (!this.value) { 
-                document.getElementById('panel-lobby-curso').style.display = 'block'; 
-                document.getElementById('contenedor-tabs').style.display = 'none'; 
-                apagarPanelesIA(); return; 
-            } 
-            document.getElementById('panel-lobby-curso').style.display = 'none'; 
-            document.getElementById('contenedor-tabs').style.display = 'block'; 
-            const base = document.getElementById('selector-curso-base').value; 
-            cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === this.value); 
-            actualizarPantallaCurso(); 
-        }
-
-        function generarInsightIA(curso) { 
-            if (!curso) return; 
-            const chs = curso.Salud_Curso_CHS || 0; 
-            const nps = curso.e_NPS || 0; 
-            const fin = curso['Tasa_Finalizacion_%'] || 0; 
-            const abd = curso['Tasa_Abandono_%'] || 0; 
-            const inact = curso['Tasa_Inactividad_%'] || 0; 
-            const iup = curso.IUP_Promedio || 0; 
-            const icd = curso.ICD_Promedio || 0; 
-            const ux = curso.UX_Promedio || 0; 
-            const brecha = curso.Brecha_Expectativa || 0; 
-            const encuestas = curso.Total_Encuestas || 0; 
-            
-            let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A"; 
-            
-            try { 
-                let totalG = Object.values(curso.Demografia.Sexo).reduce((a, b) => a + b, 0); 
-                if (totalG > 0) { 
-                    pMujeres = Math.round(((curso.Demografia.Sexo['Femenino'] || 0) / totalG) * 100); 
-                    let pKeys = Object.keys(curso.Demografia.Perfil); 
-                    perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => curso.Demografia.Perfil[a] > curso.Demografia.Perfil[b] ? a : b) : "N/A"; 
-                    pPerfil = Math.round(((curso.Demografia.Perfil[perfilDom] || 0) / totalG) * 100); 
-                    let eKeys = Object.keys(curso.Demografia.Edad); 
-                    edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => curso.Demografia.Edad[a] > curso.Demografia.Edad[b] ? a : b) : "N/A"; 
-                } 
-            } catch (e) { } 
-            
-            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(curso.Total_Inscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "La analítica revela un grupo sesgado hacia profesionales de", "Esto sugiere que los ejemplos deben orientarse a este sector."); 
-            document.getElementById('panel-ia-demo').style.display = 'block'; 
-            document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs); 
-            document.getElementById('panel-ia-moodle').style.display = 'block'; 
-            document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, "Índice de recomendación basado en"); 
-            document.getElementById('panel-ia-radar').style.display = 'block'; 
-        }
-
-        function generarInsightIAGlobal(totInscritos, fin, abd, inact, iup, icd, ux, brecha, encuestas) { 
-            const chs = dashboardData.kpis_globales.chs_promedio_secretaria; 
-            const nps = dashboardData.kpis_globales.nps_global; 
-            
-            let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A"; 
-            
-            try { 
-                let totalG = Object.values(dashboardData.demografia_global['Sexo']).reduce((a, b) => a + b, 0); 
-                if (totalG > 0) { 
-                    pMujeres = Math.round(((dashboardData.demografia_global['Sexo']['Femenino'] || 0) / totalG) * 100); 
-                    let pKeys = Object.keys(dashboardData.demografia_global['Perfil']); 
-                    perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => dashboardData.demografia_global['Perfil'][a] > dashboardData.demografia_global['Perfil'][b] ? a : b) : "N/A"; 
-                    pPerfil = Math.round(((dashboardData.demografia_global['Perfil'][perfilDom] || 0) / totalG) * 100); 
-                    let eKeys = Object.keys(dashboardData.demografia_global['Curso de Vida']); 
-                    edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => dashboardData.demografia_global['Curso de Vida'][a] > dashboardData.demografia_global['Curso de Vida'][b] ? a : b) : "N/A"; 
-                } 
-            } catch (e) { } 
-            
-            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(totInscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "A nivel consolidado, la Secretaría impacta principalmente a", "Las futuras políticas deben considerar este perfil como estándar institucional."); 
-            document.getElementById('panel-ia-demo').style.display = 'block'; 
-            document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs, true); 
-            document.getElementById('panel-ia-moodle').style.display = 'block'; 
-            document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas.toLocaleString(), nps, iup, icd, ux, brecha, "Sentimiento consolidado institucional basado en"); 
-            document.getElementById('panel-ia-radar').style.display = 'block'; 
-        }
-
-        function renderHTMLDemo(tot, pM, pDom, pP, eDom, t1, t2) { 
-            return `<div class="row g-4 mb-4"><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${tot}</div><div class="ia-lbl">Matrículas</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pM}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div></div><p class="mb-0 fs-6" style="color: var(--text-main); line-height: 1.6;"><strong>Conclusión:</strong> ${t1} <strong>${pDom}</strong>. ${t2}</p>`; 
-        }
-
-        function renderHTMLMoodle(fin, inact, abd, chs, isGlobal = false) { 
-            let mIcon = "", mColor = "", mText = ""; 
-            if (fin >= 80) { 
-                mIcon = "bi-check-circle-fill"; mColor = "success"; 
-                mText = "<strong>Excelente Eficiencia Terminal.</strong> El modelo pedagógico logra retener al estudiante efectivamente."; 
-            } else if (inact > fin && inact > 40) { 
-                mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; 
-                mText = `<strong>Fricción Severa en Onboarding.</strong> El mayor porcentaje (${inact}%) nunca inició la capacitación. Se requiere auditar los accesos.`; 
-            } else if (abd > 30) { 
-                mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; 
-                mText = `<strong>Alerta de Deserción Intermedia.</strong> Existe una fuga masiva del ${abd}%. Los módulos podrían estar sobrecargados o ser confusos.`; 
-            } else { 
-                mIcon = "bi-info-circle-fill"; mColor = "primary"; 
-                mText = "<strong>Comportamiento Operativo Estándar.</strong> Tasas de aprobación y abandono dentro de los márgenes normales de educación virtual."; 
-            } 
-            
-            let lblFuga = isGlobal ? "Fuga Histórica" : "Fuga Académica"; 
-            let lblInac = isGlobal ? "Inactividad Histórica" : "Barrera de Entrada"; 
-            
-            return `<div class="alert alert-${mColor} d-flex align-items-center mb-5 p-4 border-0 shadow-sm rounded-4"><i class="bi ${mIcon} fs-1 me-4"></i> <div class="fs-6">${mText}</div></div><div class="row g-4"><div class="col-md-4"><div class="ia-mini-card border-${mColor}"><div class="ia-lbl">Puntaje de Salud (CHS)</div><div class="ia-val mt-2 text-${mColor}">${chs} <span style="font-size: 1rem; color: var(--text-muted);">/ 100</span></div><div class="ia-desc">Indicador compuesto de viabilidad operativa.</div></div></div><div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${lblFuga}</div><div class="ia-val mt-2">${abd}%</div><div class="ia-desc">Iniciaron pero no lograron concluir.</div></div></div><div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${lblInac}</div><div class="ia-val mt-2">${inact}%</div><div class="ia-desc">Matriculados que nunca registraron actividad.</div></div></div></div>`; 
-        }
-
-        function renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, msgNps) { 
-            if (encuestas < 5) return `<div class="alert bg-indigo-soft border-0 p-4 rounded-4 d-flex align-items-center"><i class="bi bi-bar-chart-fill fs-1 me-4"></i><div class="fs-6">Muestra estadística muy baja (<strong>${encuestas} respuestas</strong>). No es posible emitir un diagnóstico con significancia estadística.</div></div>`; 
-            
-            let npsColor = nps > 20 ? "success" : (nps < 0 ? "danger" : "warning"); 
-            let iupHtml = iup >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Alta Aplicabilidad.</strong> Excelente transferencia de conocimiento a la vida cotidiana o laboral.</div></div></div>` : (iup >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Aplicabilidad Estable.</strong> Contenido útil, con margen para incluir más casos prácticos reales.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Disonancia Teórica.</strong> Fuerte desconexión entre la teoría impartida y la realidad de los participantes.</div></div></div>`); 
-            let icdHtml = icd >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Dominio Experto.</strong> El facilitador demostró un excelente manejo del tema y metodología.</div></div></div>` : (icd >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Desempeño Sólido.</strong> La facilitación cumplió con los estándares esperados.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-warning"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Oportunidad de Mejora.</strong> Deficiencias en la claridad metodológica o en el dominio percibido.</div></div></div>`); 
-            let uxHtml = ux >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Entorno Óptimo.</strong> Moodle y los materiales didácticos facilitaron el aprendizaje.</div></div></div>` : (ux >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Entorno Funcional.</strong> El entorno virtual cumple su propósito sin fricciones significativas.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Fricción Tecnológica.</strong> La calidad del material o la navegación actuaron como un obstáculo.</div></div></div>`); 
-            let brechaHtml = brecha >= 0 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-bullseye"></i></div><div class="ia-lbl">Brecha Expectativa: ${brecha}</div><div class="ia-desc"><strong>Promesa Cumplida.</strong> Se lograron o superaron los objetivos que se prometieron al inicio.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-bullseye"></i></div><div class="ia-lbl">Brecha Expectativa: ${brecha}</div><div class="ia-desc"><strong>Riesgo de Percepción.</strong> Los estudiantes sienten que lo prometido al inicio no se entregó.</div></div></div>`; 
-            
-            return `<div class="d-flex align-items-center mb-5 pb-4 border-bottom border-light"><span class="badge bg-${npsColor} text-white fs-4 py-3 px-4 me-4 shadow-sm rounded-3" style="font-variant-numeric: tabular-nums;">NPS: ${nps}</span><span class="fs-6" style="color: var(--text-main); line-height: 1.5;">${msgNps} <strong>${encuestas} encuestas totales</strong>. Diagnóstico individual por ítem crítico:</span></div><div class="row g-4">${icdHtml}${iupHtml}${uxHtml}${brechaHtml}</div>`; 
-        }
-
-        function apagarPanelesIA() { 
-            document.getElementById('panel-ia-demo').style.display = 'none'; 
-            document.getElementById('panel-ia-moodle').style.display = 'none'; 
-            document.getElementById('panel-ia-radar').style.display = 'none'; 
-        }
-
-        function actualizarPantallaGlobal() { 
-            const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
-            
-            let totalCertificados = 0; 
-            dashboardData.cursos.forEach(c => { 
-                totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); 
-            }); 
-            const pctCertificados = totalInscritos > 0 ? Math.round((totalCertificados / totalInscritos) * 100) + "%" : "0%"; 
-            
-            // 1. ACTUALIZA LOS DATOS EN LA LANDING (BENTO GRID)
-            document.getElementById('ld-cursos').innerText = dashboardData.metadata.total_cursos_analizados;
-            document.getElementById('ld-matriculas').innerText = totalInscritos.toLocaleString();
-            document.getElementById('ld-unicos').innerText = (dashboardData.metadata.total_estudiantes_unicos || 0).toLocaleString();
-            document.getElementById('ld-certs').innerText = totalCertificados.toLocaleString();
-            document.getElementById('ld-certs-pct').innerText = pctCertificados;
-            document.getElementById('ld-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString();
-            document.getElementById('ld-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
-            document.getElementById('ld-nps').innerText = dashboardData.kpis_globales.nps_global;
-
-            // 2. ACTUALIZA LAS TARJETAS INTERNAS DEL DASHBOARD (7 TARJETAS)
-            document.getElementById('kpi-global-row').innerHTML = `
-                ${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}
-                ${crearTarjetaKPI("Matrículas Totales", totalInscritos.toLocaleString())}
-                ${crearTarjetaKPI("Estudiantes Únicos", (dashboardData.metadata.total_estudiantes_unicos || 0).toLocaleString())}
-                ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
-                ${crearTarjetaKPI("Encuestas Recibidas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}
-                ${crearTarjetaKPI("CHS Institucional", dashboardData.kpis_globales.chs_promedio_secretaria)}
-                ${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}
-            `; 
-            
-            dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); 
-            dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); 
-            dibujarGraficoDona('chartPerfil', dashboardData.demografia_global['Perfil'], 'right'); 
-            dibujarGraficoDona('chartEscolaridad', dashboardData.demografia_global['Escolaridad'], 'right'); 
-            dibujarMapaCoropletico(dashboardData.demografia_global['Comuna']); 
-            dibujarGraficoComunas('chartComunas', dashboardData.demografia_global['Comuna']); 
-            
-            let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0; 
-            dashboardData.cursos.forEach(c => { 
-                let insc = c.Total_Inscritos || 0; 
-                totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; 
-                totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; 
-                totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; 
-                if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } 
-            }); 
-            
-            let pctFin = totalInscritos ? Math.round((totalFin / totalInscritos) * 100) : 0; 
-            let pctAbd = totalInscritos ? Math.round((totalAbd / totalInscritos) * 100) : 0; 
-            let pctInac = totalInscritos ? Math.round((totalInac / totalInscritos) * 100) : 0; 
-            let promDias = countCursosDias ? Math.round(sumDias / countCursosDias) : 0; 
-            
-            document.getElementById('kpi-moodle-row').innerHTML = `
-                ${crearTarjetaKPI("Tasa Finalización Global", pctFin + "%")}
-                ${crearTarjetaKPI("Tasa Abandono Histórico", pctAbd + "%")}
-                ${crearTarjetaKPI("Inactividad Institucional", pctInac + "%")}
-            `; 
-            document.getElementById('tiempo-consumo-dias').innerText = promDias; 
-            dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pctFin, 'Tasa_Abandono_%': pctAbd, 'Tasa_Inactividad_%': pctInac }); 
-            
-            let sumIUP = 0, sumICD = 0, sumUX = 0, sumBrecha = 0, countEnc = 0; 
-            dashboardData.cursos.forEach(c => { 
-                if (c.Total_Encuestas > 0) { 
-                    sumIUP += (c.IUP_Promedio * c.Total_Encuestas); 
-                    sumICD += (c.ICD_Promedio * c.Total_Encuestas); 
-                    sumUX += (c.UX_Promedio * c.Total_Encuestas); 
-                    sumBrecha += (c.Brecha_Expectativa * c.Total_Encuestas); 
-                    countEnc += c.Total_Encuestas; 
-                } 
-            }); 
-            
-            let globIUP = countEnc ? (sumIUP / countEnc).toFixed(2) : 0; 
-            let globICD = countEnc ? (sumICD / countEnc).toFixed(2) : 0; 
-            let globUX = countEnc ? (sumUX / countEnc).toFixed(2) : 0; 
-            let globBrecha = countEnc ? (sumBrecha / countEnc).toFixed(2) : 0; 
-            
-            document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; 
-            document.getElementById('titulo-desglose').innerText = "Calificación Institucional Global (Sobre 5.0)"; 
-            dibujarRadar(promediosGlobalesPreguntas, true); 
-            
-            // Renderizado de Barras de Progreso Horizontales para Calidad
-            let htmlBarras = '';
-            for (let q in promediosGlobalesPreguntas) {
-                let lbl = mapeoPreguntas[q] || "Dimensión";
-                if(lbl === "Satisfacción General" || lbl === "Objetivo Cumplido" || lbl === "Objetivo Claro") continue;
-                let val = promediosGlobalesPreguntas[q].toFixed(2);
-                htmlBarras += renderBarraProgreso(lbl, val);
-            }
-            htmlBarras += renderBrecha(globBrecha);
-            document.getElementById('diagnostico-detalles').innerHTML = htmlBarras; 
-            
-            generarInsightIAGlobal(totalInscritos, pctFin, pctAbd, pctInac, globIUP, globICD, globUX, globBrecha, countEnc); 
-            
-            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
-        }
-
-        function actualizarPantallaCurso() { 
-            const totalCertificados = Math.round((cursoActual.Total_Inscritos || 0) * (cursoActual['Tasa_Finalizacion_%'] || 0) / 100); 
-            const pctCertificados = cursoActual['Tasa_Finalizacion_%'] + "%"; 
-            
-            // ACTUALIZA LAS TARJETAS INTERNAS (SOLO 6 TARJETAS, SE EXCLUYE "ESTUDIANTES ÚNICOS")
-            document.getElementById('kpi-global-row').innerHTML = `
-                ${crearTarjetaKPI("Matrículas", cursoActual.Total_Inscritos.toLocaleString())}
-                ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
-                ${crearTarjetaKPI("Encuestas", cursoActual.Total_Encuestas.toLocaleString())}
-                ${crearTarjetaKPI("Participación", cursoActual.Total_Inscritos > 0 ? Math.round((cursoActual.Total_Encuestas / cursoActual.Total_Inscritos) * 100) + "%" : "0%")}
-                ${crearTarjetaKPI("Score Salud (CHS)", cursoActual.Salud_Curso_CHS)}
-                ${crearTarjetaKPI("e-NPS", cursoActual.e_NPS)}
-            `; 
-            
-            dibujarGraficoDona('chartSexo', cursoActual.Demografia['Sexo'], 'bottom'); 
-            dibujarGraficoDona('chartEdad', cursoActual.Demografia['Edad'], 'right'); 
-            dibujarGraficoDona('chartPerfil', cursoActual.Demografia['Perfil'], 'right'); 
-            dibujarGraficoDona('chartEscolaridad', cursoActual.Demografia['Escolaridad'], 'right'); 
-            dibujarMapaCoropletico(cursoActual.Demografia['Comuna']); 
-            dibujarGraficoComunas('chartComunas', cursoActual.Demografia['Comuna']); 
-            
-            document.getElementById('kpi-moodle-row').innerHTML = `
-                ${crearTarjetaKPI("Tasa Finalización", cursoActual['Tasa_Finalizacion_%'] + "%")}
-                ${crearTarjetaKPI("Tasa Abandono", cursoActual['Tasa_Abandono_%'] + "%")}
-                ${crearTarjetaKPI("Tasa Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}
-            `; 
-            
-            document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; 
-            dibujarBarraMoodle('chartMoodleBar', cursoActual); 
-            
-            document.getElementById('titulo-radar').innerText = "Radar de Dimensiones vs Benchmark Global"; 
-            document.getElementById('titulo-desglose').innerText = "Desglose Detallado de Calificación"; 
-            dibujarRadar(cursoActual.Detalle_Preguntas, false); 
-            
-            // Renderizado de Barras de Progreso Horizontales para Calidad (Nivel Curso)
-            let htmlBarras = '';
-            for (let q in cursoActual.Detalle_Preguntas) {
-                let lbl = mapeoPreguntas[q] || "Dimensión";
-                if(lbl === "Satisfacción General" || lbl === "Objetivo Cumplido" || lbl === "Objetivo Claro") continue;
-                let val = (cursoActual.Detalle_Preguntas[q] || 0).toFixed(2);
-                htmlBarras += renderBarraProgreso(lbl, val);
-            }
-            htmlBarras += renderBrecha(cursoActual.Brecha_Expectativa);
-            document.getElementById('diagnostico-detalles').innerHTML = htmlBarras; 
-            
-            generarInsightIA(cursoActual); 
-            
-            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
-        }
-
-        function crearTarjetaKPI(label, valor, porcentaje = null) { 
-            let htmlPorcentaje = porcentaje ? `<span style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.15); padding: 4px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;">${porcentaje}</span>` : ''; 
-            return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-card"><div class="kpi-value d-flex align-items-center flex-wrap">${valor} ${htmlPorcentaje}</div><div class="kpi-label">${label}</div></div></div>`; 
-        }
-
-        // Helper para renderizar las barras horizontales de calidad
-        function renderBarraProgreso(label, val) {
-            let pct = (val / 5) * 100;
-            let colorClass = val >= 4.5 ? 'bg-success' : (val >= 4.0 ? 'bg-primary' : 'bg-danger');
-            return `
-            <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-end mb-1">
-                    <span class="fw-semibold" style="font-size: 0.9rem; color: var(--text-main);">${label}</span>
-                    <span class="badge ${colorClass} rounded-pill" style="font-size: 0.75rem;">${val} / 5</span>
-                </div>
-                <div class="progress" style="height: 8px; background: rgba(100,116,139,0.1); border-radius: 4px;">
-                    <div class="progress-bar ${colorClass}" role="progressbar" style="width: ${pct}%" aria-valuenow="${val}" aria-valuemin="0" aria-valuemax="5"></div>
-                </div>
-            </div>`;
-        }
-
-        function renderBrecha(val) {
-            let colorClass = val < 0 ? 'bg-danger' : 'bg-success';
-            return `
-            <div class="mb-3 pt-3 border-top" style="border-color: var(--border-light) !important;">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-bold" style="font-size: 0.95rem; color: var(--text-main);">Brecha de Expectativa</span>
-                    <span class="badge ${colorClass} rounded-pill fs-6">${val}</span>
-                </div>
-            </div>`;
         }
 
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
-            if (!dataObject || Object.keys(dataObject).length === 0) return; 
-            
-            let activeHoverIndex = null; 
-            const currentData = Object.values(dataObject); 
-            const currentLabels = Object.keys(dataObject); 
-            const baseColors = currentLabels.map((_, i) => coloresDona[i % coloresDona.length]); 
-            
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
-                type: 'doughnut', 
-                data: { 
-                    labels: currentLabels, 
-                    datasets: [{ data: currentData, backgroundColor: [...baseColors], borderWidth: 2, borderColor: 'transparent', hoverOffset: 12, }] 
-                }, 
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    cutout: '75%', 
-                    layout: { padding: 10 }, 
-                    onHover: (event, elements, chart) => { 
-                        if (elements && elements.length) { 
-                            const index = elements[0].index; 
-                            if (activeHoverIndex !== index) { 
-                                activeHoverIndex = index; 
-                                chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => i === index ? color : 'rgba(100, 116, 139, 0.15)' ); 
-                                chart.update('none'); 
-                            } 
-                        } else if (activeHoverIndex !== null) { 
-                            activeHoverIndex = null; 
-                            chart.data.datasets[0].backgroundColor = [...baseColors]; 
-                            chart.update('none'); 
-                        } 
-                    }, 
-                    plugins: { 
-                        legend: { 
-                            position: legendPosition, 
-                            labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } }, 
-                            onHover: function(event, legendItem, legend) { 
-                                const index = legendItem.index; 
-                                const chart = legend.chart; 
-                                chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => i === index ? color : 'rgba(100, 116, 139, 0.15)' ); 
-                                chart.update('none'); 
-                            }, 
-                            onLeave: function(event, legendItem, legend) { 
-                                const chart = legend.chart; 
-                                chart.data.datasets[0].backgroundColor = [...baseColors]; 
-                                chart.update('none'); 
-                            } 
-                        } 
-                    } 
-                } 
+                type: 'doughnut', data: { labels: Object.keys(dataObject), datasets: [{ data: Object.values(dataObject), backgroundColor: coloresDona, borderWidth: 2, borderColor: 'transparent', hoverOffset: 8 }] }, 
+                options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } } } } } 
             }); 
         }
 
         function dibujarBarraMoodle(canvasId, curso) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
-            const style = getComputedStyle(document.documentElement); 
-            
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
-                type: 'bar', 
-                data: { 
-                    labels: ['Estado %'], 
-                    datasets: [
-                        { label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: style.getPropertyValue('--success').trim(), borderRadius: { topLeft: 6, bottomLeft: 6 } }, 
-                        { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: style.getPropertyValue('--warning').trim() }, 
-                        { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: style.getPropertyValue('--danger').trim(), borderRadius: { topRight: 6, bottomRight: 6 } }
-                    ] 
-                }, 
-                options: { 
-                    responsive: true, maintainAspectRatio: false, indexAxis: 'y', 
-                    scales: { 
-                        x: { stacked: true, max: 100, grid: { display: false }, border: { display: false } }, 
-                        y: { stacked: true, display: false, grid: { display: false }, border: { display: false } } 
-                    }, 
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 14, font: { family: 'Inter', size: 13 } } } } 
-                } 
+                type: 'bar', data: { labels: ['Estado %'], datasets: [
+                        { label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, 
+                        { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: '#ffb547' }, 
+                        { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } }
+                    ] }, 
+                options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 14 } } } } 
             }); 
         }
 
         function dibujarRadar(preguntasCurso, isGlobal = false) { 
             if (chartInstances['chartRadar']) chartInstances['chartRadar'].destroy(); 
-            if (!preguntasCurso || Object.keys(preguntasCurso).length === 0) return; 
-            
-            const etiquetasLargas = Object.keys(preguntasCurso); 
-            const etiquetasCortas = etiquetasLargas.map(q => mapeoPreguntas[q] || "Pregunta"); 
-            const dataCurso = Object.values(preguntasCurso); 
-            const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); 
-            const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim(); 
-            
-            let datasetsArray = []; 
-            if (isGlobal) { 
-                datasetsArray.push({ label: 'Promedio Institucional', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); 
-            } else { 
-                const dataGlobal = etiquetasLargas.map(q => promediosGlobalesPreguntas[q] || 0); 
-                datasetsArray.push({ label: 'Esta Cohorte', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); 
-                datasetsArray.push({ label: 'Benchmark Global', data: dataGlobal, backgroundColor: 'transparent', borderColor: mutedColor, borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); 
-            } 
-            
+            const labels = Object.keys(preguntasCurso).map(q => mapeoPreguntas[q] || "Pregunta"); 
+            let datasetsArray = [{ label: isGlobal ? 'Promedio Institucional' : 'Esta Cohorte', data: Object.values(preguntasCurso), backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 4 }]; 
+            if (!isGlobal) datasetsArray.push({ label: 'Benchmark Global', data: Object.keys(preguntasCurso).map(q => promediosGlobalesPreguntas[q] || 0), backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); 
             chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { 
-                type: 'radar', 
-                data: { labels: etiquetasCortas, datasets: datasetsArray }, 
-                options: { 
-                    responsive: true, maintainAspectRatio: false, 
-                    scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent', font: { family: 'Inter' } }, grid: { color: 'rgba(0,0,0,0.05)' }, angleLines: { color: 'rgba(0,0,0,0.05)' }, pointLabels: { font: { size: 11, family: 'Inter', weight: '600' } } } }, 
-                    plugins: { tooltip: { padding: 12, callbacks: { title: (context) => { const textoCompleto = etiquetasLargas[context[0].dataIndex]; const palabras = textoCompleto.split(' '); let lineas = []; let lineaActual = ''; palabras.forEach(palabra => { if ((lineaActual + palabra).length > 40) { lineas.push(lineaActual.trim()); lineaActual = palabra + ' '; } else { lineaActual += palabra + ' '; } }); lineas.push(lineaActual.trim()); return lineas; } } } } 
-                } 
+                type: 'radar', data: { labels: labels, datasets: datasetsArray }, 
+                options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 10, family: 'Inter', weight: '600' } } } } } 
             }); 
         }
     </script>
