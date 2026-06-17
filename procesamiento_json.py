@@ -4,6 +4,7 @@ import json
 import os
 import logging
 import re
+import glob  # <-- NUEVO IMPORT NECESARIO
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -14,6 +15,7 @@ class MotorAnalitico:
         self.ruta_sat = os.path.join(self.base_dir, 'fact_satisfaccion.csv')
         self.ruta_perf = os.path.join(self.base_dir, 'dim_perfiles.csv')
         self.ruta_catalogo = os.path.join(self.base_dir, 'catalogo_cursos.csv')
+        self.carpeta_moodle = os.path.join(self.base_dir, 'descargas_moodle') # <-- NUEVA RUTA PARA LEER CORREOS
 
     def ejecutar(self):
         logging.info("Iniciando Motor Analítico (Arquitectura Híbrida: Tiempo Adaptativo + Enlace Relacional)...")
@@ -230,6 +232,30 @@ class MotorAnalitico:
             "Escolaridad": df_perf_raw['Escolaridad'].value_counts().to_dict() if 'Escolaridad' in df_perf_raw.columns else {}
         }
 
+        # ========================================================
+        # NUEVO: CÁLCULO DE ESTUDIANTES ÚNICOS (MÉTRICA GLOBAL)
+        # ========================================================
+        estudiantes_unicos = set()
+        if os.path.exists(self.carpeta_moodle):
+            for file_path in glob.glob(os.path.join(self.carpeta_moodle, '*.csv')):
+                try:
+                    df_raw = pd.read_csv(file_path, sep=',')
+                    if len(df_raw.columns) < 3: df_raw = pd.read_csv(file_path, sep=';')
+                    
+                    # Buscar la columna de correo
+                    col_correo = next((col for col in df_raw.columns if 'correo' in str(col).lower() or 'email' in str(col).lower()), df_raw.columns[1] if len(df_raw.columns) > 1 else None)
+                    
+                    if col_correo:
+                        # Limpiar correos y agregar al Set (que elimina duplicados solo)
+                        correos_limpios = df_raw[col_correo].dropna().astype(str).str.strip().str.lower().tolist()
+                        estudiantes_unicos.update(correos_limpios)
+                except Exception as e:
+                    logging.warning(f"No se pudo extraer correos de {file_path}: {e}")
+        
+        total_estudiantes_unicos = len(estudiantes_unicos)
+        logging.info(f"✔ Estudiantes ÚNICOS identificados en la plataforma Moodle: {total_estudiantes_unicos}")
+        # ========================================================
+
         # 7. Construcción de Estructura JSON
         cursos_lista = df_final.to_dict(orient='records')
         for c in cursos_lista:
@@ -263,7 +289,8 @@ class MotorAnalitico:
         dashboard_json = {
             "metadata": {
                 "total_cursos_analizados": len(cursos_lista),
-                "total_encuestas_historicas": len(df_sat_raw)
+                "total_encuestas_historicas": len(df_sat_raw),
+                "total_estudiantes_unicos": total_estudiantes_unicos # <-- INYECCIÓN DE LA MÉTRICA
             },
             "kpis_globales": {
                 "chs_promedio_secretaria": round(df_final['Salud_Curso_CHS'].mean(), 1) if len(df_final) > 0 else 0,
