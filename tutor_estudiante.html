@@ -333,8 +333,8 @@
         let MODEL = "gemini-2.5-flash"; 
         
         // Pega tu llave de Google AI Studio aquí:
-        const geminiP1 = "AQ.Ab8RN6Luy1TyB5SL3-EGX9PDSFu9EPd"; 
-        const geminiP2 = "_Fo_YF4or9rIaV-Lz0Q"; 
+        const geminiP1 = "AQ.Ab8RN6JQAtMlVOg3cL2L"; 
+        const geminiP2 = "kf6xOq5UQhTxII--Bba3yHFzfZKySQ"; 
         
         let apiKey = geminiP1.trim() + geminiP2.trim();
         let isSimulacion = false;
@@ -353,7 +353,8 @@
         let chatHistory = [];
         let systemPromptBase = "";
         
-        // Cargar eventos una vez el DOM esté listo (Solución del TypeError)
+        // Se asegura que los eventos y variables del DOM solo se capturen tras cargar la página
+        // para prevenir errores del tipo 'Cannot read properties of null'.
         document.addEventListener('DOMContentLoaded', () => {
             const userInput = document.getElementById('user_input');
             if (userInput) {
@@ -421,6 +422,8 @@
                     if (!response.ok) throw new Error("Archivo no encontrado en el servidor");
                     const data = await response.json();
                     
+                    // 🛡️ DIETA DE TOKENS AJUSTADA PARA CURSOS SEGMENTADOS (50.000 caracteres)
+                    // Permite leer unas 10 a 15 páginas de texto completo sin truncar.
                     let textoCompleto = data.contexto_base || "";
                     if (textoCompleto.length > 50000) {
                         contextoExtraido = textoCompleto.substring(0, 50000) + "... [Fin del extracto]";
@@ -433,7 +436,7 @@
                     if (!isSimulacion) {
                         throw new Error(`El tema '${temaId}' no existe en la base de datos.`);
                     }
-                    // Respaldo genérico
+                    // Respaldo 100% genérico para el simulador
                     contextoExtraido = `
                         DOCUMENTO DE EJEMPLO GENÉRICO
                         Capítulo 1: Introducción a los Conceptos Básicos. Define los fundamentos teóricos de la materia.
@@ -442,17 +445,17 @@
                     `;
                 }
 
+                // 🧠 PROMPT UNIVERSAL, ADAPTATIVO, DIRECTO Y PORCENTUAL
                 systemPromptBase = `
-                    Eres un Tutor y Evaluador Experto. Tu objetivo es evaluar el nivel de comprensión del estudiante sobre el documento cargado y generar una "Ruta de Aprendizaje" personalizada.
+                    Eres un Tutor y Evaluador Experto. Tu objetivo es evaluar el nivel de comprensión del estudiante sobre el documento cargado de forma general y generar una "Ruta de Aprendizaje" personalizada.
                     
                     DOCUMENTO BASE DE CONOCIMIENTO (RESUMIDO):
                     ${contextoExtraido}
 
                     REGLAS OBLIGATORIAS DE INTERACCIÓN (SÍGUELAS PASO A PASO):
-                    PASO 1 (INICIO): Analiza el documento base y extrae mentalmente sus temas, capítulos o módulos principales. Preséntate cordialmente, enumera brevemente estos temas y pregúntale al estudiante SOBRE CUÁL de ellos desea ser evaluado hoy. NO hagas preguntas evaluativas todavía. Espera su respuesta.
-                    PASO 2 (EVALUACIÓN): Una vez el estudiante elija su tema, formula UN (1) caso práctico o pregunta de análisis correspondiente a esa sección del documento. Hazle una sola pregunta a la vez.
-                    PASO 3 (EVALUACIÓN FLEXIBLE Y PORCENTUAL): Espera la respuesta del estudiante. Analiza el sentido de su respuesta (no exijas palabras exactas, valora el análisis crítico). Califícalo con una ESCALA PORCENTUAL (Ej: "Tu respuesta es 80% acertada", "Tienes un 60% de precisión"). Explícale amablemente qué le faltó para llegar al 100% o felicítalo, y lanza la siguiente pregunta sobre un tema diferente del documento. Haz un máximo de 3 a 4 preguntas en total.
-                    PASO 4 (VEREDICTO FINAL): Tras finalizar las preguntas, despídete. Dile explícitamente cuáles temas domina y en cuáles falló. Finalmente, recomiéndale ir a su plataforma de estudio y repasar EXCLUSIVAMENTE los capítulos o temas específicos en los que tuvo menor porcentaje.
+                    PASO 1 (INICIO E INTRODUCCIÓN): Analiza el documento base y extrae mentalmente sus temas o capítulos principales. Preséntate cordialmente, da una MUY BREVE introducción (máximo 2 líneas) resumiendo de qué trata el documento en general. INMEDIATAMENTE DESPUÉS, formula la primera pregunta práctica o de análisis basada en cualquier parte del documento para comenzar la evaluación. Hazle una sola pregunta a la vez.
+                    PASO 2 (EVALUACIÓN FLEXIBLE Y PORCENTUAL): Espera la respuesta del estudiante. Analiza el sentido de su respuesta (no exijas palabras exactas, valora el análisis crítico). Califícalo con una ESCALA PORCENTUAL (Ej: "Tu respuesta es 80% acertada", "Tienes un 60% de precisión"). Explícale amablemente qué le faltó para llegar al 100% o felicítalo, y lanza la siguiente pregunta sobre un tema diferente del documento. Haz un máximo de 3 a 4 preguntas en total.
+                    PASO 3 (VEREDICTO FINAL): Tras finalizar las preguntas, despídete. Dile explícitamente cuáles temas domina y en cuáles falló basándote en la evaluación general del documento. Finalmente, recomiéndale ir a su plataforma de estudio y repasar EXCLUSIVAMENTE los capítulos o temas específicos en los que tuvo menor porcentaje.
                 `;
 
                 verificarModoIa();
@@ -482,7 +485,8 @@
         async function arrancarConversacion() {
             mostrarTyping();
             try {
-                const promptOculto = "Hola, soy el estudiante. Por favor preséntate, indícame de forma resumida qué temas o capítulos principales detectaste en el documento cargado y pregúntame sobre cuál de ellos deseo ser evaluado hoy.";
+                // Gatillo oculto DIRECTO
+                const promptOculto = "Hola, soy el estudiante y estoy listo para iniciar. Por favor preséntate, dame una muy breve introducción de los temas del documento e inicia la evaluación con la primera pregunta.";
                 const respuesta = await procesarGeminiAPI(promptOculto, true);
                 quitarTyping();
                 agregarMensaje(respuesta, 'bot');
@@ -557,7 +561,7 @@
             if (isSimulacion) {
                 await new Promise(res => setTimeout(res, 1500)); 
                 if (esPrimerMensaje) {
-                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación**.\n\nHe analizado el documento cargado y veo que trata sobre 3 capítulos principales: Introducción, Aplicación Práctica y Evaluación. **¿Sobre cuál de estos temas deseas que te evalúe hoy?**";
+                    return "¡Hola! Soy tu Tutor IA 🏥. Te hablo desde el **Modo Simulación**.\n\nHe analizado el documento cargado y veo que trata sobre 3 capítulos principales: Introducción, Aplicación Práctica y Evaluación. \n\nPara empezar: ¿Cuáles son las herramientas estándar en la fase de Aplicación Práctica?";
                 } else {
                     return "*(Respuesta simulada)*. Tu análisis tiene un **75% de precisión**. Captaste la idea principal de forma excelente, pero olvidaste mencionar un detalle clave del protocolo.\n\nSiguiente caso: Si te encuentras en la fase de Evaluación, ¿qué indicadores analizarías primero?";
                 }
@@ -601,7 +605,7 @@
                     
                     if(esPrimerMensaje) {
                         chatHistory = [
-                            { role: "user", parts: [{ text: "Hola, soy el estudiante. Por favor preséntate, indícame qué temas detectaste en el documento y pregúntame por dónde iniciar." }] },
+                            { role: "user", parts: [{ text: "Hola, soy el estudiante y estoy listo para iniciar. Por favor preséntate, dame una muy breve introducción de los temas del documento e inicia la evaluación con la primera pregunta." }] },
                             { role: "model", parts: [{ text: aiText }] }
                         ];
                     } else {
