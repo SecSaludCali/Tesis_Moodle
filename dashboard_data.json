@@ -1,7 +1,8 @@
 {
     "metadata": {
         "total_cursos_analizados": 41,
-        "total_encuestas_historicas": 3857
+        "total_encuestas_historicas": 3857,
+        "total_estudiantes_unicos": 5459
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 57.4,
