@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Analítico - Secretaría de Salud</title>
+    <title>Ecosistema Educativo - Secretaría de Salud</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,7 +16,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
-        /* PALETA CON EFECTO LIQUID GLASS Y BURBUJAS FLOTANTES */
+        /* =========================================
+           PALETA Y VARIABLES GLOBALES
+           ========================================= */
         :root[data-theme="light"] {
             --bg-color: #f4f7fe;
             --card-bg: rgba(255, 255, 255, 0.6);
@@ -37,7 +39,6 @@
             --ia-card-bg: rgba(248, 250, 252, 0.7);
             --modal-bg: rgba(255, 255, 255, 0.95);
 
-            /* Ajustados a opacidades para radial-gradient */
             --blob-1: rgba(67, 24, 255, 0.12);
             --blob-2: rgba(5, 205, 153, 0.12);
             --blob-3: rgba(238, 93, 80, 0.1);
@@ -72,13 +73,13 @@
             background-color: var(--bg-color);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
             position: relative;
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* BURBUJAS FLOTANTES EN EL FONDO (Optimizadas GPU - SIN LAG) */
+        /* BURBUJAS FLOTANTES (Cero Lag - Radial Gradient) */
         body::before, body::after, .blob-3 {
             content: ''; position: fixed; border-radius: 50%;
             z-index: -1; animation: float 15s infinite alternate ease-in-out;
@@ -97,7 +98,7 @@
         .blob-3 { 
             width: 50vw; height: 50vw; 
             background: radial-gradient(circle, var(--blob-3) 0%, transparent 60%); 
-            top: 20%; left: 25%; animation-delay: -10s; display: none; 
+            top: 20%; left: 25%; animation-delay: -10s; 
         }
 
         @keyframes float {
@@ -106,18 +107,35 @@
         }
 
         /* =========================================
-           PORTAL DE BIENVENIDA (SPLASH SCREEN)
+           TARJETAS GLOBALES Y KPIs
+           ========================================= */
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            padding: 32px;
+            height: 100%;
+            border: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-light);
+            border-left: 1px solid var(--border-light);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
+        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
+        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
+        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
+
+        /* =========================================
+           PORTAL DE BIENVENIDA (LANDING CON TARJETAS)
            ========================================= */
         #welcome_portal {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute;
+            top: 0; left: 0; right: 0;
             padding: 40px 20px;
-            overflow-y: auto;
+            z-index: 10;
             transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
@@ -125,23 +143,40 @@
             opacity: 0;
             transform: translateY(-50px) scale(0.98);
             pointer-events: none;
+            position: absolute;
         }
 
-        .portal-content { width: 100%; max-width: 1200px; position: relative; z-index: 10; }
-        .header-title { text-align: center; margin-bottom: 60px; animation: slideDown 0.8s ease-out; }
+        /* Contenedor del Logo Institucional */
+        .brand-logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .brand-logo-container img {
+            max-height: 90px;
+            object-fit: contain;
+            /* Si tienes un logo, quita este filtro. Por ahora lo oscurece para el placeholder */
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .hero-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            animation: slideDown 0.8s ease-out;
+            margin-bottom: 40px;
+        }
 
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .header-title h1 { font-weight: 800; font-size: 3rem; color: var(--primary); letter-spacing: -0.03em; margin-bottom: 10px; }
-        .header-title p { font-size: 1.2rem; color: var(--text-muted); font-weight: 500; }
+        .hero-section h1 { font-weight: 800; font-size: 2.8rem; color: var(--primary); letter-spacing: -0.03em; margin-bottom: 10px; }
+        .hero-section p { font-size: 1.15rem; color: var(--text-muted); font-weight: 500; margin-bottom: 30px; }
 
-        /* =========================================
-           TARJETAS DEL PORTAL (LIQUID GLASS PREMIUM)
-           ========================================= */
-        .portal-row { max-width: 1000px; margin: 0 auto; }
+        /* Tarjetas de Navegación del Portal */
+        .portal-row { max-width: 1100px; margin: 0 auto; }
 
         .hub-card {
             background: rgba(255, 255, 255, 0.4);
@@ -172,6 +207,7 @@
             border-color: rgba(255, 255, 255, 0.9);
         }
         .hub-card:hover::before { left: 200%; }
+        
         .hub-card:nth-child(1) { animation-delay: 0.1s; }
         .hub-card:nth-child(2) { animation-delay: 0.2s; }
         .hub-card:nth-child(3) { animation-delay: 0.3s; }
@@ -209,30 +245,28 @@
         }
         :root[data-theme="dark"] .hub-btn { background: rgba(255, 255, 255, 0.1); color: var(--text-main); border-color: rgba(255,255,255,0.1); }
 
-        /* =========================================
-           DASHBOARD ESTILOS ORIGINALES
-           ========================================= */
-        h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
-        h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .glass-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: var(--card-shadow);
-            padding: 32px;
-            height: 100%;
-            border: 1px solid var(--border-color);
-            border-top: 1px solid var(--border-light);
-            border-left: 1px solid var(--border-light);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        /* =========================================
+           DASHBOARD PROFUNDO (Oculto al inicio)
+           ========================================= */
+        #dashboard_content {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            opacity: 0; 
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            padding-top: 40px;
         }
 
-        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
-        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
-        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
-        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
+        #dashboard_content.show-dashboard {
+            opacity: 1;
+            pointer-events: auto;
+            position: relative; 
+        }
+
+        h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
+        h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; }
 
         .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
 
@@ -242,7 +276,6 @@
             display: inline-flex; align-items: center; position: relative; background: var(--card-bg);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-light);
             border-radius: 50px; padding: 8px; box-shadow: var(--card-shadow); z-index: 10; list-style: none; margin: 0;
-            transform: translateZ(0);
         }
         .liquid-nav .nav-item { z-index: 2; }
         .liquid-tab {
@@ -252,7 +285,6 @@
         .liquid-tab:hover { color: var(--primary); }
         .liquid-tab.active { color: var(--primary) !important; font-weight: 700; }
 
-        /* La "Gota" TRANSPARENTE tipo lente de cristal */
         .liquid-indicator {
             position: absolute; top: 8px; bottom: 8px; left: 8px; width: 0; 
             background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(4px) saturate(150%);
@@ -285,7 +317,7 @@
         .ia-card { 
             background-color: var(--ia-bg); border-radius: 24px; padding: 40px; 
             border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); 
-            box-shadow: var(--card-shadow); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transform: translateZ(0);
+            box-shadow: var(--card-shadow); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
         }
         .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
         .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; height: 100%; transition: transform 0.2s; }
@@ -314,7 +346,7 @@
         .modal-content { 
             background: var(--modal-bg); color: var(--text-main); border-radius: 28px; border: 1px solid var(--border-color);
             border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255,255,255,0.1); overflow: hidden; transform: translateZ(0);
+            -webkit-backdrop-filter: blur(16px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255,255,255,0.1); overflow: hidden;
         }
         .modal-header { border-bottom: 1px solid var(--border-color); padding: 30px 40px; background: transparent; }
         .modal-body { padding: 40px; background-color: transparent; }
@@ -328,8 +360,6 @@
             overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .dic-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(67, 24, 255, 0.1), inset 0 1px 0 var(--border-light); border-color: rgba(67, 24, 255, 0.2); }
-        .dic-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); transition: left 0.6s ease; pointer-events: none; }
-        .dic-card:hover::before { left: 200%; }
         .dic-info { flex: 1; z-index: 2; }
         .dic-mockup { flex: 0 0 300px; background: var(--ia-card-bg); border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; box-shadow: inset 0 6px 15px rgba(0,0,0,0.04); z-index: 2; }
 
@@ -356,7 +386,7 @@
         }
 
         /* FIX MAPA LEAFLET */
-        #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); }
+        #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); }
         .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
     </style>
 </head>
@@ -364,67 +394,77 @@
 <body>
 
     <!-- ========================================== -->
-    <!-- OVERLAY: PORTAL DE BIENVENIDA MÁGICO       -->
+    <!-- PORTAL DE BIENVENIDA (LANDING CON TARJETAS)-->
     <!-- ========================================== -->
     <div id="welcome_portal">
-        <div class="blob-3"></div> <!-- Burbuja extra solo para el lobby -->
-        <div class="portal-content">
-            <div class="header-title">
-                <h1>Ecosistema Educativo en Salud</h1>
-                <p>Selecciona el portal al que deseas ingresar</p>
+        <div class="blob-3"></div>
+        
+        <div class="hero-section">
+            <!-- LOGO INSTITUCIONAL -->
+            <div class="brand-logo-container">
+                <!-- Reemplaza el src con la URL de tu logo -->
+                <img src="Logo_AlcaldiaCali.png">
             </div>
 
-            <div class="row g-4 justify-content-center portal-row">
-                <!-- MÓDULO 1: DASHBOARD (SE QUEDA AQUÍ) -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="hub-card card-analytics" onclick="entrarAlDashboard()">
-                        <div class="hub-icon">
-                            <i class="bi bi-bar-chart-line-fill"></i>
-                        </div>
-                        <h3 class="hub-title">Dashboard Analítico</h3>
-                        <p class="hub-desc">Visualiza métricas, KPIs institucionales, rendimiento demográfico y calidad percibida.</p>
-                        <div class="hub-btn">
-                            Ver Gráficos <i class="bi bi-arrow-right"></i>
-                        </div>
+            <h1>Ecosistema Educativo en Salud</h1>
+            <p>Plataforma integral de monitoreo, entrenamiento y simulación clínica.</p>
+            
+            <!-- KPIs GLOBALES EN LA LANDING -->
+            <div class="row g-4 justify-content-center mb-5" id="kpi-landing-row" style="max-width: 1200px; margin: 0 auto;">
+                <!-- Se llenan por Javascript al cargar los datos -->
+            </div>
+        </div>
+
+        <div class="row g-4 justify-content-center portal-row">
+            <!-- MÓDULO 1: DASHBOARD -->
+            <div class="col-lg-4 col-md-6">
+                <div class="hub-card card-analytics" onclick="entrarAlDashboard()">
+                    <div class="hub-icon">
+                        <i class="bi bi-bar-chart-line-fill"></i>
+                    </div>
+                    <h3 class="hub-title">Dashboard Analítico</h3>
+                    <p class="hub-desc">Análisis profundo de cohortes, rendimiento geográfico y calidad percibida.</p>
+                    <div class="hub-btn">
+                        Ver Gráficos <i class="bi bi-arrow-right"></i>
                     </div>
                 </div>
+            </div>
 
-                <!-- MÓDULO 2: ESTUDIANTES (TUTOR IA) -->
-                <div class="col-lg-4 col-md-6">
-                    <a href="tutor_estudiante.html" class="hub-card card-tutor text-decoration-none">
-                        <div class="hub-icon">
-                            <i class="bi bi-robot"></i>
-                        </div>
-                        <h3 class="hub-title">Tutor IA (Estudiante)</h3>
-                        <p class="hub-desc">Simulador clínico inteligente. Interactúa con el evaluador para trazar tu ruta.</p>
-                        <div class="hub-btn">
-                            Ingresar <i class="bi bi-arrow-right"></i>
-                        </div>
-                    </a>
-                </div>
+            <!-- MÓDULO 2: ESTUDIANTES (TUTOR IA) -->
+            <div class="col-lg-4 col-md-6">
+                <a href="tutor_estudiante.html" class="hub-card card-tutor text-decoration-none">
+                    <div class="hub-icon">
+                        <i class="bi bi-robot"></i>
+                    </div>
+                    <h3 class="hub-title">Tutor IA (Estudiante)</h3>
+                    <p class="hub-desc">Simulador clínico inteligente. Interactúa con el evaluador para trazar tu ruta.</p>
+                    <div class="hub-btn">
+                        Ingresar <i class="bi bi-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
 
-                <!-- MÓDULO 3: ADMIN (ENTRENAMIENTO) -->
-                <div class="col-lg-4 col-md-6">
-                    <a href="admin_conocimiento.html" class="hub-card card-admin text-decoration-none">
-                        <div class="hub-icon">
-                            <i class="bi bi-shield-lock-fill"></i>
-                        </div>
-                        <h3 class="hub-title">Entrenamiento IA</h3>
-                        <p class="hub-desc">Acceso restringido para el curador. Sube normativas y entrena los cerebros.</p>
-                        <div class="hub-btn">
-                            Ingresar <i class="bi bi-arrow-right"></i>
-                        </div>
-                    </a>
-                </div>
+            <!-- MÓDULO 3: ADMIN (ENTRENAMIENTO) -->
+            <div class="col-lg-4 col-md-6">
+                <a href="admin_conocimiento.html" class="hub-card card-admin text-decoration-none">
+                    <div class="hub-icon">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+                    <h3 class="hub-title">Entrenamiento IA</h3>
+                    <p class="hub-desc">Acceso restringido para el curador. Sube normativas y entrena los cerebros.</p>
+                    <div class="hub-btn">
+                        Ingresar <i class="bi bi-arrow-right"></i>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 
 
     <!-- ========================================== -->
-    <!-- CONTENIDO REAL DEL DASHBOARD (Debajo)      -->
+    <!-- DASHBOARD PROFUNDO (Oculto al inicio)      -->
     <!-- ========================================== -->
-    <div class="container-fluid py-5 px-4 px-xl-5" id="dashboard_content" style="opacity: 0; transition: opacity 0.8s ease;">
+    <div class="container-fluid px-4 px-xl-5" id="dashboard_content">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
             <div>
                 <h2 class="d-flex align-items-center gap-3">
@@ -439,7 +479,7 @@
             
             <!-- Botón para volver a abrir el Portal -->
             <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2" onclick="volverAlPortal()" style="border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px); color: var(--text-main);">
-                <i class="bi bi-grid-fill text-primary"></i> Cambiar Módulo
+                <i class="bi bi-house-door-fill text-primary"></i> Volver al Inicio
             </button>
         </div>
 
@@ -490,7 +530,11 @@
             <div class="tab-content" id="myTabContent">
                 <!-- PANEL 1: DEMOGRAFÍA -->
                 <div class="tab-pane fade show active" id="panel-global" role="tabpanel" aria-labelledby="global-tab">
-                    <div class="row g-4 mb-5" id="kpi-global-row"></div>
+                    
+                    <div class="row g-4 mb-5" id="kpi-global-row">
+                        <!-- Se llena dinámicamente si se filtra un curso. En vista global está vacío porque ya están arriba -->
+                    </div>
+
                     <div class="row g-4 mb-5">
                         <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Sexo</h5><div class="chart-wrapper"><canvas id="chartSexo"></canvas></div></div></div>
                         <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Curso de Vida</h5><div class="chart-wrapper"><canvas id="chartEdad"></canvas></div></div></div>
@@ -606,7 +650,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ==========================================
-        // LÓGICA DEL PORTAL MÁGICO (SPLASH SCREEN)
+        // LÓGICA DE NAVEGACIÓN Y RENDERIZADO
         // ==========================================
         function entrarAlDashboard() {
             const portal = document.getElementById('welcome_portal');
@@ -615,7 +659,7 @@
             portal.classList.add('hide-portal');
             
             setTimeout(() => {
-                dashboard.style.opacity = '1';
+                dashboard.classList.add('show-dashboard');
                 if (mapInstance) {
                     setTimeout(() => mapInstance.invalidateSize(), 300);
                 }
@@ -626,12 +670,15 @@
             const portal = document.getElementById('welcome_portal');
             const dashboard = document.getElementById('dashboard_content');
             
-            dashboard.style.opacity = '0';
-            portal.classList.remove('hide-portal');
+            dashboard.classList.remove('show-dashboard');
+            
+            setTimeout(() => {
+                portal.classList.remove('hide-portal');
+            }, 400); 
         }
 
         // ==========================================
-        // RESTO DEL CÓDIGO DEL DASHBOARD ORIGINAL
+        // LÓGICA PRINCIPAL DEL DASHBOARD
         // ==========================================
         proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
@@ -670,10 +717,15 @@
                 const isLight = html.getAttribute('data-theme') === 'light';
                 html.setAttribute('data-theme', isLight ? 'dark' : 'light');
                 btnTheme.innerHTML = isLight ? '<i class="bi bi-sun-fill text-warning"></i>' : '<i class="bi bi-moon-stars-fill"></i>';
+                
+                // Actualiza logo si es necesario (opcional)
+                // const logo = document.getElementById('main_logo');
+                // logo.style.filter = isLight ? 'invert(0)' : 'invert(1) brightness(2)';
+
                 Chart.defaults.color = getComputedStyle(html).getPropertyValue('--text-main');
                 if(mapInstance) {
                     if(mapTilesLayer) mapInstance.removeLayer(mapTilesLayer);
-                    let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+                    let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
                     mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
                 }
                 if (cursoActual) actualizarPantallaCurso(); else actualizarPantallaGlobal();
@@ -717,7 +769,7 @@
                     const geoResponse = await fetch('mc_comunas.json');
                     geoJsonDataRaw = proyectarGeoJson(await geoResponse.json()); 
                 } catch (fetchError) {
-                    // Datos quemados para preview
+                    // Datos quemados para preview si no hay JSON
                     dashboardData = { 
                         "metadata": { "total_cursos_analizados": 1, "total_encuestas_historicas": 416 }, 
                         "kpis_globales": { "chs_promedio_secretaria": 88.5, "nps_global": 65.2 }, 
@@ -746,7 +798,6 @@
         // ==========================================
         // FUNCIONES AUXILIARES DESCOMPRIMIDAS
         // ==========================================
-
         function normalizarLlaveComuna(texto) { 
             if (texto === null || texto === undefined) return "N/A"; 
             let t = String(texto).trim(); 
@@ -949,7 +1000,7 @@
                     htmlLobby += `<div class="col-12 mt-5"><h4 class="fw-bold mb-4" style="color: var(--text-main); border-bottom: 2px solid var(--border-color); padding-bottom: 15px;"><i class="bi bi-calendar3 me-2"></i>Año ${anio}</h4></div>`; 
                     porAnio[anio].forEach(c => { 
                         let nombreCohorte = c.Edicion.split(' - ')[1] || "Edición Única"; 
-                        htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${nombreCohorte}</h5><span class="badge bg-indigo-soft px-3 py-2 text-primary" style="font-size:0.9rem;">${c.Total_Inscritos} Inscritos</span></div></div>`; 
+                        htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${nombreCohorte}</h5><span class="badge bg-indigo-soft px-3 py-2 text-primary" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
                     }); 
                 }); 
                 htmlLobby += `</div>`; 
@@ -1042,7 +1093,7 @@
         }
 
         function renderHTMLDemo(tot, pM, pDom, pP, eDom, t1, t2) { 
-            return `<div class="row g-4 mb-4"><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${tot}</div><div class="ia-lbl">Total Matriculados</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pM}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div></div><p class="mb-0 fs-6" style="color: var(--text-main); line-height: 1.6;"><strong>Conclusión:</strong> ${t1} <strong>${pDom}</strong>. ${t2}</p>`; 
+            return `<div class="row g-4 mb-4"><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${tot}</div><div class="ia-lbl">Matrículas</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pM}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div></div><p class="mb-0 fs-6" style="color: var(--text-main); line-height: 1.6;"><strong>Conclusión:</strong> ${t1} <strong>${pDom}</strong>. ${t2}</p>`; 
         }
 
         function renderHTMLMoodle(fin, inact, abd, chs, isGlobal = false) { 
@@ -1086,7 +1137,7 @@
         }
 
         // ==========================================
-        // CÁLCULO DE KPIS GLOBALES (CERTIFICADOS AÑADIDO)
+        // CÁLCULO DE KPIS GLOBALES (CERTIFICADOS AÑADIDO Y NOMBRE CORREGIDO)
         // ==========================================
         function actualizarPantallaGlobal() { 
             const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
@@ -1097,14 +1148,19 @@
             }); 
             const pctCertificados = totalInscritos > 0 ? Math.round((totalCertificados / totalInscritos) * 100) + "%" : "0%"; 
             
-            document.getElementById('kpi-global-row').innerHTML = `
+            // Renderizamos los KPIs tanto en la Landing como en el Dashboard
+            const kpiHtml = `
                 ${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}
-                ${crearTarjetaKPI("Inscritos Históricos", totalInscritos.toLocaleString())}
+                ${crearTarjetaKPI("Matrículas Totales", totalInscritos.toLocaleString())}
                 ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
                 ${crearTarjetaKPI("Encuestas Recibidas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}
                 ${crearTarjetaKPI("CHS Institucional", dashboardData.kpis_globales.chs_promedio_secretaria)}
                 ${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}
-            `; 
+            `;
+            
+            document.getElementById('kpi-landing-row').innerHTML = kpiHtml;
+            // Se limpia la vista interna porque ya están en el landing superior (Evita duplicados visuales confusos)
+            document.getElementById('kpi-global-row').innerHTML = '';
             
             dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); 
             dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); 
@@ -1162,14 +1218,14 @@
         }
 
         // ==========================================
-        // CÁLCULO DE KPIS ESPECÍFICOS (CERTIFICADOS AÑADIDO)
+        // CÁLCULO DE KPIS ESPECÍFICOS (CERTIFICADOS AÑADIDO Y NOMBRE CORREGIDO)
         // ==========================================
         function actualizarPantallaCurso() { 
             const totalCertificados = Math.round((cursoActual.Total_Inscritos || 0) * (cursoActual['Tasa_Finalizacion_%'] || 0) / 100); 
             const pctCertificados = cursoActual['Tasa_Finalizacion_%'] + "%"; 
             
             document.getElementById('kpi-global-row').innerHTML = `
-                ${crearTarjetaKPI("Inscritos", cursoActual.Total_Inscritos.toLocaleString())}
+                ${crearTarjetaKPI("Matrículas", cursoActual.Total_Inscritos.toLocaleString())}
                 ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
                 ${crearTarjetaKPI("Encuestas", cursoActual.Total_Encuestas.toLocaleString())}
                 ${crearTarjetaKPI("Participación", cursoActual.Total_Inscritos > 0 ? Math.round((cursoActual.Total_Encuestas / cursoActual.Total_Inscritos) * 100) + "%" : "0%")}
@@ -1208,7 +1264,7 @@
         // ==========================================
         function crearTarjetaKPI(label, valor, porcentaje = null) { 
             let htmlPorcentaje = porcentaje ? `<span style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.15); padding: 4px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;">${porcentaje}</span>` : ''; 
-            return `<div class="col"><div class="glass-card kpi-card"><div class="kpi-value d-flex align-items-center flex-wrap">${valor} ${htmlPorcentaje}</div><div class="kpi-label">${label}</div></div></div>`; 
+            return `<div class="col-lg-2 col-md-4 col-sm-6"><div class="glass-card kpi-card" style="padding: 20px;"><div class="kpi-value d-flex align-items-center flex-wrap" style="font-size: 1.6rem;">${valor} ${htmlPorcentaje}</div><div class="kpi-label" style="font-size: 0.75rem;">${label}</div></div></div>`; 
         }
 
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
