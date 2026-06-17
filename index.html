@@ -7,8 +7,7 @@
     <title>Dashboard Analítico - Secretaría de Salud</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- LIBRERÍAS DE GRÁFICOS Y MAPAS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -38,9 +37,10 @@
             --ia-card-bg: rgba(248, 250, 252, 0.7);
             --modal-bg: rgba(255, 255, 255, 0.95);
 
-            --blob-1: rgba(67, 24, 255, 0.25);
-            --blob-2: rgba(5, 205, 153, 0.25);
-            --blob-3: rgba(238, 93, 80, 0.2);
+            /* Ajustados a opacidades para radial-gradient */
+            --blob-1: rgba(67, 24, 255, 0.12);
+            --blob-2: rgba(5, 205, 153, 0.12);
+            --blob-3: rgba(238, 93, 80, 0.1);
         }
 
         :root[data-theme="dark"] {
@@ -63,9 +63,9 @@
             --ia-card-bg: rgba(5, 10, 31, 0.6);
             --modal-bg: rgba(11, 20, 55, 0.95);
 
-            --blob-1: rgba(117, 81, 255, 0.3);
-            --blob-2: rgba(14, 165, 233, 0.2);
-            --blob-3: rgba(238, 93, 80, 0.15);
+            --blob-1: rgba(117, 81, 255, 0.15);
+            --blob-2: rgba(14, 165, 233, 0.1);
+            --blob-3: rgba(238, 93, 80, 0.08);
         }
 
         body {
@@ -78,15 +78,27 @@
             min-height: 100vh;
         }
 
-        /* BURBUJAS FLOTANTES EN EL FONDO (Optimizadas GPU) */
+        /* BURBUJAS FLOTANTES EN EL FONDO (Optimizadas GPU - SIN LAG) */
         body::before, body::after, .blob-3 {
-            content: ''; position: fixed; border-radius: 50%; filter: blur(80px);
+            content: ''; position: fixed; border-radius: 50%;
             z-index: -1; animation: float 15s infinite alternate ease-in-out;
-            will-change: transform; transform: translateZ(0); pointer-events: none;
+            pointer-events: none;
         }
-        body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
-        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; animation-delay: -5s; }
-        .blob-3 { width: 30vw; height: 30vw; background: var(--blob-3); top: 30%; left: 35%; animation-delay: -10s; display: none; } /* Solo se usa en el portal inicial */
+        body::before { 
+            width: 70vw; height: 70vw; 
+            background: radial-gradient(circle, var(--blob-1) 0%, transparent 65%); 
+            top: -20%; left: -20%; 
+        }
+        body::after { 
+            width: 60vw; height: 60vw; 
+            background: radial-gradient(circle, var(--blob-2) 0%, transparent 60%); 
+            bottom: -20%; right: -10%; animation-delay: -5s; 
+        }
+        .blob-3 { 
+            width: 50vw; height: 50vw; 
+            background: radial-gradient(circle, var(--blob-3) 0%, transparent 60%); 
+            top: 20%; left: 25%; animation-delay: -10s; display: none; 
+        }
 
         @keyframes float {
             0% { transform: translate3d(0, 0, 0) scale(1); }
@@ -109,68 +121,44 @@
             transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        /* Cuando se desvanece el portal, esta clase se añade */
         #welcome_portal.hide-portal {
             opacity: 0;
             transform: translateY(-50px) scale(0.98);
             pointer-events: none;
         }
 
-        .portal-content {
-            width: 100%;
-            max-width: 1200px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .header-title {
-            text-align: center;
-            margin-bottom: 60px;
-            animation: slideDown 0.8s ease-out;
-        }
+        .portal-content { width: 100%; max-width: 1200px; position: relative; z-index: 10; }
+        .header-title { text-align: center; margin-bottom: 60px; animation: slideDown 0.8s ease-out; }
 
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .header-title h1 {
-            font-weight: 800; font-size: 3rem; color: var(--primary); letter-spacing: -0.03em; margin-bottom: 10px;
-        }
+        .header-title h1 { font-weight: 800; font-size: 3rem; color: var(--primary); letter-spacing: -0.03em; margin-bottom: 10px; }
         .header-title p { font-size: 1.2rem; color: var(--text-muted); font-weight: 500; }
 
         /* =========================================
            TARJETAS DEL PORTAL (LIQUID GLASS PREMIUM)
            ========================================= */
-        .portal-row {
-            max-width: 1000px; /* Reducimos el ancho máximo para que no se vean tan estiradas */
-            margin: 0 auto;
-        }
+        .portal-row { max-width: 1000px; margin: 0 auto; }
 
         .hub-card {
-            background: rgba(255, 255, 255, 0.4); /* Más transparente para que el cristal se note */
+            background: rgba(255, 255, 255, 0.4);
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(31, 38, 135, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.6);
-            padding: 30px 25px; /* Menos relleno para hacerla más delicada */
+            padding: 30px 25px;
             height: 100%;
             border: 1px solid rgba(255, 255, 255, 0.6);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             border-right: 1px solid rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(20px) saturate(120%);
             -webkit-backdrop-filter: blur(20px) saturate(120%);
-            text-align: center;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center;
             transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-            animation: fadeIn 0.8s ease-out backwards;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            animation: fadeIn 0.8s ease-out backwards; cursor: pointer; position: relative; overflow: hidden;
         }
 
-        /* El reflejo de luz de cristal pasando por encima */
         .hub-card::before {
             content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
             background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
@@ -184,21 +172,13 @@
             border-color: rgba(255, 255, 255, 0.9);
         }
         .hub-card:hover::before { left: 200%; }
-
         .hub-card:nth-child(1) { animation-delay: 0.1s; }
         .hub-card:nth-child(2) { animation-delay: 0.2s; }
         .hub-card:nth-child(3) { animation-delay: 0.3s; }
 
         .hub-icon {
-            width: 70px; /* Íconos más pequeños y sutiles */
-            height: 70px; 
-            border-radius: 20px; 
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; 
-            margin-bottom: 20px; 
-            transition: all 0.4s ease;
-            position: relative;
-            z-index: 2;
+            width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin-bottom: 20px; transition: all 0.4s ease; position: relative; z-index: 2;
             box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5);
         }
 
@@ -220,13 +200,11 @@
         }
         .hub-card:hover .hub-btn { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(67, 24, 255, 0.2);}
         
-        /* Ajustes específicos de color para botones al hacer hover */
         .card-tutor:hover .hub-btn { background: var(--success); border-color: var(--success); color: white; box-shadow: 0 6px 15px rgba(5, 205, 153, 0.2); }
         .card-admin:hover .hub-btn { background: var(--danger); border-color: var(--danger); color: white; box-shadow: 0 6px 15px rgba(238, 93, 80, 0.2); }
 
         :root[data-theme="dark"] .hub-card {
-            background: rgba(11, 20, 55, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(11, 20, 55, 0.4); border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
         }
         :root[data-theme="dark"] .hub-btn { background: rgba(255, 255, 255, 0.1); color: var(--text-main); border-color: rgba(255,255,255,0.1); }
@@ -249,7 +227,6 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            will-change: transform, box-shadow;
         }
 
         .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
@@ -283,7 +260,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.3); border-radius: 40px; z-index: 1;
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.5); pointer-events: none; 
-            will-change: left, width;
         }
 
         .nav-divider { width: 1px; height: 24px; background-color: var(--border-color); margin: 0 8px; z-index: 2; }
@@ -349,10 +325,10 @@
             background: var(--card-bg); border-radius: 24px; padding: 36px; border: 1px solid var(--border-color);
             border-top: 1px solid rgba(255,255,255,0.4); border-left: 1px solid rgba(255,255,255,0.4); margin-bottom: 30px; 
             display: flex; gap: 40px; align-items: stretch; box-shadow: 0 10px 30px rgba(0,0,0,0.05); position: relative;
-            overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; will-change: transform;
+            overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .dic-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(67, 24, 255, 0.1), inset 0 1px 0 var(--border-light); border-color: rgba(67, 24, 255, 0.2); }
-        .dic-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); transition: left 0.6s ease; will-change: left; pointer-events: none; }
+        .dic-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); transition: left 0.6s ease; pointer-events: none; }
         .dic-card:hover::before { left: 200%; }
         .dic-info { flex: 1; z-index: 2; }
         .dic-mockup { flex: 0 0 300px; background: var(--ia-card-bg); border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; box-shadow: inset 0 6px 15px rgba(0,0,0,0.04); z-index: 2; }
@@ -636,13 +612,10 @@
             const portal = document.getElementById('welcome_portal');
             const dashboard = document.getElementById('dashboard_content');
             
-            // Animación de ocultamiento
             portal.classList.add('hide-portal');
             
-            // Aparece el dashboard suavemente
             setTimeout(() => {
                 dashboard.style.opacity = '1';
-                // Solo renderizar Leaflet si entra al dashboard por primera vez (evita bugs de grises)
                 if (mapInstance) {
                     setTimeout(() => mapInstance.invalidateSize(), 300);
                 }
@@ -662,10 +635,32 @@
         // ==========================================
         proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
-        let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let chartInstances = {}; let promediosGlobalesPreguntas = {};
-        let mapInstance = null; let geoJsonLayer = null; let mapTilesLayer = null; let geoJsonDataRaw = null;
+        let dashboardData = {}; 
+        let cursosPorBase = {}; 
+        let cursoActual = null; 
+        let chartInstances = {}; 
+        let promediosGlobalesPreguntas = {};
+        let mapInstance = null; 
+        let geoJsonLayer = null; 
+        let mapTilesLayer = null; 
+        let geoJsonDataRaw = null;
 
-        const mapeoPreguntas = { "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Objetivo Cumplido", "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia Temática", "¿Los temas se desarrollaron en el tiempo previsto?": "Manejo del Tiempo", "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Innovación (Conceptos)", "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Utilidad Práctica", "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente", "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Resolución Dudas", "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "Experiencia Plataforma (UX)", "¿El material utilizado permitió el entendimiento del tema?": "Calidad Materiales", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General" };
+        const mapeoPreguntas = { 
+            "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", 
+            "¿Se cumplió el objetivo de la capacitación?": "Objetivo Cumplido", 
+            "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia Temática", 
+            "¿Los temas se desarrollaron en el tiempo previsto?": "Manejo del Tiempo", 
+            "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Innovación (Conceptos)", 
+            "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Utilidad Práctica", 
+            "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", 
+            "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente", 
+            "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", 
+            "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Resolución Dudas", 
+            "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "Experiencia Plataforma (UX)", 
+            "¿El material utilizado permitió el entendimiento del tema?": "Calidad Materiales", 
+            "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General" 
+        };
+        
         const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
 
         const btnTheme = document.getElementById('btn-theme');
@@ -700,11 +695,19 @@
             }
         }
 
-        window.addEventListener('resize', () => { const activeBtn = document.querySelector('.liquid-tab.active'); if(activeBtn) moveIndicator(activeBtn); });
+        window.addEventListener('resize', () => { 
+            const activeBtn = document.querySelector('.liquid-tab.active'); 
+            if(activeBtn) moveIndicator(activeBtn); 
+        });
 
         document.addEventListener("DOMContentLoaded", async () => {
-            document.querySelectorAll('.liquid-tab').forEach(btn => { btn.addEventListener('shown.bs.tab', (e) => { moveIndicator(e.target); }); });
-            setTimeout(() => { const activeBtn = document.querySelector('.liquid-tab.active'); if(activeBtn) moveIndicator(activeBtn); }, 100);
+            document.querySelectorAll('.liquid-tab').forEach(btn => { 
+                btn.addEventListener('shown.bs.tab', (e) => { moveIndicator(e.target); }); 
+            });
+            setTimeout(() => { 
+                const activeBtn = document.querySelector('.liquid-tab.active'); 
+                if(activeBtn) moveIndicator(activeBtn); 
+            }, 100);
 
             try {
                 const urlFresca = 'dashboard_data.json?v=' + new Date().getTime();
@@ -715,43 +718,608 @@
                     geoJsonDataRaw = proyectarGeoJson(await geoResponse.json()); 
                 } catch (fetchError) {
                     // Datos quemados para preview
-                    dashboardData = { "metadata": { "total_cursos_analizados": 1, "total_encuestas_historicas": 416 }, "kpis_globales": { "chs_promedio_secretaria": 88.5, "nps_global": 65.2 }, "demografia_global": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Curso de Vida": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 116 }, "Escolaridad": { "Profesional": 200, "Especialización": 216 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, "cursos": [{ "Nombre_Curso": "RPMS PI e I 012026 - (AISPPMSCVPI_01_2026)", "Curso_Base": "RPMS PI e I 012026", "Edicion": "2026 - Edición 01", "Total_Inscritos": 500, "Total_Encuestas": 416, "Salud_Curso_CHS": 88.5, "e_NPS": 65.2, "Tasa_Finalizacion_%": 75, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 10, "Tiempo_Promedio_Dias": 12.5, "IUP_Promedio": 4.6, "ICD_Promedio": 4.8, "UX_Promedio": 4.3, "Brecha_Expectativa": 0.2, "Demografia": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Edad": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 116 }, "Escolaridad": { "Profesional": 200, "Especialización": 216 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.7, "¿Se cumplió el objetivo de la capacitación?": 4.6, "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.8, "¿Los temas se desarrollaron en el tiempo previsto?": 4.5, "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.6, "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.7, "¿El facilitador demostró el dominio del tema brindado?": 4.8, "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4, "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.3, "¿El material utilizado permitió el entendimiento del tema?": 4.5, "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.7 } }] };
+                    dashboardData = { 
+                        "metadata": { "total_cursos_analizados": 1, "total_encuestas_historicas": 416 }, 
+                        "kpis_globales": { "chs_promedio_secretaria": 88.5, "nps_global": 65.2 }, 
+                        "demografia_global": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Curso de Vida": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 116 }, "Escolaridad": { "Profesional": 200, "Especialización": 216 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, 
+                        "cursos": [{ "Nombre_Curso": "RPMS PI e I 012026 - (AISPPMSCVPI_01_2026)", "Curso_Base": "RPMS PI e I 012026", "Edicion": "2026 - Edición 01", "Total_Inscritos": 500, "Total_Encuestas": 416, "Salud_Curso_CHS": 88.5, "e_NPS": 65.2, "Tasa_Finalizacion_%": 75, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 10, "Tiempo_Promedio_Dias": 12.5, "IUP_Promedio": 4.6, "ICD_Promedio": 4.8, "UX_Promedio": 4.3, "Brecha_Expectativa": 0.2, "Demografia": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Edad": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 116 }, "Escolaridad": { "Profesional": 200, "Especialización": 216 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.7, "¿Se cumplió el objetivo de la capacitación?": 4.6, "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.8, "¿Los temas se desarrollaron en el tiempo previsto?": 4.5, "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.6, "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.7, "¿El facilitador demostró el dominio del tema brindado?": 4.8, "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4, "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.3, "¿El material utilizado permitió el entendimiento del tema?": 4.5, "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.7 } }] 
+                    };
                 }
 
-                Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); Chart.defaults.font.family = 'Inter';
-                inicializarMapa(); calcularBenchmarkGlobal(); agruparCursos();
+                Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); 
+                Chart.defaults.font.family = 'Inter';
+                
+                inicializarMapa(); 
+                calcularBenchmarkGlobal(); 
+                agruparCursos();
+                
                 document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
                 document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
+                
                 actualizarPantallaGlobal();
 
-            } catch (error) { console.error("Error crítico procesando datos", error); }
+            } catch (error) { 
+                console.error("Error crítico procesando datos", error); 
+            }
         });
 
-        // Funciones auxiliares del Dashboard omitidas para limpieza (Asumidas funcionales del script base)
-        function normalizarLlaveComuna(texto) { if (texto === null || texto === undefined) return "N/A"; let t = String(texto).trim(); let upperT = t.toUpperCase(); if (upperT === "" || upperT === "N/A" || upperT === "NULL" || upperT === "SIN DATO") return "N/A"; let numStr = t.replace(/\D/g, ''); let num = parseInt(numStr, 10); if (isNaN(num)) return t; else return String(num); }
-        function formatearNombreUbicacion(llave) { if (llave === "N/A") return "Fuera de Cali / Sin Dato"; if (!isNaN(llave) && llave.trim() !== "") return "Comuna " + llave; let texto = llave.replace(/Comuna\s+C\.\s*/i, 'Corregimiento ').replace(/^C\.\s*/i, 'Corregimiento ').replace(/^C\s+/i, 'Corregimiento '); if (!texto.toLowerCase().includes("corregimiento") && !texto.toLowerCase().includes("comuna")) texto = "Corregimiento " + texto; return texto.toLowerCase().split(' ').map(word => { if (word.length === 0) return word; if (["de", "la", "el", "los", "las", "y", "en"].includes(word)) return word; return word.charAt(0).toUpperCase() + word.slice(1); }).join(' ').replace(/^./, str => str.toUpperCase()); }
-        function proyectarGeoJson(data) { if(!data || !data.features) return { type: "FeatureCollection", features: [] }; let newData = JSON.parse(JSON.stringify(data)); newData.features.forEach((feature, index) => { try { if (feature.geometry && feature.geometry.coordinates) { const tipo = feature.geometry.type; if (tipo === "Polygon") { feature.geometry.coordinates = feature.geometry.coordinates.map(ring => ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))); } else if (tipo === "MultiPolygon") { feature.geometry.coordinates = feature.geometry.coordinates.map(polygon => polygon.map(ring => ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord)))); } } } catch (error) { console.error(`Error proyectando comuna:`, error); } }); return newData; }
-        function inicializarMapa() { if (mapInstance) return; mapInstance = L.map('map-container').setView([3.42158, -76.5205], 11); const isLight = document.documentElement.getAttribute('data-theme') === 'light'; let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'; mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance); }
-        function getColorMapa(valor, maxValor) { if (valor === 0) return 'transparent'; if (valor > maxValor * 0.8) return '#4318ff'; if (valor > maxValor * 0.6) return '#7551ff'; if (valor > maxValor * 0.4) return '#a389ff'; if (valor > maxValor * 0.2) return '#d1c4ff'; return '#ece6ff'; }
-        function dibujarMapaCoropletico(dataComunasBackend) { if (!mapInstance || !geoJsonDataRaw || !geoJsonDataRaw.features) return; if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); let mapaDatosNormalizado = {}; let maxParticipantes = 0; for (let nombreComunaEnData in dataComunasBackend) { let idLimpio = normalizarLlaveComuna(nombreComunaEnData); let cantidad = dataComunasBackend[nombreComunaEnData] || 0; mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + cantidad; if (mapaDatosNormalizado[idLimpio] > maxParticipantes && !isNaN(idLimpio)) maxParticipantes = mapaDatosNormalizado[idLimpio]; } geoJsonLayer = L.geoJSON(geoJsonDataRaw, { style: function (feature) { let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id; let idLimpio = normalizarLlaveComuna(idGeo); let participantes = mapaDatosNormalizado[idLimpio] || 0; return { fillColor: getColorMapa(participantes, maxParticipantes), weight: 1.5, opacity: 1, color: document.documentElement.getAttribute('data-theme') === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(11,20,55,0.7)', fillOpacity: participantes > 0 ? 0.8 : 0.2 }; }, onEachFeature: function (feature, layer) { let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id; let idLimpio = normalizarLlaveComuna(idGeo); let participantes = mapaDatosNormalizado[idLimpio] || 0; let tooltipHtml = `<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${participantes} Participantes</span></div>`; layer.bindTooltip(tooltipHtml, { sticky: true, className: 'custom-map-tooltip' }); } }).addTo(mapInstance); if (geoJsonLayer.getBounds().isValid()) mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] }); }
-        function dibujarGraficoComunas(canvasId, dataObject) { if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); if (!dataObject || Object.keys(dataObject).length === 0) return; let agrupadito = {}; for (let key in dataObject) { let val = dataObject[key]; let cleanKey = normalizarLlaveComuna(key); let label = formatearNombreUbicacion(cleanKey); agrupadito[label] = (agrupadito[label] || 0) + val; } let sortedArray = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]); let labels = sortedArray.map(item => item[0]); let data = sortedArray.map(item => item[1]); const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ label: 'Participantes', data: data, backgroundColor: primColor, borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } } } } }); }
-        function calcularBenchmarkGlobal() { const sum = {}; const count = {}; dashboardData.cursos.forEach(curso => { if (curso.Detalle_Preguntas && curso.Total_Encuestas > 0) { for (let k in curso.Detalle_Preguntas) { if (curso.Detalle_Preguntas[k] > 0) { sum[k] = (sum[k] || 0) + curso.Detalle_Preguntas[k]; count[k] = (count[k] || 0) + 1; } } } }); for (let k in sum) { promediosGlobalesPreguntas[k] = sum[k] / count[k]; } }
-        function agruparCursos() { const sel = document.getElementById('selector-curso-base'); dashboardData.cursos.forEach(c => { const base = c.Curso_Base || c.Nombre_Curso; if (!cursosPorBase[base]) cursosPorBase[base] = []; cursosPorBase[base].push(c); }); Object.keys(cursosPorBase).sort().forEach(base => { sel.appendChild(new Option(base, base)); }); }
-        function manejarCambioBase() { const seleccion = this.value; const selectorCohorte = document.getElementById('selector-cohorte'); const lobby = document.getElementById('panel-lobby-curso'); const tabs = document.getElementById('contenedor-tabs'); if (seleccion === "ALL") { selectorCohorte.style.display = "none"; cursoActual = null; lobby.style.display = "none"; tabs.style.display = "block"; actualizarPantallaGlobal(); } else { const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); selectorCohorte.style.display = "block"; selectorCohorte.value = ""; tabs.style.display = "none"; lobby.style.display = "block"; apagarPanelesIA(); let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;"><i class="bi bi-journal-bookmark-fill me-2"></i>${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizar su rendimiento detallado</p></div><div class="row g-4 justify-content-center">`; let porAnio = {}; cohortes.forEach(c => { let anio = c.Edicion.split(' - ')[0]; if (!porAnio[anio]) porAnio[anio] = []; porAnio[anio].push(c); }); let anios = Object.keys(porAnio).sort((a, b) => b - a); anios.forEach(anio => { htmlLobby += `<div class="col-12 mt-5"><h4 class="fw-bold mb-4" style="color: var(--text-main); border-bottom: 2px solid var(--border-color); padding-bottom: 15px;"><i class="bi bi-calendar3 me-2"></i>Año ${anio}</h4></div>`; porAnio[anio].forEach(c => { let nombreCohorte = c.Edicion.split(' - ')[1] || "Edición Única"; htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${nombreCohorte}</h5><span class="badge bg-indigo-soft px-3 py-2 text-primary" style="font-size:0.9rem;">${c.Total_Inscritos} Inscritos</span></div></div>`; }); }); htmlLobby += `</div>`; lobby.innerHTML = htmlLobby; } if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); }
-        window.seleccionarCohorteDesdeLobby = function(nombreCurso) { document.getElementById('selector-cohorte').value = nombreCurso; document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block'; const base = document.getElementById('selector-curso-base').value; cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === nombreCurso); actualizarPantallaCurso(); }
-        function manejarCambioCohorte() { if (!this.value) { document.getElementById('panel-lobby-curso').style.display = 'block'; document.getElementById('contenedor-tabs').style.display = 'none'; apagarPanelesIA(); return; } document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block'; const base = document.getElementById('selector-curso-base').value; cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === this.value); actualizarPantallaCurso(); }
-        function generarInsightIA(curso) { if (!curso) return; const chs = curso.Salud_Curso_CHS || 0; const nps = curso.e_NPS || 0; const fin = curso['Tasa_Finalizacion_%'] || 0; const abd = curso['Tasa_Abandono_%'] || 0; const inact = curso['Tasa_Inactividad_%'] || 0; const iup = curso.IUP_Promedio || 0; const icd = curso.ICD_Promedio || 0; const ux = curso.UX_Promedio || 0; const brecha = curso.Brecha_Expectativa || 0; const encuestas = curso.Total_Encuestas || 0; let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A"; try { let totalG = Object.values(curso.Demografia.Sexo).reduce((a, b) => a + b, 0); if (totalG > 0) { pMujeres = Math.round(((curso.Demografia.Sexo['Femenino'] || 0) / totalG) * 100); let pKeys = Object.keys(curso.Demografia.Perfil); perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => curso.Demografia.Perfil[a] > curso.Demografia.Perfil[b] ? a : b) : "N/A"; pPerfil = Math.round(((curso.Demografia.Perfil[perfilDom] || 0) / totalG) * 100); let eKeys = Object.keys(curso.Demografia.Edad); edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => curso.Demografia.Edad[a] > curso.Demografia.Edad[b] ? a : b) : "N/A"; } } catch (e) { } document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(curso.Total_Inscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "La analítica revela un grupo sesgado hacia profesionales de", "Esto sugiere que los ejemplos deben orientarse a este sector."); document.getElementById('panel-ia-demo').style.display = 'block'; document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs); document.getElementById('panel-ia-moodle').style.display = 'block'; document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, "Índice de recomendación basado en"); document.getElementById('panel-ia-radar').style.display = 'block'; }
-        function generarInsightIAGlobal(totInscritos, fin, abd, inact, iup, icd, ux, brecha, encuestas) { const chs = dashboardData.kpis_globales.chs_promedio_secretaria; const nps = dashboardData.kpis_globales.nps_global; let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A"; try { let totalG = Object.values(dashboardData.demografia_global['Sexo']).reduce((a, b) => a + b, 0); if (totalG > 0) { pMujeres = Math.round(((dashboardData.demografia_global['Sexo']['Femenino'] || 0) / totalG) * 100); let pKeys = Object.keys(dashboardData.demografia_global['Perfil']); perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => dashboardData.demografia_global['Perfil'][a] > dashboardData.demografia_global['Perfil'][b] ? a : b) : "N/A"; pPerfil = Math.round(((dashboardData.demografia_global['Perfil'][perfilDom] || 0) / totalG) * 100); let eKeys = Object.keys(dashboardData.demografia_global['Curso de Vida']); edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => dashboardData.demografia_global['Curso de Vida'][a] > dashboardData.demografia_global['Curso de Vida'][b] ? a : b) : "N/A"; } } catch (e) { } document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(totInscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "A nivel consolidado, la Secretaría impacta principalmente a", "Las futuras políticas deben considerar este perfil como estándar institucional."); document.getElementById('panel-ia-demo').style.display = 'block'; document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs, true); document.getElementById('panel-ia-moodle').style.display = 'block'; document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas.toLocaleString(), nps, iup, icd, ux, brecha, "Sentimiento consolidado institucional basado en"); document.getElementById('panel-ia-radar').style.display = 'block'; }
-        function renderHTMLDemo(tot, pM, pDom, pP, eDom, t1, t2) { return `<div class="row g-4 mb-4"><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${tot}</div><div class="ia-lbl">Total Matriculados</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pM}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div></div><p class="mb-0 fs-6" style="color: var(--text-main); line-height: 1.6;"><strong>Conclusión:</strong> ${t1} <strong>${pDom}</strong>. ${t2}</p>`; }
-        function renderHTMLMoodle(fin, inact, abd, chs, isGlobal = false) { let mIcon = "", mColor = "", mText = ""; if (fin >= 80) { mIcon = "bi-check-circle-fill"; mColor = "success"; mText = "<strong>Excelente Eficiencia Terminal.</strong> El modelo pedagógico logra retener al estudiante efectivamente."; } else if (inact > fin && inact > 40) { mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; mText = `<strong>Fricción Severa en Onboarding.</strong> El mayor porcentaje (${inact}%) nunca inició la capacitación. Se requiere auditar los accesos.`; } else if (abd > 30) { mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; mText = `<strong>Alerta de Deserción Intermedia.</strong> Existe una fuga masiva del ${abd}%. Los módulos podrían estar sobrecargados o ser confusos.`; } else { mIcon = "bi-info-circle-fill"; mColor = "primary"; mText = "<strong>Comportamiento Operativo Estándar.</strong> Tasas de aprobación y abandono dentro de los márgenes normales de educación virtual."; } let lblFuga = isGlobal ? "Fuga Histórica" : "Fuga Académica"; let lblInac = isGlobal ? "Inactividad Histórica" : "Barrera de Entrada"; return `<div class="alert alert-${mColor} d-flex align-items-center mb-5 p-4 border-0 shadow-sm rounded-4"><i class="bi ${mIcon} fs-1 me-4"></i> <div class="fs-6">${mText}</div></div><div class="row g-4"><div class="col-md-4"><div class="ia-mini-card border-${mColor}"><div class="ia-lbl">Puntaje de Salud (CHS)</div><div class="ia-val mt-2 text-${mColor}">${chs} <span style="font-size: 1rem; color: var(--text-muted);">/ 100</span></div><div class="ia-desc">Indicador compuesto de viabilidad operativa.</div></div></div><div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${lblFuga}</div><div class="ia-val mt-2">${abd}%</div><div class="ia-desc">Iniciaron pero no lograron concluir.</div></div></div><div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${lblInac}</div><div class="ia-val mt-2">${inact}%</div><div class="ia-desc">Matriculados que nunca registraron actividad.</div></div></div></div>`; }
-        function renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, msgNps) { if (encuestas < 5) return `<div class="alert bg-indigo-soft border-0 p-4 rounded-4 d-flex align-items-center"><i class="bi bi-bar-chart-fill fs-1 me-4"></i><div class="fs-6">Muestra estadística muy baja (<strong>${encuestas} respuestas</strong>). No es posible emitir un diagnóstico con significancia estadística.</div></div>`; let npsColor = nps > 20 ? "success" : (nps < 0 ? "danger" : "warning"); let iupHtml = iup >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Alta Aplicabilidad.</strong> Excelente transferencia de conocimiento a la vida cotidiana o laboral.</div></div></div>` : (iup >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Aplicabilidad Estable.</strong> Contenido útil, con margen para incluir más casos prácticos reales.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Disonancia Teórica.</strong> Fuerte desconexión entre la teoría impartida y la realidad de los participantes.</div></div></div>`); let icdHtml = icd >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Dominio Experto.</strong> El facilitador demostró un excelente manejo del tema y metodología.</div></div></div>` : (icd >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Desempeño Sólido.</strong> La facilitación cumplió con los estándares esperados.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-warning"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Oportunidad de Mejora.</strong> Deficiencias en la claridad metodológica o en el dominio percibido.</div></div></div>`); let uxHtml = ux >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Entorno Óptimo.</strong> Moodle y los materiales didácticos facilitaron el aprendizaje.</div></div></div>` : (ux >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Entorno Funcional.</strong> El entorno virtual cumple su propósito sin fricciones significativas.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Fricción Tecnológica.</strong> La calidad del material o la navegación actuaron como un obstáculo.</div></div></div>`); let brechaHtml = brecha >= 0 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-bullseye"></i></div><div class="ia-lbl">Brecha Expectativa: ${brecha}</div><div class="ia-desc"><strong>Promesa Cumplida.</strong> Se lograron o superaron los objetivos que se prometieron al inicio.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-bullseye"></i></div><div class="ia-lbl">Brecha Expectativa: ${brecha}</div><div class="ia-desc"><strong>Riesgo de Percepción.</strong> Los estudiantes sienten que lo prometido al inicio no se entregó.</div></div></div>`; return `<div class="d-flex align-items-center mb-5 pb-4 border-bottom border-light"><span class="badge bg-${npsColor} text-white fs-4 py-3 px-4 me-4 shadow-sm rounded-3" style="font-variant-numeric: tabular-nums;">NPS: ${nps}</span><span class="fs-6" style="color: var(--text-main); line-height: 1.5;">${msgNps} <strong>${encuestas} encuestas totales</strong>. Diagnóstico individual por ítem crítico:</span></div><div class="row g-4">${icdHtml}${iupHtml}${uxHtml}${brechaHtml}</div>`; }
-        function apagarPanelesIA() { document.getElementById('panel-ia-demo').style.display = 'none'; document.getElementById('panel-ia-moodle').style.display = 'none'; document.getElementById('panel-ia-radar').style.display = 'none'; }
-        function actualizarPantallaGlobal() { const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}${crearTarjetaKPI("Inscritos Históricos", totalInscritos.toLocaleString())}${crearTarjetaKPI("Encuestas Recibidas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}${crearTarjetaKPI("CHS Institucional", dashboardData.kpis_globales.chs_promedio_secretaria)}${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}`; dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dashboardData.demografia_global['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dashboardData.demografia_global['Escolaridad'], 'right'); dibujarMapaCoropletico(dashboardData.demografia_global['Comuna']); dibujarGraficoComunas('chartComunas', dashboardData.demografia_global['Comuna']); let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0; dashboardData.cursos.forEach(c => { let insc = c.Total_Inscritos || 0; totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } }); let pctFin = totalInscritos ? Math.round((totalFin / totalInscritos) * 100) : 0; let pctAbd = totalInscritos ? Math.round((totalAbd / totalInscritos) * 100) : 0; let pctInac = totalInscritos ? Math.round((totalInac / totalInscritos) * 100) : 0; let promDias = countCursosDias ? Math.round(sumDias / countCursosDias) : 0; document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Tasa Finalización Global", pctFin + "%")}${crearTarjetaKPI("Tasa Abandono Histórico", pctAbd + "%")}${crearTarjetaKPI("Inactividad Institucional", pctInac + "%")}`; document.getElementById('tiempo-consumo-dias').innerText = promDias; dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pctFin, 'Tasa_Abandono_%': pctAbd, 'Tasa_Inactividad_%': pctInac }); let sumIUP = 0, sumICD = 0, sumUX = 0, sumBrecha = 0, countEnc = 0; dashboardData.cursos.forEach(c => { if (c.Total_Encuestas > 0) { sumIUP += (c.IUP_Promedio * c.Total_Encuestas); sumICD += (c.ICD_Promedio * c.Total_Encuestas); sumUX += (c.UX_Promedio * c.Total_Encuestas); sumBrecha += (c.Brecha_Expectativa * c.Total_Encuestas); countEnc += c.Total_Encuestas; } }); let globIUP = countEnc ? (sumIUP / countEnc).toFixed(2) : 0; let globICD = countEnc ? (sumICD / countEnc).toFixed(2) : 0; let globUX = countEnc ? (sumUX / countEnc).toFixed(2) : 0; let globBrecha = countEnc ? (sumBrecha / countEnc).toFixed(2) : 0; document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; document.getElementById('titulo-desglose').innerText = "Calificación Institucional Global (Sobre 5.0)"; dibujarRadar(promediosGlobalesPreguntas, true); document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${globIUP} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${globICD} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${globUX} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${globBrecha < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${globBrecha < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${globBrecha}</span></li></ul>`; generarInsightIAGlobal(totalInscritos, pctFin, pctAbd, pctInac, globIUP, globICD, globUX, globBrecha, countEnc); if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); }
-        function actualizarPantallaCurso() { document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Inscritos", cursoActual.Total_Inscritos)}${crearTarjetaKPI("Encuestas", cursoActual.Total_Encuestas)}${crearTarjetaKPI("Participación", cursoActual.Total_Inscritos > 0 ? Math.round((cursoActual.Total_Encuestas / cursoActual.Total_Inscritos) * 100) + "%" : "0%")}${crearTarjetaKPI("Score Salud (CHS)", cursoActual.Salud_Curso_CHS)}${crearTarjetaKPI("e-NPS", cursoActual.e_NPS)}`; dibujarGraficoDona('chartSexo', cursoActual.Demografia['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', cursoActual.Demografia['Edad'], 'right'); dibujarGraficoDona('chartPerfil', cursoActual.Demografia['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', cursoActual.Demografia['Escolaridad'], 'right'); dibujarMapaCoropletico(cursoActual.Demografia['Comuna']); dibujarGraficoComunas('chartComunas', cursoActual.Demografia['Comuna']); document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Tasa Finalización", cursoActual['Tasa_Finalizacion_%'] + "%")}${crearTarjetaKPI("Tasa Abandono", cursoActual['Tasa_Abandono_%'] + "%")}${crearTarjetaKPI("Tasa Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); document.getElementById('titulo-radar').innerText = "Radar de Dimensiones vs Benchmark Global"; document.getElementById('titulo-desglose').innerText = "Desglose de Calificación (Sobre 5.0)"; dibujarRadar(cursoActual.Detalle_Preguntas, false); document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${cursoActual.IUP_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${cursoActual.ICD_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${cursoActual.UX_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${cursoActual.Brecha_Expectativa < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${cursoActual.Brecha_Expectativa < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${cursoActual.Brecha_Expectativa || 0}</span></li></ul>`; generarInsightIA(cursoActual); if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); }
-        function crearTarjetaKPI(label, valor) { return `<div class="col"><div class="glass-card kpi-card"><div class="kpi-value">${valor}</div><div class="kpi-label">${label}</div></div></div>`; }
-        function dibujarGraficoDona(canvasId, dataObject, legendPosition) { if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); if (!dataObject || Object.keys(dataObject).length === 0) return; let activeHoverIndex = null; const currentData = Object.values(dataObject); const currentLabels = Object.keys(dataObject); const baseColors = currentLabels.map((_, i) => coloresDona[i % coloresDona.length]); chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'doughnut', data: { labels: currentLabels, datasets: [{ data: currentData, backgroundColor: [...baseColors], borderWidth: 2, borderColor: 'transparent', hoverOffset: 12, }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', layout: { padding: 10 }, onHover: (event, elements, chart) => { if (elements && elements.length) { const index = elements[0].index; if (activeHoverIndex !== index) { activeHoverIndex = index; chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => i === index ? color : 'rgba(100, 116, 139, 0.15)' ); chart.update('none'); } } else if (activeHoverIndex !== null) { activeHoverIndex = null; chart.data.datasets[0].backgroundColor = [...baseColors]; chart.update('none'); } }, plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } }, onHover: function(event, legendItem, legend) { const index = legendItem.index; const chart = legend.chart; chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => i === index ? color : 'rgba(100, 116, 139, 0.15)' ); chart.update('none'); }, onLeave: function(event, legendItem, legend) { const chart = legend.chart; chart.data.datasets[0].backgroundColor = [...baseColors]; chart.update('none'); } } } } }); }
-        function dibujarBarraMoodle(canvasId, curso) { if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); const style = getComputedStyle(document.documentElement); chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [{ label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: style.getPropertyValue('--success').trim(), borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: style.getPropertyValue('--warning').trim() }, { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: style.getPropertyValue('--danger').trim(), borderRadius: { topRight: 6, bottomRight: 6 } }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, grid: { display: false }, border: { display: false } }, y: { stacked: true, display: false, grid: { display: false }, border: { display: false } } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 14, font: { family: 'Inter', size: 13 } } } } } }); }
-        function dibujarRadar(preguntasCurso, isGlobal = false) { if (chartInstances['chartRadar']) chartInstances['chartRadar'].destroy(); if (!preguntasCurso || Object.keys(preguntasCurso).length === 0) return; const etiquetasLargas = Object.keys(preguntasCurso); const etiquetasCortas = etiquetasLargas.map(q => mapeoPreguntas[q] || "Pregunta"); const dataCurso = Object.values(preguntasCurso); const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim(); let datasetsArray = []; if (isGlobal) { datasetsArray.push({ label: 'Promedio Institucional', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); } else { const dataGlobal = etiquetasLargas.map(q => promediosGlobalesPreguntas[q] || 0); datasetsArray.push({ label: 'Esta Cohorte', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); datasetsArray.push({ label: 'Benchmark Global', data: dataGlobal, backgroundColor: 'transparent', borderColor: mutedColor, borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); } chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: etiquetasCortas, datasets: datasetsArray }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent', font: { family: 'Inter' } }, grid: { color: 'rgba(0,0,0,0.05)' }, angleLines: { color: 'rgba(0,0,0,0.05)' }, pointLabels: { font: { size: 11, family: 'Inter', weight: '600' } } } }, plugins: { tooltip: { padding: 12, callbacks: { title: (context) => { const textoCompleto = etiquetasLargas[context[0].dataIndex]; const palabras = textoCompleto.split(' '); let lineas = []; let lineaActual = ''; palabras.forEach(palabra => { if ((lineaActual + palabra).length > 40) { lineas.push(lineaActual.trim()); lineaActual = palabra + ' '; } else { lineaActual += palabra + ' '; } }); lineas.push(lineaActual.trim()); return lineas; } } } } } }); }
+        // ==========================================
+        // FUNCIONES AUXILIARES DESCOMPRIMIDAS
+        // ==========================================
+
+        function normalizarLlaveComuna(texto) { 
+            if (texto === null || texto === undefined) return "N/A"; 
+            let t = String(texto).trim(); 
+            let upperT = t.toUpperCase(); 
+            if (upperT === "" || upperT === "N/A" || upperT === "NULL" || upperT === "SIN DATO") return "N/A"; 
+            let numStr = t.replace(/\D/g, ''); 
+            let num = parseInt(numStr, 10); 
+            if (isNaN(num)) return t; else return String(num); 
+        }
+
+        function formatearNombreUbicacion(llave) { 
+            if (llave === "N/A") return "Fuera de Cali / Sin Dato"; 
+            if (!isNaN(llave) && llave.trim() !== "") return "Comuna " + llave; 
+            let texto = llave.replace(/Comuna\s+C\.\s*/i, 'Corregimiento ').replace(/^C\.\s*/i, 'Corregimiento ').replace(/^C\s+/i, 'Corregimiento '); 
+            if (!texto.toLowerCase().includes("corregimiento") && !texto.toLowerCase().includes("comuna")) texto = "Corregimiento " + texto; 
+            return texto.toLowerCase().split(' ').map(word => { 
+                if (word.length === 0) return word; 
+                if (["de", "la", "el", "los", "las", "y", "en"].includes(word)) return word; 
+                return word.charAt(0).toUpperCase() + word.slice(1); 
+            }).join(' ').replace(/^./, str => str.toUpperCase()); 
+        }
+
+        function proyectarGeoJson(data) { 
+            if(!data || !data.features) return { type: "FeatureCollection", features: [] }; 
+            let newData = JSON.parse(JSON.stringify(data)); 
+            newData.features.forEach((feature, index) => { 
+                try { 
+                    if (feature.geometry && feature.geometry.coordinates) { 
+                        const tipo = feature.geometry.type; 
+                        if (tipo === "Polygon") { 
+                            feature.geometry.coordinates = feature.geometry.coordinates.map(ring => ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord))); 
+                        } else if (tipo === "MultiPolygon") { 
+                            feature.geometry.coordinates = feature.geometry.coordinates.map(polygon => polygon.map(ring => ring.map(coord => proj4("EPSG:3115", "EPSG:4326", coord)))); 
+                        } 
+                    } 
+                } catch (error) { 
+                    console.error(`Error proyectando comuna:`, error); 
+                } 
+            }); 
+            return newData; 
+        }
+
+        function inicializarMapa() { 
+            if (mapInstance) return; 
+            mapInstance = L.map('map-container').setView([3.42158, -76.5205], 11); 
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light'; 
+            let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'; 
+            mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance); 
+        }
+
+        function getColorMapa(valor, maxValor) { 
+            if (valor === 0) return 'transparent'; 
+            if (valor > maxValor * 0.8) return '#4318ff'; 
+            if (valor > maxValor * 0.6) return '#7551ff'; 
+            if (valor > maxValor * 0.4) return '#a389ff'; 
+            if (valor > maxValor * 0.2) return '#d1c4ff'; 
+            return '#ece6ff'; 
+        }
+
+        function dibujarMapaCoropletico(dataComunasBackend) { 
+            if (!mapInstance || !geoJsonDataRaw || !geoJsonDataRaw.features) return; 
+            if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
+            
+            let mapaDatosNormalizado = {}; 
+            let maxParticipantes = 0; 
+            
+            for (let nombreComunaEnData in dataComunasBackend) { 
+                let idLimpio = normalizarLlaveComuna(nombreComunaEnData); 
+                let cantidad = dataComunasBackend[nombreComunaEnData] || 0; 
+                mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + cantidad; 
+                if (mapaDatosNormalizado[idLimpio] > maxParticipantes && !isNaN(idLimpio)) {
+                    maxParticipantes = mapaDatosNormalizado[idLimpio]; 
+                }
+            } 
+            
+            geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
+                style: function (feature) { 
+                    let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id; 
+                    let idLimpio = normalizarLlaveComuna(idGeo); 
+                    let participantes = mapaDatosNormalizado[idLimpio] || 0; 
+                    return { 
+                        fillColor: getColorMapa(participantes, maxParticipantes), 
+                        weight: 1.5, 
+                        opacity: 1, 
+                        color: document.documentElement.getAttribute('data-theme') === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(11,20,55,0.7)', 
+                        fillOpacity: participantes > 0 ? 0.8 : 0.2 
+                    }; 
+                }, 
+                onEachFeature: function (feature, layer) { 
+                    let idGeo = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id; 
+                    let idLimpio = normalizarLlaveComuna(idGeo); 
+                    let participantes = mapaDatosNormalizado[idLimpio] || 0; 
+                    let tooltipHtml = `<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${participantes} Participantes</span></div>`; 
+                    layer.bindTooltip(tooltipHtml, { sticky: true, className: 'custom-map-tooltip' }); 
+                } 
+            }).addTo(mapInstance); 
+            
+            if (geoJsonLayer.getBounds().isValid()) {
+                mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] }); 
+            }
+        }
+
+        function dibujarGraficoComunas(canvasId, dataObject) { 
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
+            if (!dataObject || Object.keys(dataObject).length === 0) return; 
+            
+            let agrupadito = {}; 
+            for (let key in dataObject) { 
+                let val = dataObject[key]; 
+                let cleanKey = normalizarLlaveComuna(key); 
+                let label = formatearNombreUbicacion(cleanKey); 
+                agrupadito[label] = (agrupadito[label] || 0) + val; 
+            } 
+            
+            let sortedArray = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]); 
+            let labels = sortedArray.map(item => item[0]); 
+            let data = sortedArray.map(item => item[1]); 
+            const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); 
+            
+            chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
+                type: 'bar', 
+                data: { 
+                    labels: labels, 
+                    datasets: [{ label: 'Participantes', data: data, backgroundColor: primColor, borderRadius: 4 }] 
+                }, 
+                options: { 
+                    indexAxis: 'y', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, 
+                        y: { grid: { display: false }, ticks: { font: { family: 'Inter', size: 11 } } } 
+                    } 
+                } 
+            }); 
+        }
+
+        function calcularBenchmarkGlobal() { 
+            const sum = {}; const count = {}; 
+            dashboardData.cursos.forEach(curso => { 
+                if (curso.Detalle_Preguntas && curso.Total_Encuestas > 0) { 
+                    for (let k in curso.Detalle_Preguntas) { 
+                        if (curso.Detalle_Preguntas[k] > 0) { 
+                            sum[k] = (sum[k] || 0) + curso.Detalle_Preguntas[k]; 
+                            count[k] = (count[k] || 0) + 1; 
+                        } 
+                    } 
+                } 
+            }); 
+            for (let k in sum) { 
+                promediosGlobalesPreguntas[k] = sum[k] / count[k]; 
+            } 
+        }
+
+        function agruparCursos() { 
+            const sel = document.getElementById('selector-curso-base'); 
+            dashboardData.cursos.forEach(c => { 
+                const base = c.Curso_Base || c.Nombre_Curso; 
+                if (!cursosPorBase[base]) cursosPorBase[base] = []; 
+                cursosPorBase[base].push(c); 
+            }); 
+            Object.keys(cursosPorBase).sort().forEach(base => { 
+                sel.appendChild(new Option(base, base)); 
+            }); 
+        }
+
+        function manejarCambioBase() { 
+            const seleccion = this.value; 
+            const selectorCohorte = document.getElementById('selector-cohorte'); 
+            const lobby = document.getElementById('panel-lobby-curso'); 
+            const tabs = document.getElementById('contenedor-tabs'); 
+            
+            if (seleccion === "ALL") { 
+                selectorCohorte.style.display = "none"; 
+                cursoActual = null; 
+                lobby.style.display = "none"; 
+                tabs.style.display = "block"; 
+                actualizarPantallaGlobal(); 
+            } else { 
+                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; 
+                cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); 
+                selectorCohorte.style.display = "block"; 
+                selectorCohorte.value = ""; 
+                tabs.style.display = "none"; 
+                lobby.style.display = "block"; 
+                apagarPanelesIA(); 
+                
+                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;"><i class="bi bi-journal-bookmark-fill me-2"></i>${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizar su rendimiento detallado</p></div><div class="row g-4 justify-content-center">`; 
+                let porAnio = {}; 
+                cohortes.forEach(c => { 
+                    let anio = c.Edicion.split(' - ')[0]; 
+                    if (!porAnio[anio]) porAnio[anio] = []; 
+                    porAnio[anio].push(c); 
+                }); 
+                
+                let anios = Object.keys(porAnio).sort((a, b) => b - a); 
+                anios.forEach(anio => { 
+                    htmlLobby += `<div class="col-12 mt-5"><h4 class="fw-bold mb-4" style="color: var(--text-main); border-bottom: 2px solid var(--border-color); padding-bottom: 15px;"><i class="bi bi-calendar3 me-2"></i>Año ${anio}</h4></div>`; 
+                    porAnio[anio].forEach(c => { 
+                        let nombreCohorte = c.Edicion.split(' - ')[1] || "Edición Única"; 
+                        htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${nombreCohorte}</h5><span class="badge bg-indigo-soft px-3 py-2 text-primary" style="font-size:0.9rem;">${c.Total_Inscritos} Inscritos</span></div></div>`; 
+                    }); 
+                }); 
+                htmlLobby += `</div>`; 
+                lobby.innerHTML = htmlLobby; 
+            } 
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
+        }
+
+        window.seleccionarCohorteDesdeLobby = function(nombreCurso) { 
+            document.getElementById('selector-cohorte').value = nombreCurso; 
+            document.getElementById('panel-lobby-curso').style.display = 'none'; 
+            document.getElementById('contenedor-tabs').style.display = 'block'; 
+            const base = document.getElementById('selector-curso-base').value; 
+            cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === nombreCurso); 
+            actualizarPantallaCurso(); 
+        }
+
+        function manejarCambioCohorte() { 
+            if (!this.value) { 
+                document.getElementById('panel-lobby-curso').style.display = 'block'; 
+                document.getElementById('contenedor-tabs').style.display = 'none'; 
+                apagarPanelesIA(); return; 
+            } 
+            document.getElementById('panel-lobby-curso').style.display = 'none'; 
+            document.getElementById('contenedor-tabs').style.display = 'block'; 
+            const base = document.getElementById('selector-curso-base').value; 
+            cursoActual = cursosPorBase[base].find(c => c.Nombre_Curso === this.value); 
+            actualizarPantallaCurso(); 
+        }
+
+        function generarInsightIA(curso) { 
+            if (!curso) return; 
+            const chs = curso.Salud_Curso_CHS || 0; 
+            const nps = curso.e_NPS || 0; 
+            const fin = curso['Tasa_Finalizacion_%'] || 0; 
+            const abd = curso['Tasa_Abandono_%'] || 0; 
+            const inact = curso['Tasa_Inactividad_%'] || 0; 
+            const iup = curso.IUP_Promedio || 0; 
+            const icd = curso.ICD_Promedio || 0; 
+            const ux = curso.UX_Promedio || 0; 
+            const brecha = curso.Brecha_Expectativa || 0; 
+            const encuestas = curso.Total_Encuestas || 0; 
+            
+            let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A"; 
+            
+            try { 
+                let totalG = Object.values(curso.Demografia.Sexo).reduce((a, b) => a + b, 0); 
+                if (totalG > 0) { 
+                    pMujeres = Math.round(((curso.Demografia.Sexo['Femenino'] || 0) / totalG) * 100); 
+                    let pKeys = Object.keys(curso.Demografia.Perfil); 
+                    perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => curso.Demografia.Perfil[a] > curso.Demografia.Perfil[b] ? a : b) : "N/A"; 
+                    pPerfil = Math.round(((curso.Demografia.Perfil[perfilDom] || 0) / totalG) * 100); 
+                    let eKeys = Object.keys(curso.Demografia.Edad); 
+                    edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => curso.Demografia.Edad[a] > curso.Demografia.Edad[b] ? a : b) : "N/A"; 
+                } 
+            } catch (e) { } 
+            
+            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(curso.Total_Inscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "La analítica revela un grupo sesgado hacia profesionales de", "Esto sugiere que los ejemplos deben orientarse a este sector."); 
+            document.getElementById('panel-ia-demo').style.display = 'block'; 
+            document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs); 
+            document.getElementById('panel-ia-moodle').style.display = 'block'; 
+            document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, "Índice de recomendación basado en"); 
+            document.getElementById('panel-ia-radar').style.display = 'block'; 
+        }
+
+        function generarInsightIAGlobal(totInscritos, fin, abd, inact, iup, icd, ux, brecha, encuestas) { 
+            const chs = dashboardData.kpis_globales.chs_promedio_secretaria; 
+            const nps = dashboardData.kpis_globales.nps_global; 
+            
+            let pMujeres = 0; let perfilDom = "N/A"; let pPerfil = 0; let edadDom = "N/A"; 
+            
+            try { 
+                let totalG = Object.values(dashboardData.demografia_global['Sexo']).reduce((a, b) => a + b, 0); 
+                if (totalG > 0) { 
+                    pMujeres = Math.round(((dashboardData.demografia_global['Sexo']['Femenino'] || 0) / totalG) * 100); 
+                    let pKeys = Object.keys(dashboardData.demografia_global['Perfil']); 
+                    perfilDom = pKeys.length > 0 ? pKeys.reduce((a, b) => dashboardData.demografia_global['Perfil'][a] > dashboardData.demografia_global['Perfil'][b] ? a : b) : "N/A"; 
+                    pPerfil = Math.round(((dashboardData.demografia_global['Perfil'][perfilDom] || 0) / totalG) * 100); 
+                    let eKeys = Object.keys(dashboardData.demografia_global['Curso de Vida']); 
+                    edadDom = eKeys.length > 0 ? eKeys.reduce((a, b) => dashboardData.demografia_global['Curso de Vida'][a] > dashboardData.demografia_global['Curso de Vida'][b] ? a : b) : "N/A"; 
+                } 
+            } catch (e) { } 
+            
+            document.getElementById('ia-txt-demo').innerHTML = renderHTMLDemo(totInscritos.toLocaleString(), pMujeres, perfilDom, pPerfil, edadDom, "A nivel consolidado, la Secretaría impacta principalmente a", "Las futuras políticas deben considerar este perfil como estándar institucional."); 
+            document.getElementById('panel-ia-demo').style.display = 'block'; 
+            document.getElementById('ia-txt-moodle').innerHTML = renderHTMLMoodle(fin, inact, abd, chs, true); 
+            document.getElementById('panel-ia-moodle').style.display = 'block'; 
+            document.getElementById('ia-txt-radar').innerHTML = renderHTMLRadar(encuestas.toLocaleString(), nps, iup, icd, ux, brecha, "Sentimiento consolidado institucional basado en"); 
+            document.getElementById('panel-ia-radar').style.display = 'block'; 
+        }
+
+        function renderHTMLDemo(tot, pM, pDom, pP, eDom, t1, t2) { 
+            return `<div class="row g-4 mb-4"><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${tot}</div><div class="ia-lbl">Total Matriculados</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pM}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div><div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem; line-height: 1.3;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div></div><p class="mb-0 fs-6" style="color: var(--text-main); line-height: 1.6;"><strong>Conclusión:</strong> ${t1} <strong>${pDom}</strong>. ${t2}</p>`; 
+        }
+
+        function renderHTMLMoodle(fin, inact, abd, chs, isGlobal = false) { 
+            let mIcon = "", mColor = "", mText = ""; 
+            if (fin >= 80) { 
+                mIcon = "bi-check-circle-fill"; mColor = "success"; 
+                mText = "<strong>Excelente Eficiencia Terminal.</strong> El modelo pedagógico logra retener al estudiante efectivamente."; 
+            } else if (inact > fin && inact > 40) { 
+                mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; 
+                mText = `<strong>Fricción Severa en Onboarding.</strong> El mayor porcentaje (${inact}%) nunca inició la capacitación. Se requiere auditar los accesos.`; 
+            } else if (abd > 30) { 
+                mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; 
+                mText = `<strong>Alerta de Deserción Intermedia.</strong> Existe una fuga masiva del ${abd}%. Los módulos podrían estar sobrecargados o ser confusos.`; 
+            } else { 
+                mIcon = "bi-info-circle-fill"; mColor = "primary"; 
+                mText = "<strong>Comportamiento Operativo Estándar.</strong> Tasas de aprobación y abandono dentro de los márgenes normales de educación virtual."; 
+            } 
+            
+            let lblFuga = isGlobal ? "Fuga Histórica" : "Fuga Académica"; 
+            let lblInac = isGlobal ? "Inactividad Histórica" : "Barrera de Entrada"; 
+            
+            return `<div class="alert alert-${mColor} d-flex align-items-center mb-5 p-4 border-0 shadow-sm rounded-4"><i class="bi ${mIcon} fs-1 me-4"></i> <div class="fs-6">${mText}</div></div><div class="row g-4"><div class="col-md-4"><div class="ia-mini-card border-${mColor}"><div class="ia-lbl">Puntaje de Salud (CHS)</div><div class="ia-val mt-2 text-${mColor}">${chs} <span style="font-size: 1rem; color: var(--text-muted);">/ 100</span></div><div class="ia-desc">Indicador compuesto de viabilidad operativa.</div></div></div><div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${lblFuga}</div><div class="ia-val mt-2">${abd}%</div><div class="ia-desc">Iniciaron pero no lograron concluir.</div></div></div><div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${lblInac}</div><div class="ia-val mt-2">${inact}%</div><div class="ia-desc">Matriculados que nunca registraron actividad.</div></div></div></div>`; 
+        }
+
+        function renderHTMLRadar(encuestas, nps, iup, icd, ux, brecha, msgNps) { 
+            if (encuestas < 5) return `<div class="alert bg-indigo-soft border-0 p-4 rounded-4 d-flex align-items-center"><i class="bi bi-bar-chart-fill fs-1 me-4"></i><div class="fs-6">Muestra estadística muy baja (<strong>${encuestas} respuestas</strong>). No es posible emitir un diagnóstico con significancia estadística.</div></div>`; 
+            
+            let npsColor = nps > 20 ? "success" : (nps < 0 ? "danger" : "warning"); 
+            let iupHtml = iup >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Alta Aplicabilidad.</strong> Excelente transferencia de conocimiento a la vida cotidiana o laboral.</div></div></div>` : (iup >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Aplicabilidad Estable.</strong> Contenido útil, con margen para incluir más casos prácticos reales.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-tools"></i></div><div class="ia-lbl">Utilidad Práctica: ${iup}/5</div><div class="ia-desc"><strong>Disonancia Teórica.</strong> Fuerte desconexión entre la teoría impartida y la realidad de los participantes.</div></div></div>`); 
+            let icdHtml = icd >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Dominio Experto.</strong> El facilitador demostró un excelente manejo del tema y metodología.</div></div></div>` : (icd >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Desempeño Sólido.</strong> La facilitación cumplió con los estándares esperados.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-warning"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-person-video3"></i></div><div class="ia-lbl">Competencia Docente: ${icd}/5</div><div class="ia-desc"><strong>Oportunidad de Mejora.</strong> Deficiencias en la claridad metodológica o en el dominio percibido.</div></div></div>`); 
+            let uxHtml = ux >= 4.5 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Entorno Óptimo.</strong> Moodle y los materiales didácticos facilitaron el aprendizaje.</div></div></div>` : (ux >= 4.0 ? `<div class="col-md-6"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Entorno Funcional.</strong> El entorno virtual cumple su propósito sin fricciones significativas.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-laptop"></i></div><div class="ia-lbl">Experiencia Plataforma: ${ux}/5</div><div class="ia-desc"><strong>Fricción Tecnológica.</strong> La calidad del material o la navegación actuaron como un obstáculo.</div></div></div>`); 
+            let brechaHtml = brecha >= 0 ? `<div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-bullseye"></i></div><div class="ia-lbl">Brecha Expectativa: ${brecha}</div><div class="ia-desc"><strong>Promesa Cumplida.</strong> Se lograron o superaron los objetivos que se prometieron al inicio.</div></div></div>` : `<div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-bullseye"></i></div><div class="ia-lbl">Brecha Expectativa: ${brecha}</div><div class="ia-desc"><strong>Riesgo de Percepción.</strong> Los estudiantes sienten que lo prometido al inicio no se entregó.</div></div></div>`; 
+            
+            return `<div class="d-flex align-items-center mb-5 pb-4 border-bottom border-light"><span class="badge bg-${npsColor} text-white fs-4 py-3 px-4 me-4 shadow-sm rounded-3" style="font-variant-numeric: tabular-nums;">NPS: ${nps}</span><span class="fs-6" style="color: var(--text-main); line-height: 1.5;">${msgNps} <strong>${encuestas} encuestas totales</strong>. Diagnóstico individual por ítem crítico:</span></div><div class="row g-4">${icdHtml}${iupHtml}${uxHtml}${brechaHtml}</div>`; 
+        }
+
+        function apagarPanelesIA() { 
+            document.getElementById('panel-ia-demo').style.display = 'none'; 
+            document.getElementById('panel-ia-moodle').style.display = 'none'; 
+            document.getElementById('panel-ia-radar').style.display = 'none'; 
+        }
+
+        // ==========================================
+        // CÁLCULO DE KPIS GLOBALES (CERTIFICADOS AÑADIDO)
+        // ==========================================
+        function actualizarPantallaGlobal() { 
+            const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
+            
+            let totalCertificados = 0; 
+            dashboardData.cursos.forEach(c => { 
+                totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); 
+            }); 
+            const pctCertificados = totalInscritos > 0 ? Math.round((totalCertificados / totalInscritos) * 100) + "%" : "0%"; 
+            
+            document.getElementById('kpi-global-row').innerHTML = `
+                ${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}
+                ${crearTarjetaKPI("Inscritos Históricos", totalInscritos.toLocaleString())}
+                ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
+                ${crearTarjetaKPI("Encuestas Recibidas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}
+                ${crearTarjetaKPI("CHS Institucional", dashboardData.kpis_globales.chs_promedio_secretaria)}
+                ${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}
+            `; 
+            
+            dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); 
+            dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); 
+            dibujarGraficoDona('chartPerfil', dashboardData.demografia_global['Perfil'], 'right'); 
+            dibujarGraficoDona('chartEscolaridad', dashboardData.demografia_global['Escolaridad'], 'right'); 
+            dibujarMapaCoropletico(dashboardData.demografia_global['Comuna']); 
+            dibujarGraficoComunas('chartComunas', dashboardData.demografia_global['Comuna']); 
+            
+            let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0; 
+            dashboardData.cursos.forEach(c => { 
+                let insc = c.Total_Inscritos || 0; 
+                totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; 
+                totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; 
+                totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; 
+                if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } 
+            }); 
+            
+            let pctFin = totalInscritos ? Math.round((totalFin / totalInscritos) * 100) : 0; 
+            let pctAbd = totalInscritos ? Math.round((totalAbd / totalInscritos) * 100) : 0; 
+            let pctInac = totalInscritos ? Math.round((totalInac / totalInscritos) * 100) : 0; 
+            let promDias = countCursosDias ? Math.round(sumDias / countCursosDias) : 0; 
+            
+            document.getElementById('kpi-moodle-row').innerHTML = `
+                ${crearTarjetaKPI("Tasa Finalización Global", pctFin + "%")}
+                ${crearTarjetaKPI("Tasa Abandono Histórico", pctAbd + "%")}
+                ${crearTarjetaKPI("Inactividad Institucional", pctInac + "%")}
+            `; 
+            document.getElementById('tiempo-consumo-dias').innerText = promDias; 
+            dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pctFin, 'Tasa_Abandono_%': pctAbd, 'Tasa_Inactividad_%': pctInac }); 
+            
+            let sumIUP = 0, sumICD = 0, sumUX = 0, sumBrecha = 0, countEnc = 0; 
+            dashboardData.cursos.forEach(c => { 
+                if (c.Total_Encuestas > 0) { 
+                    sumIUP += (c.IUP_Promedio * c.Total_Encuestas); 
+                    sumICD += (c.ICD_Promedio * c.Total_Encuestas); 
+                    sumUX += (c.UX_Promedio * c.Total_Encuestas); 
+                    sumBrecha += (c.Brecha_Expectativa * c.Total_Encuestas); 
+                    countEnc += c.Total_Encuestas; 
+                } 
+            }); 
+            
+            let globIUP = countEnc ? (sumIUP / countEnc).toFixed(2) : 0; 
+            let globICD = countEnc ? (sumICD / countEnc).toFixed(2) : 0; 
+            let globUX = countEnc ? (sumUX / countEnc).toFixed(2) : 0; 
+            let globBrecha = countEnc ? (sumBrecha / countEnc).toFixed(2) : 0; 
+            
+            document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; 
+            document.getElementById('titulo-desglose').innerText = "Calificación Institucional Global (Sobre 5.0)"; 
+            dibujarRadar(promediosGlobalesPreguntas, true); 
+            
+            document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${globIUP} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${globICD} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${globUX} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${globBrecha < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${globBrecha < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${globBrecha}</span></li></ul>`; 
+            generarInsightIAGlobal(totalInscritos, pctFin, pctAbd, pctInac, globIUP, globICD, globUX, globBrecha, countEnc); 
+            
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
+        }
+
+        // ==========================================
+        // CÁLCULO DE KPIS ESPECÍFICOS (CERTIFICADOS AÑADIDO)
+        // ==========================================
+        function actualizarPantallaCurso() { 
+            const totalCertificados = Math.round((cursoActual.Total_Inscritos || 0) * (cursoActual['Tasa_Finalizacion_%'] || 0) / 100); 
+            const pctCertificados = cursoActual['Tasa_Finalizacion_%'] + "%"; 
+            
+            document.getElementById('kpi-global-row').innerHTML = `
+                ${crearTarjetaKPI("Inscritos", cursoActual.Total_Inscritos.toLocaleString())}
+                ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
+                ${crearTarjetaKPI("Encuestas", cursoActual.Total_Encuestas.toLocaleString())}
+                ${crearTarjetaKPI("Participación", cursoActual.Total_Inscritos > 0 ? Math.round((cursoActual.Total_Encuestas / cursoActual.Total_Inscritos) * 100) + "%" : "0%")}
+                ${crearTarjetaKPI("Score Salud (CHS)", cursoActual.Salud_Curso_CHS)}
+                ${crearTarjetaKPI("e-NPS", cursoActual.e_NPS)}
+            `; 
+            
+            dibujarGraficoDona('chartSexo', cursoActual.Demografia['Sexo'], 'bottom'); 
+            dibujarGraficoDona('chartEdad', cursoActual.Demografia['Edad'], 'right'); 
+            dibujarGraficoDona('chartPerfil', cursoActual.Demografia['Perfil'], 'right'); 
+            dibujarGraficoDona('chartEscolaridad', cursoActual.Demografia['Escolaridad'], 'right'); 
+            dibujarMapaCoropletico(cursoActual.Demografia['Comuna']); 
+            dibujarGraficoComunas('chartComunas', cursoActual.Demografia['Comuna']); 
+            
+            document.getElementById('kpi-moodle-row').innerHTML = `
+                ${crearTarjetaKPI("Tasa Finalización", cursoActual['Tasa_Finalizacion_%'] + "%")}
+                ${crearTarjetaKPI("Tasa Abandono", cursoActual['Tasa_Abandono_%'] + "%")}
+                ${crearTarjetaKPI("Tasa Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}
+            `; 
+            
+            document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; 
+            dibujarBarraMoodle('chartMoodleBar', cursoActual); 
+            
+            document.getElementById('titulo-radar').innerText = "Radar de Dimensiones vs Benchmark Global"; 
+            document.getElementById('titulo-desglose').innerText = "Desglose de Calificación (Sobre 5.0)"; 
+            dibujarRadar(cursoActual.Detalle_Preguntas, false); 
+            
+            document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${cursoActual.IUP_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${cursoActual.ICD_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${cursoActual.UX_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${cursoActual.Brecha_Expectativa < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${cursoActual.Brecha_Expectativa < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${cursoActual.Brecha_Expectativa || 0}</span></li></ul>`; 
+            generarInsightIA(cursoActual); 
+            
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
+        }
+
+        // ==========================================
+        // TARJETAS CON PORCENTAJE (PÍLDORA VERDE)
+        // ==========================================
+        function crearTarjetaKPI(label, valor, porcentaje = null) { 
+            let htmlPorcentaje = porcentaje ? `<span style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.15); padding: 4px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;">${porcentaje}</span>` : ''; 
+            return `<div class="col"><div class="glass-card kpi-card"><div class="kpi-value d-flex align-items-center flex-wrap">${valor} ${htmlPorcentaje}</div><div class="kpi-label">${label}</div></div></div>`; 
+        }
+
+        function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
+            if (!dataObject || Object.keys(dataObject).length === 0) return; 
+            
+            let activeHoverIndex = null; 
+            const currentData = Object.values(dataObject); 
+            const currentLabels = Object.keys(dataObject); 
+            const baseColors = currentLabels.map((_, i) => coloresDona[i % coloresDona.length]); 
+            
+            chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
+                type: 'doughnut', 
+                data: { 
+                    labels: currentLabels, 
+                    datasets: [{ data: currentData, backgroundColor: [...baseColors], borderWidth: 2, borderColor: 'transparent', hoverOffset: 12, }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    cutout: '75%', 
+                    layout: { padding: 10 }, 
+                    onHover: (event, elements, chart) => { 
+                        if (elements && elements.length) { 
+                            const index = elements[0].index; 
+                            if (activeHoverIndex !== index) { 
+                                activeHoverIndex = index; 
+                                chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => i === index ? color : 'rgba(100, 116, 139, 0.15)' ); 
+                                chart.update('none'); 
+                            } 
+                        } else if (activeHoverIndex !== null) { 
+                            activeHoverIndex = null; 
+                            chart.data.datasets[0].backgroundColor = [...baseColors]; 
+                            chart.update('none'); 
+                        } 
+                    }, 
+                    plugins: { 
+                        legend: { 
+                            position: legendPosition, 
+                            labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } }, 
+                            onHover: function(event, legendItem, legend) { 
+                                const index = legendItem.index; 
+                                const chart = legend.chart; 
+                                chart.data.datasets[0].backgroundColor = baseColors.map((color, i) => i === index ? color : 'rgba(100, 116, 139, 0.15)' ); 
+                                chart.update('none'); 
+                            }, 
+                            onLeave: function(event, legendItem, legend) { 
+                                const chart = legend.chart; 
+                                chart.data.datasets[0].backgroundColor = [...baseColors]; 
+                                chart.update('none'); 
+                            } 
+                        } 
+                    } 
+                } 
+            }); 
+        }
+
+        function dibujarBarraMoodle(canvasId, curso) { 
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
+            const style = getComputedStyle(document.documentElement); 
+            
+            chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
+                type: 'bar', 
+                data: { 
+                    labels: ['Estado %'], 
+                    datasets: [
+                        { label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: style.getPropertyValue('--success').trim(), borderRadius: { topLeft: 6, bottomLeft: 6 } }, 
+                        { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: style.getPropertyValue('--warning').trim() }, 
+                        { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: style.getPropertyValue('--danger').trim(), borderRadius: { topRight: 6, bottomRight: 6 } }
+                    ] 
+                }, 
+                options: { 
+                    responsive: true, maintainAspectRatio: false, indexAxis: 'y', 
+                    scales: { 
+                        x: { stacked: true, max: 100, grid: { display: false }, border: { display: false } }, 
+                        y: { stacked: true, display: false, grid: { display: false }, border: { display: false } } 
+                    }, 
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 14, font: { family: 'Inter', size: 13 } } } } 
+                } 
+            }); 
+        }
+
+        function dibujarRadar(preguntasCurso, isGlobal = false) { 
+            if (chartInstances['chartRadar']) chartInstances['chartRadar'].destroy(); 
+            if (!preguntasCurso || Object.keys(preguntasCurso).length === 0) return; 
+            
+            const etiquetasLargas = Object.keys(preguntasCurso); 
+            const etiquetasCortas = etiquetasLargas.map(q => mapeoPreguntas[q] || "Pregunta"); 
+            const dataCurso = Object.values(preguntasCurso); 
+            const primColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim(); 
+            const mutedColor = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim(); 
+            
+            let datasetsArray = []; 
+            if (isGlobal) { 
+                datasetsArray.push({ label: 'Promedio Institucional', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); 
+            } else { 
+                const dataGlobal = etiquetasLargas.map(q => promediosGlobalesPreguntas[q] || 0); 
+                datasetsArray.push({ label: 'Esta Cohorte', data: dataCurso, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: primColor, pointBackgroundColor: primColor, borderWidth: 2, pointRadius: 4 }); 
+                datasetsArray.push({ label: 'Benchmark Global', data: dataGlobal, backgroundColor: 'transparent', borderColor: mutedColor, borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); 
+            } 
+            
+            chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { 
+                type: 'radar', 
+                data: { labels: etiquetasCortas, datasets: datasetsArray }, 
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent', font: { family: 'Inter' } }, grid: { color: 'rgba(0,0,0,0.05)' }, angleLines: { color: 'rgba(0,0,0,0.05)' }, pointLabels: { font: { size: 11, family: 'Inter', weight: '600' } } } }, 
+                    plugins: { tooltip: { padding: 12, callbacks: { title: (context) => { const textoCompleto = etiquetasLargas[context[0].dataIndex]; const palabras = textoCompleto.split(' '); let lineas = []; let lineaActual = ''; palabras.forEach(palabra => { if ((lineaActual + palabra).length > 40) { lineas.push(lineaActual.trim()); lineaActual = palabra + ' '; } else { lineaActual += palabra + ' '; } }); lineas.push(lineaActual.trim()); return lineas; } } } } 
+                } 
+            }); 
+        }
     </script>
 </body>
 </html>
