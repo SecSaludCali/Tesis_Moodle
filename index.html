@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecosistema Educativo - Secretaría de Salud</title>
+    <title>Dashboard Analítico - Secretaría de Salud</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,9 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
-        /* =========================================
-           PALETA Y VARIABLES GLOBALES
-           ========================================= */
+        /* PALETA CON EFECTO LIQUID GLASS Y BURBUJAS FLOTANTES (CERO LAG) */
         :root[data-theme="light"] {
             --bg-color: #f4f7fe;
             --card-bg: rgba(255, 255, 255, 0.6);
@@ -38,6 +36,11 @@
             --ia-text: #334155;
             --ia-card-bg: rgba(248, 250, 252, 0.7);
             --modal-bg: rgba(255, 255, 255, 0.95);
+
+            /* NUEVO: Variables para KPIs Sólidos (Contraste con botones de vidrio) */
+            --kpi-solid-bg: #ffffff;
+            --kpi-solid-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --kpi-solid-shadow-hover: 0 20px 40px rgba(67, 24, 255, 0.12);
 
             --blob-1: rgba(67, 24, 255, 0.12);
             --blob-2: rgba(5, 205, 153, 0.12);
@@ -64,6 +67,11 @@
             --ia-card-bg: rgba(5, 10, 31, 0.6);
             --modal-bg: rgba(11, 20, 55, 0.95);
 
+            /* NUEVO: Variables para KPIs Sólidos (Dark Mode) */
+            --kpi-solid-bg: #0b1437;
+            --kpi-solid-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --kpi-solid-shadow-hover: 0 20px 40px rgba(117, 81, 255, 0.3);
+
             --blob-1: rgba(117, 81, 255, 0.15);
             --blob-2: rgba(14, 165, 233, 0.1);
             --blob-3: rgba(238, 93, 80, 0.08);
@@ -73,13 +81,13 @@
             background-color: var(--bg-color);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: all 0.3s ease;
             position: relative;
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* BURBUJAS FLOTANTES (Cero Lag - Radial Gradient) */
+        /* BURBUJAS FLOTANTES EN EL FONDO (Optimizadas GPU - SIN LAG) */
         body::before, body::after, .blob-3 {
             content: ''; position: fixed; border-radius: 50%;
             z-index: -1; animation: float 15s infinite alternate ease-in-out;
@@ -98,7 +106,7 @@
         .blob-3 { 
             width: 50vw; height: 50vw; 
             background: radial-gradient(circle, var(--blob-3) 0%, transparent 60%); 
-            top: 20%; left: 25%; animation-delay: -10s; 
+            top: 20%; left: 25%; animation-delay: -10s; display: none; 
         }
 
         @keyframes float {
@@ -107,35 +115,16 @@
         }
 
         /* =========================================
-           TARJETAS GLOBALES Y KPIs
-           ========================================= */
-        .glass-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: var(--card-shadow);
-            padding: 32px;
-            height: 100%;
-            border: 1px solid var(--border-color);
-            border-top: 1px solid var(--border-light);
-            border-left: 1px solid var(--border-light);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
-        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
-        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
-        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
-
-        /* =========================================
-           PORTAL DE BIENVENIDA (LANDING CON TARJETAS)
+           PORTAL DE BIENVENIDA (SPLASH SCREEN ORIGINAL)
            ========================================= */
         #welcome_portal {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            padding: 40px 20px;
-            z-index: 10;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-color);
+            z-index: 9999;
+            overflow-y: auto; /* Permite hacer scroll sin que se corte nada */
+            display: flex;
+            flex-direction: column;
             transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
@@ -143,40 +132,134 @@
             opacity: 0;
             transform: translateY(-50px) scale(0.98);
             pointer-events: none;
-            position: absolute;
         }
 
-        /* Contenedor del Logo Institucional */
-        .brand-logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
+        .portal-content { 
+            width: 100%; 
+            max-width: 1200px; 
+            position: relative; 
+            z-index: 10; 
+            margin: auto; /* Truco mágico para centrar contenido dinámicamente sin cortarlo */
+            padding: 40px 20px;
         }
-        .brand-logo-container img {
-            max-height: 90px;
-            object-fit: contain;
-            /* Si tienes un logo, quita este filtro. Por ahora lo oscurece para el placeholder */
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-        }
-
-        .hero-section {
-            max-width: 1400px;
-            margin: 0 auto;
-            text-align: center;
-            animation: slideDown 0.8s ease-out;
-            margin-bottom: 40px;
-        }
+        
+        .header-title { text-align: center; margin-bottom: 40px; animation: slideDown 0.8s ease-out; }
 
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-section h1 { font-weight: 800; font-size: 2.8rem; color: var(--primary); letter-spacing: -0.03em; margin-bottom: 10px; }
-        .hero-section p { font-size: 1.15rem; color: var(--text-muted); font-weight: 500; margin-bottom: 30px; }
+        .brand-logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
 
-        /* Tarjetas de Navegación del Portal */
-        .portal-row { max-width: 1100px; margin: 0 auto; }
+        .brand-logo-container img {
+            max-height: 85px; /* Altura ideal del logo */
+            object-fit: contain;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .header-title h1 { font-weight: 800; font-size: 2.5rem; color: var(--primary); letter-spacing: -0.03em; margin-bottom: 10px; }
+        .header-title p { font-size: 1.1rem; color: var(--text-muted); font-weight: 500; }
+
+        /* =========================================
+           NUEVAS TARJETAS DE KPIS AGRUPADAS (LANDING)
+           ========================================= */
+        .landing-kpis-container {
+            max-width: 900px;
+            margin: 0 auto 60px auto;
+        }
+
+        .kpi-bento-card {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            position: relative;
+            z-index: 2;
+            height: 100%;
+        }
+
+        .kpi-bento-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(67, 24, 255, 0.12);
+        }
+
+        /* Variantes de color para los agrupados (Estilo Aurora y Píldora) */
+        .bento-aurora-1 { 
+            background: linear-gradient(135deg, #00D4FF 0%, #5B0FBE 100%); 
+            color: white; 
+            box-shadow: 0 15px 35px rgba(91, 15, 190, 0.2); 
+            border-radius: 50px; /* Forma de píldora súper redondeada */
+        }
+        .bento-aurora-1:hover { box-shadow: 0 20px 40px rgba(91, 15, 190, 0.35); }
+        .bento-aurora-1 .landing-kpi-val { color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+        .bento-aurora-1 .landing-kpi-lbl { color: rgba(255,255,255,0.9); }
+        .bento-aurora-1 .kpi-divider { background-color: rgba(255,255,255,0.3); }
+
+        .bento-aurora-2 { 
+            background: linear-gradient(135deg, #5B0FBE 0%, #00D4FF 100%); /* Gradiente invertido */
+            color: white; 
+            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2); 
+            border-radius: 50px; /* Forma de píldora súper redondeada */
+        }
+        .bento-aurora-2:hover { box-shadow: 0 20px 40px rgba(0, 212, 255, 0.35); }
+        .bento-aurora-2 .landing-kpi-val { color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+        .bento-aurora-2 .landing-kpi-lbl { color: rgba(255,255,255,0.9); }
+        .bento-aurora-2 .kpi-divider { background-color: rgba(255,255,255,0.3); }
+
+        :root[data-theme="dark"] .kpi-bento-card:not(.bento-aurora-1):not(.bento-aurora-2) {
+            background: #0b1437; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .kpi-block {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+        }
+
+        .kpi-divider {
+            width: 1px;
+            height: 70%;
+            background-color: var(--border-color);
+            margin: 0 20px;
+        }
+
+        .landing-kpi-val {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 12px;
+            letter-spacing: -0.04em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .landing-kpi-lbl {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Ajustes Mobile para las tarjetas combinadas */
+        @media (max-width: 768px) {
+            .kpi-bento-card { flex-direction: column; padding: 20px; }
+            .kpi-divider { width: 70%; height: 1px; margin: 20px 0; }
+            .kpi-block { width: 100%; }
+            .bento-aurora-1, .bento-aurora-2 { border-radius: 30px; } /* Ajuste de píldora en móvil para que no se deforme al apilarse hacia abajo */
+        }
+
+        /* TARJETAS DEL PORTAL (LIQUID GLASS PREMIUM) */
+        .portal-row { max-width: 1000px; margin: 0 auto; }
 
         .hub-card {
             background: rgba(255, 255, 255, 0.4);
@@ -207,7 +290,6 @@
             border-color: rgba(255, 255, 255, 0.9);
         }
         .hub-card:hover::before { left: 200%; }
-        
         .hub-card:nth-child(1) { animation-delay: 0.1s; }
         .hub-card:nth-child(2) { animation-delay: 0.2s; }
         .hub-card:nth-child(3) { animation-delay: 0.3s; }
@@ -248,7 +330,7 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* =========================================
-           DASHBOARD PROFUNDO (Oculto al inicio)
+           DASHBOARD ESTILOS ORIGINALES (MODIFICADOS)
            ========================================= */
         #dashboard_content {
             position: absolute;
@@ -256,7 +338,6 @@
             opacity: 0; 
             pointer-events: none;
             transition: opacity 0.8s ease;
-            padding-top: 40px;
         }
 
         #dashboard_content.show-dashboard {
@@ -268,6 +349,26 @@
         h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
         h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; }
 
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            padding: 32px;
+            height: 100%;
+            border: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-light);
+            border-left: 1px solid var(--border-light);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* KPIs Internos del Dashboard */
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
+        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
+        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
+        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
+
         .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
 
         /* LIQUID NAVBAR MENU */
@@ -276,6 +377,7 @@
             display: inline-flex; align-items: center; position: relative; background: var(--card-bg);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-light);
             border-radius: 50px; padding: 8px; box-shadow: var(--card-shadow); z-index: 10; list-style: none; margin: 0;
+            transform: translateZ(0);
         }
         .liquid-nav .nav-item { z-index: 2; }
         .liquid-tab {
@@ -307,7 +409,12 @@
         .form-select option { background-color: var(--bg-color); color: var(--text-main); }
 
         .chart-wrapper { position: relative; height: 280px; width: 100%; margin-top: 10px; }
-        .radar-wrapper { position: relative; height: 420px; width: 100%; display: flex; justify-content: center; }
+        .radar-wrapper { position: relative; height: 350px; width: 100%; display: flex; justify-content: center; }
+
+        /* BARRAS HORIZONTALES DETALLADAS */
+        .progreso-pregunta .progress { height: 8px; background-color: var(--border-color); border-radius: 10px; overflow: hidden; }
+        .progreso-pregunta .lbl-preg { font-size: 0.85rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .progreso-pregunta .val-preg { font-size: 0.85rem; font-weight: 700; color: var(--text-main); font-variant-numeric: tabular-nums;}
 
         .list-group-item { padding: 16px 0; }
         .list-group-item.bg-transparent { color: var(--text-main) !important; border-color: rgba(163, 174, 208, 0.2) !important; }
@@ -317,7 +424,7 @@
         .ia-card { 
             background-color: var(--ia-bg); border-radius: 24px; padding: 40px; 
             border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); 
-            box-shadow: var(--card-shadow); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            box-shadow: var(--card-shadow); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transform: translateZ(0);
         }
         .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; }
         .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; height: 100%; transition: transform 0.2s; }
@@ -346,7 +453,7 @@
         .modal-content { 
             background: var(--modal-bg); color: var(--text-main); border-radius: 28px; border: 1px solid var(--border-color);
             border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255,255,255,0.1); overflow: hidden;
+            -webkit-backdrop-filter: blur(16px); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgba(255,255,255,0.1); overflow: hidden; transform: translateZ(0);
         }
         .modal-header { border-bottom: 1px solid var(--border-color); padding: 30px 40px; background: transparent; }
         .modal-body { padding: 40px; background-color: transparent; }
@@ -360,6 +467,8 @@
             overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .dic-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(67, 24, 255, 0.1), inset 0 1px 0 var(--border-light); border-color: rgba(67, 24, 255, 0.2); }
+        .dic-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); transition: left 0.6s ease; pointer-events: none; }
+        .dic-card:hover::before { left: 200%; }
         .dic-info { flex: 1; z-index: 2; }
         .dic-mockup { flex: 0 0 300px; background: var(--ia-card-bg); border-radius: 20px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; box-shadow: inset 0 6px 15px rgba(0,0,0,0.04); z-index: 2; }
 
@@ -386,7 +495,7 @@
         }
 
         /* FIX MAPA LEAFLET */
-        #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); }
+        #map-container { border-radius: 12px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); }
         .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
     </style>
 </head>
@@ -394,77 +503,136 @@
 <body>
 
     <!-- ========================================== -->
-    <!-- PORTAL DE BIENVENIDA (LANDING CON TARJETAS)-->
+    <!-- OVERLAY: PORTAL DE BIENVENIDA MÁGICO       -->
     <!-- ========================================== -->
     <div id="welcome_portal">
-        <div class="blob-3"></div>
+        <div class="blob-3"></div> <!-- Burbuja extra solo para el lobby -->
         
-        <div class="hero-section">
-            <!-- LOGO INSTITUCIONAL -->
-            <div class="brand-logo-container">
-                <!-- Reemplaza el src con la URL de tu logo -->
-                <img src="Logo_AlcaldiaCali.png">
-            </div>
-
-            <h1>Ecosistema Educativo en Salud</h1>
-            <p>Plataforma integral de monitoreo, entrenamiento y simulación clínica.</p>
+        <div class="portal-content">
             
-            <!-- KPIs GLOBALES EN LA LANDING -->
-            <div class="row g-4 justify-content-center mb-5" id="kpi-landing-row" style="max-width: 1200px; margin: 0 auto;">
-                <!-- Se llenan por Javascript al cargar los datos -->
+            <div class="header-title">
+                <div class="brand-logo-container">
+                    <!-- INSERTA AQUÍ LA URL DE TU LOGO INSTITUCIONAL -->
+                    <img src="https://placehold.co/400x100/transparent/4318ff?text=Logo+Institucional" alt="Logo Institucional" id="main_logo">
+                </div>
+                <h1>Ecosistema Educativo en Salud</h1>
+                <p>Plataforma integral de monitoreo, entrenamiento y simulación clínica.</p>
             </div>
-        </div>
 
-        <div class="row g-4 justify-content-center portal-row">
-            <!-- MÓDULO 1: DASHBOARD -->
-            <div class="col-lg-4 col-md-6">
-                <div class="hub-card card-analytics" onclick="entrarAlDashboard()">
-                    <div class="hub-icon">
-                        <i class="bi bi-bar-chart-line-fill"></i>
+            <!-- NUEVO DISEÑO: KPIs AGRUPADOS (BENTO UI) -->
+            <div class="landing-kpis-container">
+                <!-- Fila 1: Cursos (Solo) + Matriculas y Únicos (Agrupados) -->
+                <div class="row g-4 justify-content-center mb-4">
+                    <div class="col-lg-4 col-md-5">
+                        <div class="kpi-bento-card">
+                            <div class="kpi-block">
+                                <div class="landing-kpi-val" id="land-kpi-cursos">-</div>
+                                <div class="landing-kpi-lbl">Cursos Activos</div>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="hub-title">Dashboard Analítico</h3>
-                    <p class="hub-desc">Análisis profundo de cohortes, rendimiento geográfico y calidad percibida.</p>
-                    <div class="hub-btn">
-                        Ver Gráficos <i class="bi bi-arrow-right"></i>
+                    <div class="col-lg-8 col-md-7">
+                        <div class="kpi-bento-card">
+                            <div class="kpi-block">
+                                <div class="landing-kpi-val" id="land-kpi-matriculas">-</div>
+                                <div class="landing-kpi-lbl">Matrículas Totales</div>
+                            </div>
+                            <div class="kpi-divider"></div>
+                            <div class="kpi-block" style="opacity: 0.5;" title="Esperando conexión con base de datos de correos">
+                                <div class="landing-kpi-val" id="land-kpi-unicos">...</div>
+                                <div class="landing-kpi-lbl">Estudiantes Únicos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Fila 2: Certificados y Encuestas (Aurora 1) -->
+                <div class="row g-4 justify-content-center mb-4">
+                    <div class="col-12">
+                        <div class="kpi-bento-card bento-aurora-1">
+                            <div class="kpi-block">
+                                <div class="landing-kpi-val" id="land-kpi-certificados">-</div>
+                                <div class="landing-kpi-lbl">Certificados Emitidos</div>
+                            </div>
+                            <div class="kpi-divider"></div>
+                            <div class="kpi-block">
+                                <div class="landing-kpi-val" id="land-kpi-encuestas">-</div>
+                                <div class="landing-kpi-lbl">Encuestas Recibidas</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fila 3: CHS y NPS (Aurora 2 invertido) -->
+                <div class="row g-4 justify-content-center mb-5">
+                    <div class="col-12">
+                        <div class="kpi-bento-card bento-aurora-2">
+                            <div class="kpi-block">
+                                <div class="landing-kpi-val" id="land-kpi-chs">-</div>
+                                <div class="landing-kpi-lbl">Score de Salud (CHS)</div>
+                            </div>
+                            <div class="kpi-divider"></div>
+                            <div class="kpi-block">
+                                <div class="landing-kpi-val" id="land-kpi-nps">-</div>
+                                <div class="landing-kpi-lbl">e-NPS Global</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- MÓDULO 2: ESTUDIANTES (TUTOR IA) -->
-            <div class="col-lg-4 col-md-6">
-                <a href="tutor_estudiante.html" class="hub-card card-tutor text-decoration-none">
-                    <div class="hub-icon">
-                        <i class="bi bi-robot"></i>
+            <!-- TARJETAS DE NAVEGACIÓN -->
+            <div class="row g-4 justify-content-center portal-row">
+                <!-- MÓDULO 1: DASHBOARD -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="hub-card card-analytics" onclick="entrarAlDashboard()">
+                        <div class="hub-icon">
+                            <i class="bi bi-bar-chart-line-fill"></i>
+                        </div>
+                        <h3 class="hub-title">Dashboard Analítico</h3>
+                        <p class="hub-desc">Visualiza métricas, KPIs institucionales, rendimiento demográfico y calidad percibida.</p>
+                        <div class="hub-btn">
+                            Ver Gráficos <i class="bi bi-arrow-right"></i>
+                        </div>
                     </div>
-                    <h3 class="hub-title">Tutor IA (Estudiante)</h3>
-                    <p class="hub-desc">Simulador clínico inteligente. Interactúa con el evaluador para trazar tu ruta.</p>
-                    <div class="hub-btn">
-                        Ingresar <i class="bi bi-arrow-right"></i>
-                    </div>
-                </a>
-            </div>
+                </div>
 
-            <!-- MÓDULO 3: ADMIN (ENTRENAMIENTO) -->
-            <div class="col-lg-4 col-md-6">
-                <a href="admin_conocimiento.html" class="hub-card card-admin text-decoration-none">
-                    <div class="hub-icon">
-                        <i class="bi bi-shield-lock-fill"></i>
-                    </div>
-                    <h3 class="hub-title">Entrenamiento IA</h3>
-                    <p class="hub-desc">Acceso restringido para el curador. Sube normativas y entrena los cerebros.</p>
-                    <div class="hub-btn">
-                        Ingresar <i class="bi bi-arrow-right"></i>
-                    </div>
-                </a>
+                <!-- MÓDULO 2: ESTUDIANTES (TUTOR IA) -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="tutor_estudiante.html" class="hub-card card-tutor text-decoration-none">
+                        <div class="hub-icon">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <h3 class="hub-title">Tutor IA (Estudiante)</h3>
+                        <p class="hub-desc">Simulador clínico inteligente. Interactúa con el evaluador para trazar tu ruta.</p>
+                        <div class="hub-btn">
+                            Ingresar <i class="bi bi-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- MÓDULO 3: ADMIN (ENTRENAMIENTO) -->
+                <div class="col-lg-4 col-md-6">
+                    <a href="admin_conocimiento.html" class="hub-card card-admin text-decoration-none">
+                        <div class="hub-icon">
+                            <i class="bi bi-shield-lock-fill"></i>
+                        </div>
+                        <h3 class="hub-title">Entrenamiento IA</h3>
+                        <p class="hub-desc">Acceso restringido para el curador. Sube normativas y entrena los cerebros.</p>
+                        <div class="hub-btn">
+                            Ingresar <i class="bi bi-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
 
     <!-- ========================================== -->
-    <!-- DASHBOARD PROFUNDO (Oculto al inicio)      -->
+    <!-- CONTENIDO REAL DEL DASHBOARD (Oculto al inicio) -->
     <!-- ========================================== -->
-    <div class="container-fluid px-4 px-xl-5" id="dashboard_content">
+    <div class="container-fluid py-5 px-4 px-xl-5" id="dashboard_content">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
             <div>
                 <h2 class="d-flex align-items-center gap-3">
@@ -530,11 +698,7 @@
             <div class="tab-content" id="myTabContent">
                 <!-- PANEL 1: DEMOGRAFÍA -->
                 <div class="tab-pane fade show active" id="panel-global" role="tabpanel" aria-labelledby="global-tab">
-                    
-                    <div class="row g-4 mb-5" id="kpi-global-row">
-                        <!-- Se llena dinámicamente si se filtra un curso. En vista global está vacío porque ya están arriba -->
-                    </div>
-
+                    <div class="row g-4 mb-5" id="kpi-global-row"></div>
                     <div class="row g-4 mb-5">
                         <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Sexo</h5><div class="chart-wrapper"><canvas id="chartSexo"></canvas></div></div></div>
                         <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Curso de Vida</h5><div class="chart-wrapper"><canvas id="chartEdad"></canvas></div></div></div>
@@ -564,6 +728,20 @@
                     <div class="row g-4">
                         <div class="col-md-8"><div class="glass-card"><h5 id="titulo-radar">Radar de Dimensiones vs Benchmark</h5><div class="radar-wrapper"><canvas id="chartRadar"></canvas></div></div></div>
                         <div class="col-md-4"><div class="glass-card"><h5 id="titulo-desglose">Desglose de Calificación (Sobre 5.0)</h5><div id="diagnostico-detalles" class="mt-4"></div></div></div>
+                    </div>
+                    
+                    <!-- NUEVO: BARRAS HORIZONTALES PARA CADA PREGUNTA -->
+                    <div class="row g-4 mt-1">
+                        <div class="col-12">
+                            <div class="glass-card">
+                                <h5>Desglose Detallado por Ítem Evaluado</h5>
+                                <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 20px;">Interpretación visual de cada pregunta de la encuesta. Valores sobre 5.0.</p>
+                                <div id="contenedor-barras-preguntas" class="row g-4"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mt-1">
                         <div class="col-12 ia-panel-wrapper" id="panel-ia-radar" style="display: none;"><div class="ia-card"><div class="ia-title"><i class="bi bi-robot fs-3"></i> Evaluación Analítica de Calidad Percibida</div><div id="ia-txt-radar"></div></div></div>
                     </div>
                 </div>
@@ -650,7 +828,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ==========================================
-        // LÓGICA DE NAVEGACIÓN Y RENDERIZADO
+        // LÓGICA DEL PORTAL MÁGICO (SPLASH SCREEN)
         // ==========================================
         function entrarAlDashboard() {
             const portal = document.getElementById('welcome_portal');
@@ -678,7 +856,7 @@
         }
 
         // ==========================================
-        // LÓGICA PRINCIPAL DEL DASHBOARD
+        // RESTO DEL CÓDIGO DEL DASHBOARD ORIGINAL
         // ==========================================
         proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
@@ -717,15 +895,10 @@
                 const isLight = html.getAttribute('data-theme') === 'light';
                 html.setAttribute('data-theme', isLight ? 'dark' : 'light');
                 btnTheme.innerHTML = isLight ? '<i class="bi bi-sun-fill text-warning"></i>' : '<i class="bi bi-moon-stars-fill"></i>';
-                
-                // Actualiza logo si es necesario (opcional)
-                // const logo = document.getElementById('main_logo');
-                // logo.style.filter = isLight ? 'invert(0)' : 'invert(1) brightness(2)';
-
                 Chart.defaults.color = getComputedStyle(html).getPropertyValue('--text-main');
                 if(mapInstance) {
                     if(mapTilesLayer) mapInstance.removeLayer(mapTilesLayer);
-                    let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+                    let tileUrl = isLight ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
                     mapTilesLayer = L.tileLayer(tileUrl, { attribution: '&copy; CARTO', subdomains: 'abcd', maxZoom: 20 }).addTo(mapInstance);
                 }
                 if (cursoActual) actualizarPantallaCurso(); else actualizarPantallaGlobal();
@@ -769,7 +942,7 @@
                     const geoResponse = await fetch('mc_comunas.json');
                     geoJsonDataRaw = proyectarGeoJson(await geoResponse.json()); 
                 } catch (fetchError) {
-                    // Datos quemados para preview si no hay JSON
+                    // Datos quemados para preview
                     dashboardData = { 
                         "metadata": { "total_cursos_analizados": 1, "total_encuestas_historicas": 416 }, 
                         "kpis_globales": { "chs_promedio_secretaria": 88.5, "nps_global": 65.2 }, 
@@ -796,7 +969,7 @@
         });
 
         // ==========================================
-        // FUNCIONES AUXILIARES DESCOMPRIMIDAS
+        // FUNCIONES AUXILIARES
         // ==========================================
         function normalizarLlaveComuna(texto) { 
             if (texto === null || texto === undefined) return "N/A"; 
@@ -1031,6 +1204,38 @@
             actualizarPantallaCurso(); 
         }
 
+        // ==========================================
+        // DIBUJAR BARRAS DE ENCUESTA HORIZONTALES
+        // ==========================================
+        function dibujarBarrasPreguntas(preguntasObj) {
+            const contenedor = document.getElementById('contenedor-barras-preguntas');
+            if (!contenedor) return;
+            contenedor.innerHTML = '';
+            if (!preguntasObj) return;
+
+            let html = '';
+            for (let pLarga in preguntasObj) {
+                let pCorta = mapeoPreguntas[pLarga] || pLarga;
+                let valor = preguntasObj[pLarga];
+                let porcentaje = (valor / 5) * 100;
+                
+                // Color Code: >= 4.5 Verde, >= 4.0 Azul, else Rojo
+                let colorClase = valor >= 4.5 ? 'bg-success' : (valor >= 4.0 ? 'bg-primary' : 'bg-danger');
+
+                html += `
+                <div class="col-md-6 col-lg-4 progreso-pregunta">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="lbl-preg" title="${pLarga}">${pCorta}</span>
+                        <span class="val-preg">${valor.toFixed(1)}/5.0</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar ${colorClase}" role="progressbar" style="width: ${porcentaje}%"></div>
+                    </div>
+                </div>`;
+            }
+            contenedor.innerHTML = html;
+        }
+
         function generarInsightIA(curso) { 
             if (!curso) return; 
             const chs = curso.Salud_Curso_CHS || 0; 
@@ -1137,7 +1342,7 @@
         }
 
         // ==========================================
-        // CÁLCULO DE KPIS GLOBALES (CERTIFICADOS AÑADIDO Y NOMBRE CORREGIDO)
+        // CÁLCULO DE KPIS GLOBALES
         // ==========================================
         function actualizarPantallaGlobal() { 
             const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
@@ -1148,19 +1353,25 @@
             }); 
             const pctCertificados = totalInscritos > 0 ? Math.round((totalCertificados / totalInscritos) * 100) + "%" : "0%"; 
             
-            // Renderizamos los KPIs tanto en la Landing como en el Dashboard
-            const kpiHtml = `
+            const elCursosL = document.getElementById('land-kpi-cursos'); if (elCursosL) elCursosL.innerText = dashboardData.metadata.total_cursos_analizados;
+            const elMatriculasL = document.getElementById('land-kpi-matriculas'); if (elMatriculasL) elMatriculasL.innerText = totalInscritos.toLocaleString();
+            
+            // BURBUJA BLANCA PARA EL PORCENTAJE EN LA TARJETA AURORA
+            const elCertificadosL = document.getElementById('land-kpi-certificados'); 
+            if (elCertificadosL) elCertificadosL.innerHTML = `${totalCertificados.toLocaleString()} <span style="font-size:1rem; font-weight:900; color:#5B0FBE; background:#ffffff; padding:4px 16px; border-radius:30px; margin-left:12px; vertical-align:middle; box-shadow:0 8px 20px rgba(0,0,0,0.15); letter-spacing: -0.02em;"> ${pctCertificados} </span>`;
+            
+            const elEncuestasL = document.getElementById('land-kpi-encuestas'); if (elEncuestasL) elEncuestasL.innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString();
+            const elChsL = document.getElementById('land-kpi-chs'); if (elChsL) elChsL.innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
+            const elNpsL = document.getElementById('land-kpi-nps'); if (elNpsL) elNpsL.innerText = dashboardData.kpis_globales.nps_global;
+
+            document.getElementById('kpi-global-row').innerHTML = `
                 ${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}
                 ${crearTarjetaKPI("Matrículas Totales", totalInscritos.toLocaleString())}
                 ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
                 ${crearTarjetaKPI("Encuestas Recibidas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}
                 ${crearTarjetaKPI("CHS Institucional", dashboardData.kpis_globales.chs_promedio_secretaria)}
                 ${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}
-            `;
-            
-            document.getElementById('kpi-landing-row').innerHTML = kpiHtml;
-            // Se limpia la vista interna porque ya están en el landing superior (Evita duplicados visuales confusos)
-            document.getElementById('kpi-global-row').innerHTML = '';
+            `; 
             
             dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); 
             dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); 
@@ -1210,6 +1421,7 @@
             document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; 
             document.getElementById('titulo-desglose').innerText = "Calificación Institucional Global (Sobre 5.0)"; 
             dibujarRadar(promediosGlobalesPreguntas, true); 
+            dibujarBarrasPreguntas(promediosGlobalesPreguntas);
             
             document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${globIUP} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${globICD} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${globUX} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${globBrecha < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${globBrecha < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${globBrecha}</span></li></ul>`; 
             generarInsightIAGlobal(totalInscritos, pctFin, pctAbd, pctInac, globIUP, globICD, globUX, globBrecha, countEnc); 
@@ -1218,7 +1430,7 @@
         }
 
         // ==========================================
-        // CÁLCULO DE KPIS ESPECÍFICOS (CERTIFICADOS AÑADIDO Y NOMBRE CORREGIDO)
+        // CÁLCULO DE KPIS ESPECÍFICOS POR CURSO
         // ==========================================
         function actualizarPantallaCurso() { 
             const totalCertificados = Math.round((cursoActual.Total_Inscritos || 0) * (cursoActual['Tasa_Finalizacion_%'] || 0) / 100); 
@@ -1252,6 +1464,7 @@
             document.getElementById('titulo-radar').innerText = "Radar de Dimensiones vs Benchmark Global"; 
             document.getElementById('titulo-desglose').innerText = "Desglose de Calificación (Sobre 5.0)"; 
             dibujarRadar(cursoActual.Detalle_Preguntas, false); 
+            dibujarBarrasPreguntas(cursoActual.Detalle_Preguntas);
             
             document.getElementById('diagnostico-detalles').innerHTML = `<ul class="list-group list-group-flush mt-3"><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Utilidad Práctica</span><span class="badge rounded-pill fs-6" style="background-color: var(--primary); font-variant-numeric: tabular-nums;">${cursoActual.IUP_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Competencia Docente</span><span class="badge rounded-pill fs-6" style="background-color: var(--success); font-variant-numeric: tabular-nums;">${cursoActual.ICD_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent py-3"><span class="fw-bold">Experiencia UX/UI</span><span class="badge rounded-pill text-dark fs-6" style="background-color: var(--info); font-variant-numeric: tabular-nums;">${cursoActual.UX_Promedio || 0} / 5</span></li><li class="list-group-item d-flex justify-content-between px-0 bg-transparent border-0 py-3"><span class="fw-bold">Brecha Expectativa</span><span class="badge rounded-pill fs-6" style="background-color: ${cursoActual.Brecha_Expectativa < 0 ? 'var(--danger)' : 'var(--warning)'}; color: ${cursoActual.Brecha_Expectativa < 0 ? '#fff' : '#000'}; font-variant-numeric: tabular-nums;">${cursoActual.Brecha_Expectativa || 0}</span></li></ul>`; 
             generarInsightIA(cursoActual); 
@@ -1264,7 +1477,7 @@
         // ==========================================
         function crearTarjetaKPI(label, valor, porcentaje = null) { 
             let htmlPorcentaje = porcentaje ? `<span style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.15); padding: 4px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;">${porcentaje}</span>` : ''; 
-            return `<div class="col-lg-2 col-md-4 col-sm-6"><div class="glass-card kpi-card" style="padding: 20px;"><div class="kpi-value d-flex align-items-center flex-wrap" style="font-size: 1.6rem;">${valor} ${htmlPorcentaje}</div><div class="kpi-label" style="font-size: 0.75rem;">${label}</div></div></div>`; 
+            return `<div class="col"><div class="glass-card kpi-card"><div class="kpi-value d-flex align-items-center flex-wrap">${valor} ${htmlPorcentaje}</div><div class="kpi-label">${label}</div></div></div>`; 
         }
 
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
