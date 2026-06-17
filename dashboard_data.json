@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 41,
-        "total_encuestas_historicas": 3856
+        "total_encuestas_historicas": 3857
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 57.4,
@@ -9,23 +9,23 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2824,
+            "Femenino": 2825,
             "Masculino": 1028,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2775,
+            "Área de la salud": 2776,
             "Estudiante": 702,
             "Otro": 379
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2278,
+            "Adultez (29 - 59 años)": 2279,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 697,
             "Vejez (60 años o más)": 160
         },
         "Comuna": {
-            "COMUNA 17": 439,
+            "COMUNA 17": 440,
             "COMUNA 19": 228,
             "COMUNA 1": 222,
             "COMUNA 10": 199,
@@ -66,7 +66,7 @@
         "Escolaridad": {
             "Pregrado": 1734,
             "Bachiller": 1085,
-            "Postgrado": 981,
+            "Postgrado": 982,
             "Ninguna": 56
         }
     },
@@ -2772,34 +2772,34 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2025 - 01",
             "ID_Moodle_Original": "sello_012025",
             "Total_Inscritos": 1244,
-            "Tasa_Finalizacion_%": 77.6,
+            "Tasa_Finalizacion_%": 77.7,
             "Tasa_Abandono_%": 2.3,
             "Tasa_Inactividad_%": 20.1,
             "Tiempo_Promedio_Dias": 2.4,
-            "Total_Encuestas": 652.0,
+            "Total_Encuestas": 653.0,
             "ISG_Promedio": 4.55,
             "ICD_Promedio": 4.48,
             "IUP_Promedio": 4.63,
             "UX_Promedio": 4.55,
             "Brecha_Expectativa": 0.01,
-            "e_NPS": 58.9,
+            "e_NPS": 59.0,
             "Salud_Curso_CHS": 86.0,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 424,
+                    "Femenino": 425,
                     "Intersexual": 1,
                     "Masculino": 227
                 },
                 "Perfil": {
                     "Estudiante": 14,
                     "Otro": 163,
-                    "Área de la salud": 475
+                    "Área de la salud": 476
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 524,
+                    "Adultez (29 - 59 años)": 525,
                     "Juventud (18 - 28 años)": 73,
                     "Vejez (60 años o más)": 55
                 },
@@ -2827,7 +2827,7 @@
                     "COMUNA 14": 12,
                     "COMUNA 15": 26,
                     "COMUNA 16": 23,
-                    "COMUNA 17": 108,
+                    "COMUNA 17": 109,
                     "COMUNA 18": 24,
                     "COMUNA 19": 72,
                     "COMUNA 2": 38,
@@ -2845,7 +2845,7 @@
                 "Escolaridad": {
                     "Bachiller": 104,
                     "Ninguna": 2,
-                    "Postgrado": 244,
+                    "Postgrado": 245,
                     "Pregrado": 302
                 }
             },
