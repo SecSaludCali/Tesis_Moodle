@@ -18,9 +18,8 @@ class MotorAnalitico:
         self.carpeta_moodle = os.path.join(self.base_dir, 'descargas_moodle')
 
     def ejecutar(self):
-        logging.info("Iniciando Motor Analítico (Arquitectura Híbrida: Tiempo Adaptativo + Enlace Relacional)...")
+        logging.info("Iniciando Motor Analítico con Inyección de Micro-Datasets (Filtros OLAP)...")
 
-        # 1. Carga de datos
         try:
             df_moodle = pd.read_csv(self.ruta_moodle)
             df_sat_raw = pd.read_csv(self.ruta_sat)
@@ -36,20 +35,21 @@ class MotorAnalitico:
         moodle_ids = df_moodle['ID_Moodle_Original'].dropna().unique().tolist()
         moodle_ids_lower = [str(mid).lower().strip() for mid in moodle_ids]
 
-        # Asegurar columna de fechas solo en el archivo que la posee
         col_fecha = next((c for c in df_sat_raw.columns if 'marca temporal' in c.lower() or 'timestamp' in c.lower() or 'fecha' in c.lower()), None)
         if col_fecha:
             df_sat_raw[col_fecha] = pd.to_datetime(df_sat_raw[col_fecha], errors='coerce')
+
+        # Asignamos ID de fila para no perder el rastro de la persona al clonar por cohortes
+        df_sat_raw['ID_Fila'] = df_sat_raw.index
+        df_perf_raw['ID_Fila'] = df_perf_raw.index
 
         # ========================================================
         # 2. ALGORITMO DE DISTANCIA MÁXIMA EN FORMS (SATISFACCIÓN)
         # ========================================================
         def resolver_tiempo_y_clonacion(df_crudo):
             filas_procesadas = []
-            
             for nombre_form, grupo in df_crudo.groupby('Nombre_Curso'):
                 nombre_str = str(nombre_form).lower()
-                
                 bloques_parentesis = re.findall(r'\(([^)]+)\)', nombre_str)
                 cohortes_temporales = []
                 for bloque in bloques_parentesis:
@@ -72,10 +72,7 @@ class MotorAnalitico:
                         filas_procesadas.append(g_copy)
                     continue
                 
-                es_paralelo = False
-                if "012026" in nombre_str or "01_2026" in nombre_str: 
-                    es_paralelo = True
-
+                es_paralelo = "012026" in nombre_str or "01_2026" in nombre_str
                 if es_paralelo:
                     for bloque in cohortes_temporales:
                         for mid in bloque:
@@ -119,7 +116,30 @@ class MotorAnalitico:
         df_sat = resolver_tiempo_y_clonacion(df_sat_raw)
 
         # ========================================================
-        # 3. CRUCE RELACIONAL DE DEMOGRAFÍA (GARANTIZA INTEGRIDAD)
+        # NUEVO: CREACIÓN DE BASE MAESTRA INDIVIDUAL (MICRO-DATASET)
+        # ========================================================
+        # Cruzamos encuestas y demografía usando el ID_Fila exacto
+        df_encuestas = pd.merge(df_sat, df_perf_raw.drop(columns=['ID_Formulario', 'Nombre_Curso'], errors='ignore'), on='ID_Fila', how='inner')
+        
+        cols_preguntas = [c for c in df_encuestas.columns if '¿' in c]
+        for c in cols_preguntas:
+            df_encuestas[c] = df_encuestas[c].astype(str).str.strip().str.lower().replace({'sí': 5, 'si': 5, 'no': 1})
+            df_encuestas[c] = pd.to_numeric(df_encuestas[c], errors='coerce').fillna(0)
+            
+        cols_demo = ['Sexo', 'Curso de vida', 'Perfil', 'Comuna_Unificada', 'Escolaridad']
+        for c in cols_demo:
+            if c in df_encuestas.columns:
+                df_encuestas[c] = df_encuestas[c].fillna('N/A').astype(str)
+
+        # Empaquetamos los registros individuales por curso
+        registros_por_llave = {}
+        for llave, grupo in df_encuestas.groupby('Llave_PK'):
+            cols_a_extraer = [c for c in cols_demo + cols_preguntas if c in grupo.columns]
+            registros_por_llave[llave] = grupo[cols_a_extraer].to_dict(orient='records')
+
+
+        # ========================================================
+        # 3. CONTINÚA PROCESAMIENTO GLOBAL
         # ========================================================
         if not df_sat.empty and 'ID_Formulario' in df_sat.columns and 'ID_Formulario' in df_perf_raw.columns:
             mapa_llaves = df_sat[['ID_Formulario', 'Llave_PK']].drop_duplicates()
@@ -128,19 +148,15 @@ class MotorAnalitico:
         else:
             df_perf = df_perf_raw.copy()
             df_perf['Llave_PK'] = None
-            logging.error("No se pudo cruzar la demografía: falta columna ID_Formulario.")
 
         df_sat = df_sat[df_sat['Llave_PK'].notna()]
         df_perf = df_perf[df_perf['Llave_PK'].notna()]
-
         df_moodle['Llave_PK'] = df_moodle['ID_Moodle_Original']
         df_moodle = df_moodle.drop_duplicates(subset=['Llave_PK'])
 
-        # 4. Ingeniería de Características en Satisfacción
-        cols_preguntas = [c for c in df_sat.columns if '¿' in c]
+        # Ingeniería Métrica Rápida para df_sat
         for c in cols_preguntas:
-            df_sat[c] = df_sat[c].astype(str).str.strip().str.lower()
-            df_sat[c] = df_sat[c].replace({'sí': 5, 'si': 5, 'no': 1})
+            df_sat[c] = df_sat[c].astype(str).str.strip().str.lower().replace({'sí': 5, 'si': 5, 'no': 1})
             df_sat[c] = pd.to_numeric(df_sat[c], errors='coerce')
 
         col_dominio = next((c for c in cols_preguntas if 'dominio' in c.lower()), cols_preguntas[0])
@@ -176,24 +192,13 @@ class MotorAnalitico:
 
         agg_funcs = {
             'Total_Encuestas': ('Llave_PK', 'count'),
-            'ISG_Promedio': ('ISG', 'mean'),
-            'ICD_Promedio': ('ICD', 'mean'),
-            'IUP_Promedio': ('IUP', 'mean'),
-            'UX_Promedio': ('Score_UX', 'mean'),
-            'Brecha_Expectativa': ('Brecha_Expectativa', 'mean'),
+            'ISG_Promedio': ('ISG', 'mean'), 'ICD_Promedio': ('ICD', 'mean'), 'IUP_Promedio': ('IUP', 'mean'), 'UX_Promedio': ('Score_UX', 'mean'),
             'e_NPS': ('Categoria_NPS', calcular_nps_curso)
         }
-        for q in cols_preguntas:
-            agg_funcs[q] = (q, 'mean')
-
+        for q in cols_preguntas: agg_funcs[q] = (q, 'mean')
         sat_agrupada = df_sat.groupby('Llave_PK').agg(**agg_funcs).reset_index()
 
-        for col in ['ISG_Promedio', 'ICD_Promedio', 'IUP_Promedio', 'UX_Promedio', 'Brecha_Expectativa'] + cols_preguntas:
-            sat_agrupada[col] = sat_agrupada[col].round(2)
-
-        # 5. Cruce Left Join Estricto (Moodle Manda)
         df_final = pd.merge(df_moodle, sat_agrupada, on='Llave_PK', how='left')
-
         cols_numericas = df_final.select_dtypes(include=[np.number]).columns
         df_final[cols_numericas] = df_final[cols_numericas].fillna(0)
         df_final = df_final.replace({np.nan: None}) 
@@ -203,15 +208,12 @@ class MotorAnalitico:
             score_iup = (row['IUP_Promedio'] / 5) * 100
             score_ux = (row['UX_Promedio'] / 5) * 100
             tasa_fin = row['Tasa_Finalizacion_%']
-            if row['Total_Encuestas'] > 0:
-                chs = (tasa_fin * 0.4) + (score_isg * 0.3) + (score_iup * 0.2) + (score_ux * 0.1)
-            else:
-                chs = tasa_fin
+            if row['Total_Encuestas'] > 0: chs = (tasa_fin * 0.4) + (score_isg * 0.3) + (score_iup * 0.2) + (score_ux * 0.1)
+            else: chs = tasa_fin
             return round(chs, 1)
 
         df_final['Salud_Curso_CHS'] = df_final.apply(calcular_chs, axis=1)
 
-        # 6. Agrupaciones Demográficas Finales
         demo_genero = df_perf.groupby(['Llave_PK', 'Sexo']).size().unstack(fill_value=0).to_dict(orient='index')
         demo_perfil = df_perf.groupby(['Llave_PK', 'Perfil']).size().unstack(fill_value=0).to_dict(orient='index')
         demo_edad = df_perf.groupby(['Llave_PK', 'Curso de vida']).size().unstack(fill_value=0).to_dict(orient='index')
@@ -226,56 +228,21 @@ class MotorAnalitico:
             "Escolaridad": df_perf_raw['Escolaridad'].value_counts().to_dict() if 'Escolaridad' in df_perf_raw.columns else {}
         }
 
-        # ========================================================
-        # NUEVO: EXTRACCIÓN ROBUSTA DE ESTUDIANTES ÚNICOS
-        # ========================================================
         estudiantes_unicos = set()
-        
         if os.path.exists(self.carpeta_moodle):
-            archivos_csv = glob.glob(os.path.join(self.carpeta_moodle, '*.csv'))
-            logging.info(f"Escaneando {len(archivos_csv)} archivos CSV en Moodle...")
-            
-            for file_path in archivos_csv:
-                nombre_archivo = os.path.basename(file_path)
+            for file_path in glob.glob(os.path.join(self.carpeta_moodle, '*.csv')):
                 try:
-                    # Determinamos el separador de forma inteligente leyendo la primera línea
                     with open(file_path, 'r', encoding='utf-8-sig') as f:
-                        primera_linea = f.readline()
-                        separador = ',' if ',' in primera_linea else ';'
-
-                    # on_bad_lines='skip' evita que el código muera si Moodle exporta filas chuecas
+                        separador = ',' if ',' in f.readline() else ';'
                     df_raw = pd.read_csv(file_path, sep=separador, encoding='utf-8-sig', on_bad_lines='skip')
-                    
-                    # 1. Limpieza extrema de columnas (Quita espacios, saltos de línea y basuras)
                     df_raw.columns = [str(c).strip().replace('\n', '').replace('\r', '') for c in df_raw.columns]
-                    
-                    # 2. Búsqueda inteligente de la columna (soporta variaciones de Moodle)
                     col_correo = next((col for col in df_raw.columns if 'correo' in col.lower() or 'email' in col.lower()), None)
-                    
-                    # 3. Extraer y procesar
                     if col_correo:
-                        # Extraemos, volvemos minúsculas y limpiamos espacios de los correos
                         correos = df_raw[col_correo].dropna().astype(str).str.strip().str.lower()
-                        
-                        # Filtramos filas vacías
                         correos = correos[~correos.isin(['', 'nan', 'null', 'sin dato', '-'])]
-                        
-                        # El SET se encarga de guardar solo los que no existan ya
                         estudiantes_unicos.update(correos.tolist())
-                        logging.info(f"  -> {nombre_archivo}: Se procesaron {len(correos)} registros (Métrica viva).")
-                    else:
-                        logging.warning(f"  -> {nombre_archivo}: No se encontró columna 'correo'. Columnas disponibles: {df_raw.columns.tolist()}")
+                except Exception as e: pass
 
-                except Exception as e:
-                    logging.error(f"  -> Error procesando {nombre_archivo}: {str(e)}")
-        else:
-            logging.error(f"❌ ATENCIÓN: La carpeta '{self.carpeta_moodle}' NO existe. GitHub Actions podría estar ignorándola.")
-
-        total_estudiantes_unicos = len(estudiantes_unicos)
-        logging.info(f"✔ TOTAL INSTITUCIONAL: {total_estudiantes_unicos} Estudiantes Únicos identificados.")
-        # ========================================================
-
-        # 7. Construcción de Estructura JSON
         cursos_lista = df_final.to_dict(orient='records')
         for c in cursos_lista:
             llave = c['Llave_PK']
@@ -284,9 +251,7 @@ class MotorAnalitico:
             
             if len(partes) >= 3:
                 c['Curso_Base'] = partes[0].strip()
-                anio = partes[1].strip()
-                num_c = int(partes[2].strip()) if partes[2].strip().isdigit() else partes[2].strip()
-                c['Edicion'] = f"{anio} - Cohorte {num_c}"
+                c['Edicion'] = f"{partes[1].strip()} - Cohorte {int(partes[2].strip()) if partes[2].strip().isdigit() else partes[2].strip()}"
             elif len(partes) == 2:
                 c['Curso_Base'] = partes[0].strip()
                 c['Edicion'] = f"{partes[1].strip()} - Única"
@@ -295,26 +260,19 @@ class MotorAnalitico:
                 c['Edicion'] = "General - Única"
             
             c['Demografia'] = {
-                'Sexo': demo_genero.get(llave, {}),
-                'Perfil': demo_perfil.get(llave, {}),
-                'Edad': demo_edad.get(llave, {}),
-                'Comuna': demo_comuna.get(llave, {}),
-                'Escolaridad': demo_escolaridad.get(llave, {})
+                'Sexo': demo_genero.get(llave, {}), 'Perfil': demo_perfil.get(llave, {}), 'Edad': demo_edad.get(llave, {}),
+                'Comuna': demo_comuna.get(llave, {}), 'Escolaridad': demo_escolaridad.get(llave, {})
             }
             c['Detalle_Preguntas'] = { q: c.get(q, 0) for q in cols_preguntas }
             for q in cols_preguntas: c.pop(q, None)
+            
+            # INYECTAMOS EL MICRO-DATASET AQUÍ
+            c['Registros_Crudos'] = registros_por_llave.get(llave, [])
             c.pop('Llave_PK', None)
 
         dashboard_json = {
-            "metadata": {
-                "total_cursos_analizados": len(cursos_lista),
-                "total_encuestas_historicas": len(df_sat_raw),
-                "total_estudiantes_unicos": total_estudiantes_unicos # <-- INYECCIÓN DE LA MÉTRICA
-            },
-            "kpis_globales": {
-                "chs_promedio_secretaria": round(df_final['Salud_Curso_CHS'].mean(), 1) if len(df_final) > 0 else 0,
-                "nps_global": round(df_final[df_final['Total_Encuestas'] > 0]['e_NPS'].mean(), 1) if len(df_final) > 0 else 0
-            },
+            "metadata": { "total_cursos_analizados": len(cursos_lista), "total_encuestas_historicas": len(df_sat_raw), "total_estudiantes_unicos": len(estudiantes_unicos) },
+            "kpis_globales": { "chs_promedio_secretaria": round(df_final['Salud_Curso_CHS'].mean(), 1) if len(df_final) > 0 else 0, "nps_global": round(df_final[df_final['Total_Encuestas'] > 0]['e_NPS'].mean(), 1) if len(df_final) > 0 else 0 },
             "demografia_global": demografia_global,
             "cursos": cursos_lista
         }
@@ -322,8 +280,7 @@ class MotorAnalitico:
         ruta_salida = os.path.join(self.base_dir, 'dashboard_data.json')
         with open(ruta_salida, 'w', encoding='utf-8') as f:
             json.dump(dashboard_json, f, ensure_ascii=False, indent=4)
-
-        logging.info(f"--- MAPEO RELACIONAL FINALIZADO ---")
+        logging.info("✔ Motor Analítico Finalizado. Cubo OLAP integrado.")
 
 if __name__ == "__main__":
     motor = MotorAnalitico()
