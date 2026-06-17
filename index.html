@@ -9,15 +9,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- LIBRERÍAS DE GRÁFICOS, MAPAS Y PDF -->
+    <!-- LIBRERÍAS DE GRÁFICOS Y MAPAS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        /* PALETA Y EFECTOS BASE */
+        /* =========================================
+           MOTOR DE TEMAS (CSS VARIABLES)
+           ========================================= */
+        
+        /* 1. TEMA CLARO (Default) */
         :root[data-theme="light"] {
             --bg-color: #f4f7fe; --card-bg: rgba(255, 255, 255, 0.6); --text-main: #1e293b; --text-muted: #64748b;
             --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50; --info: #0ea5e9;
@@ -26,6 +29,7 @@
             --blob-1: rgba(67, 24, 255, 0.12); --blob-2: rgba(5, 205, 153, 0.12); --blob-3: rgba(238, 93, 80, 0.1);
         }
 
+        /* 2. TEMA OSCURO */
         :root[data-theme="dark"] {
             --bg-color: #050a1f; --card-bg: rgba(11, 20, 55, 0.6); --text-main: #f8fafc; --text-muted: #8f9bba;
             --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50; --info: #38bdf8;
@@ -34,21 +38,57 @@
             --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1); --blob-3: rgba(238, 93, 80, 0.08);
         }
 
-        body { background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); transition: all 0.3s ease; position: relative; overflow-x: hidden; min-height: 100vh; }
-        body::before, body::after, .blob-3 { content: ''; position: fixed; border-radius: 50%; z-index: -1; animation: float 15s infinite alternate ease-in-out; pointer-events: none; }
+        /* 3. TEMA ROSADO (Rose) */
+        :root[data-theme="rose"] {
+            --bg-color: #fff1f2; --card-bg: rgba(255, 255, 255, 0.65); --text-main: #4c0519; --text-muted: #881337;
+            --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --info: #0ea5e9;
+            --card-shadow: 0 8px 32px 0 rgba(225, 29, 72, 0.08); --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15);
+            --ia-bg: rgba(255, 255, 255, 0.8); --ia-border: rgba(225, 29, 72, 0.2); --ia-text: #4c0519; --ia-card-bg: rgba(255, 241, 242, 0.7);
+            --blob-1: rgba(225, 29, 72, 0.12); --blob-2: rgba(244, 63, 94, 0.12); --blob-3: rgba(251, 113, 133, 0.1);
+        }
+
+        /* 4. TEMA CÁLIDO (Amber) */
+        :root[data-theme="amber"] {
+            --bg-color: #fffbeb; --card-bg: rgba(255, 255, 255, 0.65); --text-main: #451a03; --text-muted: #78350f;
+            --primary: #d97706; --success: #05cd99; --warning: #d97706; --danger: #ef4444; --info: #0ea5e9;
+            --card-shadow: 0 8px 32px 0 rgba(217, 119, 6, 0.08); --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15);
+            --ia-bg: rgba(255, 255, 255, 0.8); --ia-border: rgba(217, 119, 6, 0.2); --ia-text: #451a03; --ia-card-bg: rgba(255, 251, 235, 0.7);
+            --blob-1: rgba(217, 119, 6, 0.12); --blob-2: rgba(245, 158, 11, 0.12); --blob-3: rgba(252, 211, 77, 0.1);
+        }
+
+        body { background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); transition: background-color 0.4s ease, color 0.4s ease; position: relative; overflow-x: hidden; min-height: 100vh; }
+        body::before, body::after, .blob-3 { content: ''; position: fixed; border-radius: 50%; z-index: -1; animation: float 15s infinite alternate ease-in-out; pointer-events: none; transition: background 0.4s ease; }
         body::before { width: 70vw; height: 70vw; background: radial-gradient(circle, var(--blob-1) 0%, transparent 65%); top: -20%; left: -20%; }
         body::after { width: 60vw; height: 60vw; background: radial-gradient(circle, var(--blob-2) 0%, transparent 60%); bottom: -20%; right: -10%; animation-delay: -5s; }
         .blob-3 { width: 50vw; height: 50vw; background: radial-gradient(circle, var(--blob-3) 0%, transparent 60%); top: 20%; left: 25%; animation-delay: -10s; display: none; }
         @keyframes float { 0% { transform: translate3d(0, 0, 0) scale(1); } 100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); } }
 
         /* =========================================
-           LANDING PAGE: BENTO BOX & AURORA PILLS
+           BOTONES SELECTORES DE TEMA (MATRIZ 2x2)
+           ========================================= */
+        .theme-selector-container { 
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; 
+            padding: 8px; box-shadow: var(--card-shadow); backdrop-filter: blur(10px); 
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; 
+            transition: all 0.3s; margin-left: 15px; align-content: center;
+        }
+        .theme-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; transition: transform 0.2s, box-shadow 0.2s; position: relative; }
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { transform: scale(1.2); box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 3px var(--text-main); }
+        
+        .t-btn-light { background: #f4f7fe; border-color: #4318ff; }
+        .t-btn-dark { background: #050a1f; border-color: #7551ff; }
+        .t-btn-rose { background: #fff1f2; border-color: #e11d48; }
+        .t-btn-amber { background: #fffbeb; border-color: #d97706; }
+
+        /* =========================================
+           LANDING PAGE Y BENTO BOX
            ========================================= */
         #welcome_portal { position: absolute; top: 0; left: 0; right: 0; min-height: 100vh; background: transparent; z-index: 9999; display: flex; flex-direction: column; padding: 40px 20px; transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         #welcome_portal.hide-portal { opacity: 0; transform: translateY(-50px) scale(0.98); pointer-events: none; }
         .portal-content { width: 100%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; animation: fadeIn 0.8s ease-out; }
 
-        .bento-solid { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 32px 24px; box-shadow: var(--card-shadow); text-align: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.3s; }
+        .bento-solid { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 32px 24px; box-shadow: var(--card-shadow); text-align: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.3s, background-color 0.4s, border-color 0.4s; }
         .bento-solid:hover { transform: translateY(-5px); }
         .bento-pill-1 { background: linear-gradient(135deg, #00D4FF 0%, #5B0FBE 100%); color: white; border-radius: 50px; padding: 32px 40px; box-shadow: 0 15px 35px rgba(91, 15, 190, 0.25); text-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: transform 0.3s; }
         .bento-pill-2 { background: linear-gradient(135deg, #5B0FBE 0%, #00D4FF 100%); color: white; border-radius: 50px; padding: 32px 40px; box-shadow: 0 15px 35px rgba(0, 212, 255, 0.25); text-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: transform 0.3s; }
@@ -56,23 +96,23 @@
         
         .bento-divider { width: 1px; background: rgba(255,255,255,0.3); height: 90px; margin: 0 20px; }
         .bento-solid-divider { width: 1px; background: var(--border-color); height: 90px; margin: 0 20px; }
-        .bento-val { font-size: 3.8rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
+        .bento-val { font-size: 3.8rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); transition: color 0.4s;}
+        .bento-pill-1 .bento-val, .bento-pill-2 .bento-val { color: #ffffff; }
         .bento-lbl { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
         .pill-badge { background: #ffffff; color: #5B0FBE; font-weight: 800; padding: 6px 16px; border-radius: 30px; font-size: 1.1rem; margin-left: 15px; text-shadow: none; vertical-align: text-bottom; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* NAVEGACIÓN LIQUID GLASS */
         .portal-row { max-width: 1000px; margin: 60px auto 0; }
         .hub-card { background: rgba(255, 255, 255, 0.4); border-radius: 24px; box-shadow: 0 10px 30px rgba(31, 38, 135, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.6); padding: 30px 25px; height: 100%; border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px) saturate(120%); -webkit-backdrop-filter: blur(20px) saturate(120%); text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: all 0.5s; cursor: pointer; position: relative; overflow: hidden; }
         .hub-card::before { content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent); transform: skewX(-25deg); transition: left 0.7s; pointer-events: none; z-index: 1; }
         .hub-card:hover { transform: translateY(-10px); border-color: rgba(255, 255, 255, 0.9); }
         .hub-card:hover::before { left: 200%; }
         .hub-icon { width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 20px; z-index: 2; position: relative;}
-        .card-analytics .hub-icon { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; box-shadow: 0 8px 20px rgba(67, 24, 255, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
+        .card-analytics .hub-icon { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; box-shadow: 0 8px 20px var(--blob-1), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
         .card-tutor .hub-icon { background: linear-gradient(135deg, var(--success) 0%, #048a67 100%); color: white; box-shadow: 0 8px 20px rgba(5, 205, 153, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
         .card-admin .hub-icon { background: linear-gradient(135deg, var(--danger) 0%, #c43d30 100%); color: white; box-shadow: 0 8px 20px rgba(238, 93, 80, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
-        .hub-title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; z-index: 2; position: relative;}
-        .hub-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; flex-grow: 1; z-index: 2; position: relative;}
-        .hub-btn { background: rgba(255, 255, 255, 0.6); color: var(--primary); font-weight: 700; padding: 8px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.8); z-index: 2; position: relative; display: inline-flex; gap: 8px; align-items: center;}
+        .hub-title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; z-index: 2; position: relative; transition: color 0.4s;}
+        .hub-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; flex-grow: 1; z-index: 2; position: relative; transition: color 0.4s;}
+        .hub-btn { background: var(--card-bg); color: var(--primary); font-weight: 700; padding: 8px 20px; border-radius: 30px; border: 1px solid var(--border-color); z-index: 2; position: relative; display: inline-flex; gap: 8px; align-items: center; transition: all 0.4s;}
 
         :root[data-theme="dark"] .hub-card, :root[data-theme="dark"] .bento-solid { background: rgba(11, 20, 55, 0.4); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
 
@@ -90,91 +130,63 @@
         #dashboard_content { display: none; opacity: 0; transition: opacity 0.8s ease; }
         #dashboard_content.show-dashboard { display: block; opacity: 1; position: relative; z-index: 20; }
 
-        h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; }
-        h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; }
+        h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; transition: color 0.4s; }
+        h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; transition: color 0.4s; }
 
-        .glass-card { background: var(--card-bg); border-radius: 24px; box-shadow: var(--card-shadow); padding: 32px; height: 100%; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.2s; }
-        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
-        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
-        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
-        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
-        .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
+        .glass-card { background: var(--card-bg); border-radius: 24px; box-shadow: var(--card-shadow); padding: 32px; height: 100%; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.2s, background-color 0.4s, border-color 0.4s; }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.1); }
+        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; transition: border-left-color 0.4s; }
+        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); transition: color 0.4s;}
+        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; transition: color 0.4s;}
+        .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; transition: color 0.4s;}
 
         /* TABS Y CONTROLES */
-        .liquid-nav-container { display: flex; justify-content: center; margin-bottom: 40px; margin-top: 10px; }
-        .liquid-nav { display: inline-flex; align-items: center; position: relative; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--border-light); border-radius: 50px; padding: 8px; box-shadow: var(--card-shadow); z-index: 10; margin: 0; }
+        .liquid-nav-container { display: flex; justify-content: center; margin-bottom: 40px; margin-top: 10px; flex-wrap: wrap; gap: 15px; }
+        .liquid-nav { display: inline-flex; align-items: center; position: relative; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--border-light); border-radius: 50px; padding: 8px; box-shadow: var(--card-shadow); z-index: 10; margin: 0; transition: background-color 0.4s, border-color 0.4s; }
         .liquid-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; padding: 12px 24px; border-radius: 40px; transition: color 0.3s ease; display: flex; gap: 8px; z-index: 2;}
         .liquid-tab.active { color: var(--primary) !important; font-weight: 700; }
-        .liquid-indicator { position: absolute; top: 8px; bottom: 8px; left: 8px; width: 0; background: rgba(255, 255, 255, 0.25); border-radius: 40px; z-index: 1; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+        .liquid-indicator { position: absolute; top: 8px; bottom: 8px; left: 8px; width: 0; background: var(--blob-1); border: 1px solid var(--border-color); border-radius: 40px; z-index: 1; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
 
-        .form-select { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 14px; padding: 16px 24px; font-weight: 500; box-shadow: var(--card-shadow); backdrop-filter: blur(8px); }
-        .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); }
+        .form-select { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 14px; padding: 16px 24px; font-weight: 500; box-shadow: var(--card-shadow); backdrop-filter: blur(8px); transition: background-color 0.4s, color 0.4s, border-color 0.4s; }
+        .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--blob-1); }
         
         .chart-wrapper { position: relative; height: 280px; width: 100%; margin-top: 10px; }
         .radar-wrapper { position: relative; height: 420px; width: 100%; display: flex; justify-content: center; }
 
-        /* BARRAS DE PROGRESO CALIDAD */
+        /* BARRAS DE PROGRESO CALIDAD Y BURBUJAS CHIC */
         .progress-bar-container { margin-bottom: 18px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--text-main); font-weight: 500;}
-        .progress-val { font-weight: 800; font-variant-numeric: tabular-nums; }
+        .progress-label { display: flex; justify-content: space-between; align-items: center; gap: 15px; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-main); font-weight: 500; transition: color 0.4s;}
+        .progress-label span:first-child { flex: 1; line-height: 1.3; }
+        .progress-val-bubble { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(4px); }
         .progress-bg { height: 10px; background: rgba(0,0,0,0.05); border-radius: 5px; overflow: hidden; }
         :root[data-theme="dark"] .progress-bg { background: rgba(255,255,255,0.05); }
         .progress-fill { height: 100%; border-radius: 5px; transition: width 1s ease-out; }
 
-        /* IA PANELS (EL BOT ANALISTA) */
-        .ia-panel-wrapper { margin-top: 40px; padding-top: 10px; padding-bottom: 40px;}
-        .ia-card { background-color: var(--ia-bg); border-radius: 24px; padding: 40px; border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); box-shadow: var(--card-shadow); backdrop-filter: blur(16px); }
-        .ia-title { color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 28px; display: flex; gap: 12px; align-items: center; }
-        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 24px; height: 100%; }
-        .ia-lbl { font-size: 0.85rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 15px;}
-        .ia-text { font-size: 0.95rem; color: var(--text-main); line-height: 1.6; }
+        /* BOTONES DESCARGA DE IMÁGENES */
+        .btn-download-img {
+            background: var(--blob-1); color: var(--primary); border: 1px solid var(--border-color); width: 34px; height: 34px;
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .btn-download-img:hover { background: var(--primary); color: white; transform: translateY(-2px); box-shadow: 0 4px 10px var(--blob-1); }
 
-        /* FIX MAPA LEAFLET Y EFECTO HOVER */
-        #map-container { border-radius: 24px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); box-shadow: var(--card-shadow); }
+        /* IA PANELS DIVIDIDOS */
+        .ia-panel-wrapper { margin-top: 20px; padding-top: 10px; padding-bottom: 10px;}
+        .ia-card { background-color: var(--ia-bg); border-radius: 24px; padding: 30px; border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); box-shadow: var(--card-shadow); backdrop-filter: blur(16px); transition: background-color 0.4s, border-color 0.4s; }
+        .ia-title { color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 24px; display: flex; gap: 10px; align-items: center; transition: color 0.4s; }
+        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 20px; height: 100%; display: flex; flex-direction: column; justify-content: center; transition: background-color 0.4s, border-color 0.4s;}
+        .ia-val { font-size: 1.6rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; color: var(--text-main); transition: color 0.4s;}
+        .ia-lbl { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.05em; transition: color 0.4s;}
+        .ia-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.6; transition: color 0.4s;}
+        .ia-icon-wrapper { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 15px; }
+
+        /* FIX MAPA LEAFLET Y EFECTO SOMBRA HOVER */
+        #map-container { border-radius: 24px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); box-shadow: var(--card-shadow); transition: border-color 0.4s; }
         .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
-        path.leaflet-interactive { transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease, stroke-width 0.3s ease, stroke 0.3s ease !important; }
-        .map-polygon-hover { filter: drop-shadow(0 10px 15px rgba(67, 24, 255, 0.6)); outline: none; }
+        path.leaflet-interactive { transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease, stroke-width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), stroke 0.3s ease !important; }
+        .map-polygon-hover { filter: drop-shadow(0 10px 15px var(--blob-1)); outline: none; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* =========================================
-           PLANTILLA DE REPORTE PDF (OCULTA)
-           ========================================= */
-        #pdf-template-wrapper {
-            position: absolute;
-            top: 0;
-            left: -9999px; /* Oculto fuera de la pantalla */
-            width: 800px;  /* Ancho perfecto para Carta (Letter) */
-            background-color: #ffffff;
-            color: #1e293b;
-            font-family: 'Inter', sans-serif;
-            padding: 50px;
-            box-sizing: border-box;
-            z-index: -1000;
-        }
-
-        .pdf-header-container { border-bottom: 2px solid #4318ff; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .pdf-title-box h1 { font-size: 24px; font-weight: 800; color: #4318ff; margin: 0 0 5px 0; }
-        .pdf-title-box h3 { font-size: 14px; font-weight: 500; color: #64748b; margin: 0; }
-        .pdf-date { font-size: 12px; color: #94a3b8; text-align: right; }
-
-        .pdf-section-title { font-size: 16px; font-weight: 700; color: #1e293b; border-left: 4px solid #05cd99; padding-left: 10px; margin: 30px 0 15px 0; }
-        
-        .pdf-grid-kpis { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
-        .pdf-kpi-box { flex: 1 1 30%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; text-align: center; }
-        .pdf-kpi-val { font-size: 24px; font-weight: 800; color: #4318ff; }
-        .pdf-kpi-lbl { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-top: 5px; }
-
-        .pdf-grid-charts { display: flex; gap: 20px; margin-bottom: 30px; }
-        .pdf-chart-box { flex: 1; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; text-align: center;}
-        .pdf-chart-box h4 { font-size: 13px; color: #1e293b; margin-top: 0; margin-bottom: 10px; }
-        .pdf-chart-img { max-width: 100%; height: auto; max-height: 220px; }
-
-        .pdf-ia-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin-bottom: 15px; }
-        .pdf-ia-title { font-size: 14px; font-weight: 700; color: #166534; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .pdf-ia-text { font-size: 12px; color: #1e293b; line-height: 1.6; }
-
-        .pdf-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 10px; color: #94a3b8; }
     </style>
 </head>
 
@@ -189,13 +201,12 @@
             
             <!-- LOGO INSTITUCIONAL -->
             <div class="text-center mb-5">
-                <img src="Recurso.png" alt="Logo Institucional" style="max-height: 90px; object-fit: contain;">
+                <img src="https://placehold.co/400x120/transparent/4318ff.png?text=LOGO+SECRETARIA" alt="Logo Institucional" style="max-height: 90px; object-fit: contain;">
                 <p class="mt-3 text-muted fw-bold" style="letter-spacing: 2px; text-transform: uppercase;">Ecosistema Educativo en Salud</p>
             </div>
 
             <!-- BENTO BOX: KPIs GLOBALES -->
             <div id="landing-kpis">
-                <!-- Fila 1: Cursos y Matrículas -->
                 <div class="row g-4 mb-4 justify-content-center">
                     <div class="col-lg-3 col-md-5">
                         <div class="bento-solid h-100 d-flex flex-column justify-content-center">
@@ -218,7 +229,6 @@
                     </div>
                 </div>
 
-                <!-- Fila 2: Certificados y Encuestas -->
                 <div class="row mb-4 justify-content-center">
                     <div class="col-lg-10 col-md-12">
                         <div class="bento-pill-1 h-100 d-flex flex-column flex-md-row align-items-center justify-content-around">
@@ -238,7 +248,6 @@
                     </div>
                 </div>
 
-                <!-- Fila 3: CHS y NPS -->
                 <div class="row mb-5 justify-content-center">
                     <div class="col-lg-10 col-md-12">
                         <div class="bento-pill-2 h-100 d-flex flex-column flex-md-row align-items-center justify-content-around">
@@ -283,7 +292,6 @@
                     </a>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -293,14 +301,12 @@
     <!-- ========================================== -->
     <div class="container-fluid py-5 px-4 px-xl-5" id="dashboard_content">
         
-        <!-- HEADER DASHBOARD Y BOTONES -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3" id="header-dashboard">
             <div>
                 <h2 class="d-flex align-items-center gap-3 text-primary">Inteligencia Analítica</h2>
                 <div class="text-muted mt-2">Panel interactivo de monitoreo de cohortes y calidad percibida.</div>
             </div>
             <div class="d-flex gap-2 flex-wrap" id="action-buttons">
-                <!-- Botón de Volver únicamente -->
                 <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2" onclick="volverAlPortal()" style="border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px); color: var(--text-main);">
                     <i class="bi bi-house-door-fill text-primary"></i> Volver al Inicio
                 </button>
@@ -323,156 +329,178 @@
         <div id="contenedor-tabs" style="display: block;">
             
             <div class="liquid-nav-container" id="tabs-navigation">
+                <!-- PESTAÑAS -->
                 <ul class="nav liquid-nav" role="tablist">
                     <div class="liquid-indicator" id="liquid-indicator"></div>
                     <li class="nav-item"><button class="nav-link liquid-tab active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab"><i class="bi bi-pie-chart-fill fs-5"></i> Demografía</button></li>
                     <li class="nav-item"><button class="nav-link liquid-tab" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab"><i class="bi bi-speedometer2 fs-5"></i> Operativo</button></li>
                     <li class="nav-item"><button class="nav-link liquid-tab" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill fs-5"></i> Calidad Percibida</button></li>
                 </ul>
+
+                <!-- SELECTOR DE TEMAS (CUADRÍCULA 2x2) -->
+                <div class="theme-selector-container">
+                    <button class="theme-btn t-btn-light active" data-theme="light" onclick="cambiarTema('light')" title="Tema Claro"></button>
+                    <button class="theme-btn t-btn-dark" data-theme="dark" onclick="cambiarTema('dark')" title="Tema Oscuro"></button>
+                    <button class="theme-btn t-btn-rose" data-theme="rose" onclick="cambiarTema('rose')" title="Tema Rosado"></button>
+                    <button class="theme-btn t-btn-amber" data-theme="amber" onclick="cambiarTema('amber')" title="Tema Cálido"></button>
+                </div>
             </div>
 
             <div class="tab-content" id="myTabContent">
+                
+                <!-- ======================================================== -->
                 <!-- PANEL 1: DEMOGRAFÍA -->
+                <!-- ======================================================== -->
                 <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                     <div class="row g-4 mb-5" id="kpi-global-row"></div>
+                    
                     <div class="row g-4 mb-5">
-                        <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Sexo</h5><div class="chart-wrapper"><canvas id="chartSexo"></canvas></div></div></div>
-                        <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Curso de Vida</h5><div class="chart-wrapper"><canvas id="chartEdad"></canvas></div></div></div>
-                        <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Perfil Profesional</h5><div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div></div></div>
-                        <div class="col-xl-3 col-md-6"><div class="glass-card"><h5>Escolaridad</h5><div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div></div></div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="glass-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0">Sexo</h5>
+                                    <button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Demografia_Sexo')" title="Descargar Gráfico"><i class="bi bi-download"></i></button>
+                                </div>
+                                <div class="chart-wrapper"><canvas id="chartSexo"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="glass-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0">Curso de Vida</h5>
+                                    <button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Demografia_CursoVida')" title="Descargar Gráfico"><i class="bi bi-download"></i></button>
+                                </div>
+                                <div class="chart-wrapper"><canvas id="chartEdad"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="glass-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0">Perfil Profesional</h5>
+                                    <button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Demografia_Perfil')" title="Descargar Gráfico"><i class="bi bi-download"></i></button>
+                                </div>
+                                <div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="glass-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0">Escolaridad</h5>
+                                    <button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Demografia_Escolaridad')" title="Descargar Gráfico"><i class="bi bi-download"></i></button>
+                                </div>
+                                <div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row g-4 mb-5">
-                        <div class="col-lg-5 col-md-12"><div class="glass-card d-flex flex-column"><h5>Mapa de Participación</h5><div id="map-container" style="flex-grow: 1; min-height: 550px; width: 100%;"></div></div></div>
-                        <div class="col-lg-7 col-md-12"><div class="glass-card"><h5>Distribución por Ubicación</h5><div class="chart-wrapper" style="height: 550px; margin-top: 0;"><canvas id="chartComunas"></canvas></div></div></div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-lg-5 col-md-12">
+                            <div class="glass-card d-flex flex-column">
+                                <h5>Mapa de Participación</h5>
+                                <div id="map-container" style="flex-grow: 1; min-height: 550px; width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-12">
+                            <div class="glass-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0">Distribución por Ubicación</h5>
+                                    <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Demografia_Comunas')" title="Descargar Gráfico"><i class="bi bi-download"></i></button>
+                                </div>
+                                <div class="chart-wrapper" style="height: 550px; margin-top: 0;"><canvas id="chartComunas"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ANALISTA IA: DEMOGRAFÍA -->
+                    <div class="ia-panel-wrapper">
+                        <div class="ia-card">
+                            <div class="ia-title">
+                                <div style="background: linear-gradient(135deg, var(--primary) 0%, rgba(255,255,255,0.2) 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px var(--blob-1);">
+                                    <i class="bi bi-robot fs-5"></i>
+                                </div>
+                                Diagnóstico Demográfico Asistido
+                            </div>
+                            <div id="ia-txt-demo"></div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- PANEL 2: RENDIMIENTO -->
+                <!-- ======================================================== -->
+                <!-- PANEL 2: RENDIMIENTO OPERATIVO -->
+                <!-- ======================================================== -->
                 <div class="tab-pane fade" id="panel-moodle" role="tabpanel">
                     <div class="row g-4 mb-5" id="kpi-moodle-row"></div>
-                    <div class="row g-4">
-                        <div class="col-md-8"><div class="glass-card"><h5>Distribución del Estado de Capacitación</h5><div class="chart-wrapper"><canvas id="chartMoodleBar"></canvas></div></div></div>
-                        <div class="col-md-4"><div class="glass-card text-center d-flex flex-column justify-content-center align-items-center"><h5>Ritmo de Aprendizaje</h5><div class="metric-big mt-4" id="tiempo-consumo-dias">0</div><div class="kpi-label">Días Promedio para Finalizar</div></div></div>
-                    </div>
-                </div>
-
-                <!-- PANEL 3: CALIDAD -->
-                <div class="tab-pane fade" id="panel-radar" role="tabpanel">
-                    <div class="row g-4">
-                        <div class="col-md-7"><div class="glass-card"><h5 id="titulo-radar">Radar de Dimensiones vs Benchmark</h5><div class="radar-wrapper"><canvas id="chartRadar"></canvas></div></div></div>
-                        <div class="col-md-5"><div class="glass-card"><h5 id="titulo-desglose">Desglose Detallado de la Encuesta (0 - 5.0)</h5><div id="diagnostico-detalles" class="mt-4" style="max-height: 420px; overflow-y: auto; padding-right: 10px;"></div></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- PANEL ANALISTA IA AUTOMÁTICO               -->
-            <!-- ========================================== -->
-            <div class="ia-panel-wrapper" id="ia-panel">
-                <div class="ia-card">
-                    <div class="ia-title">
-                        <div style="background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3);">
-                            <i class="bi bi-robot fs-5"></i>
-                        </div>
-                        Analista IA - Diagnóstico Automático
-                    </div>
                     
-                    <div class="row g-4" id="ia-cards-container">
-                        <!-- Llenado por JS -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-8">
+                            <div class="glass-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0">Distribución del Estado de Capacitación</h5>
+                                    <button class="btn-download-img" onclick="descargarGrafico('chartMoodleBar', 'Operativo_Embudo')" title="Descargar Gráfico"><i class="bi bi-download"></i></button>
+                                </div>
+                                <div class="chart-wrapper"><canvas id="chartMoodleBar"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card text-center d-flex flex-column justify-content-center align-items-center">
+                                <h5>Ritmo de Aprendizaje</h5>
+                                <div class="metric-big mt-4" id="tiempo-consumo-dias">0</div>
+                                <div class="kpi-label">Días Promedio para Finalizar</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ANALISTA IA: OPERATIVO -->
+                    <div class="ia-panel-wrapper">
+                        <div class="ia-card">
+                            <div class="ia-title">
+                                <div style="background: linear-gradient(135deg, var(--success) 0%, rgba(255,255,255,0.2) 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(5, 205, 153, 0.3);">
+                                    <i class="bi bi-robot fs-5"></i>
+                                </div>
+                                Diagnóstico de Rendimiento Operativo
+                            </div>
+                            <div id="ia-txt-moodle"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======================================================== -->
+                <!-- PANEL 3: CALIDAD PERCIBIDA -->
+                <!-- ======================================================== -->
+                <div class="tab-pane fade" id="panel-radar" role="tabpanel">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-7">
+                            <div class="glass-card">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="mb-0" id="titulo-radar">Radar de Dimensiones vs Benchmark</h5>
+                                    <button class="btn-download-img" onclick="descargarGrafico('chartRadar', 'Calidad_Radar')" title="Descargar Gráfico"><i class="bi bi-download"></i></button>
+                                </div>
+                                <div class="radar-wrapper"><canvas id="chartRadar"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="glass-card">
+                                <h5 id="titulo-desglose">Desglose Detallado de la Encuesta (0 - 5.0)</h5>
+                                <div id="diagnostico-detalles" class="mt-4" style="max-height: 420px; overflow-y: auto; padding-right: 10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ANALISTA IA: CALIDAD -->
+                    <div class="ia-panel-wrapper">
+                        <div class="ia-card">
+                            <div class="ia-title">
+                                <div style="background: linear-gradient(135deg, var(--warning) 0%, rgba(255,255,255,0.2) 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(255, 181, 71, 0.3);">
+                                    <i class="bi bi-robot fs-5"></i>
+                                </div>
+                                Evaluación Analítica de Calidad Percibida
+                            </div>
+                            <div id="ia-txt-radar"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ZONA DE EXPORTACIÓN (SÓLO VISIBLE EN CURSOS ESPECÍFICOS) -->
-            <div id="pdf-export-zone" class="text-center mt-5 mb-5" style="display: none;">
-                <hr style="border-color: var(--border-color); margin-bottom: 30px;">
-                <h5 class="fw-bold mb-3">Exportación Ejecutiva</h5>
-                <p class="text-muted mb-4">Genera un documento PDF tamaño carta, estructurado y formateado para informes de gestión.</p>
-                <button class="btn btn-primary rounded-pill px-5 py-3 fw-bold shadow" onclick="generarReporteProfesionalPDF()" id="btn-descargar-pdf">
-                    <i class="bi bi-file-earmark-pdf-fill me-2 fs-5"></i> Descargar Reporte PDF
-                </button>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- PLANTILLA OCULTA PARA EL PDF PROFESIONAL   -->
-    <!-- ========================================== -->
-    <div id="pdf-template-wrapper">
-        <div class="pdf-header-container">
-            <div class="pdf-title-box">
-                <h1>Reporte Analítico de Rendimiento</h1>
-                <h3 id="pdf-curso-nombre">Nombre del Curso</h3>
-            </div>
-            <div class="pdf-date text-end">
-                <img src="https://placehold.co/150x50/transparent/4318ff.png?text=LOGO" alt="Logo" style="max-height: 40px; margin-bottom: 10px;"><br>
-                <span id="pdf-fecha-actual">Fecha</span>
-            </div>
-        </div>
-
-        <div class="pdf-section-title">Resumen Operativo</div>
-        <div class="pdf-grid-kpis">
-            <div class="pdf-kpi-box">
-                <div class="pdf-kpi-val" id="pdf-kpi-matriculas">0</div>
-                <div class="pdf-kpi-lbl">Matrículas Totales</div>
-            </div>
-            <div class="pdf-kpi-box">
-                <div class="pdf-kpi-val" id="pdf-kpi-certificados" style="color: #05cd99;">0</div>
-                <div class="pdf-kpi-lbl">Certificados (Aprobados)</div>
-            </div>
-            <div class="pdf-kpi-box">
-                <div class="pdf-kpi-val" id="pdf-kpi-abandono" style="color: #ffb547;">0%</div>
-                <div class="pdf-kpi-lbl">Tasa de Abandono</div>
-            </div>
-        </div>
-
-        <div class="pdf-section-title">Calidad Percibida (Encuestas)</div>
-        <div class="pdf-grid-kpis">
-            <div class="pdf-kpi-box">
-                <div class="pdf-kpi-val" id="pdf-kpi-chs">0</div>
-                <div class="pdf-kpi-lbl">Score Salud (CHS)</div>
-            </div>
-            <div class="pdf-kpi-box">
-                <div class="pdf-kpi-val" id="pdf-kpi-nps">0</div>
-                <div class="pdf-kpi-lbl">e-NPS (Satisfacción)</div>
-            </div>
-            <div class="pdf-kpi-box">
-                <div class="pdf-kpi-val" id="pdf-kpi-encuestas">0</div>
-                <div class="pdf-kpi-lbl">Respuestas Recibidas</div>
-            </div>
-        </div>
-
-        <div class="pdf-section-title">Visualización de Datos</div>
-        <div class="pdf-grid-charts">
-            <div class="pdf-chart-box">
-                <h4>Embudo de Capacitación</h4>
-                <img id="pdf-img-moodle" class="pdf-chart-img" alt="Gráfico Moodle">
-            </div>
-            <div class="pdf-chart-box">
-                <h4>Dimensiones de Calidad</h4>
-                <img id="pdf-img-radar" class="pdf-chart-img" alt="Gráfico Radar">
-            </div>
-        </div>
-
-        <div class="pdf-section-title">Diagnóstico IA (Automático)</div>
-        <div class="pdf-ia-box">
-            <div class="pdf-ia-title"><i class="bi bi-robot"></i> Estado General</div>
-            <div class="pdf-ia-text" id="pdf-ia-diag">Cargando diagnóstico...</div>
-        </div>
-        <div style="display: flex; gap: 15px;">
-            <div class="pdf-ia-box" style="flex: 1; border-color: #86efac; background: #f0fdf4;">
-                <div class="pdf-ia-title" style="color: #166534;"><i class="bi bi-star-fill"></i> Principal Fortaleza</div>
-                <div class="pdf-ia-text" id="pdf-ia-fort">Cargando fortaleza...</div>
-            </div>
-            <div class="pdf-ia-box" style="flex: 1; border-color: #fca5a5; background: #fef2f2;">
-                <div class="pdf-ia-title" style="color: #991b1b;"><i class="bi bi-exclamation-triangle-fill"></i> Oportunidad de Mejora</div>
-                <div class="pdf-ia-text" id="pdf-ia-riesgo">Cargando riesgo...</div>
-            </div>
-        </div>
-
-        <div class="pdf-footer">
-            Generado automáticamente por el Ecosistema Educativo en Salud - Inteligencia Analítica.
         </div>
     </div>
 
@@ -493,6 +521,19 @@
         let mapTilesLayer = null; 
         let geoJsonDataRaw = null;
 
+        // Extraer dinámicamente los colores de la dona según el tema
+        function getColoresDona() {
+            const rootStyle = getComputedStyle(document.documentElement);
+            return [
+                rootStyle.getPropertyValue('--primary').trim(),
+                rootStyle.getPropertyValue('--success').trim(),
+                rootStyle.getPropertyValue('--warning').trim(),
+                rootStyle.getPropertyValue('--danger').trim(),
+                rootStyle.getPropertyValue('--info').trim(),
+                '#8b5cf6', '#14b8a6'
+            ];
+        }
+
         const mapeoPreguntas = { 
             "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro al Inicio", 
             "¿Se cumplió el objetivo de la capacitación?": "Objetivo General Cumplido", 
@@ -508,7 +549,34 @@
             "¿El material utilizado permitió el entendimiento del tema?": "Calidad del Material", 
             "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General (eNPS Base)" 
         };
-        const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
+
+        // ==========================================
+        // MOTOR DE TEMAS DENTRO DE CHART.JS
+        // ==========================================
+        function cambiarTema(temaNombre) {
+            // 1. Aplicar al HTML
+            document.documentElement.setAttribute('data-theme', temaNombre);
+            localStorage.setItem('dashboard_theme', temaNombre);
+            
+            // 2. Actualizar botones selectores
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.dataset.theme === temaNombre) btn.classList.add('active');
+            });
+
+            // 3. Forzar redibujado absoluto de gráficas para que absorban los colores nuevos de CSS
+            setTimeout(() => {
+                let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
+                Chart.defaults.color = textColor; // Actualizar color global de textos
+
+                // Volver a dibujar todo (Destruye y crea de nuevo para actualizar Dona, Ejes X/Y y Mapa)
+                if (cursoActual) {
+                    actualizarPantallaCurso();
+                } else if (Object.keys(dashboardData).length > 0) {
+                    actualizarPantallaGlobal();
+                }
+            }, 50);
+        }
 
         // Navegación Liquid
         function moveIndicator(btn) {
@@ -539,68 +607,33 @@
         }
 
         // ==========================================
-        // DESCARGA PDF PROFESIONAL CON PLANTILLA
+        // DESCARGA DE GRÁFICOS INDIVIDUALES
         // ==========================================
-        function generarReporteProfesionalPDF() {
-            if (!cursoActual) return; // Por seguridad
+        function descargarGrafico(canvasId, nombreBase) {
+            const canvasOriginal = document.getElementById(canvasId);
+            if (!canvasOriginal) return;
 
-            const btnPdf = document.getElementById('btn-descargar-pdf');
-            btnPdf.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Preparando Documento...';
-            btnPdf.disabled = true;
+            // Canvas temporal para rellenar el fondo según el Tema
+            const tempCanvas = document.createElement('canvas');
+            const ctx = tempCanvas.getContext('2d');
+            tempCanvas.width = canvasOriginal.width;
+            tempCanvas.height = canvasOriginal.height;
 
-            // 1. Llenar los datos de texto de la plantilla oculta
-            document.getElementById('pdf-curso-nombre').innerText = cursoActual.Nombre_Curso;
-            
-            const opcionesFecha = { year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('pdf-fecha-actual').innerText = new Date().toLocaleDateString('es-ES', opcionesFecha);
+            // Obtener el color de fondo actual del tema
+            const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
+            ctx.fillStyle = bgColor || '#ffffff';
+            ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-            document.getElementById('pdf-kpi-matriculas').innerText = cursoActual.Total_Inscritos;
-            const totalCertificados = Math.round((cursoActual.Total_Inscritos || 0) * (cursoActual['Tasa_Finalizacion_%'] || 0) / 100);
-            document.getElementById('pdf-kpi-certificados').innerText = totalCertificados + " (" + cursoActual['Tasa_Finalizacion_%'] + "%)";
-            document.getElementById('pdf-kpi-abandono').innerText = cursoActual['Tasa_Abandono_%'] + "%";
+            // Dibujar el gráfico original
+            ctx.drawImage(canvasOriginal, 0, 0);
 
-            document.getElementById('pdf-kpi-chs').innerText = cursoActual.Salud_Curso_CHS;
-            document.getElementById('pdf-kpi-nps').innerText = cursoActual.e_NPS;
-            document.getElementById('pdf-kpi-encuestas').innerText = cursoActual.Total_Encuestas;
+            let sufijo = cursoActual ? `_${cursoActual.Nombre_Curso.substring(0,15)}` : '_Global';
+            let nombreArchivo = `${nombreBase}${sufijo}.png`.replace(/\s+/g, '');
 
-            // 2. Extraer textos de la IA desde el DOM actual (que ya fue generado)
-            // Las tarjetas IA no tienen ID individual, pero podemos agarrar su contenido interno
-            const iaCards = document.querySelectorAll('#ia-cards-container .ia-text');
-            if (iaCards.length >= 3) {
-                document.getElementById('pdf-ia-diag').innerHTML = iaCards[0].innerHTML;
-                document.getElementById('pdf-ia-fort').innerHTML = iaCards[1].innerHTML;
-                document.getElementById('pdf-ia-riesgo').innerHTML = iaCards[2].innerHTML;
-            }
-
-            // 3. Tomar "fotos" (Data URL) de las gráficas de Chart.js
-            // Moodle Bar
-            const canvasMoodle = document.getElementById('chartMoodleBar');
-            if (canvasMoodle) document.getElementById('pdf-img-moodle').src = canvasMoodle.toDataURL('image/png', 1.0);
-            
-            // Radar
-            const canvasRadar = document.getElementById('chartRadar');
-            if (canvasRadar) document.getElementById('pdf-img-radar').src = canvasRadar.toDataURL('image/png', 1.0);
-
-            // 4. Configurar y disparar html2pdf
-            const elementoPlantilla = document.getElementById('pdf-template-wrapper');
-            const nombreArchivo = "Reporte_" + cursoActual.Edicion.replace(/ /g, '_') + ".pdf";
-
-            var opt = {
-                margin:       0, // Los márgenes ya los manejamos con CSS (padding)
-                filename:     nombreArchivo,
-                image:        { type: 'jpeg', quality: 1.0 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
-            // Pequeña pausa para asegurar que las imágenes se cargaron en el src
-            setTimeout(() => {
-                html2pdf().set(opt).from(elementoPlantilla).save().then(() => {
-                    // Restaurar botón
-                    btnPdf.innerHTML = '<i class="bi bi-file-earmark-pdf-fill me-2 fs-5"></i> Descargar Reporte PDF';
-                    btnPdf.disabled = false;
-                });
-            }, 500);
+            const enlace = document.createElement('a');
+            enlace.download = nombreArchivo;
+            enlace.href = tempCanvas.toDataURL('image/png', 1.0);
+            enlace.click();
         }
 
         // ==========================================
@@ -608,6 +641,10 @@
         // ==========================================
         document.addEventListener("DOMContentLoaded", async () => {
             
+            // Cargar el tema guardado
+            const temaGuardado = localStorage.getItem('dashboard_theme') || 'light';
+            cambiarTema(temaGuardado);
+
             document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(btn => { 
                 btn.addEventListener('shown.bs.tab', (e) => { 
                     moveIndicator(e.target); 
@@ -637,7 +674,6 @@
                     };
                 }
 
-                Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main'); 
                 Chart.defaults.font.family = 'Inter';
                 
                 inicializarMapa(); 
@@ -655,69 +691,118 @@
         });
 
         // ==========================================
-        // ANALISTA IA (GENERADOR DE TEXTO)
+        // ANALISTA IA (GENERADOR DE TEXTOS DIVIDIDOS)
         // ==========================================
-        function generarInsightIA(esGlobal, curso) {
-            let chs, nps, totalEncuestas, pregData;
+        function generarInsightsIABloques(esGlobal, curso) {
             
+            // 1. DATA DEMOGRÁFICA
+            let totalDemo = esGlobal ? dashboardData.metadata.total_estudiantes_unicos : curso.Total_Inscritos;
+            let demoData = esGlobal ? dashboardData.demografia_global : curso.Demografia;
+            let pMujeres = 0, pDom = "N/A", pP = 0, eDom = "N/A";
+            
+            try { 
+                let totalG = Object.values(demoData.Sexo || {}).reduce((a, b) => a + b, 0); 
+                if (totalG > 0) { 
+                    pMujeres = Math.round(((demoData.Sexo['Femenino'] || 0) / totalG) * 100); 
+                    let pKeys = Object.keys(demoData.Perfil || {}); 
+                    pDom = pKeys.length > 0 ? pKeys.reduce((a, b) => demoData.Perfil[a] > demoData.Perfil[b] ? a : b) : "N/A"; 
+                    pP = Math.round(((demoData.Perfil[pDom] || 0) / totalG) * 100); 
+                    let keyEdad = esGlobal ? 'Curso de Vida' : 'Edad';
+                    let eKeys = Object.keys(demoData[keyEdad] || {}); 
+                    eDom = eKeys.length > 0 ? eKeys.reduce((a, b) => demoData[keyEdad][a] > demoData[keyEdad][b] ? a : b) : "N/A"; 
+                } 
+            } catch (e) {}
+
+            let txtDemoConclu = esGlobal 
+                ? `A nivel consolidado, la institución impacta principalmente a <strong>${pDom}</strong>. Las futuras políticas deben considerar este perfil como estándar institucional.` 
+                : `La analítica de esta cohorte revela un grupo sesgado hacia <strong>${pDom}</strong>. Esto sugiere que los ejemplos y metodologías del tutor deben orientarse a este sector.`;
+
+            document.getElementById('ia-txt-demo').innerHTML = `
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${totalDemo ? totalDemo.toLocaleString() : 0}</div><div class="ia-lbl">Participantes</div></div></div>
+                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pMujeres}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div>
+                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div>
+                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div>
+                </div>
+                <p class="mb-0 fs-6 text-muted"><strong>Conclusión de IA:</strong> ${txtDemoConclu}</p>
+            `;
+
+            // 2. DATA OPERATIVA
+            let fin = 0, abd = 0, inact = 0, chs = 0;
             if (esGlobal) {
                 chs = dashboardData.kpis_globales.chs_promedio_secretaria;
-                nps = dashboardData.kpis_globales.nps_global;
-                totalEncuestas = dashboardData.metadata.total_encuestas_historicas;
-                pregData = promediosGlobalesPreguntas;
+                let totInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0);
+                dashboardData.cursos.forEach(c => { 
+                    fin += (c['Tasa_Finalizacion_%'] / 100) * (c.Total_Inscritos || 0); 
+                    abd += (c['Tasa_Abandono_%'] / 100) * (c.Total_Inscritos || 0); 
+                    inact += (c['Tasa_Inactividad_%'] / 100) * (c.Total_Inscritos || 0); 
+                });
+                fin = totInscritos ? Math.round((fin / totInscritos) * 100) : 0;
+                abd = totInscritos ? Math.round((abd / totInscritos) * 100) : 0;
+                inact = totInscritos ? Math.round((inact / totInscritos) * 100) : 0;
             } else {
                 chs = curso.Salud_Curso_CHS;
-                nps = curso.e_NPS;
-                totalEncuestas = curso.Total_Encuestas;
-                pregData = curso.Detalle_Preguntas;
+                fin = curso['Tasa_Finalizacion_%']; abd = curso['Tasa_Abandono_%']; inact = curso['Tasa_Inactividad_%'];
             }
 
-            // Diagnóstico de Salud
-            let saludText = chs >= 80 ? "Óptimo" : (chs >= 65 ? "Estable" : "Crítico");
-            let colorSalud = chs >= 80 ? "var(--success)" : (chs >= 65 ? "var(--warning)" : "var(--danger)");
-            let diagStr = `El ecosistema presenta un estado de salud <strong style="color:${colorSalud}">${saludText} (${chs} CHS)</strong>. `;
-            if(nps >= 50) diagStr += `El nivel de recomendación e-NPS es sobresaliente, indicando una alta fidelización por parte de los estudiantes. `;
-            else diagStr += `Existen áreas de oportunidad en la percepción general, ya que el e-NPS actual es de ${nps}. `;
-            
-            // Encontrar la fortaleza y el riesgo buscando en las encuestas
-            let maxScore = -1, minScore = 6;
-            let mejorPregunta = "", peorPregunta = "";
-            
-            for(let q in pregData) {
-                if(q.includes("En general")) continue; // Omitir la pregunta del NPS
-                let val = pregData[q];
-                if(val > maxScore) { maxScore = val; mejorPregunta = mapeoPreguntas[q] || q; }
-                if(val < minScore) { minScore = val; peorPregunta = mapeoPreguntas[q] || q; }
-            }
+            let mIcon = "", mColor = "", mText = ""; 
+            if (fin >= 80) { mIcon = "bi-check-circle-fill"; mColor = "success"; mText = "<strong>Excelente Eficiencia Terminal.</strong> El modelo pedagógico logra retener al estudiante efectivamente."; } 
+            else if (inact > fin && inact > 40) { mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; mText = `<strong>Fricción Severa en Onboarding.</strong> El mayor porcentaje (${inact}%) nunca inició la capacitación. Se requiere auditar los accesos o correos.`; } 
+            else if (abd > 30) { mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; mText = `<strong>Alerta de Deserción Intermedia.</strong> Existe una fuga masiva del ${abd}%. Los módulos podrían estar sobrecargados o ser confusos.`; } 
+            else { mIcon = "bi-info-circle-fill"; mColor = "primary"; mText = "<strong>Comportamiento Operativo Estándar.</strong> Tasas de aprobación y abandono dentro de los márgenes normales de educación virtual."; } 
 
-            let fortStr = `La dimensión mejor valorada es <strong>${mejorPregunta}</strong> con un puntaje de ${maxScore.toFixed(1)}/5.0. Esto sugiere que el ecosistema tiene un rendimiento superior en esta área específica.`;
-            let riesgoStr = `Atención requerida en <strong>${peorPregunta}</strong>, la cual obtuvo la calificación más baja (${minScore.toFixed(1)}/5.0). Se recomienda implementar planes de mejora inmediatos en este aspecto metodológico u operativo.`;
-
-            if (totalEncuestas < 5) {
-                fortStr = "Aún no hay suficientes datos de encuestas para determinar una fortaleza estadísticamente significativa.";
-                riesgoStr = "Es necesario fomentar la participación en las encuestas de satisfacción para obtener métricas claras.";
-            }
-
-            document.getElementById('ia-cards-container').innerHTML = `
-                <div class="col-md-4">
-                    <div class="ia-mini-card">
-                        <div class="ia-lbl text-primary"><i class="bi bi-heart-pulse-fill me-2"></i>Estado Institucional</div>
-                        <div class="ia-text">${diagStr}</div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="ia-mini-card">
-                        <div class="ia-lbl" style="color: var(--success)"><i class="bi bi-star-fill me-2"></i>Principal Fortaleza</div>
-                        <div class="ia-text">${fortStr}</div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="ia-mini-card">
-                        <div class="ia-lbl" style="color: var(--danger)"><i class="bi bi-exclamation-triangle-fill me-2"></i>Riesgo / Oportunidad</div>
-                        <div class="ia-text">${riesgoStr}</div>
-                    </div>
+            document.getElementById('ia-txt-moodle').innerHTML = `
+                <div class="alert bg-${mColor}-soft d-flex align-items-center mb-4 p-4 border-0 shadow-sm rounded-4" style="background-color: var(--card-bg); border-left: 4px solid var(--${mColor}) !important;"><i class="bi ${mIcon} fs-1 me-4 text-${mColor}"></i> <div class="fs-6 text-main">${mText}</div></div>
+                <div class="row g-4">
+                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">Puntaje de Salud (CHS)</div><div class="ia-val text-${mColor}">${chs} <span style="font-size: 1rem; color: var(--text-muted);">/ 100</span></div><div class="ia-text text-muted">Métrica que combina finalización y satisfacción.</div></div></div>
+                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${esGlobal ? 'Fuga Histórica' : 'Fuga Académica'}</div><div class="ia-val">${abd}%</div><div class="ia-text text-muted">Estudiantes que iniciaron pero no concluyeron.</div></div></div>
+                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${esGlobal ? 'Inactividad Institucional' : 'Barrera de Entrada'}</div><div class="ia-val">${inact}%</div><div class="ia-text text-muted">Matriculados que jamás registraron actividad.</div></div></div>
                 </div>
             `;
+
+            // 3. DATA DE CALIDAD
+            let nps = esGlobal ? dashboardData.kpis_globales.nps_global : curso.e_NPS;
+            let encuestas = esGlobal ? dashboardData.metadata.total_encuestas_historicas : curso.Total_Encuestas;
+            let pregData = esGlobal ? promediosGlobalesPreguntas : curso.Detalle_Preguntas;
+
+            if (encuestas < 5) {
+                document.getElementById('ia-txt-radar').innerHTML = `<div class="alert bg-indigo-soft border-0 p-4 rounded-4 d-flex align-items-center"><i class="bi bi-bar-chart-fill fs-1 me-4"></i><div class="fs-6">Muestra estadística muy baja (<strong>${encuestas} respuestas</strong>). No es posible emitir un diagnóstico de calidad con significancia estadística.</div></div>`;
+            } else {
+                let maxScore = -1, minScore = 6, mejorPregunta = "", peorPregunta = "";
+                for(let q in pregData) {
+                    if(q.includes("En general")) continue; 
+                    let val = pregData[q];
+                    if(val > maxScore) { maxScore = val; mejorPregunta = mapeoPreguntas[q] || q; }
+                    if(val < minScore) { minScore = val; peorPregunta = mapeoPreguntas[q] || q; }
+                }
+
+                let npsColor = nps > 20 ? "success" : (nps < 0 ? "danger" : "warning"); 
+                
+                document.getElementById('ia-txt-radar').innerHTML = `
+                    <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-light">
+                        <span class="badge bg-${npsColor} text-white fs-4 py-3 px-4 me-4 shadow-sm rounded-3" style="font-variant-numeric: tabular-nums;">NPS: ${nps}</span>
+                        <span class="fs-6 text-muted" style="line-height: 1.5;">Sentimiento extraído de <strong>${encuestas.toLocaleString()} encuestas</strong> válidas. El Net Promoter Score indica la lealtad general.</span>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="ia-mini-card" style="border-left: 4px solid var(--success);">
+                                <div class="ia-lbl text-success"><i class="bi bi-star-fill me-2"></i>Dimensión Mejor Valorada</div>
+                                <div class="ia-val" style="font-size:1.3rem;">${maxScore.toFixed(1)} <span style="font-size: 1rem; color: var(--text-muted);">/ 5.0</span></div>
+                                <div class="ia-text fw-bold mb-1">${mejorPregunta}</div>
+                                <div class="ia-text text-muted" style="font-size:0.85rem;">El ecosistema presenta un rendimiento superior en este aspecto metodológico.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="ia-mini-card" style="border-left: 4px solid var(--danger);">
+                                <div class="ia-lbl text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Oportunidad de Mejora</div>
+                                <div class="ia-val" style="font-size:1.3rem;">${minScore.toFixed(1)} <span style="font-size: 1rem; color: var(--text-muted);">/ 5.0</span></div>
+                                <div class="ia-text fw-bold mb-1">${peorPregunta}</div>
+                                <div class="ia-text text-muted" style="font-size:0.85rem;">Se requiere atención prioritaria y planes de mejora en esta área.</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         }
 
 
@@ -743,9 +828,6 @@
         }
 
         function actualizarPantallaGlobal() { 
-            // 1. Ocultar zona PDF en global
-            document.getElementById('pdf-export-zone').style.display = 'none';
-
             const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
             let totalCertificados = 0; 
             dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
@@ -794,13 +876,10 @@
             dibujarRadar(promediosGlobalesPreguntas, true); 
             document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
 
-            generarInsightIA(true, null);
+            generarInsightsIABloques(true, null);
         }
 
         function actualizarPantallaCurso() { 
-            // 1. Mostrar zona PDF
-            document.getElementById('pdf-export-zone').style.display = 'block';
-
             const totalCertificados = Math.round((cursoActual.Total_Inscritos || 0) * (cursoActual['Tasa_Finalizacion_%'] || 0) / 100); 
             const pctCertificados = cursoActual['Tasa_Finalizacion_%'] + "%"; 
             
@@ -833,11 +912,11 @@
             dibujarRadar(cursoActual.Detalle_Preguntas, false); 
             document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(cursoActual.Detalle_Preguntas);
 
-            generarInsightIA(false, cursoActual);
+            generarInsightsIABloques(false, cursoActual);
         }
 
         // ==========================================
-        // COMPONENTES UI Y LÓGICA DE DIBUJO
+        // COMPONENTES UI
         // ==========================================
         function crearTarjetaKPI(label, valor, porcentaje = null) { 
             let htmlPorcentaje = porcentaje ? `<span style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.15); padding: 4px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;">${porcentaje}</span>` : ''; 
@@ -848,17 +927,21 @@
             let html = '';
             for (let q in datosPreguntas) {
                 let val = parseFloat(datosPreguntas[q]) || 0;
-                let colorClass = val >= 4.5 ? 'success' : (val >= 4.0 ? 'info' : 'danger');
+                
+                // Extraer el color y el fondo suave directamente de las variables CSS actuales
+                let hexColor = val >= 4.5 ? 'var(--success)' : (val >= 4.0 ? 'var(--warning)' : 'var(--danger)');
+                let bgSoft = val >= 4.5 ? 'rgba(5, 205, 153, 0.15)' : (val >= 4.0 ? 'rgba(255, 181, 71, 0.15)' : 'rgba(238, 93, 80, 0.15)');
+                
                 let widthPct = (val / 5) * 100;
                 
                 html += `
                 <div class="progress-bar-container">
                     <div class="progress-label">
                         <span>${q}</span>
-                        <span class="progress-val text-${colorClass}">${val.toFixed(1)}</span>
+                        <span class="progress-val-bubble" style="background-color: ${bgSoft}; color: ${hexColor}; border-color: ${hexColor};">${val.toFixed(1)}</span>
                     </div>
                     <div class="progress-bg">
-                        <div class="progress-fill bg-${colorClass}" style="width: ${widthPct}%"></div>
+                        <div class="progress-fill" style="width: ${widthPct}%; background-color: ${hexColor};"></div>
                     </div>
                 </div>`;
             }
@@ -909,9 +992,6 @@
                     htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${c.Edicion}</h5><span class="badge bg-primary px-3 py-2 text-white" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
                 }); 
                 htmlLobby += `</div>`; lobby.innerHTML = htmlLobby; 
-                
-                // Asegurar que la zona PDF no salga en el Lobby
-                document.getElementById('pdf-export-zone').style.display = 'none';
             } 
             if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
         }
@@ -927,7 +1007,6 @@
             if (!this.value) { 
                 document.getElementById('panel-lobby-curso').style.display = 'block'; 
                 document.getElementById('contenedor-tabs').style.display = 'none'; 
-                document.getElementById('pdf-export-zone').style.display = 'none';
                 return; 
             } 
             document.getElementById('panel-lobby-curso').style.display = 'none'; 
@@ -971,11 +1050,21 @@
 
         function getColorMapa(valor, maxValor) { 
             if (valor === 0) return 'transparent'; 
-            if (valor > maxValor * 0.8) return '#4318ff'; 
-            if (valor > maxValor * 0.6) return '#7551ff'; 
-            if (valor > maxValor * 0.4) return '#a389ff'; 
-            if (valor > maxValor * 0.2) return '#d1c4ff'; 
-            return '#ece6ff'; 
+            
+            // Adaptar la paleta al tema actual
+            let tema = document.documentElement.getAttribute('data-theme') || 'light';
+            let paleta = [];
+            
+            if (tema === 'light') paleta = ['#ece6ff', '#d1c4ff', '#a389ff', '#7551ff', '#4318ff'];
+            else if (tema === 'dark') paleta = ['#1e1b4b', '#2e266d', '#4338ca', '#5b21b6', '#7551ff'];
+            else if (tema === 'rose') paleta = ['#ffe4e6', '#fecdd3', '#fda4af', '#fb7185', '#e11d48'];
+            else if (tema === 'amber') paleta = ['#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#d97706'];
+
+            if (valor > maxValor * 0.8) return paleta[4]; 
+            if (valor > maxValor * 0.6) return paleta[3]; 
+            if (valor > maxValor * 0.4) return paleta[2]; 
+            if (valor > maxValor * 0.2) return paleta[1]; 
+            return paleta[0]; 
         }
 
         function dibujarMapaCoropletico(dataComunas) { 
@@ -1027,40 +1116,88 @@
                 agrupadito[label] = (agrupadito[label] || 0) + dataObject[key]; 
             } 
             let sorted = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]); 
+            
+            let colorPrimario = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+            let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
+
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
-                type: 'bar', data: { labels: sorted.map(i => i[0]), datasets: [{ data: sorted.map(i => i[1]), backgroundColor: '#4318ff', borderRadius: 4 }] }, 
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { autoSkip: false, font: { family: 'Inter', size: 10 } } } } } 
+                type: 'bar', 
+                data: { labels: sorted.map(i => i[0]), datasets: [{ data: sorted.map(i => i[1]), backgroundColor: colorPrimario, borderRadius: 4 }] }, 
+                options: { 
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, 
+                    scales: { 
+                        x: { beginAtZero: true, ticks: { color: textColor } }, 
+                        y: { ticks: { autoSkip: false, color: textColor, font: { family: 'Inter', size: 10 } } } 
+                    } 
+                } 
             }); 
         }
 
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
+            
+            let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
+
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
-                type: 'doughnut', data: { labels: Object.keys(dataObject), datasets: [{ data: Object.values(dataObject), backgroundColor: coloresDona, borderWidth: 2, borderColor: 'transparent', hoverOffset: 8 }] }, 
-                options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } } } } } 
+                type: 'doughnut', 
+                data: { labels: Object.keys(dataObject), datasets: [{ data: Object.values(dataObject), backgroundColor: getColoresDona(), borderWidth: 2, borderColor: 'transparent', hoverOffset: 8 }] }, 
+                options: { 
+                    responsive: true, maintainAspectRatio: false, cutout: '75%', 
+                    plugins: { legend: { position: legendPosition, labels: { color: textColor, boxWidth: 10, font: { size: 11, family: 'Inter' } } } } 
+                } 
             }); 
         }
 
         function dibujarBarraMoodle(canvasId, curso) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
+            
+            let cSucc = getComputedStyle(document.documentElement).getPropertyValue('--success').trim();
+            let cWarn = getComputedStyle(document.documentElement).getPropertyValue('--warning').trim();
+            let cDang = getComputedStyle(document.documentElement).getPropertyValue('--danger').trim();
+            let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
+
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
                 type: 'bar', data: { labels: ['Estado %'], datasets: [
-                        { label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, 
-                        { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: '#ffb547' }, 
-                        { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } }
+                        { label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: cSucc, borderRadius: { topLeft: 6, bottomLeft: 6 } }, 
+                        { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: cWarn }, 
+                        { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: cDang, borderRadius: { topRight: 6, bottomRight: 6 } }
                     ] }, 
-                options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 14 } } } } 
+                options: { 
+                    responsive: true, maintainAspectRatio: false, indexAxis: 'y', 
+                    scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, 
+                    plugins: { legend: { position: 'bottom', labels: { color: textColor, boxWidth: 14 } } } 
+                } 
             }); 
         }
 
         function dibujarRadar(preguntasCurso, isGlobal = false) { 
             if (chartInstances['chartRadar']) chartInstances['chartRadar'].destroy(); 
             const labels = Object.keys(preguntasCurso).map(q => mapeoPreguntas[q] || "Pregunta"); 
-            let datasetsArray = [{ label: isGlobal ? 'Promedio Institucional' : 'Esta Cohorte', data: Object.values(preguntasCurso), backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 4 }]; 
+            
+            let colorPrimario = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+            let colorFondoSoft = getComputedStyle(document.documentElement).getPropertyValue('--blob-1').trim();
+            let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
+            let gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
+
+            let datasetsArray = [{ label: isGlobal ? 'Promedio Institucional' : 'Esta Cohorte', data: Object.values(preguntasCurso), backgroundColor: colorFondoSoft, borderColor: colorPrimario, pointBackgroundColor: colorPrimario, borderWidth: 2, pointRadius: 4 }]; 
             if (!isGlobal) datasetsArray.push({ label: 'Benchmark Global', data: Object.keys(preguntasCurso).map(q => promediosGlobalesPreguntas[q] || 0), backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); 
+            
             chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { 
-                type: 'radar', data: { labels: labels, datasets: datasetsArray }, 
-                options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 10, family: 'Inter', weight: '600' } } } } } 
+                type: 'radar', 
+                data: { labels: labels, datasets: datasetsArray }, 
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    plugins: { legend: { labels: { color: textColor } } },
+                    scales: { 
+                        r: { 
+                            min: 0, max: 5, 
+                            grid: { color: gridColor },
+                            angleLines: { color: gridColor },
+                            pointLabels: { color: textColor, font: { size: 10, family: 'Inter', weight: '600' } },
+                            ticks: { color: textColor, stepSize: 1, backdropColor: 'transparent' } 
+                        } 
+                    } 
+                } 
             }); 
         }
     </script>
