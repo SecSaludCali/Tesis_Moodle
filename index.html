@@ -106,10 +106,15 @@
         .theme-btn:hover { transform: scale(1.1); }
         .theme-btn.active { border-color: var(--text-main); }
         
-        /* FILTROS CRUZADOS (OLAP) */
+        /* FILTROS CRUZADOS (OLAP) FLAT ICONS */
         .filtros-container { background: var(--card-bg); border-radius: 16px; padding: 20px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); backdrop-filter: blur(12px); display: none; animation: fadeIn 0.4s ease; margin-bottom: 30px; border-left: 4px solid var(--primary);}
-        .glass-filter { background-color: rgba(255,255,255,0.4); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 10px; font-weight: 600; }
+        .glass-filter { background-color: rgba(255,255,255,0.4); color: var(--text-main); border: 1px solid var(--border-light); font-weight: 600; }
         :root[data-theme="dark"] .glass-filter { background-color: rgba(0,0,0,0.2); }
+        
+        .input-group-text.glass-filter { border-top-left-radius: 12px; border-bottom-left-radius: 12px; background: transparent; }
+        .form-select.glass-filter { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+        .form-select.glass-filter:focus { border-color: var(--border-light); box-shadow: none; }
+
         .filtro-lock { opacity: 0.6; filter: grayscale(100%); pointer-events: none; position: relative; }
         .filtro-lock::after { content: '🔒 Bloqueado por Filtros (Data Anónima)'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; white-space: nowrap; z-index: 100;}
 
@@ -147,6 +152,15 @@
         .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
         path.leaflet-interactive { transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease, stroke-width 0.3s ease, stroke 0.3s ease !important; }
         .map-polygon-hover { filter: drop-shadow(0 10px 15px rgba(67, 24, 255, 0.6)); outline: none; }
+        
+        /* Efecto Leaflet Dark Mode automático */
+        :root[data-theme="dark"] .leaflet-layer,
+        :root[data-theme="dark"] .leaflet-control-zoom-in,
+        :root[data-theme="dark"] .leaflet-control-zoom-out,
+        :root[data-theme="dark"] .leaflet-control-attribution {
+            filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+        }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     </style>
@@ -285,16 +299,28 @@
             </div>
             <div class="row g-3">
                 <div class="col-md-3">
-                    <select id="f-sexo" class="form-select glass-filter" onchange="aplicarFiltros()"><option value="ALL">Todos los Sexos</option></select>
+                    <div class="input-group">
+                        <span class="input-group-text glass-filter border-end-0"><i class="bi bi-gender-ambiguous text-primary"></i></span>
+                        <select id="f-sexo" class="form-select glass-filter border-start-0 ps-0" onchange="aplicarFiltros()"><option value="ALL">Todos los Sexos</option></select>
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <select id="f-edad" class="form-select glass-filter" onchange="aplicarFiltros()"><option value="ALL">Todas las Edades</option></select>
+                    <div class="input-group">
+                        <span class="input-group-text glass-filter border-end-0"><i class="bi bi-calendar-range text-primary"></i></span>
+                        <select id="f-edad" class="form-select glass-filter border-start-0 ps-0" onchange="aplicarFiltros()"><option value="ALL">Todas las Edades</option></select>
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <select id="f-perfil" class="form-select glass-filter" onchange="aplicarFiltros()"><option value="ALL">Todos los Perfiles</option></select>
+                    <div class="input-group">
+                        <span class="input-group-text glass-filter border-end-0"><i class="bi bi-briefcase text-primary"></i></span>
+                        <select id="f-perfil" class="form-select glass-filter border-start-0 ps-0" onchange="aplicarFiltros()"><option value="ALL">Todos los Perfiles</option></select>
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <select id="f-comuna" class="form-select glass-filter" onchange="aplicarFiltros()"><option value="ALL">Todas las Comunas</option></select>
+                    <div class="input-group">
+                        <span class="input-group-text glass-filter border-end-0"><i class="bi bi-geo-alt text-primary"></i></span>
+                        <select id="f-comuna" class="form-select glass-filter border-start-0 ps-0" onchange="aplicarFiltros()"><option value="ALL">Todas las Comunas</option></select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -605,10 +631,10 @@
                 sel.innerHTML = `<option value="ALL">${labelTodos}</option>`;
                 Array.from(set).sort().forEach(val => { if(val && val!=="N/A") sel.appendChild(new Option(val, val)); });
             };
-            llenarSelect('f-sexo', fSexo, '👤 Todos los Sexos');
-            llenarSelect('f-edad', fEdad, '⏳ Todas las Edades');
-            llenarSelect('f-perfil', fPerfil, '💼 Todos los Perfiles');
-            llenarSelect('f-comuna', fCom, '📍 Todas las Comunas');
+            llenarSelect('f-sexo', fSexo, 'Todos los Sexos');
+            llenarSelect('f-edad', fEdad, 'Todas las Edades');
+            llenarSelect('f-perfil', fPerfil, 'Todos los Perfiles');
+            llenarSelect('f-comuna', fCom, 'Todas las Comunas');
         }
 
         window.aplicarFiltros = function() {
@@ -780,52 +806,6 @@
             document.getElementById('bento-nps').innerText = dashboardData.kpis_globales.nps_global;
         }
 
-        function manejarCambioBase() { 
-            const seleccion = this.value; 
-            const selectorCohorte = document.getElementById('selector-cohorte'); 
-            const lobby = document.getElementById('panel-lobby-curso'); 
-            const tabs = document.getElementById('contenedor-tabs'); 
-            
-            if (seleccion === "ALL") { 
-                selectorCohorte.style.display = "none"; cursoActual = null; 
-                lobby.style.display = "none"; tabs.style.display = "block"; 
-                actualizarPantallaGlobal(); 
-            } else { 
-                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
-                selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; 
-                cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); 
-                selectorCohorte.style.display = "block"; selectorCohorte.value = ""; 
-                tabs.style.display = "none"; lobby.style.display = "block"; 
-                document.getElementById('filtros-cruzados-bar').style.display = 'none';
-                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;">${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizarla</p></div><div class="row g-4 justify-content-center">`; 
-                cohortes.forEach(c => { 
-                    htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${c.Edicion}</h5><span class="badge bg-primary px-3 py-2 text-white" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
-                }); 
-                htmlLobby += `</div>`; lobby.innerHTML = htmlLobby; 
-            } 
-            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
-        }
-
-        window.seleccionarCohorteDesdeLobby = function(nombreCurso) { 
-            document.getElementById('selector-cohorte').value = nombreCurso; 
-            document.getElementById('panel-lobby-curso').style.display = 'none'; 
-            document.getElementById('contenedor-tabs').style.display = 'block'; 
-            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === nombreCurso); 
-            actualizarPantallaCurso(); 
-        };
-
-        function manejarCambioCohorte() { 
-            if (!this.value) { 
-                document.getElementById('panel-lobby-curso').style.display = 'block'; 
-                document.getElementById('contenedor-tabs').style.display = 'none'; 
-                return; 
-            } 
-            document.getElementById('panel-lobby-curso').style.display = 'none'; 
-            document.getElementById('contenedor-tabs').style.display = 'block'; 
-            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); 
-            actualizarPantallaCurso(); 
-        }
-
         function actualizarPantallaGlobal() { 
             document.getElementById('filtros-cruzados-bar').style.display = 'none';
             datosFiltradosActuales = null;
@@ -950,6 +930,52 @@
             Object.keys(cursosPorBase).sort().forEach(base => { sel.appendChild(new Option(base, base)); }); 
         }
 
+        function manejarCambioBase() { 
+            const seleccion = this.value; 
+            const selectorCohorte = document.getElementById('selector-cohorte'); 
+            const lobby = document.getElementById('panel-lobby-curso'); 
+            const tabs = document.getElementById('contenedor-tabs'); 
+            
+            if (seleccion === "ALL") { 
+                selectorCohorte.style.display = "none"; cursoActual = null; 
+                lobby.style.display = "none"; tabs.style.display = "block"; 
+                actualizarPantallaGlobal(); 
+            } else { 
+                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; 
+                cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); 
+                selectorCohorte.style.display = "block"; selectorCohorte.value = ""; 
+                tabs.style.display = "none"; lobby.style.display = "block"; 
+                document.getElementById('filtros-cruzados-bar').style.display = 'none';
+                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;">${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizarla</p></div><div class="row g-4 justify-content-center">`; 
+                cohortes.forEach(c => { 
+                    htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${c.Edicion}</h5><span class="badge bg-primary px-3 py-2 text-white" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
+                }); 
+                htmlLobby += `</div>`; lobby.innerHTML = htmlLobby; 
+            } 
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
+        }
+
+        window.seleccionarCohorteDesdeLobby = function(nombreCurso) { 
+            document.getElementById('selector-cohorte').value = nombreCurso; 
+            document.getElementById('panel-lobby-curso').style.display = 'none'; 
+            document.getElementById('contenedor-tabs').style.display = 'block'; 
+            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === nombreCurso); 
+            actualizarPantallaCurso(); 
+        };
+
+        function manejarCambioCohorte() { 
+            if (!this.value) { 
+                document.getElementById('panel-lobby-curso').style.display = 'block'; 
+                document.getElementById('contenedor-tabs').style.display = 'none'; 
+                return; 
+            } 
+            document.getElementById('panel-lobby-curso').style.display = 'none'; 
+            document.getElementById('contenedor-tabs').style.display = 'block'; 
+            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); 
+            actualizarPantallaCurso(); 
+        }
+
         function normalizarLlaveComuna(texto) { 
             if (!texto) return "N/A"; let t = String(texto).trim().toUpperCase(); 
             if (t === "" || t === "N/A" || t === "NULL" || t === "SIN DATO") return "N/A"; 
@@ -992,39 +1018,49 @@
 
         function dibujarMapaCoropletico(dataComunas) { 
             if (!mapInstance || !geoJsonDataRaw || !geoJsonDataRaw.features) return; 
-            if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
-            let mapaDatosNormalizado = {}; let maxParticipantes = 0; 
-            for (let nombreEnData in dataComunas) { 
-                let idLimpio = normalizarLlaveComuna(nombreEnData); 
-                mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + (dataComunas[nombreEnData] || 0); 
-                if (mapaDatosNormalizado[idLimpio] > maxParticipantes && !isNaN(idLimpio)) maxParticipantes = mapaDatosNormalizado[idLimpio]; 
-            } 
-            geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
-                style: function (feature) { 
-                    let idLimpio = normalizarLlaveComuna(feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id); 
-                    let partes = mapaDatosNormalizado[idLimpio] || 0; 
-                    return { fillColor: getColorMapa(partes, maxParticipantes), weight: 1.5, opacity: 1, color: 'rgba(255,255,255,0.9)', fillOpacity: partes > 0 ? 0.8 : 0.2 }; 
-                }, 
-                onEachFeature: function (feature, layer) { 
-                    let idLimpio = normalizarLlaveComuna(feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id); 
-                    let partes = mapaDatosNormalizado[idLimpio] || 0; 
-                    layer.bindTooltip(`<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${partes} Participantes</span></div>`, { sticky: true }); 
-                    layer.on({
-                        mouseover: function (e) {
-                            geoJsonLayer.eachLayer(l => { if (l !== e.target) l.setStyle({ fillOpacity: 0.1, opacity: 0.2, weight: 1 }); });
-                            let bdColor = document.documentElement.getAttribute('data-theme') === 'light' ? '#1e293b' : '#ffffff';
-                            e.target.setStyle({ weight: 4, color: bdColor, fillOpacity: 1 });
-                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) e.target.bringToFront();
-                            if (e.target._path) e.target._path.classList.add('map-polygon-hover');
-                        },
-                        mouseout: function (e) { 
-                            if (e.target._path) e.target._path.classList.remove('map-polygon-hover');
-                            geoJsonLayer.eachLayer(l => geoJsonLayer.resetStyle(l)); 
-                        }
-                    });
+            
+            // TIMEOUT MÁGICO: Da tiempo al navegador a calcular el tamaño del contenedor al quitar el display:none
+            setTimeout(() => {
+                mapInstance.invalidateSize();
+                
+                if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
+                let mapaDatosNormalizado = {}; let maxParticipantes = 0; 
+                for (let nombreEnData in dataComunas) { 
+                    let idLimpio = normalizarLlaveComuna(nombreEnData); 
+                    mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + (dataComunas[nombreEnData] || 0); 
+                    if (mapaDatosNormalizado[idLimpio] > maxParticipantes && !isNaN(idLimpio)) maxParticipantes = mapaDatosNormalizado[idLimpio]; 
                 } 
-            }).addTo(mapInstance); 
-            if (geoJsonLayer.getBounds().isValid()) mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] }); 
+                
+                geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
+                    style: function (feature) { 
+                        let idLimpio = normalizarLlaveComuna(feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id); 
+                        let partes = mapaDatosNormalizado[idLimpio] || 0; 
+                        return { fillColor: getColorMapa(partes, maxParticipantes), weight: 1.5, opacity: 1, color: 'rgba(255,255,255,0.9)', fillOpacity: partes > 0 ? 0.8 : 0.2 }; 
+                    }, 
+                    onEachFeature: function (feature, layer) { 
+                        let idLimpio = normalizarLlaveComuna(feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id); 
+                        let partes = mapaDatosNormalizado[idLimpio] || 0; 
+                        layer.bindTooltip(`<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${partes} Participantes</span></div>`, { sticky: true }); 
+                        layer.on({
+                            mouseover: function (e) {
+                                geoJsonLayer.eachLayer(l => { if (l !== e.target) l.setStyle({ fillOpacity: 0.1, opacity: 0.2, weight: 1 }); });
+                                let bdColor = document.documentElement.getAttribute('data-theme') === 'light' ? '#1e293b' : '#ffffff';
+                                e.target.setStyle({ weight: 4, color: bdColor, fillOpacity: 1 });
+                                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) e.target.bringToFront();
+                                if (e.target._path) e.target._path.classList.add('map-polygon-hover');
+                            },
+                            mouseout: function (e) { 
+                                if (e.target._path) e.target._path.classList.remove('map-polygon-hover');
+                                geoJsonLayer.eachLayer(l => geoJsonLayer.resetStyle(l)); 
+                            }
+                        });
+                    } 
+                }).addTo(mapInstance); 
+                
+                if (geoJsonLayer.getBounds().isValid()) {
+                    mapInstance.fitBounds(geoJsonLayer.getBounds(), { padding: [10, 10] }); 
+                }
+            }, 150); // Fin del Timeout Mágico
         }
 
         function dibujarGraficoComunas(canvasId, dataObject) { 
