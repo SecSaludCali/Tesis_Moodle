@@ -9,18 +9,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- LIBRERÍAS DE GRÁFICOS Y MAPAS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
-        /* =========================================
-           MOTOR DE TEMAS (CSS VARIABLES)
-           ========================================= */
-        
-        /* 1. TEMA CLARO (Default) */
+        /* PALETA Y EFECTOS BASE */
         :root[data-theme="light"] {
             --bg-color: #f4f7fe; --card-bg: rgba(255, 255, 255, 0.6); --text-main: #1e293b; --text-muted: #64748b;
             --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50; --info: #0ea5e9;
@@ -29,162 +24,129 @@
             --blob-1: rgba(67, 24, 255, 0.12); --blob-2: rgba(5, 205, 153, 0.12); --blob-3: rgba(238, 93, 80, 0.1);
         }
 
-        /* 2. TEMA OSCURO */
         :root[data-theme="dark"] {
-            --bg-color: #050a1f; --card-bg: rgba(11, 20, 55, 0.6); --text-main: #f8fafc; --text-muted: #8f9bba;
+            --bg-color: #0b1437; --card-bg: rgba(17, 28, 68, 0.6); --text-main: #f8fafc; --text-muted: #a3aed1;
             --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50; --info: #38bdf8;
             --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); --border-light: rgba(255, 255, 255, 0.15); --border-color: rgba(255, 255, 255, 0.08);
-            --ia-bg: rgba(11, 20, 55, 0.7); --ia-border: rgba(255, 255, 255, 0.15); --ia-text: #e2e8f0; --ia-card-bg: rgba(5, 10, 31, 0.6);
+            --ia-bg: rgba(17, 28, 68, 0.7); --ia-border: rgba(255, 255, 255, 0.15); --ia-text: #e2e8f0; --ia-card-bg: rgba(11, 20, 55, 0.6);
             --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1); --blob-3: rgba(238, 93, 80, 0.08);
         }
 
-        /* 3. TEMA ROSADO (Rose) */
         :root[data-theme="rose"] {
-            --bg-color: #fff1f2; --card-bg: rgba(255, 255, 255, 0.65); --text-main: #4c0519; --text-muted: #881337;
-            --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --info: #0ea5e9;
-            --card-shadow: 0 8px 32px 0 rgba(225, 29, 72, 0.08); --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15);
-            --ia-bg: rgba(255, 255, 255, 0.8); --ia-border: rgba(225, 29, 72, 0.2); --ia-text: #4c0519; --ia-card-bg: rgba(255, 241, 242, 0.7);
-            --blob-1: rgba(225, 29, 72, 0.12); --blob-2: rgba(244, 63, 94, 0.12); --blob-3: rgba(251, 113, 133, 0.1);
+            --bg-color: #fff1f2; --card-bg: rgba(255, 255, 255, 0.6); --text-main: #4c0519; --text-muted: #9f1239;
+            --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c; --info: #0ea5e9;
+            --card-shadow: 0 8px 32px 0 rgba(225, 29, 72, 0.08); --border-light: rgba(255, 255, 255, 0.8); --border-color: rgba(255, 255, 255, 0.5);
+            --ia-bg: rgba(255, 255, 255, 0.7); --ia-border: rgba(255, 255, 255, 0.8); --ia-text: #4c0519; --ia-card-bg: rgba(255, 241, 242, 0.7);
+            --blob-1: rgba(225, 29, 72, 0.12); --blob-2: rgba(244, 63, 94, 0.12); --blob-3: rgba(190, 18, 60, 0.1);
         }
 
-        /* 4. TEMA CÁLIDO (Amber) */
         :root[data-theme="amber"] {
-            --bg-color: #fffbeb; --card-bg: rgba(255, 255, 255, 0.65); --text-main: #451a03; --text-muted: #78350f;
-            --primary: #d97706; --success: #05cd99; --warning: #d97706; --danger: #ef4444; --info: #0ea5e9;
-            --card-shadow: 0 8px 32px 0 rgba(217, 119, 6, 0.08); --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15);
-            --ia-bg: rgba(255, 255, 255, 0.8); --ia-border: rgba(217, 119, 6, 0.2); --ia-text: #451a03; --ia-card-bg: rgba(255, 251, 235, 0.7);
-            --blob-1: rgba(217, 119, 6, 0.12); --blob-2: rgba(245, 158, 11, 0.12); --blob-3: rgba(252, 211, 77, 0.1);
+            --bg-color: #fffbeb; --card-bg: rgba(255, 255, 255, 0.6); --text-main: #451a03; --text-muted: #92400e;
+            --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626; --info: #0284c7;
+            --card-shadow: 0 8px 32px 0 rgba(217, 119, 6, 0.08); --border-light: rgba(255, 255, 255, 0.8); --border-color: rgba(255, 255, 255, 0.5);
+            --ia-bg: rgba(255, 255, 255, 0.7); --ia-border: rgba(255, 255, 255, 0.8); --ia-text: #451a03; --ia-card-bg: rgba(254, 252, 232, 0.7);
+            --blob-1: rgba(217, 119, 6, 0.12); --blob-2: rgba(245, 158, 11, 0.12); --blob-3: rgba(180, 83, 9, 0.1);
         }
 
-        body { background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); transition: background-color 0.4s ease, color 0.4s ease; position: relative; overflow-x: hidden; min-height: 100vh; }
-        body::before, body::after, .blob-3 { content: ''; position: fixed; border-radius: 50%; z-index: -1; animation: float 15s infinite alternate ease-in-out; pointer-events: none; transition: background 0.4s ease; }
+        body { background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); transition: all 0.3s ease; position: relative; overflow-x: hidden; min-height: 100vh; }
+        body::before, body::after, .blob-3 { content: ''; position: fixed; border-radius: 50%; z-index: -1; animation: float 15s infinite alternate ease-in-out; pointer-events: none; }
         body::before { width: 70vw; height: 70vw; background: radial-gradient(circle, var(--blob-1) 0%, transparent 65%); top: -20%; left: -20%; }
         body::after { width: 60vw; height: 60vw; background: radial-gradient(circle, var(--blob-2) 0%, transparent 60%); bottom: -20%; right: -10%; animation-delay: -5s; }
         .blob-3 { width: 50vw; height: 50vw; background: radial-gradient(circle, var(--blob-3) 0%, transparent 60%); top: 20%; left: 25%; animation-delay: -10s; display: none; }
         @keyframes float { 0% { transform: translate3d(0, 0, 0) scale(1); } 100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); } }
 
-        /* =========================================
-           BOTONES SELECTORES DE TEMA (MATRIZ 2x2)
-           ========================================= */
-        .theme-selector-container { 
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; 
-            padding: 8px; box-shadow: var(--card-shadow); backdrop-filter: blur(10px); 
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; 
-            transition: all 0.3s; margin-left: 15px; align-content: center;
-        }
-        .theme-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; transition: transform 0.2s, box-shadow 0.2s; position: relative; }
-        .theme-btn:hover { transform: scale(1.1); }
-        .theme-btn.active { transform: scale(1.2); box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 3px var(--text-main); }
-        
-        .t-btn-light { background: #f4f7fe; border-color: #4318ff; }
-        .t-btn-dark { background: #050a1f; border-color: #7551ff; }
-        .t-btn-rose { background: #fff1f2; border-color: #e11d48; }
-        .t-btn-amber { background: #fffbeb; border-color: #d97706; }
-
-        /* =========================================
-           LANDING PAGE Y BENTO BOX
-           ========================================= */
+        /* LANDING PAGE: BENTO BOX */
         #welcome_portal { position: absolute; top: 0; left: 0; right: 0; min-height: 100vh; background: transparent; z-index: 9999; display: flex; flex-direction: column; padding: 40px 20px; transition: opacity 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         #welcome_portal.hide-portal { opacity: 0; transform: translateY(-50px) scale(0.98); pointer-events: none; }
-        .portal-content { width: 100%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; animation: fadeIn 0.8s ease-out; }
+        .portal-content { width: 100%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 10; }
 
-        .bento-solid { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 32px 24px; box-shadow: var(--card-shadow); text-align: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.3s, background-color 0.4s, border-color 0.4s; }
+        .bento-solid { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 32px 24px; box-shadow: var(--card-shadow); text-align: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.3s; }
         .bento-solid:hover { transform: translateY(-5px); }
         .bento-pill-1 { background: linear-gradient(135deg, #00D4FF 0%, #5B0FBE 100%); color: white; border-radius: 50px; padding: 32px 40px; box-shadow: 0 15px 35px rgba(91, 15, 190, 0.25); text-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: transform 0.3s; }
         .bento-pill-2 { background: linear-gradient(135deg, #5B0FBE 0%, #00D4FF 100%); color: white; border-radius: 50px; padding: 32px 40px; box-shadow: 0 15px 35px rgba(0, 212, 255, 0.25); text-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: transform 0.3s; }
         .bento-pill-1:hover, .bento-pill-2:hover { transform: translateY(-5px); }
-        
         .bento-divider { width: 1px; background: rgba(255,255,255,0.3); height: 90px; margin: 0 20px; }
         .bento-solid-divider { width: 1px; background: var(--border-color); height: 90px; margin: 0 20px; }
-        .bento-val { font-size: 3.8rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); transition: color 0.4s;}
-        .bento-pill-1 .bento-val, .bento-pill-2 .bento-val { color: #ffffff; }
+        .bento-val { font-size: 3.8rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
         .bento-lbl { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
         .pill-badge { background: #ffffff; color: #5B0FBE; font-weight: 800; padding: 6px 16px; border-radius: 30px; font-size: 1.1rem; margin-left: 15px; text-shadow: none; vertical-align: text-bottom; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         .portal-row { max-width: 1000px; margin: 60px auto 0; }
-        .hub-card { background: rgba(255, 255, 255, 0.4); border-radius: 24px; box-shadow: 0 10px 30px rgba(31, 38, 135, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.6); padding: 30px 25px; height: 100%; border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px) saturate(120%); -webkit-backdrop-filter: blur(20px) saturate(120%); text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: all 0.5s; cursor: pointer; position: relative; overflow: hidden; }
-        .hub-card::before { content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent); transform: skewX(-25deg); transition: left 0.7s; pointer-events: none; z-index: 1; }
+        .hub-card { background: rgba(255, 255, 255, 0.4); border-radius: 24px; box-shadow: 0 10px 30px rgba(31, 38, 135, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.6); padding: 30px 25px; height: 100%; border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px); text-align: center; text-decoration: none; display: flex; flex-direction: column; align-items: center; transition: all 0.5s; cursor: pointer; position: relative; overflow: hidden; }
         .hub-card:hover { transform: translateY(-10px); border-color: rgba(255, 255, 255, 0.9); }
-        .hub-card:hover::before { left: 200%; }
-        .hub-icon { width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 20px; z-index: 2; position: relative;}
-        .card-analytics .hub-icon { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; box-shadow: 0 8px 20px var(--blob-1), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
+        .hub-icon { width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 20px; }
+        .card-analytics .hub-icon { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; }
         .card-tutor .hub-icon { background: linear-gradient(135deg, var(--success) 0%, #048a67 100%); color: white; box-shadow: 0 8px 20px rgba(5, 205, 153, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
         .card-admin .hub-icon { background: linear-gradient(135deg, var(--danger) 0%, #c43d30 100%); color: white; box-shadow: 0 8px 20px rgba(238, 93, 80, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.4); }
-        .hub-title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; z-index: 2; position: relative; transition: color 0.4s;}
-        .hub-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; flex-grow: 1; z-index: 2; position: relative; transition: color 0.4s;}
-        .hub-btn { background: var(--card-bg); color: var(--primary); font-weight: 700; padding: 8px 20px; border-radius: 30px; border: 1px solid var(--border-color); z-index: 2; position: relative; display: inline-flex; gap: 8px; align-items: center; transition: all 0.4s;}
+        .hub-title { font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; }
+        .hub-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; flex-grow: 1; }
+        .hub-btn { background: rgba(255, 255, 255, 0.6); color: var(--primary); font-weight: 700; padding: 8px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.8); }
 
-        :root[data-theme="dark"] .hub-card, :root[data-theme="dark"] .bento-solid { background: rgba(11, 20, 55, 0.4); border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
-
-        @media (max-width: 768px) {
-            .bento-pill-1, .bento-pill-2 { border-radius: 30px; flex-direction: column; padding: 30px 20px; }
-            .bento-divider, .bento-solid-divider { width: 100%; height: 1px; margin: 25px 0; }
-            .bento-val { font-size: 3rem; }
-            .pill-badge { display: block; margin: 10px auto 0; width: fit-content; }
-            .bento-solid { padding: 30px 20px; }
-        }
-
-        /* =========================================
-           DASHBOARD INTERNO
-           ========================================= */
+        /* DASHBOARD INTERNO */
         #dashboard_content { display: none; opacity: 0; transition: opacity 0.8s ease; }
         #dashboard_content.show-dashboard { display: block; opacity: 1; position: relative; z-index: 20; }
+        .glass-card { background: var(--card-bg); border-radius: 24px; box-shadow: var(--card-shadow); padding: 32px; height: 100%; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); backdrop-filter: blur(12px); transition: transform 0.2s; }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(31, 38, 135, 0.15); }
+        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; }
+        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); }
+        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; }
+        .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; }
+        
+        .valor-chic { background: rgba(67, 24, 255, 0.1); color: var(--primary); font-weight: 800; padding: 4px 12px; border-radius: 20px; }
 
-        h2 { font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0; font-size: 2.2rem; transition: color 0.4s; }
-        h5 { font-size: 1.05rem; margin-bottom: 24px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.02em; transition: color 0.4s; }
-
-        .glass-card { background: var(--card-bg); border-radius: 24px; box-shadow: var(--card-shadow); padding: 32px; height: 100%; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.2s, background-color 0.4s, border-color 0.4s; }
-        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.1); }
-        .kpi-card { border-left: 5px solid var(--primary); display: flex; flex-direction: column; justify-content: center; padding: 28px 32px; transition: border-left-color 0.4s; }
-        .kpi-value { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; color: var(--text-main); transition: color 0.4s;}
-        .kpi-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-top: 12px; transition: color 0.4s;}
-        .metric-big { font-size: 4.5rem; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 10px; font-variant-numeric: tabular-nums; letter-spacing: -0.05em; transition: color 0.4s;}
-
-        /* TABS Y CONTROLES */
-        .liquid-nav-container { display: flex; justify-content: center; margin-bottom: 40px; margin-top: 10px; flex-wrap: wrap; gap: 15px; }
-        .liquid-nav { display: inline-flex; align-items: center; position: relative; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--border-light); border-radius: 50px; padding: 8px; box-shadow: var(--card-shadow); z-index: 10; margin: 0; transition: background-color 0.4s, border-color 0.4s; }
+        /* NAVEGACIÓN Y TABS */
+        .liquid-nav-container { display: flex; justify-content: center; align-items: center; margin-bottom: 40px; margin-top: 10px; gap: 20px; flex-wrap: wrap;}
+        .liquid-nav { display: inline-flex; align-items: center; position: relative; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--border-light); border-radius: 50px; padding: 8px; box-shadow: var(--card-shadow); z-index: 10; margin: 0; }
         .liquid-tab { background: transparent; border: none; color: var(--text-muted); font-weight: 600; padding: 12px 24px; border-radius: 40px; transition: color 0.3s ease; display: flex; gap: 8px; z-index: 2;}
         .liquid-tab.active { color: var(--primary) !important; font-weight: 700; }
-        .liquid-indicator { position: absolute; top: 8px; bottom: 8px; left: 8px; width: 0; background: var(--blob-1); border: 1px solid var(--border-color); border-radius: 40px; z-index: 1; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+        .liquid-indicator { position: absolute; top: 8px; bottom: 8px; left: 8px; width: 0; background: rgba(255, 255, 255, 0.25); border-radius: 40px; z-index: 1; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
 
-        .form-select { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 14px; padding: 16px 24px; font-weight: 500; box-shadow: var(--card-shadow); backdrop-filter: blur(8px); transition: background-color 0.4s, color 0.4s, border-color 0.4s; }
-        .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--blob-1); }
+        .theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; background: var(--card-bg); padding: 8px; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: var(--card-shadow); }
+        .theme-btn { width: 22px; height: 22px; border-radius: 6px; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; }
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: var(--text-main); }
+        
+        /* FILTROS CRUZADOS (OLAP) */
+        .filtros-container { background: var(--card-bg); border-radius: 16px; padding: 20px; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); backdrop-filter: blur(12px); display: none; animation: fadeIn 0.4s ease; margin-bottom: 30px; border-left: 4px solid var(--primary);}
+        .glass-filter { background-color: rgba(255,255,255,0.4); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 10px; font-weight: 600; }
+        :root[data-theme="dark"] .glass-filter { background-color: rgba(0,0,0,0.2); }
+        .filtro-lock { opacity: 0.6; filter: grayscale(100%); pointer-events: none; position: relative; }
+        .filtro-lock::after { content: '🔒 Bloqueado por Filtros (Data Anónima)'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; white-space: nowrap; z-index: 100;}
+
+        .form-select { background-color: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-light); border-radius: 14px; padding: 16px 24px; font-weight: 500; box-shadow: var(--card-shadow); }
         
         .chart-wrapper { position: relative; height: 280px; width: 100%; margin-top: 10px; }
         .radar-wrapper { position: relative; height: 420px; width: 100%; display: flex; justify-content: center; }
 
-        /* BARRAS DE PROGRESO CALIDAD Y BURBUJAS CHIC */
         .progress-bar-container { margin-bottom: 18px; }
-        .progress-label { display: flex; justify-content: space-between; align-items: center; gap: 15px; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-main); font-weight: 500; transition: color 0.4s;}
+        .progress-label { display: flex; justify-content: space-between; align-items: flex-end; gap: 15px; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-main); font-weight: 500;}
         .progress-label span:first-child { flex: 1; line-height: 1.3; }
-        .progress-val-bubble { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(4px); }
+        .progress-val { font-variant-numeric: tabular-nums; white-space: nowrap; }
         .progress-bg { height: 10px; background: rgba(0,0,0,0.05); border-radius: 5px; overflow: hidden; }
         :root[data-theme="dark"] .progress-bg { background: rgba(255,255,255,0.05); }
         .progress-fill { height: 100%; border-radius: 5px; transition: width 1s ease-out; }
 
-        /* BOTONES DESCARGA DE IMÁGENES */
-        .btn-download-img {
-            background: var(--blob-1); color: var(--primary); border: 1px solid var(--border-color); width: 34px; height: 34px;
-            border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-        }
-        .btn-download-img:hover { background: var(--primary); color: white; transform: translateY(-2px); box-shadow: 0 4px 10px var(--blob-1); }
+        .btn-download-img { background: rgba(100, 116, 139, 0.1); color: var(--text-muted); border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .btn-download-img:hover { background: var(--primary); color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(67, 24, 255, 0.2); }
 
-        /* IA PANELS DIVIDIDOS */
-        .ia-panel-wrapper { margin-top: 20px; padding-top: 10px; padding-bottom: 10px;}
-        .ia-card { background-color: var(--ia-bg); border-radius: 24px; padding: 30px; border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); box-shadow: var(--card-shadow); backdrop-filter: blur(16px); transition: background-color 0.4s, border-color 0.4s; }
-        .ia-title { color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 24px; display: flex; gap: 10px; align-items: center; transition: color 0.4s; }
-        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 20px; height: 100%; display: flex; flex-direction: column; justify-content: center; transition: background-color 0.4s, border-color 0.4s;}
-        .ia-val { font-size: 1.6rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; color: var(--text-main); transition: color 0.4s;}
-        .ia-lbl { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.05em; transition: color 0.4s;}
-        .ia-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.6; transition: color 0.4s;}
+        .ia-panel-wrapper { margin-top: 40px; padding-top: 10px; padding-bottom: 10px;}
+        .ia-card { background-color: var(--ia-bg); border-radius: 24px; padding: 30px; border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); box-shadow: var(--card-shadow); backdrop-filter: blur(16px); }
+        .ia-title { color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 24px; display: flex; gap: 10px; align-items: center; }
+        .ia-mini-card { background: var(--ia-card-bg); border: 1px solid var(--ia-border); border-radius: 16px; padding: 20px; height: 100%; display: flex; flex-direction: column; justify-content: center;}
+        .ia-val { font-size: 1.6rem; font-weight: 800; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; color: var(--text-main);}
+        .ia-lbl { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 10px;}
+        .ia-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.6; }
         .ia-icon-wrapper { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 15px; }
 
-        /* FIX MAPA LEAFLET Y EFECTO SOMBRA HOVER */
-        #map-container { border-radius: 24px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); box-shadow: var(--card-shadow); transition: border-color 0.4s; }
-        .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
-        path.leaflet-interactive { transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease, stroke-width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), stroke 0.3s ease !important; }
-        .map-polygon-hover { filter: drop-shadow(0 10px 15px var(--blob-1)); outline: none; }
+        .bg-indigo-soft { background-color: rgba(67, 24, 255, 0.1); color: var(--primary); }
+        .bg-emerald-soft { background-color: rgba(5, 205, 153, 0.1); color: var(--success); }
+        .bg-amber-soft { background-color: rgba(255, 181, 71, 0.1); color: var(--warning); }
+        .bg-rose-soft { background-color: rgba(238, 93, 80, 0.1); color: var(--danger); }
 
+        #map-container { border-radius: 24px; overflow: hidden; z-index: 1; border: 1px solid var(--border-color); transform: translateZ(0); box-shadow: var(--card-shadow); }
+        .leaflet-container { background: transparent; font-family: 'Inter', sans-serif; }
+        path.leaflet-interactive { transition: fill-opacity 0.4s ease, stroke-opacity 0.4s ease, stroke-width 0.3s ease, stroke 0.3s ease !important; }
+        .map-polygon-hover { filter: drop-shadow(0 10px 15px rgba(67, 24, 255, 0.6)); outline: none; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     </style>
@@ -192,20 +154,14 @@
 
 <body>
 
-    <!-- ========================================== -->
-    <!-- PORTAL DE BIENVENIDA MÁGICO (LANDING)      -->
-    <!-- ========================================== -->
     <div id="welcome_portal">
         <div class="blob-3"></div>
         <div class="portal-content">
-            
-            <!-- LOGO INSTITUCIONAL -->
             <div class="text-center mb-5">
-                <img src="Recurso.png" alt="Logo Institucional" style="max-height: 90px; object-fit: contain;">
+                <img src="https://placehold.co/400x120/transparent/4318ff.png?text=LOGO+SECRETARIA" alt="Logo Institucional" style="max-height: 90px; object-fit: contain;">
                 <p class="mt-3 text-muted fw-bold" style="letter-spacing: 2px; text-transform: uppercase;">Ecosistema Educativo en Salud</p>
             </div>
 
-            <!-- BENTO BOX: KPIs GLOBALES -->
             <div id="landing-kpis">
                 <div class="row g-4 mb-4 justify-content-center">
                     <div class="col-lg-3 col-md-5">
@@ -265,7 +221,6 @@
                 </div>
             </div>
 
-            <!-- NAVEGACIÓN: PORTALES -->
             <div class="row g-4 justify-content-center portal-row">
                 <div class="col-lg-4 col-md-6">
                     <div class="hub-card card-analytics" onclick="entrarAlDashboard()">
@@ -296,9 +251,7 @@
     </div>
 
 
-    <!-- ========================================== -->
-    <!-- DASHBOARD INTERNO                          -->
-    <!-- ========================================== -->
+    <!-- DASHBOARD INTERNO -->
     <div class="container-fluid py-5 px-4 px-xl-5" id="dashboard_content">
         
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3" id="header-dashboard">
@@ -306,14 +259,12 @@
                 <h2 class="d-flex align-items-center gap-3 text-primary">Inteligencia Analítica</h2>
                 <div class="text-muted mt-2">Panel interactivo de monitoreo de cohortes y calidad percibida.</div>
             </div>
-            <div class="d-flex gap-2 flex-wrap" id="action-buttons">
-                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2" onclick="volverAlPortal()" style="border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px); color: var(--text-main);">
-                    <i class="bi bi-house-door-fill text-primary"></i> Volver al Inicio
-                </button>
-            </div>
+            <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2" onclick="volverAlPortal()" style="border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px); color: var(--text-main);">
+                <i class="bi bi-house-door-fill text-primary"></i> Volver al Inicio
+            </button>
         </div>
 
-        <div class="row mb-5 g-4" id="selectores-container">
+        <div class="row mb-4 g-4" id="selectores-container">
             <div class="col-md-8">
                 <select id="selector-curso-base" class="form-select">
                     <option value="ALL">🌐 Vista Global (Consolidado Institucional)</option>
@@ -324,33 +275,52 @@
             </div>
         </div>
 
+        <!-- ======================================================== -->
+        <!-- FILTROS CRUZADOS (OLAP) SOLO PARA CURSOS -->
+        <!-- ======================================================== -->
+        <div id="filtros-cruzados-bar" class="filtros-container">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-funnel-fill text-primary me-2"></i>
+                <h6 class="mb-0 fw-bold">Filtros Cruzados en Tiempo Real</h6>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <select id="f-sexo" class="form-select glass-filter" onchange="aplicarFiltros()"><option value="ALL">Todos los Sexos</option></select>
+                </div>
+                <div class="col-md-3">
+                    <select id="f-edad" class="form-select glass-filter" onchange="aplicarFiltros()"><option value="ALL">Todas las Edades</option></select>
+                </div>
+                <div class="col-md-3">
+                    <select id="f-perfil" class="form-select glass-filter" onchange="aplicarFiltros()"><option value="ALL">Todos los Perfiles</option></select>
+                </div>
+                <div class="col-md-3">
+                    <select id="f-comuna" class="form-select glass-filter" onchange="aplicarFiltros()"><option value="ALL">Todas las Comunas</option></select>
+                </div>
+            </div>
+        </div>
+
         <div id="panel-lobby-curso" style="display: none; min-height: 50vh;" class="mb-5"></div>
 
         <div id="contenedor-tabs" style="display: block;">
             
             <div class="liquid-nav-container" id="tabs-navigation">
-                <!-- PESTAÑAS -->
                 <ul class="nav liquid-nav" role="tablist">
                     <div class="liquid-indicator" id="liquid-indicator"></div>
                     <li class="nav-item"><button class="nav-link liquid-tab active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab"><i class="bi bi-pie-chart-fill fs-5"></i> Demografía</button></li>
                     <li class="nav-item"><button class="nav-link liquid-tab" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab"><i class="bi bi-speedometer2 fs-5"></i> Operativo</button></li>
                     <li class="nav-item"><button class="nav-link liquid-tab" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill fs-5"></i> Calidad Percibida</button></li>
                 </ul>
-
-                <!-- SELECTOR DE TEMAS (CUADRÍCULA 2x2) -->
-                <div class="theme-selector-container">
-                    <button class="theme-btn t-btn-light active" data-theme="light" onclick="cambiarTema('light')" title="Tema Claro"></button>
-                    <button class="theme-btn t-btn-dark" data-theme="dark" onclick="cambiarTema('dark')" title="Tema Oscuro"></button>
-                    <button class="theme-btn t-btn-rose" data-theme="rose" onclick="cambiarTema('rose')" title="Tema Rosado"></button>
-                    <button class="theme-btn t-btn-amber" data-theme="amber" onclick="cambiarTema('amber')" title="Tema Cálido"></button>
+                <div class="theme-grid">
+                    <div class="theme-btn" data-theme-btn="light" style="background:#f4f7fe;" onclick="cambiarTema('light')"></div>
+                    <div class="theme-btn" data-theme-btn="dark" style="background:#0b1437;" onclick="cambiarTema('dark')"></div>
+                    <div class="theme-btn" data-theme-btn="rose" style="background:#fff1f2;" onclick="cambiarTema('rose')"></div>
+                    <div class="theme-btn" data-theme-btn="amber" style="background:#fffbeb;" onclick="cambiarTema('amber')"></div>
                 </div>
             </div>
 
             <div class="tab-content" id="myTabContent">
                 
-                <!-- ======================================================== -->
                 <!-- PANEL 1: DEMOGRAFÍA -->
-                <!-- ======================================================== -->
                 <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                     <div class="row g-4 mb-5" id="kpi-global-row"></div>
                     
@@ -411,27 +381,14 @@
                         </div>
                     </div>
 
-                    <!-- ANALISTA IA: DEMOGRAFÍA -->
-                    <div class="ia-panel-wrapper">
-                        <div class="ia-card">
-                            <div class="ia-title">
-                                <div style="background: linear-gradient(135deg, var(--primary) 0%, rgba(255,255,255,0.2) 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px var(--blob-1);">
-                                    <i class="bi bi-robot fs-5"></i>
-                                </div>
-                                Diagnóstico Demográfico Asistido
-                            </div>
-                            <div id="ia-txt-demo"></div>
-                        </div>
-                    </div>
+                    <div class="ia-panel-wrapper"><div class="ia-card"><div class="ia-title"><div style="background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-robot fs-5"></i></div>Diagnóstico Demográfico Asistido</div><div id="ia-txt-demo"></div></div></div>
                 </div>
 
-                <!-- ======================================================== -->
-                <!-- PANEL 2: RENDIMIENTO OPERATIVO -->
-                <!-- ======================================================== -->
+                <!-- PANEL 2: RENDIMIENTO -->
                 <div class="tab-pane fade" id="panel-moodle" role="tabpanel">
                     <div class="row g-4 mb-5" id="kpi-moodle-row"></div>
                     
-                    <div class="row g-4 mb-4">
+                    <div class="row g-4 mb-4" id="moodle-charts-wrapper">
                         <div class="col-md-8">
                             <div class="glass-card">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -450,23 +407,10 @@
                         </div>
                     </div>
 
-                    <!-- ANALISTA IA: OPERATIVO -->
-                    <div class="ia-panel-wrapper">
-                        <div class="ia-card">
-                            <div class="ia-title">
-                                <div style="background: linear-gradient(135deg, var(--success) 0%, rgba(255,255,255,0.2) 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(5, 205, 153, 0.3);">
-                                    <i class="bi bi-robot fs-5"></i>
-                                </div>
-                                Diagnóstico de Rendimiento Operativo
-                            </div>
-                            <div id="ia-txt-moodle"></div>
-                        </div>
-                    </div>
+                    <div class="ia-panel-wrapper"><div class="ia-card"><div class="ia-title"><div style="background: linear-gradient(135deg, var(--success) 0%, #048a67 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-robot fs-5"></i></div>Diagnóstico de Rendimiento Operativo</div><div id="ia-txt-moodle"></div></div></div>
                 </div>
 
-                <!-- ======================================================== -->
-                <!-- PANEL 3: CALIDAD PERCIBIDA -->
-                <!-- ======================================================== -->
+                <!-- PANEL 3: CALIDAD -->
                 <div class="tab-pane fade" id="panel-radar" role="tabpanel">
                     <div class="row g-4 mb-4">
                         <div class="col-md-7">
@@ -486,18 +430,7 @@
                         </div>
                     </div>
 
-                    <!-- ANALISTA IA: CALIDAD -->
-                    <div class="ia-panel-wrapper">
-                        <div class="ia-card">
-                            <div class="ia-title">
-                                <div style="background: linear-gradient(135deg, var(--warning) 0%, rgba(255,255,255,0.2) 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(255, 181, 71, 0.3);">
-                                    <i class="bi bi-robot fs-5"></i>
-                                </div>
-                                Evaluación Analítica de Calidad Percibida
-                            </div>
-                            <div id="ia-txt-radar"></div>
-                        </div>
-                    </div>
+                    <div class="ia-panel-wrapper"><div class="ia-card"><div class="ia-title"><div style="background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-robot fs-5"></i></div>Evaluación Analítica de Calidad Percibida</div><div id="ia-txt-radar"></div></div></div>
                 </div>
             </div>
 
@@ -508,31 +441,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // ==========================================
-        // VARIABLES GLOBALES Y DICCIONARIOS
-        // ==========================================
         let dashboardData = {}; 
         let cursosPorBase = {}; 
         let cursoActual = null; 
+        let datosFiltradosActuales = null; // OLAP CUBE
         let chartInstances = {}; 
         let promediosGlobalesPreguntas = {};
         let mapInstance = null; 
         let geoJsonLayer = null; 
         let mapTilesLayer = null; 
         let geoJsonDataRaw = null;
-
-        // Extraer dinámicamente los colores de la dona según el tema
-        function getColoresDona() {
-            const rootStyle = getComputedStyle(document.documentElement);
-            return [
-                rootStyle.getPropertyValue('--primary').trim(),
-                rootStyle.getPropertyValue('--success').trim(),
-                rootStyle.getPropertyValue('--warning').trim(),
-                rootStyle.getPropertyValue('--danger').trim(),
-                rootStyle.getPropertyValue('--info').trim(),
-                '#8b5cf6', '#14b8a6'
-            ];
-        }
 
         const mapeoPreguntas = { 
             "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro al Inicio", 
@@ -549,36 +467,34 @@
             "¿El material utilizado permitió el entendimiento del tema?": "Calidad del Material", 
             "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General (eNPS Base)" 
         };
+        const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
 
-        // ==========================================
-        // MOTOR DE TEMAS DENTRO DE CHART.JS
-        // ==========================================
-        function cambiarTema(temaNombre) {
-            // 1. Aplicar al HTML
-            document.documentElement.setAttribute('data-theme', temaNombre);
-            localStorage.setItem('dashboard_theme', temaNombre);
+        function cambiarTema(tema) {
+            document.documentElement.setAttribute('data-theme', tema);
+            localStorage.setItem('temaDashboard', tema);
             
-            // 2. Actualizar botones selectores
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.dataset.theme === temaNombre) btn.classList.add('active');
-            });
-
-            // 3. Forzar redibujado absoluto de gráficas para que absorban los colores nuevos de CSS
-            setTimeout(() => {
-                let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
-                Chart.defaults.color = textColor; // Actualizar color global de textos
-
-                // Volver a dibujar todo (Destruye y crea de nuevo para actualizar Dona, Ejes X/Y y Mapa)
-                if (cursoActual) {
-                    actualizarPantallaCurso();
-                } else if (Object.keys(dashboardData).length > 0) {
-                    actualizarPantallaGlobal();
+            // Remove active class from all theme buttons
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to the selected theme button safely without relying on the event variable
+            const activeBtns = document.querySelectorAll(`.theme-btn[data-theme-btn="${tema}"]`);
+            activeBtns.forEach(b => b.classList.add('active'));
+            
+            Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main');
+            for (let id in chartInstances) {
+                if (chartInstances[id]) { 
+                    chartInstances[id].options.color = Chart.defaults.color; 
+                    chartInstances[id].update(); 
                 }
-            }, 50);
+            }
+            
+            // Only update screens if data is loaded to prevent initial crash
+            if (Object.keys(dashboardData).length > 0) {
+                if(cursoActual) actualizarPantallaCurso(datosFiltradosActuales);
+                else actualizarPantallaGlobal();
+            }
         }
 
-        // Navegación Liquid
         function moveIndicator(btn) {
             const indicator = document.getElementById('liquid-indicator');
             const nav = document.querySelector('.liquid-nav');
@@ -593,7 +509,6 @@
         }
         window.addEventListener('resize', () => { const activeBtn = document.querySelector('.liquid-tab.active'); if(activeBtn) moveIndicator(activeBtn); });
 
-        // Portales
         function entrarAlDashboard() {
             document.getElementById('welcome_portal').classList.add('hide-portal');
             setTimeout(() => { 
@@ -606,100 +521,164 @@
             setTimeout(() => { document.getElementById('welcome_portal').classList.remove('hide-portal'); }, 400); 
         }
 
-        // ==========================================
-        // DESCARGA DE GRÁFICOS INDIVIDUALES
-        // ==========================================
         function descargarGrafico(canvasId, nombreBase) {
             const canvasOriginal = document.getElementById(canvasId);
             if (!canvasOriginal) return;
-
-            // Canvas temporal para rellenar el fondo según el Tema
             const tempCanvas = document.createElement('canvas');
             const ctx = tempCanvas.getContext('2d');
-            tempCanvas.width = canvasOriginal.width;
-            tempCanvas.height = canvasOriginal.height;
-
-            // Obtener el color de fondo actual del tema
-            const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
-            ctx.fillStyle = bgColor || '#ffffff';
+            tempCanvas.width = canvasOriginal.width; tempCanvas.height = canvasOriginal.height;
+            const tema = document.documentElement.getAttribute('data-theme');
+            ctx.fillStyle = tema === 'dark' ? '#0b1437' : (tema === 'rose' ? '#fff1f2' : (tema === 'amber' ? '#fffbeb' : '#ffffff'));
             ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-
-            // Dibujar el gráfico original
             ctx.drawImage(canvasOriginal, 0, 0);
-
             let sufijo = cursoActual ? `_${cursoActual.Nombre_Curso.substring(0,15)}` : '_Global';
-            let nombreArchivo = `${nombreBase}${sufijo}.png`.replace(/\s+/g, '');
-
             const enlace = document.createElement('a');
-            enlace.download = nombreArchivo;
+            enlace.download = `${nombreBase}${sufijo}.png`.replace(/\s+/g, '');
             enlace.href = tempCanvas.toDataURL('image/png', 1.0);
             enlace.click();
         }
 
-        // ==========================================
-        // INICIALIZACIÓN Y FETCH
-        // ==========================================
         document.addEventListener("DOMContentLoaded", async () => {
-            
-            // Cargar el tema guardado
-            const temaGuardado = localStorage.getItem('dashboard_theme') || 'light';
+            let temaGuardado = localStorage.getItem('temaDashboard') || 'light';
             cambiarTema(temaGuardado);
-
+            
             document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(btn => { 
                 btn.addEventListener('shown.bs.tab', (e) => { 
                     moveIndicator(e.target); 
                     Object.values(chartInstances).forEach(chart => { if (chart) chart.resize(); });
-                    if (e.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) {
-                        setTimeout(() => mapInstance.invalidateSize(), 100);
-                    }
+                    if (e.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) setTimeout(() => mapInstance.invalidateSize(), 100);
                 }); 
             });
             
             proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
 
             try {
-                const urlFresca = 'dashboard_data.json?v=' + new Date().getTime();
-                try {
-                    const response = await fetch(urlFresca, { headers: { 'Cache-Control': 'no-cache' } }); 
-                    dashboardData = await response.json();
-                    const geoResponse = await fetch('mc_comunas.json');
-                    geoJsonDataRaw = proyectarGeoJson(await geoResponse.json()); 
-                } catch (e) {
-                    // MOCK DATA SI FALLA EL FETCH
-                    dashboardData = { 
-                        "metadata": { "total_cursos_analizados": 3, "total_encuestas_historicas": 416, "total_estudiantes_unicos": 350 }, 
-                        "kpis_globales": { "chs_promedio_secretaria": 88.5, "nps_global": 65.2 }, 
-                        "demografia_global": { "Sexo": { "Femenino": 250, "Masculino": 100 }, "Curso de Vida": { "Adultez": 300, "Juventud": 50 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 50 }, "Escolaridad": { "Profesional": 200, "Especialización": 150 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, 
-                        "cursos": [{ "Nombre_Curso": "RPMS PI e I 012026", "Curso_Base": "RPMS PI", "Edicion": "2026 - Ed. 01", "Total_Inscritos": 500, "Total_Encuestas": 416, "Salud_Curso_CHS": 88.5, "e_NPS": 65.2, "Tasa_Finalizacion_%": 75, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 10, "Tiempo_Promedio_Dias": 12.5, "Demografia": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Edad": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150 }, "Escolaridad": { "Profesional": 200 }, "Comuna": { "1": 50 } }, "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.7, "¿Se cumplió el objetivo de la capacitación?": 4.6, "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.8, "¿Los temas se desarrollaron en el tiempo previsto?": 4.5, "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.6, "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.7, "¿El facilitador demostró el dominio del tema brindado?": 4.8, "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4, "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.3, "¿El material utilizado permitió el entendimiento del tema?": 4.5, "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.7 } }] 
-                    };
+                if (window.location.protocol === 'blob:' || window.location.protocol === 'data:' || window.location.protocol === 'file:') {
+                    console.log("Entorno Sandbox detectado. Cargando datos locales de prueba...");
+                    throw new Error("Entorno local detectado.");
                 }
-
-                Chart.defaults.font.family = 'Inter';
+                const response = await fetch('dashboard_data.json?v=' + new Date().getTime(), { headers: { 'Cache-Control': 'no-cache' } }); 
+                dashboardData = await response.json();
                 
-                inicializarMapa(); 
-                calcularBenchmarkGlobal(); 
-                agruparCursos();
-                
-                document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
-                document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
-                
-                actualizarLandingKPIs();
-                actualizarPantallaGlobal();
-                setTimeout(() => { const activeBtn = document.querySelector('.liquid-tab.active'); if(activeBtn) moveIndicator(activeBtn); }, 100);
-
-            } catch (error) { console.error("Error", error); }
+                const geoResponse = await fetch('mc_comunas.json');
+                geoJsonDataRaw = proyectarGeoJson(await geoResponse.json()); 
+            } catch (e) {
+                dashboardData = { 
+                    "metadata": { "total_cursos_analizados": 3, "total_encuestas_historicas": 416, "total_estudiantes_unicos": 350 }, 
+                    "kpis_globales": { "chs_promedio_secretaria": 88.5, "nps_global": 65.2 }, 
+                    "demografia_global": { "Sexo": { "Femenino": 250, "Masculino": 100 }, "Curso de Vida": { "Adultez": 300, "Juventud": 50 }, "Perfil": { "Médico": 150, "Enfermera": 150, "Auxiliar": 50 }, "Escolaridad": { "Profesional": 200, "Especialización": 150 }, "Comuna": { "1": 50, "2": 30, "3": 80, "Corregimiento La Paz": 25, "N/A": 100 } }, 
+                    "cursos": [{ "Nombre_Curso": "RPMS PI e I 012026", "Curso_Base": "RPMS PI", "Edicion": "2026 - Ed. 01", "Total_Inscritos": 500, "Total_Encuestas": 416, "Salud_Curso_CHS": 88.5, "e_NPS": 65.2, "Tasa_Finalizacion_%": 75, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 10, "Tiempo_Promedio_Dias": 12.5, "Demografia": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Edad": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150 }, "Escolaridad": { "Profesional": 200 }, "Comuna": { "1": 50 } }, "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.7, "¿Se cumplió el objetivo de la capacitación?": 4.6, "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.8, "¿Los temas se desarrollaron en el tiempo previsto?": 4.5, "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.6, "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.7, "¿El facilitador demostró el dominio del tema brindado?": 4.8, "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4, "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.3, "¿El material utilizado permitió el entendimiento del tema?": 4.5, "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.7 }, "Registros_Crudos": [
+                        { "Sexo": "Femenino", "Curso de vida": "Adultez", "Perfil": "Médico", "Comuna_Unificada": "1", "Escolaridad": "Profesional", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5, "¿Se cumplió el objetivo de la capacitación?": 5 },
+                        { "Sexo": "Masculino", "Curso de vida": "Juventud", "Perfil": "Médico", "Comuna_Unificada": "3", "Escolaridad": "Profesional", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4, "¿Se cumplió el objetivo de la capacitación?": 4 }
+                    ] }] 
+                };
+            }
+            
+            Chart.defaults.font.family = 'Inter';
+            inicializarMapa(); 
+            calcularBenchmarkGlobal(); 
+            agruparCursos();
+            
+            document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
+            document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
+            
+            actualizarLandingKPIs();
+            actualizarPantallaGlobal();
+            setTimeout(() => { const activeBtn = document.querySelector('.liquid-tab.active'); if(activeBtn) moveIndicator(activeBtn); }, 100);
         });
 
         // ==========================================
-        // ANALISTA IA (GENERADOR DE TEXTOS DIVIDIDOS)
+        // FILTROS OLAP CRUZADOS
         // ==========================================
-        function generarInsightsIABloques(esGlobal, curso) {
-            
-            // 1. DATA DEMOGRÁFICA
-            let totalDemo = esGlobal ? dashboardData.metadata.total_estudiantes_unicos : curso.Total_Inscritos;
-            let demoData = esGlobal ? dashboardData.demografia_global : curso.Demografia;
+        function cargarFiltrosOLAP() {
+            if(!cursoActual || !cursoActual.Registros_Crudos || cursoActual.Registros_Crudos.length === 0) {
+                document.getElementById('filtros-cruzados-bar').style.display = 'none';
+                return;
+            }
+            document.getElementById('filtros-cruzados-bar').style.display = 'block';
+            const fSexo = new Set(), fEdad = new Set(), fPerfil = new Set(), fCom = new Set();
+            cursoActual.Registros_Crudos.forEach(r => {
+                fSexo.add(r['Sexo']); fEdad.add(r['Curso de vida']); fPerfil.add(r['Perfil']); fCom.add(r['Comuna_Unificada']);
+            });
+            const llenarSelect = (id, set, labelTodos) => {
+                const sel = document.getElementById(id);
+                sel.innerHTML = `<option value="ALL">${labelTodos}</option>`;
+                Array.from(set).sort().forEach(val => { if(val && val!=="N/A") sel.appendChild(new Option(val, val)); });
+            };
+            llenarSelect('f-sexo', fSexo, '👤 Todos los Sexos');
+            llenarSelect('f-edad', fEdad, '⏳ Todas las Edades');
+            llenarSelect('f-perfil', fPerfil, '💼 Todos los Perfiles');
+            llenarSelect('f-comuna', fCom, '📍 Todas las Comunas');
+        }
+
+        window.aplicarFiltros = function() {
+            if(!cursoActual || !cursoActual.Registros_Crudos) return;
+            const valSexo = document.getElementById('f-sexo').value;
+            const valEdad = document.getElementById('f-edad').value;
+            const valPerf = document.getElementById('f-perfil').value;
+            const valCom = document.getElementById('f-comuna').value;
+
+            const esFiltrado = (valSexo!=="ALL" || valEdad!=="ALL" || valPerf!=="ALL" || valCom!=="ALL");
+
+            if(!esFiltrado) {
+                datosFiltradosActuales = null;
+                document.getElementById('kpi-moodle-row').classList.remove('filtro-lock');
+                document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock');
+                actualizarPantallaCurso(null);
+                return;
+            }
+
+            // Bloquear Operativo visualmente
+            document.getElementById('kpi-moodle-row').classList.add('filtro-lock');
+            document.getElementById('moodle-charts-wrapper').classList.add('filtro-lock');
+
+            // Filtrar Array
+            let arrayFilt = cursoActual.Registros_Crudos.filter(r => {
+                return (valSexo==="ALL" || r['Sexo']===valSexo) && (valEdad==="ALL" || r['Curso de vida']===valEdad) && (valPerf==="ALL" || r['Perfil']===valPerf) && (valCom==="ALL" || r['Comuna_Unificada']===valCom);
+            });
+
+            // Reconstruir Objetos
+            let nuevaDemo = { 'Sexo':{}, 'Edad':{}, 'Perfil':{}, 'Comuna':{}, 'Escolaridad':{} };
+            let sumaQ = {}; let countQ = arrayFilt.length;
+            let npsTot = 0, promotores = 0, detractores = 0;
+
+            arrayFilt.forEach(r => {
+                nuevaDemo['Sexo'][r['Sexo']] = (nuevaDemo['Sexo'][r['Sexo']] || 0) + 1;
+                nuevaDemo['Edad'][r['Curso de vida']] = (nuevaDemo['Edad'][r['Curso de vida']] || 0) + 1;
+                nuevaDemo['Perfil'][r['Perfil']] = (nuevaDemo['Perfil'][r['Perfil']] || 0) + 1;
+                nuevaDemo['Comuna'][r['Comuna_Unificada']] = (nuevaDemo['Comuna'][r['Comuna_Unificada']] || 0) + 1;
+                nuevaDemo['Escolaridad'][r['Escolaridad']] = (nuevaDemo['Escolaridad'][r['Escolaridad']] || 0) + 1;
+                
+                Object.keys(mapeoPreguntas).forEach(q => {
+                    if(!sumaQ[q]) sumaQ[q] = 0;
+                    sumaQ[q] += parseFloat(r[q]) || 0;
+                });
+
+                let valGen = parseFloat(r['En general, ¿Cómo se sintió con la actividad de capacitación realizada?']) || 0;
+                if(valGen === 5) promotores++;
+                else if(valGen <= 3 && valGen > 0) detractores++;
+            });
+
+            let nuevoNPS = countQ > 0 ? Math.round(((promotores - detractores)/countQ)*100, 1) : 0;
+            let nuevasQ = {};
+            Object.keys(sumaQ).forEach(q => { nuevasQ[q] = countQ > 0 ? (sumaQ[q]/countQ) : 0; });
+
+            datosFiltradosActuales = {
+                Total_Encuestas: countQ,
+                e_NPS: nuevoNPS,
+                Demografia: nuevaDemo,
+                Detalle_Preguntas: nuevasQ,
+                isFiltered: true
+            };
+            actualizarPantallaCurso(datosFiltradosActuales);
+        };
+
+        function generarInsightsIABloques(esGlobal, cursoObj, datosFilt = null) {
+            let totalDemo = esGlobal ? dashboardData.metadata.total_estudiantes_unicos : cursoObj.Total_Inscritos;
+            let demoData = esGlobal ? dashboardData.demografia_global : cursoObj.Demografia;
+            if(datosFilt) { totalDemo = datosFilt.Total_Encuestas; demoData = datosFilt.Demografia; }
+
             let pMujeres = 0, pDom = "N/A", pP = 0, eDom = "N/A";
-            
             try { 
                 let totalG = Object.values(demoData.Sexo || {}).reduce((a, b) => a + b, 0); 
                 if (totalG > 0) { 
@@ -713,13 +692,11 @@
                 } 
             } catch (e) {}
 
-            let txtDemoConclu = esGlobal 
-                ? `A nivel consolidado, la institución impacta principalmente a <strong>${pDom}</strong>. Las futuras políticas deben considerar este perfil como estándar institucional.` 
-                : `La analítica de esta cohorte revela un grupo sesgado hacia <strong>${pDom}</strong>. Esto sugiere que los ejemplos y metodologías del tutor deben orientarse a este sector.`;
+            let txtDemoConclu = esGlobal ? `A nivel consolidado, la Secretaría impacta principalmente a <strong>${pDom}</strong>.` : `La analítica revela un grupo sesgado hacia <strong>${pDom}</strong>.`;
 
             document.getElementById('ia-txt-demo').innerHTML = `
                 <div class="row g-4 mb-4">
-                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${totalDemo ? totalDemo.toLocaleString() : 0}</div><div class="ia-lbl">Participantes</div></div></div>
+                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${totalDemo ? totalDemo.toLocaleString() : 0}</div><div class="ia-lbl">${datosFilt ? 'Encuestas Filtradas' : 'Participantes'}</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pMujeres}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div>
@@ -727,10 +704,8 @@
                 <p class="mb-0 fs-6 text-muted"><strong>Conclusión de IA:</strong> ${txtDemoConclu}</p>
             `;
 
-            // 2. DATA OPERATIVA
-            let fin = 0, abd = 0, inact = 0, chs = 0;
+            let fin = 0, abd = 0, inact = 0;
             if (esGlobal) {
-                chs = dashboardData.kpis_globales.chs_promedio_secretaria;
                 let totInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0);
                 dashboardData.cursos.forEach(c => { 
                     fin += (c['Tasa_Finalizacion_%'] / 100) * (c.Total_Inscritos || 0); 
@@ -741,32 +716,30 @@
                 abd = totInscritos ? Math.round((abd / totInscritos) * 100) : 0;
                 inact = totInscritos ? Math.round((inact / totInscritos) * 100) : 0;
             } else {
-                chs = curso.Salud_Curso_CHS;
-                fin = curso['Tasa_Finalizacion_%']; abd = curso['Tasa_Abandono_%']; inact = curso['Tasa_Inactividad_%'];
+                fin = cursoObj['Tasa_Finalizacion_%']; abd = cursoObj['Tasa_Abandono_%']; inact = cursoObj['Tasa_Inactividad_%'];
             }
 
-            let mIcon = "", mColor = "", mText = ""; 
-            if (fin >= 80) { mIcon = "bi-check-circle-fill"; mColor = "success"; mText = "<strong>Excelente Eficiencia Terminal.</strong> El modelo pedagógico logra retener al estudiante efectivamente."; } 
-            else if (inact > fin && inact > 40) { mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; mText = `<strong>Fricción Severa en Onboarding.</strong> El mayor porcentaje (${inact}%) nunca inició la capacitación. Se requiere auditar los accesos o correos.`; } 
-            else if (abd > 30) { mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; mText = `<strong>Alerta de Deserción Intermedia.</strong> Existe una fuga masiva del ${abd}%. Los módulos podrían estar sobrecargados o ser confusos.`; } 
-            else { mIcon = "bi-info-circle-fill"; mColor = "primary"; mText = "<strong>Comportamiento Operativo Estándar.</strong> Tasas de aprobación y abandono dentro de los márgenes normales de educación virtual."; } 
+            let mIcon = "bi-info-circle-fill", mColor = "primary", mText = "<strong>Comportamiento Estándar.</strong>"; 
+            if (fin >= 80) { mIcon = "bi-check-circle-fill"; mColor = "success"; mText = "<strong>Excelente Eficiencia Terminal.</strong>"; } 
+            else if (inact > fin && inact > 40) { mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; mText = `<strong>Fricción Severa en Onboarding.</strong> El ${inact}% nunca inició.`; } 
+            else if (abd > 30) { mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; mText = `<strong>Alerta de Deserción.</strong> Existe una fuga del ${abd}%.`; } 
 
             document.getElementById('ia-txt-moodle').innerHTML = `
-                <div class="alert bg-${mColor}-soft d-flex align-items-center mb-4 p-4 border-0 shadow-sm rounded-4" style="background-color: var(--card-bg); border-left: 4px solid var(--${mColor}) !important;"><i class="bi ${mIcon} fs-1 me-4 text-${mColor}"></i> <div class="fs-6 text-main">${mText}</div></div>
+                <div class="alert alert-${mColor} d-flex align-items-center mb-4 p-4 border-0 shadow-sm rounded-4"><i class="bi ${mIcon} fs-1 me-4"></i> <div class="fs-6">${mText}</div></div>
                 <div class="row g-4">
-                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">Puntaje de Salud (CHS)</div><div class="ia-val text-${mColor}">${chs} <span style="font-size: 1rem; color: var(--text-muted);">/ 100</span></div><div class="ia-text text-muted">Métrica que combina finalización y satisfacción.</div></div></div>
-                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${esGlobal ? 'Fuga Histórica' : 'Fuga Académica'}</div><div class="ia-val">${abd}%</div><div class="ia-text text-muted">Estudiantes que iniciaron pero no concluyeron.</div></div></div>
-                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${esGlobal ? 'Inactividad Institucional' : 'Barrera de Entrada'}</div><div class="ia-val">${inact}%</div><div class="ia-text text-muted">Matriculados que jamás registraron actividad.</div></div></div>
+                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">Aprobación</div><div class="ia-val">${fin}%</div></div></div>
+                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${esGlobal ? 'Fuga Histórica' : 'Fuga Académica'}</div><div class="ia-val">${abd}%</div></div></div>
+                    <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${esGlobal ? 'Inactividad Institucional' : 'Barrera de Entrada'}</div><div class="ia-val">${inact}%</div></div></div>
                 </div>
             `;
 
-            // 3. DATA DE CALIDAD
-            let nps = esGlobal ? dashboardData.kpis_globales.nps_global : curso.e_NPS;
-            let encuestas = esGlobal ? dashboardData.metadata.total_encuestas_historicas : curso.Total_Encuestas;
-            let pregData = esGlobal ? promediosGlobalesPreguntas : curso.Detalle_Preguntas;
+            let nps = esGlobal ? dashboardData.kpis_globales.nps_global : cursoObj.e_NPS;
+            let encuestas = esGlobal ? dashboardData.metadata.total_encuestas_historicas : cursoObj.Total_Encuestas;
+            let pregData = esGlobal ? promediosGlobalesPreguntas : cursoObj.Detalle_Preguntas;
+            if(datosFilt) { nps = datosFilt.e_NPS; encuestas = datosFilt.Total_Encuestas; pregData = datosFilt.Detalle_Preguntas; }
 
             if (encuestas < 5) {
-                document.getElementById('ia-txt-radar').innerHTML = `<div class="alert bg-indigo-soft border-0 p-4 rounded-4 d-flex align-items-center"><i class="bi bi-bar-chart-fill fs-1 me-4"></i><div class="fs-6">Muestra estadística muy baja (<strong>${encuestas} respuestas</strong>). No es posible emitir un diagnóstico de calidad con significancia estadística.</div></div>`;
+                document.getElementById('ia-txt-radar').innerHTML = `<div class="alert bg-indigo-soft border-0 p-4 rounded-4 d-flex align-items-center"><i class="bi bi-bar-chart-fill fs-1 me-4"></i><div class="fs-6">Muestra estadística baja (<strong>${encuestas} respuestas</strong>). Diagnóstico pausado.</div></div>`;
             } else {
                 let maxScore = -1, minScore = 6, mejorPregunta = "", peorPregunta = "";
                 for(let q in pregData) {
@@ -777,70 +750,98 @@
                 }
 
                 let npsColor = nps > 20 ? "success" : (nps < 0 ? "danger" : "warning"); 
-                
                 document.getElementById('ia-txt-radar').innerHTML = `
                     <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-light">
                         <span class="badge bg-${npsColor} text-white fs-4 py-3 px-4 me-4 shadow-sm rounded-3" style="font-variant-numeric: tabular-nums;">NPS: ${nps}</span>
-                        <span class="fs-6 text-muted" style="line-height: 1.5;">Sentimiento extraído de <strong>${encuestas.toLocaleString()} encuestas</strong> válidas. El Net Promoter Score indica la lealtad general.</span>
+                        <span class="fs-6 text-muted" style="line-height: 1.5;">Sentimiento extraído de <strong>${encuestas.toLocaleString()} encuestas</strong>.</span>
                     </div>
                     <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="ia-mini-card" style="border-left: 4px solid var(--success);">
-                                <div class="ia-lbl text-success"><i class="bi bi-star-fill me-2"></i>Dimensión Mejor Valorada</div>
-                                <div class="ia-val" style="font-size:1.3rem;">${maxScore.toFixed(1)} <span style="font-size: 1rem; color: var(--text-muted);">/ 5.0</span></div>
-                                <div class="ia-text fw-bold mb-1">${mejorPregunta}</div>
-                                <div class="ia-text text-muted" style="font-size:0.85rem;">El ecosistema presenta un rendimiento superior en este aspecto metodológico.</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="ia-mini-card" style="border-left: 4px solid var(--danger);">
-                                <div class="ia-lbl text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Oportunidad de Mejora</div>
-                                <div class="ia-val" style="font-size:1.3rem;">${minScore.toFixed(1)} <span style="font-size: 1rem; color: var(--text-muted);">/ 5.0</span></div>
-                                <div class="ia-text fw-bold mb-1">${peorPregunta}</div>
-                                <div class="ia-text text-muted" style="font-size:0.85rem;">Se requiere atención prioritaria y planes de mejora en esta área.</div>
-                            </div>
-                        </div>
+                        <div class="col-md-6"><div class="ia-mini-card border-success"><div class="ia-lbl text-success">Dimensión Fuerte</div><div class="ia-val">${maxScore.toFixed(1)} <span class="fs-6 text-muted">/ 5.0</span></div><div class="ia-text fw-bold mb-1">${mejorPregunta}</div></div></div>
+                        <div class="col-md-6"><div class="ia-mini-card border-danger"><div class="ia-lbl text-danger">Área de Mejora</div><div class="ia-val">${minScore.toFixed(1)} <span class="fs-6 text-muted">/ 5.0</span></div><div class="ia-text fw-bold mb-1">${peorPregunta}</div></div></div>
                     </div>
                 `;
             }
         }
 
-
         // ==========================================
-        // LÓGICA DE DATOS Y RENDERIZADO
+        // RENDERIZADO VISUAL
         // ==========================================
         function actualizarLandingKPIs() {
             const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
-            let totalCertificados = 0; 
-            dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
+            let totalCertificados = 0; dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
             const pctCertificados = totalInscritos > 0 ? Math.round((totalCertificados / totalInscritos) * 100) + "%" : "0%";
-
             document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados || 0;
             document.getElementById('bento-matriculas').innerText = totalInscritos.toLocaleString();
             document.getElementById('bento-unicos').innerText = (dashboardData.metadata.total_estudiantes_unicos || totalInscritos).toLocaleString();
-            
             document.getElementById('bento-certificados').innerText = totalCertificados.toLocaleString();
             document.getElementById('bento-pct-cert').innerText = pctCertificados;
-            
             document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString();
             document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
             document.getElementById('bento-nps').innerText = dashboardData.kpis_globales.nps_global;
         }
 
+        function manejarCambioBase() { 
+            const seleccion = this.value; 
+            const selectorCohorte = document.getElementById('selector-cohorte'); 
+            const lobby = document.getElementById('panel-lobby-curso'); 
+            const tabs = document.getElementById('contenedor-tabs'); 
+            
+            if (seleccion === "ALL") { 
+                selectorCohorte.style.display = "none"; cursoActual = null; 
+                lobby.style.display = "none"; tabs.style.display = "block"; 
+                actualizarPantallaGlobal(); 
+            } else { 
+                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; 
+                cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); 
+                selectorCohorte.style.display = "block"; selectorCohorte.value = ""; 
+                tabs.style.display = "none"; lobby.style.display = "block"; 
+                document.getElementById('filtros-cruzados-bar').style.display = 'none';
+                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;">${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizarla</p></div><div class="row g-4 justify-content-center">`; 
+                cohortes.forEach(c => { 
+                    htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${c.Edicion}</h5><span class="badge bg-primary px-3 py-2 text-white" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
+                }); 
+                htmlLobby += `</div>`; lobby.innerHTML = htmlLobby; 
+            } 
+            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
+        }
+
+        window.seleccionarCohorteDesdeLobby = function(nombreCurso) { 
+            document.getElementById('selector-cohorte').value = nombreCurso; 
+            document.getElementById('panel-lobby-curso').style.display = 'none'; 
+            document.getElementById('contenedor-tabs').style.display = 'block'; 
+            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === nombreCurso); 
+            actualizarPantallaCurso(); 
+        };
+
+        function manejarCambioCohorte() { 
+            if (!this.value) { 
+                document.getElementById('panel-lobby-curso').style.display = 'block'; 
+                document.getElementById('contenedor-tabs').style.display = 'none'; 
+                return; 
+            } 
+            document.getElementById('panel-lobby-curso').style.display = 'none'; 
+            document.getElementById('contenedor-tabs').style.display = 'block'; 
+            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); 
+            actualizarPantallaCurso(); 
+        }
+
         function actualizarPantallaGlobal() { 
+            document.getElementById('filtros-cruzados-bar').style.display = 'none';
+            datosFiltradosActuales = null;
+            document.getElementById('kpi-moodle-row').classList.remove('filtro-lock');
+            document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock');
+
             const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
-            let totalCertificados = 0; 
-            dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
-            const pctCertificados = totalInscritos > 0 ? Math.round((totalCertificados / totalInscritos) * 100) + "%" : "0%"; 
+            let totalCertificados = 0; dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
             
             document.getElementById('kpi-global-row').innerHTML = `
-                ${crearTarjetaKPI("Cursos Activos", dashboardData.metadata.total_cursos_analizados)}
-                ${crearTarjetaKPI("Matrículas Totales", totalInscritos.toLocaleString())}
-                ${crearTarjetaKPI("Estudiantes Únicos", (dashboardData.metadata.total_estudiantes_unicos || totalInscritos).toLocaleString())}
-                ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
+                ${crearTarjetaKPI("Cursos", dashboardData.metadata.total_cursos_analizados)}
+                ${crearTarjetaKPI("Matrículas", totalInscritos.toLocaleString())}
+                ${crearTarjetaKPI("Est. Únicos", (dashboardData.metadata.total_estudiantes_unicos || totalInscritos).toLocaleString())}
                 ${crearTarjetaKPI("Encuestas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}
-                ${crearTarjetaKPI("Score Salud (CHS)", dashboardData.kpis_globales.chs_promedio_secretaria)}
-                ${crearTarjetaKPI("e-NPS Global", dashboardData.kpis_globales.nps_global)}
+                ${crearTarjetaKPI("CHS", dashboardData.kpis_globales.chs_promedio_secretaria)}
+                ${crearTarjetaKPI("e-NPS", dashboardData.kpis_globales.nps_global)}
             `; 
             
             dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); 
@@ -853,70 +854,63 @@
             let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0; 
             dashboardData.cursos.forEach(c => { 
                 let insc = c.Total_Inscritos || 0; 
-                totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; 
-                totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; 
-                totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; 
+                totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; 
                 if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } 
             }); 
-            
             let pctFin = totalInscritos ? Math.round((totalFin / totalInscritos) * 100) : 0; 
             let pctAbd = totalInscritos ? Math.round((totalAbd / totalInscritos) * 100) : 0; 
             let pctInac = totalInscritos ? Math.round((totalInac / totalInscritos) * 100) : 0; 
             
-            document.getElementById('kpi-moodle-row').innerHTML = `
-                ${crearTarjetaKPI("Tasa Finalización Global", pctFin + "%")}
-                ${crearTarjetaKPI("Tasa Abandono Histórico", pctAbd + "%")}
-                ${crearTarjetaKPI("Inactividad Institucional", pctInac + "%")}
-            `; 
+            document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pctFin + "%")} ${crearTarjetaKPI("Abandono", pctAbd + "%")} ${crearTarjetaKPI("Inactividad", pctInac + "%")}`; 
             document.getElementById('tiempo-consumo-dias').innerText = countCursosDias ? Math.round(sumDias / countCursosDias) : 0; 
             dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pctFin, 'Tasa_Abandono_%': pctAbd, 'Tasa_Inactividad_%': pctInac }); 
             
             document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; 
-            document.getElementById('titulo-desglose').innerText = "Desglose Institucional (0 - 5.0)"; 
             dibujarRadar(promediosGlobalesPreguntas, true); 
             document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
-
             generarInsightsIABloques(true, null);
         }
 
-        function actualizarPantallaCurso() { 
-            const totalCertificados = Math.round((cursoActual.Total_Inscritos || 0) * (cursoActual['Tasa_Finalizacion_%'] || 0) / 100); 
-            const pctCertificados = cursoActual['Tasa_Finalizacion_%'] + "%"; 
+        function actualizarPantallaCurso(datosOlap = null) { 
+            if(!datosOlap) cargarFiltrosOLAP();
+
+            const dDemo = datosOlap ? datosOlap.Demografia : cursoActual.Demografia;
+            const dPreg = datosOlap ? datosOlap.Detalle_Preguntas : cursoActual.Detalle_Preguntas;
+            const tEnc = datosOlap ? datosOlap.Total_Encuestas : cursoActual.Total_Encuestas;
+            const dNps = datosOlap ? datosOlap.e_NPS : cursoActual.e_NPS;
+            const baseIns = cursoActual.Total_Inscritos;
+            const tFin = cursoActual['Tasa_Finalizacion_%'];
             
             document.getElementById('kpi-global-row').innerHTML = `
-                ${crearTarjetaKPI("Matrículas", cursoActual.Total_Inscritos.toLocaleString())}
-                ${crearTarjetaKPI("Certificados", totalCertificados.toLocaleString(), pctCertificados)}
-                ${crearTarjetaKPI("Encuestas", cursoActual.Total_Encuestas.toLocaleString())}
-                ${crearTarjetaKPI("Participación", cursoActual.Total_Inscritos > 0 ? Math.round((cursoActual.Total_Encuestas / cursoActual.Total_Inscritos) * 100) + "%" : "0%")}
-                ${crearTarjetaKPI("Score Salud (CHS)", cursoActual.Salud_Curso_CHS)}
-                ${crearTarjetaKPI("e-NPS", cursoActual.e_NPS)}
+                ${crearTarjetaKPI("Matrículas", baseIns.toLocaleString())}
+                ${crearTarjetaKPI("Aprobados", Math.round((baseIns * tFin) / 100).toLocaleString(), tFin + "%")}
+                ${crearTarjetaKPI(datosOlap ? "Encuestas (Filtro)" : "Encuestas", tEnc.toLocaleString())}
+                ${crearTarjetaKPI("CHS", cursoActual.Salud_Curso_CHS)}
+                ${crearTarjetaKPI("e-NPS", dNps)}
             `; 
             
-            dibujarGraficoDona('chartSexo', cursoActual.Demografia['Sexo'], 'bottom'); 
-            dibujarGraficoDona('chartEdad', cursoActual.Demografia['Edad'], 'right'); 
-            dibujarGraficoDona('chartPerfil', cursoActual.Demografia['Perfil'], 'right'); 
-            dibujarGraficoDona('chartEscolaridad', cursoActual.Demografia['Escolaridad'], 'right'); 
-            dibujarMapaCoropletico(cursoActual.Demografia['Comuna']); 
-            dibujarGraficoComunas('chartComunas', cursoActual.Demografia['Comuna']); 
+            let kEdad = dDemo['Edad'] ? 'Edad' : 'Curso de Vida';
+            dibujarGraficoDona('chartSexo', dDemo['Sexo'], 'bottom'); 
+            dibujarGraficoDona('chartEdad', dDemo[kEdad], 'right'); 
+            dibujarGraficoDona('chartPerfil', dDemo['Perfil'], 'right'); 
+            dibujarGraficoDona('chartEscolaridad', dDemo['Escolaridad'], 'right'); 
+            dibujarMapaCoropletico(dDemo['Comuna']); 
+            dibujarGraficoComunas('chartComunas', dDemo['Comuna']); 
             
-            document.getElementById('kpi-moodle-row').innerHTML = `
-                ${crearTarjetaKPI("Tasa Finalización", cursoActual['Tasa_Finalizacion_%'] + "%")}
-                ${crearTarjetaKPI("Tasa Abandono", cursoActual['Tasa_Abandono_%'] + "%")}
-                ${crearTarjetaKPI("Tasa Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}
-            `; 
-            document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; 
-            dibujarBarraMoodle('chartMoodleBar', cursoActual); 
+            if(!datosOlap) {
+                document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tFin + "%")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%'] + "%")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%'] + "%")}`; 
+                document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; 
+                dibujarBarraMoodle('chartMoodleBar', cursoActual); 
+            }
             
-            document.getElementById('titulo-radar').innerText = "Radar vs Benchmark Global"; 
-            document.getElementById('titulo-desglose').innerText = "Desglose de Cohorte (0 - 5.0)"; 
-            dibujarRadar(cursoActual.Detalle_Preguntas, false); 
-            document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(cursoActual.Detalle_Preguntas);
-
-            generarInsightsIABloques(false, cursoActual);
+            document.getElementById('titulo-radar').innerText = datosOlap ? "Radar Filtrado vs Benchmark" : "Radar vs Benchmark Global"; 
+            dibujarRadar(dPreg, false); 
+            document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dPreg);
+            generarInsightsIABloques(false, cursoActual, datosOlap);
         }
 
         // ==========================================
-        // COMPONENTES UI
+        // COMPONENTES UI Y DIBUJO
         // ==========================================
         function crearTarjetaKPI(label, valor, porcentaje = null) { 
             let htmlPorcentaje = porcentaje ? `<span style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.15); padding: 4px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;">${porcentaje}</span>` : ''; 
@@ -927,23 +921,9 @@
             let html = '';
             for (let q in datosPreguntas) {
                 let val = parseFloat(datosPreguntas[q]) || 0;
-                
-                // Extraer el color y el fondo suave directamente de las variables CSS actuales
-                let hexColor = val >= 4.5 ? 'var(--success)' : (val >= 4.0 ? 'var(--warning)' : 'var(--danger)');
-                let bgSoft = val >= 4.5 ? 'rgba(5, 205, 153, 0.15)' : (val >= 4.0 ? 'rgba(255, 181, 71, 0.15)' : 'rgba(238, 93, 80, 0.15)');
-                
+                let colorClass = val >= 4.5 ? 'success' : (val >= 4.0 ? 'info' : 'danger');
                 let widthPct = (val / 5) * 100;
-                
-                html += `
-                <div class="progress-bar-container">
-                    <div class="progress-label">
-                        <span>${q}</span>
-                        <span class="progress-val-bubble" style="background-color: ${bgSoft}; color: ${hexColor}; border-color: ${hexColor};">${val.toFixed(1)}</span>
-                    </div>
-                    <div class="progress-bg">
-                        <div class="progress-fill" style="width: ${widthPct}%; background-color: ${hexColor};"></div>
-                    </div>
-                </div>`;
+                html += `<div class="progress-bar-container"><div class="progress-label"><span>${q}</span><span class="progress-val valor-chic">${val.toFixed(1)}</span></div><div class="progress-bg"><div class="progress-fill bg-${colorClass}" style="width: ${widthPct}%"></div></div></div>`;
             }
             return html;
         }
@@ -970,54 +950,6 @@
             Object.keys(cursosPorBase).sort().forEach(base => { sel.appendChild(new Option(base, base)); }); 
         }
 
-        function manejarCambioBase() { 
-            const seleccion = this.value; 
-            const selectorCohorte = document.getElementById('selector-cohorte'); 
-            const lobby = document.getElementById('panel-lobby-curso'); 
-            const tabs = document.getElementById('contenedor-tabs'); 
-            
-            if (seleccion === "ALL") { 
-                selectorCohorte.style.display = "none"; cursoActual = null; 
-                lobby.style.display = "none"; tabs.style.display = "block"; 
-                actualizarPantallaGlobal(); 
-            } else { 
-                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
-                selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; 
-                cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); 
-                selectorCohorte.style.display = "block"; selectorCohorte.value = ""; 
-                tabs.style.display = "none"; lobby.style.display = "block"; 
-                
-                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;">${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizarla</p></div><div class="row g-4 justify-content-center">`; 
-                cohortes.forEach(c => { 
-                    htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${c.Edicion}</h5><span class="badge bg-primary px-3 py-2 text-white" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
-                }); 
-                htmlLobby += `</div>`; lobby.innerHTML = htmlLobby; 
-            } 
-            if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
-        }
-
-        window.seleccionarCohorteDesdeLobby = function(nombreCurso) { 
-            document.getElementById('selector-cohorte').value = nombreCurso; 
-            document.getElementById('panel-lobby-curso').style.display = 'none'; 
-            document.getElementById('contenedor-tabs').style.display = 'block'; 
-            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === nombreCurso); 
-            actualizarPantallaCurso(); 
-        }
-        function manejarCambioCohorte() { 
-            if (!this.value) { 
-                document.getElementById('panel-lobby-curso').style.display = 'block'; 
-                document.getElementById('contenedor-tabs').style.display = 'none'; 
-                return; 
-            } 
-            document.getElementById('panel-lobby-curso').style.display = 'none'; 
-            document.getElementById('contenedor-tabs').style.display = 'block'; 
-            cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); 
-            actualizarPantallaCurso(); 
-        }
-
-        // ==========================================
-        // MAPA Y GRÁFICOS (Chart.js / Leaflet)
-        // ==========================================
         function normalizarLlaveComuna(texto) { 
             if (!texto) return "N/A"; let t = String(texto).trim().toUpperCase(); 
             if (t === "" || t === "N/A" || t === "NULL" || t === "SIN DATO") return "N/A"; 
@@ -1050,34 +982,23 @@
 
         function getColorMapa(valor, maxValor) { 
             if (valor === 0) return 'transparent'; 
-            
-            // Adaptar la paleta al tema actual
-            let tema = document.documentElement.getAttribute('data-theme') || 'light';
-            let paleta = [];
-            
-            if (tema === 'light') paleta = ['#ece6ff', '#d1c4ff', '#a389ff', '#7551ff', '#4318ff'];
-            else if (tema === 'dark') paleta = ['#1e1b4b', '#2e266d', '#4338ca', '#5b21b6', '#7551ff'];
-            else if (tema === 'rose') paleta = ['#ffe4e6', '#fecdd3', '#fda4af', '#fb7185', '#e11d48'];
-            else if (tema === 'amber') paleta = ['#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#d97706'];
-
-            if (valor > maxValor * 0.8) return paleta[4]; 
-            if (valor > maxValor * 0.6) return paleta[3]; 
-            if (valor > maxValor * 0.4) return paleta[2]; 
-            if (valor > maxValor * 0.2) return paleta[1]; 
-            return paleta[0]; 
+            let c = document.documentElement.getAttribute('data-theme') === 'rose' ? ['#fff1f2', '#fecdd3', '#fda4af', '#f43f5e', '#be123c'] : 
+                    document.documentElement.getAttribute('data-theme') === 'amber' ? ['#fffbeb', '#fef08a', '#f59e0b', '#d97706', '#92400e'] : 
+                    ['#ece6ff', '#d1c4ff', '#a389ff', '#7551ff', '#4318ff'];
+            if (valor > maxValor * 0.8) return c[4]; if (valor > maxValor * 0.6) return c[3]; 
+            if (valor > maxValor * 0.4) return c[2]; if (valor > maxValor * 0.2) return c[1]; 
+            return c[0]; 
         }
 
         function dibujarMapaCoropletico(dataComunas) { 
             if (!mapInstance || !geoJsonDataRaw || !geoJsonDataRaw.features) return; 
             if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
-            
             let mapaDatosNormalizado = {}; let maxParticipantes = 0; 
             for (let nombreEnData in dataComunas) { 
                 let idLimpio = normalizarLlaveComuna(nombreEnData); 
                 mapaDatosNormalizado[idLimpio] = (mapaDatosNormalizado[idLimpio] || 0) + (dataComunas[nombreEnData] || 0); 
                 if (mapaDatosNormalizado[idLimpio] > maxParticipantes && !isNaN(idLimpio)) maxParticipantes = mapaDatosNormalizado[idLimpio]; 
             } 
-            
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
                 style: function (feature) { 
                     let idLimpio = normalizarLlaveComuna(feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id); 
@@ -1088,8 +1009,6 @@
                     let idLimpio = normalizarLlaveComuna(feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id); 
                     let partes = mapaDatosNormalizado[idLimpio] || 0; 
                     layer.bindTooltip(`<div style="font-family:'Inter'; text-align:center;"><strong style="color:var(--primary); font-size:1.1rem;">Comuna ${idLimpio}</strong><br><span style="font-size:1rem;">${partes} Participantes</span></div>`, { sticky: true }); 
-                    
-                    // EFECTO HOVER INTERACTIVO
                     layer.on({
                         mouseover: function (e) {
                             geoJsonLayer.eachLayer(l => { if (l !== e.target) l.setStyle({ fillOpacity: 0.1, opacity: 0.2, weight: 1 }); });
@@ -1112,92 +1031,43 @@
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
             let agrupadito = {}; 
             for (let key in dataObject) { 
-                let label = formatearNombreUbicacion(normalizarLlaveComuna(key)); 
-                agrupadito[label] = (agrupadito[label] || 0) + dataObject[key]; 
+                let label = formatearNombreUbicacion(normalizarLlaveComuna(key)); agrupadito[label] = (agrupadito[label] || 0) + dataObject[key]; 
             } 
             let sorted = Object.entries(agrupadito).sort((a, b) => b[1] - a[1]); 
-            
-            let colorPrimario = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-            let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
-
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
-                type: 'bar', 
-                data: { labels: sorted.map(i => i[0]), datasets: [{ data: sorted.map(i => i[1]), backgroundColor: colorPrimario, borderRadius: 4 }] }, 
-                options: { 
-                    indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, 
-                    scales: { 
-                        x: { beginAtZero: true, ticks: { color: textColor } }, 
-                        y: { ticks: { autoSkip: false, color: textColor, font: { family: 'Inter', size: 10 } } } 
-                    } 
-                } 
+                type: 'bar', data: { labels: sorted.map(i => i[0]), datasets: [{ data: sorted.map(i => i[1]), backgroundColor: '#4318ff', borderRadius: 4 }] }, 
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { autoSkip: false, font: { family: 'Inter', size: 10 } } } } } 
             }); 
         }
 
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
-            
-            let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
-
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
-                type: 'doughnut', 
-                data: { labels: Object.keys(dataObject), datasets: [{ data: Object.values(dataObject), backgroundColor: getColoresDona(), borderWidth: 2, borderColor: 'transparent', hoverOffset: 8 }] }, 
-                options: { 
-                    responsive: true, maintainAspectRatio: false, cutout: '75%', 
-                    plugins: { legend: { position: legendPosition, labels: { color: textColor, boxWidth: 10, font: { size: 11, family: 'Inter' } } } } 
-                } 
+                type: 'doughnut', data: { labels: Object.keys(dataObject), datasets: [{ data: Object.values(dataObject), backgroundColor: coloresDona, borderWidth: 2, borderColor: 'transparent', hoverOffset: 8 }] }, 
+                options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } } } } } 
             }); 
         }
 
         function dibujarBarraMoodle(canvasId, curso) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
-            
-            let cSucc = getComputedStyle(document.documentElement).getPropertyValue('--success').trim();
-            let cWarn = getComputedStyle(document.documentElement).getPropertyValue('--warning').trim();
-            let cDang = getComputedStyle(document.documentElement).getPropertyValue('--danger').trim();
-            let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
-
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
                 type: 'bar', data: { labels: ['Estado %'], datasets: [
-                        { label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: cSucc, borderRadius: { topLeft: 6, bottomLeft: 6 } }, 
-                        { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: cWarn }, 
-                        { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: cDang, borderRadius: { topRight: 6, bottomRight: 6 } }
+                        { label: 'Finalizaron', data: [curso['Tasa_Finalizacion_%']], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, 
+                        { label: 'Abandonaron', data: [curso['Tasa_Abandono_%']], backgroundColor: '#ffb547' }, 
+                        { label: 'Inactivos', data: [curso['Tasa_Inactividad_%']], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } }
                     ] }, 
-                options: { 
-                    responsive: true, maintainAspectRatio: false, indexAxis: 'y', 
-                    scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, 
-                    plugins: { legend: { position: 'bottom', labels: { color: textColor, boxWidth: 14 } } } 
-                } 
+                options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 14 } } } } 
             }); 
         }
 
         function dibujarRadar(preguntasCurso, isGlobal = false) { 
             if (chartInstances['chartRadar']) chartInstances['chartRadar'].destroy(); 
             const labels = Object.keys(preguntasCurso).map(q => mapeoPreguntas[q] || "Pregunta"); 
-            
-            let colorPrimario = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-            let colorFondoSoft = getComputedStyle(document.documentElement).getPropertyValue('--blob-1').trim();
-            let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
-            let gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
-
-            let datasetsArray = [{ label: isGlobal ? 'Promedio Institucional' : 'Esta Cohorte', data: Object.values(preguntasCurso), backgroundColor: colorFondoSoft, borderColor: colorPrimario, pointBackgroundColor: colorPrimario, borderWidth: 2, pointRadius: 4 }]; 
+            let datasetsArray = [{ label: isGlobal ? 'Promedio Institucional' : 'Esta Cohorte', data: Object.values(preguntasCurso), backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 4 }]; 
             if (!isGlobal) datasetsArray.push({ label: 'Benchmark Global', data: Object.keys(preguntasCurso).map(q => promediosGlobalesPreguntas[q] || 0), backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); 
-            
             chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { 
-                type: 'radar', 
-                data: { labels: labels, datasets: datasetsArray }, 
-                options: { 
-                    responsive: true, maintainAspectRatio: false, 
-                    plugins: { legend: { labels: { color: textColor } } },
-                    scales: { 
-                        r: { 
-                            min: 0, max: 5, 
-                            grid: { color: gridColor },
-                            angleLines: { color: gridColor },
-                            pointLabels: { color: textColor, font: { size: 10, family: 'Inter', weight: '600' } },
-                            ticks: { color: textColor, stepSize: 1, backdropColor: 'transparent' } 
-                        } 
-                    } 
-                } 
+                type: 'radar', data: { labels: labels, datasets: datasetsArray }, 
+                options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 10, family: 'Inter', weight: '600' } } } } } 
             }); 
         }
     </script>
