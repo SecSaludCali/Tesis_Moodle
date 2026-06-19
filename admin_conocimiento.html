@@ -283,6 +283,12 @@
             </div>
 
             <div class="mb-4">
+                <label for="estructura_curso" class="form-label">Estructura del Curso (Módulos) <span class="text-muted fw-normal">- Opcional</span></label>
+                <textarea class="form-control" id="estructura_curso" rows="3" placeholder="Ej: Módulo 1: Introducción a la Res 3280, Módulo 2: Primera Infancia, Módulo 3: Vejez..."></textarea>
+                <div class="form-text mt-2" style="font-size: 0.8rem;">Dile a la IA cuáles son los módulos exactos del curso para que sepa dónde matricular al estudiante al final del examen.</div>
+            </div>
+
+            <div class="mb-4">
                 <label class="form-label">Documento Base (PDF)</label>
                 <!-- Zona oculta de input de archivo -->
                 <input type="file" id="pdf_file" accept="application/pdf" style="display: none;">
@@ -531,10 +537,13 @@
                 mostrarLog("Extracción de texto completada. Limpiando caracteres ocultos...");
                 const textoLimpio = textoExtraido.replace(/\s+/g, ' ').trim();
                 
+                const estructuraMapeada = document.getElementById('estructura_curso').value.trim();
+
                 const conocimientoIA = {
                     id_tema: temaId,
                     fecha_creacion: new Date().toISOString(),
                     origen_archivo: archivoSeleccionado.name,
+                    estructura_curso: estructuraMapeada,
                     contexto_base: textoLimpio
                 };
 
