@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 42,
-        "total_encuestas_historicas": 3872,
+        "total_encuestas_historicas": 3873,
         "total_estudiantes_unicos": 5606
     },
     "kpis_globales": {
@@ -10,23 +10,23 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2837,
+            "Femenino": 2838,
             "Masculino": 1031,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2790,
+            "Área de la salud": 2791,
             "Estudiante": 702,
             "Otro": 380
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2293,
+            "Adultez (29 - 59 años)": 2294,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 698,
             "Vejez (60 años o más)": 160
         },
         "Comuna": {
-            "COMUNA 17": 442,
+            "COMUNA 17": 443,
             "COMUNA 19": 231,
             "COMUNA 1": 222,
             "COMUNA 10": 199,
@@ -65,7 +65,7 @@
             "C. DE LA ELVIRA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1742,
+            "Pregrado": 1743,
             "Bachiller": 1088,
             "Postgrado": 986,
             "Ninguna": 56
@@ -12643,17 +12643,17 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2026 - 01",
             "ID_Moodle_Original": "sello_01_2026",
             "Total_Inscritos": 165,
-            "Tasa_Finalizacion_%": 8.5,
+            "Tasa_Finalizacion_%": 9.1,
             "Tasa_Abandono_%": 1.8,
-            "Tasa_Inactividad_%": 89.7,
-            "Tiempo_Promedio_Dias": 0.6,
+            "Tasa_Inactividad_%": 89.1,
+            "Tiempo_Promedio_Dias": 0.5,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
             "ICD_Promedio": 0.0,
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 8.5,
+            "Salud_Curso_CHS": 9.1,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -46342,29 +46342,29 @@
             "Tasa_Abandono_%": 2.2,
             "Tasa_Inactividad_%": 20.1,
             "Tiempo_Promedio_Dias": 2.4,
-            "Total_Encuestas": 664.0,
-            "ISG_Promedio": 4.549930491195552,
-            "ICD_Promedio": 4.478413654618474,
-            "IUP_Promedio": 4.633283132530121,
-            "UX_Promedio": 4.552710843373494,
-            "e_NPS": 59.0,
+            "Total_Encuestas": 665.0,
+            "ISG_Promedio": 4.550607287449393,
+            "ICD_Promedio": 4.4791979949874685,
+            "IUP_Promedio": 4.633834586466166,
+            "UX_Promedio": 4.553383458646617,
+            "e_NPS": 59.1,
             "Salud_Curso_CHS": 86.0,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 435,
+                    "Femenino": 436,
                     "Intersexual": 1,
                     "Masculino": 228
                 },
                 "Perfil": {
                     "Estudiante": 14,
                     "Otro": 164,
-                    "Área de la salud": 486
+                    "Área de la salud": 487
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 536,
+                    "Adultez (29 - 59 años)": 537,
                     "Juventud (18 - 28 años)": 73,
                     "Vejez (60 años o más)": 55
                 },
@@ -46392,7 +46392,7 @@
                     "COMUNA 14": 12,
                     "COMUNA 15": 26,
                     "COMUNA 16": 23,
-                    "COMUNA 17": 110,
+                    "COMUNA 17": 111,
                     "COMUNA 18": 24,
                     "COMUNA 19": 73,
                     "COMUNA 2": 39,
@@ -46411,23 +46411,23 @@
                     "Bachiller": 106,
                     "Ninguna": 2,
                     "Postgrado": 248,
-                    "Pregrado": 308
+                    "Pregrado": 309
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.608433734939759,
-                "¿Se cumplió el objetivo de la capacitación?": 4.615963855421687,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.594879518072289,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.566265060240964,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.647590361445783,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.618975903614458,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.539156626506024,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.549698795180723,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.417168674698795,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.346385542168675,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.542168674698795,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.563253012048193,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.539156626506024
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.609022556390977,
+                "¿Se cumplió el objetivo de la capacitación?": 4.616541353383458,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.595488721804511,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.566917293233082,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.64812030075188,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.619548872180451,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.5398496240601505,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.550375939849624,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.418045112781955,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.347368421052631,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.542857142857143,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.56390977443609,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.5398496240601505
             },
             "Registros_Crudos": [
                 {
@@ -51509,6 +51509,26 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
                     "¿El material utilizado permitió el entendimiento del tema?": 4,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 17",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 },
                 {
                     "Sexo": "Femenino",
