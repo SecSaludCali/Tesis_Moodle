@@ -2,7 +2,7 @@
     "metadata": {
         "total_cursos_analizados": 43,
         "total_encuestas_historicas": 3880,
-        "total_estudiantes_unicos": 5774
+        "total_estudiantes_unicos": 5775
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 55.1,
@@ -30724,8 +30724,8 @@
         {
             "Nombre_Curso": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD - 2025 - 01",
             "ID_Moodle_Original": "pir_sspm_2025",
-            "Total_Inscritos": 1246,
-            "Tasa_Finalizacion_%": 84.2,
+            "Total_Inscritos": 1247,
+            "Tasa_Finalizacion_%": 84.1,
             "Tasa_Abandono_%": 2.2,
             "Tasa_Inactividad_%": 13.6,
             "Tiempo_Promedio_Dias": 2.3,
@@ -30735,7 +30735,7 @@
             "IUP_Promedio": 4.674157303370786,
             "UX_Promedio": 4.581059390048154,
             "e_NPS": 61.8,
-            "Salud_Curso_CHS": 89.0,
+            "Salud_Curso_CHS": 88.9,
             "Curso_Base": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
@@ -46378,8 +46378,8 @@
         {
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2025 - 01",
             "ID_Moodle_Original": "sello_012025",
-            "Total_Inscritos": 1246,
-            "Tasa_Finalizacion_%": 77.8,
+            "Total_Inscritos": 1247,
+            "Tasa_Finalizacion_%": 77.7,
             "Tasa_Abandono_%": 2.2,
             "Tasa_Inactividad_%": 20.0,
             "Tiempo_Promedio_Dias": 2.4,
