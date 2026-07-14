@@ -170,7 +170,7 @@
         <div class="blob-3"></div>
         <div class="portal-content">
             <div class="text-center mb-5">
-                <img src="Recurso.png" alt="Logo Institucional" style="max-height: 90px; object-fit: contain;">
+                <img src="https://placehold.co/300x80/transparent/4318ff.png?text=Ecosistema" alt="Logo Institucional" style="max-height: 90px; object-fit: contain;">
                 <p class="mt-3 text-muted fw-bold" style="letter-spacing: 2px; text-transform: uppercase;">Ecosistema Educativo en Salud</p>
             </div>
 
@@ -205,7 +205,7 @@
                                     <span id="bento-certificados">-</span>
                                     <span class="pill-badge" id="bento-pct-cert">-</span>
                                 </div>
-                                <div class="bento-lbl">Certificados Emitidos</div>
+                                <div class="bento-lbl">Aprobados (Graduados)</div>
                             </div>
                             <div class="bento-divider"></div>
                             <div class="text-center">
@@ -277,7 +277,13 @@
         </div>
 
         <div class="row mb-4 g-4" id="selectores-container">
-            <div class="col-md-8">
+            <!-- NUEVO SELECTOR DE AÑO -->
+            <div class="col-md-3">
+                <select id="selector-anio" class="form-select" style="border: 2px solid var(--primary); font-weight: 700; color: var(--primary);">
+                    <option value="ALL">📅 Todos los Años</option>
+                </select>
+            </div>
+            <div class="col-md-5">
                 <select id="selector-curso-base" class="form-select">
                     <option value="ALL">🌐 Vista Global (Consolidado Institucional)</option>
                 </select>
@@ -467,6 +473,9 @@
         let geoJsonLayer = null; 
         let mapTilesLayer = null; 
         let geoJsonDataRaw = null;
+        
+        let añosDisponibles = new Set();
+        let añoActual = "ALL";
 
         const mapeoPreguntas = { 
             "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro al Inicio", 
@@ -583,15 +592,18 @@
                     "cursos": [{ "Nombre_Curso": "RPMS PI e I 012026", "Curso_Base": "RPMS PI", "Edicion": "2026 - Ed. 01", "Total_Inscritos": 500, "Total_Encuestas": 416, "Salud_Curso_CHS": 88.5, "e_NPS": 65.2, "Tasa_Finalizacion_%": 75, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 10, "Tiempo_Promedio_Dias": 12.5, "Demografia": { "Sexo": { "Femenino": 250, "Masculino": 166 }, "Edad": { "Adultez": 300, "Juventud": 116 }, "Perfil": { "Médico": 150 }, "Escolaridad": { "Profesional": 200 }, "Comuna": { "1": 50 } }, "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.7, "¿Se cumplió el objetivo de la capacitación?": 4.6, "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.8, "¿Los temas se desarrollaron en el tiempo previsto?": 4.5, "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.6, "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.7, "¿El facilitador demostró el dominio del tema brindado?": 4.8, "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4, "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.3, "¿El material utilizado permitió el entendimiento del tema?": 4.5, "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.7 }, "Registros_Crudos": [
                         { "Sexo": "Femenino", "Curso de vida": "Adultez", "Perfil": "Médico", "Comuna_Unificada": "1", "Escolaridad": "Profesional", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5, "¿Se cumplió el objetivo de la capacitación?": 5 },
                         { "Sexo": "Masculino", "Curso de vida": "Juventud", "Perfil": "Médico", "Comuna_Unificada": "3", "Escolaridad": "Profesional", "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4, "¿Se cumplió el objetivo de la capacitación?": 4 }
-                    ] }] 
+                    ] },
+                    { "Nombre_Curso": "RPMS PI e I 012025", "Curso_Base": "RPMS PI", "Edicion": "2025 - Ed. 01", "Total_Inscritos": 300, "Total_Encuestas": 100, "Salud_Curso_CHS": 70.5, "e_NPS": 50.2, "Tasa_Finalizacion_%": 60, "Tasa_Abandono_%": 20, "Tasa_Inactividad_%": 20, "Tiempo_Promedio_Dias": 15.5, "Demografia": { "Sexo": { "Femenino": 200, "Masculino": 100 }, "Edad": { "Adultez": 150, "Juventud": 150 }, "Perfil": { "Enfermera": 150 }, "Escolaridad": { "Profesional": 100 }, "Comuna": { "2": 50 } }, "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.0, "¿Se cumplió el objetivo de la capacitación?": 4.1, "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.0, "¿Los temas se desarrollaron en el tiempo previsto?": 4.2, "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.3, "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.1, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.0, "¿El facilitador demostró el dominio del tema brindado?": 4.2, "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 3.8, "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.0, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 3.5, "¿El material utilizado permitió el entendimiento del tema?": 4.0, "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.0 }, "Registros_Crudos": [] }
+                    ] 
                 };
             }
             
             Chart.defaults.font.family = 'Inter';
             inicializarMapa(); 
-            calcularBenchmarkGlobal(); 
-            agruparCursos();
             
+            agruparCursos(); // Extrae años y cursos
+            
+            document.getElementById('selector-anio').addEventListener('change', manejarCambioAnio);
             document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase);
             document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
             
@@ -696,8 +708,8 @@
         };
 
         function generarInsightsIABloques(esGlobal, cursoObj, datosFilt = null) {
-            let totalDemo = esGlobal ? dashboardData.metadata.total_estudiantes_unicos : cursoObj.Total_Inscritos;
-            let demoData = esGlobal ? dashboardData.demografia_global : cursoObj.Demografia;
+            let totalDemo = esGlobal ? cursoObj.Total_Inscritos : cursoObj.Total_Inscritos;
+            let demoData = esGlobal ? cursoObj.Demografia : cursoObj.Demografia;
             if(datosFilt) { totalDemo = datosFilt.Total_Encuestas; demoData = datosFilt.Demografia; }
 
             let pMujeres = 0, pDom = "N/A", pP = 0, eDom = "N/A";
@@ -709,6 +721,10 @@
                     pDom = pKeys.length > 0 ? pKeys.reduce((a, b) => demoData.Perfil[a] > demoData.Perfil[b] ? a : b) : "N/A"; 
                     pP = Math.round(((demoData.Perfil[pDom] || 0) / totalG) * 100); 
                     let keyEdad = esGlobal ? 'Curso de Vida' : 'Edad';
+                    // Fallback just in case
+                    if(!demoData[keyEdad] && demoData['Edad']) keyEdad = 'Edad';
+                    if(!demoData[keyEdad] && demoData['Curso de Vida']) keyEdad = 'Curso de Vida';
+
                     let eKeys = Object.keys(demoData[keyEdad] || {}); 
                     eDom = eKeys.length > 0 ? eKeys.reduce((a, b) => demoData[keyEdad][a] > demoData[keyEdad][b] ? a : b) : "N/A"; 
                 } 
@@ -718,7 +734,7 @@
 
             document.getElementById('ia-txt-demo').innerHTML = `
                 <div class="row g-4 mb-4">
-                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${totalDemo ? totalDemo.toLocaleString() : 0}</div><div class="ia-lbl">${datosFilt ? 'Encuestas Filtradas' : 'Participantes'}</div></div></div>
+                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${totalDemo ? totalDemo.toLocaleString() : 0}</div><div class="ia-lbl">${datosFilt ? 'Encuestas Filtradas' : 'Matrículas'}</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pMujeres}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div>
@@ -728,8 +744,9 @@
 
             let fin = 0, abd = 0, inact = 0;
             if (esGlobal) {
-                let totInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0);
-                dashboardData.cursos.forEach(c => { 
+                let curArr = añoActual === "ALL" ? dashboardData.cursos : dashboardData.cursos.filter(c => (c.Edicion || "").includes(añoActual));
+                let totInscritos = curArr.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0);
+                curArr.forEach(c => { 
                     fin += (c['Tasa_Finalizacion_%'] / 100) * (c.Total_Inscritos || 0); 
                     abd += (c['Tasa_Abandono_%'] / 100) * (c.Total_Inscritos || 0); 
                     inact += (c['Tasa_Inactividad_%'] / 100) * (c.Total_Inscritos || 0); 
@@ -755,8 +772,8 @@
                 </div>
             `;
 
-            let nps = esGlobal ? dashboardData.kpis_globales.nps_global : cursoObj.e_NPS;
-            let encuestas = esGlobal ? dashboardData.metadata.total_encuestas_historicas : cursoObj.Total_Encuestas;
+            let nps = esGlobal ? (añoActual==="ALL" ? dashboardData.kpis_globales.nps_global : cursoObj.e_NPS) : cursoObj.e_NPS;
+            let encuestas = esGlobal ? cursoObj.Total_Encuestas : cursoObj.Total_Encuestas;
             let pregData = esGlobal ? promediosGlobalesPreguntas : cursoObj.Detalle_Preguntas;
             if(datosFilt) { nps = datosFilt.e_NPS; encuestas = datosFilt.Total_Encuestas; pregData = datosFilt.Detalle_Preguntas; }
 
@@ -802,6 +819,39 @@
             document.getElementById('bento-nps').innerText = dashboardData.kpis_globales.nps_global;
         }
 
+        function extraerAnios() {
+            const selAnio = document.getElementById('selector-anio');
+            dashboardData.cursos.forEach(c => {
+                let match = (c.Edicion || "").match(/\b(20\d{2})\b/);
+                if(match) añosDisponibles.add(match[1]);
+            });
+            Array.from(añosDisponibles).sort().reverse().forEach(anio => {
+                selAnio.appendChild(new Option(anio, anio));
+            });
+        }
+
+        function agruparCursos() { 
+            extraerAnios();
+            const sel = document.getElementById('selector-curso-base'); 
+            dashboardData.cursos.forEach(c => { 
+                const base = c.Curso_Base || c.Nombre_Curso; 
+                if (!cursosPorBase[base]) cursosPorBase[base] = []; 
+                cursosPorBase[base].push(c); 
+            }); 
+            Object.keys(cursosPorBase).sort().forEach(base => { sel.appendChild(new Option(base, base)); }); 
+        }
+
+        function manejarCambioAnio() {
+            añoActual = this.value;
+            const baseActual = document.getElementById('selector-curso-base').value;
+            if (baseActual === "ALL") {
+                actualizarPantallaGlobal();
+            } else {
+                // Forzar actualización del lobby
+                document.getElementById('selector-curso-base').dispatchEvent(new Event('change'));
+            }
+        }
+
         function manejarCambioBase() { 
             const seleccion = this.value; 
             const selectorCohorte = document.getElementById('selector-cohorte'); 
@@ -813,16 +863,27 @@
                 lobby.style.display = "none"; tabs.style.display = "block"; 
                 actualizarPantallaGlobal(); 
             } else { 
-                const cohortes = cursosPorBase[seleccion].sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                let cohortes = cursosPorBase[seleccion];
+                if(añoActual !== "ALL") {
+                    cohortes = cohortes.filter(c => (c.Edicion || "").includes(añoActual));
+                }
+                cohortes = cohortes.sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                
                 selectorCohorte.innerHTML = '<option value="">⬅ Volver al menú de ediciones...</option>'; 
                 cohortes.forEach(c => { selectorCohorte.appendChild(new Option(c.Edicion, c.Nombre_Curso)); }); 
                 selectorCohorte.style.display = "block"; selectorCohorte.value = ""; 
                 tabs.style.display = "none"; lobby.style.display = "block"; 
                 document.getElementById('filtros-cruzados-bar').style.display = 'none';
-                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;">${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición para analizarla</p></div><div class="row g-4 justify-content-center">`; 
-                cohortes.forEach(c => { 
-                    htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${c.Edicion}</h5><span class="badge bg-primary px-3 py-2 text-white" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
-                }); 
+                
+                let htmlLobby = `<div class="mb-5 text-center"><h3 class="fw-bold mb-3" style="color: var(--primary); font-size: 1.8rem;">${seleccion}</h3><p class="text-muted" style="font-size: 1.1rem;">Seleccione una edición ${añoActual !== "ALL" ? 'del ' + añoActual : ''} para analizarla</p></div><div class="row g-4 justify-content-center">`; 
+                
+                if(cohortes.length === 0) {
+                    htmlLobby += `<div class="col-12 text-center text-muted"><i class="bi bi-folder-x" style="font-size: 4rem;"></i><p class="mt-2 fs-5">No hay cohortes dictadas para el año ${añoActual}</p></div>`;
+                } else {
+                    cohortes.forEach(c => { 
+                        htmlLobby += `<div class="col-md-4 col-lg-3"><div class="glass-card lobby-card text-center" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="mb-4"><i class="bi bi-mortarboard-fill" style="font-size: 3rem; color: var(--primary);"></i></div><h5 class="fw-bold mb-3" style="font-size: 1.2rem;">${c.Edicion}</h5><span class="badge bg-primary px-3 py-2 text-white" style="font-size:0.9rem;">${c.Total_Inscritos} Matrículas</span></div></div>`; 
+                    }); 
+                }
                 htmlLobby += `</div>`; lobby.innerHTML = htmlLobby; 
             } 
             if (mapInstance) setTimeout(() => mapInstance.invalidateSize(), 300); 
@@ -848,33 +909,87 @@
             actualizarPantallaCurso(); 
         }
 
+        function calcularBenchmarkGlobal(arrayCursos) { 
+            const sum = {}; const count = {}; 
+            arrayCursos.forEach(curso => { 
+                if (curso.Detalle_Preguntas && curso.Total_Encuestas > 0) { 
+                    for (let k in curso.Detalle_Preguntas) { 
+                        if (curso.Detalle_Preguntas[k] > 0) { sum[k] = (sum[k] || 0) + curso.Detalle_Preguntas[k]; count[k] = (count[k] || 0) + 1; } 
+                    } 
+                } 
+            }); 
+            promediosGlobalesPreguntas = {};
+            for (let k in sum) promediosGlobalesPreguntas[k] = sum[k] / count[k]; 
+        }
+
         function actualizarPantallaGlobal() { 
             document.getElementById('filtros-cruzados-bar').style.display = 'none';
             datosFiltradosActuales = null;
             document.getElementById('kpi-moodle-row').classList.remove('filtro-lock');
             document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock');
 
-            const totalInscritos = dashboardData.cursos.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
-            let totalCertificados = 0; dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
+            let cursosFilt = dashboardData.cursos;
+            if(añoActual !== "ALL") {
+                cursosFilt = cursosFilt.filter(c => (c.Edicion || "").includes(añoActual));
+            }
+
+            const totalCursos = cursosFilt.length;
+            const totalInscritos = cursosFilt.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0); 
+            let totalCertificados = 0; 
+            let totalEncuestas = 0;
+            let npsPromotores = 0, npsDetractores = 0, chsSuma = 0;
             
+            let demoGlobal = { 'Sexo':{}, 'Curso de Vida':{}, 'Perfil':{}, 'Escolaridad':{}, 'Comuna':{} };
+
+            if (añoActual === "ALL") {
+                demoGlobal = dashboardData.demografia_global;
+                totalEncuestas = dashboardData.metadata.total_encuestas_historicas;
+                dashboardData.cursos.forEach(c => { totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); }); 
+                calcularBenchmarkGlobal(dashboardData.cursos);
+            } else {
+                cursosFilt.forEach(c => { 
+                    totalCertificados += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); 
+                    totalEncuestas += (c.Total_Encuestas || 0);
+                    chsSuma += (c.Salud_Curso_CHS || 0);
+
+                    // Reconstruir demografía del año
+                    if(c.Demografia) {
+                        for(let k in c.Demografia.Sexo) { demoGlobal['Sexo'][k] = (demoGlobal['Sexo'][k] || 0) + c.Demografia.Sexo[k]; }
+                        let kEdad = c.Demografia.Edad ? 'Edad' : 'Curso de Vida';
+                        for(let k in c.Demografia[kEdad]) { demoGlobal['Curso de Vida'][k] = (demoGlobal['Curso de Vida'][k] || 0) + c.Demografia[kEdad][k]; }
+                        for(let k in c.Demografia.Perfil) { demoGlobal['Perfil'][k] = (demoGlobal['Perfil'][k] || 0) + c.Demografia.Perfil[k]; }
+                        for(let k in c.Demografia.Comuna) { demoGlobal['Comuna'][k] = (demoGlobal['Comuna'][k] || 0) + c.Demografia.Comuna[k]; }
+                        for(let k in c.Demografia.Escolaridad) { demoGlobal['Escolaridad'][k] = (demoGlobal['Escolaridad'][k] || 0) + c.Demografia.Escolaridad[k]; }
+                    }
+
+                    // NPS Calculation proxy
+                    if(c.Total_Encuestas > 0) {
+                        let prom = Math.round((c.e_NPS + 100) / 2); // Reverse calculation approximation
+                        npsPromotores += (prom * c.Total_Encuestas) / 100;
+                        npsDetractores += ((100 - prom) * c.Total_Encuestas) / 100;
+                    }
+                });
+                calcularBenchmarkGlobal(cursosFilt);
+            }
+
             document.getElementById('kpi-global-row').innerHTML = `
-                ${crearTarjetaKPI("Cursos", dashboardData.metadata.total_cursos_analizados)}
+                ${crearTarjetaKPI("Cursos Activos", totalCursos)}
                 ${crearTarjetaKPI("Matrículas", totalInscritos.toLocaleString())}
-                ${crearTarjetaKPI("Est. Únicos", (dashboardData.metadata.total_estudiantes_unicos || totalInscritos).toLocaleString())}
-                ${crearTarjetaKPI("Encuestas", dashboardData.metadata.total_encuestas_historicas.toLocaleString())}
-                ${crearTarjetaKPI("CHS", dashboardData.kpis_globales.chs_promedio_secretaria)}
-                ${crearTarjetaKPI("e-NPS", dashboardData.kpis_globales.nps_global)}
+                ${crearTarjetaKPI("Aprobados (Graduados)", totalCertificados.toLocaleString(), totalInscritos ? Math.round((totalCertificados/totalInscritos)*100)+"%" : "0%")}
+                ${crearTarjetaKPI("Encuestas", totalEncuestas.toLocaleString())}
+                ${crearTarjetaKPI("CHS", añoActual === "ALL" ? dashboardData.kpis_globales.chs_promedio_secretaria : (totalCursos ? (chsSuma/totalCursos).toFixed(1) : 0))}
+                ${crearTarjetaKPI("e-NPS", añoActual === "ALL" ? dashboardData.kpis_globales.nps_global : (totalEncuestas ? Math.round(((npsPromotores - npsDetractores)/totalEncuestas)*100) : 0))}
             `; 
             
-            dibujarGraficoDona('chartSexo', dashboardData.demografia_global['Sexo'], 'bottom'); 
-            dibujarGraficoDona('chartEdad', dashboardData.demografia_global['Curso de Vida'], 'right'); 
-            dibujarGraficoDona('chartPerfil', dashboardData.demografia_global['Perfil'], 'right'); 
-            dibujarGraficoDona('chartEscolaridad', dashboardData.demografia_global['Escolaridad'], 'right'); 
-            dibujarMapaCoropletico(dashboardData.demografia_global['Comuna']); 
-            dibujarGraficoComunas('chartComunas', dashboardData.demografia_global['Comuna']); 
+            dibujarGraficoDona('chartSexo', demoGlobal['Sexo'], 'bottom'); 
+            dibujarGraficoDona('chartEdad', demoGlobal['Curso de Vida'], 'right'); 
+            dibujarGraficoDona('chartPerfil', demoGlobal['Perfil'], 'right'); 
+            dibujarGraficoDona('chartEscolaridad', demoGlobal['Escolaridad'], 'right'); 
+            dibujarMapaCoropletico(demoGlobal['Comuna']); 
+            dibujarGraficoComunas('chartComunas', demoGlobal['Comuna']); 
             
             let totalFin = 0, totalAbd = 0, totalInac = 0, sumDias = 0, countCursosDias = 0; 
-            dashboardData.cursos.forEach(c => { 
+            cursosFilt.forEach(c => { 
                 let insc = c.Total_Inscritos || 0; 
                 totalFin += (c['Tasa_Finalizacion_%'] / 100) * insc; totalAbd += (c['Tasa_Abandono_%'] / 100) * insc; totalInac += (c['Tasa_Inactividad_%'] / 100) * insc; 
                 if (c.Tiempo_Promedio_Dias) { sumDias += c.Tiempo_Promedio_Dias; countCursosDias++; } 
@@ -887,10 +1002,12 @@
             document.getElementById('tiempo-consumo-dias').innerText = countCursosDias ? Math.round(sumDias / countCursosDias) : 0; 
             dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pctFin, 'Tasa_Abandono_%': pctAbd, 'Tasa_Inactividad_%': pctInac }); 
             
-            document.getElementById('titulo-radar').innerText = "Perfil Institucional Consolidado"; 
+            document.getElementById('titulo-radar').innerText = añoActual === "ALL" ? "Perfil Institucional Consolidado" : `Perfil Consolidado (${añoActual})`; 
             dibujarRadar(promediosGlobalesPreguntas, true); 
             document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
-            generarInsightsIABloques(true, null);
+            
+            let objParaInsights = { Total_Inscritos: totalInscritos, Demografia: demoGlobal, Total_Encuestas: totalEncuestas, e_NPS: (añoActual === "ALL" ? dashboardData.kpis_globales.nps_global : (totalEncuestas ? Math.round(((npsPromotores - npsDetractores)/totalEncuestas)*100) : 0)) };
+            generarInsightsIABloques(true, objParaInsights);
         }
 
         function actualizarPantallaCurso(datosOlap = null) { 
@@ -950,28 +1067,6 @@
             return html;
         }
 
-        function calcularBenchmarkGlobal() { 
-            const sum = {}; const count = {}; 
-            dashboardData.cursos.forEach(curso => { 
-                if (curso.Detalle_Preguntas && curso.Total_Encuestas > 0) { 
-                    for (let k in curso.Detalle_Preguntas) { 
-                        if (curso.Detalle_Preguntas[k] > 0) { sum[k] = (sum[k] || 0) + curso.Detalle_Preguntas[k]; count[k] = (count[k] || 0) + 1; } 
-                    } 
-                } 
-            }); 
-            for (let k in sum) promediosGlobalesPreguntas[k] = sum[k] / count[k]; 
-        }
-
-        function agruparCursos() { 
-            const sel = document.getElementById('selector-curso-base'); 
-            dashboardData.cursos.forEach(c => { 
-                const base = c.Curso_Base || c.Nombre_Curso; 
-                if (!cursosPorBase[base]) cursosPorBase[base] = []; 
-                cursosPorBase[base].push(c); 
-            }); 
-            Object.keys(cursosPorBase).sort().forEach(base => { sel.appendChild(new Option(base, base)); }); 
-        }
-
         function normalizarLlaveComuna(texto) { 
             if (!texto) return "N/A"; let t = String(texto).trim().toUpperCase(); 
             if (t === "" || t === "N/A" || t === "NULL" || t === "SIN DATO") return "N/A"; 
@@ -1015,7 +1110,6 @@
         function dibujarMapaCoropletico(dataComunas) { 
             if (!mapInstance || !geoJsonDataRaw || !geoJsonDataRaw.features) return; 
             
-            // TIMEOUT MÁGICO: Da tiempo al navegador a calcular el tamaño del contenedor al aplicar filtros o cambiar de pestaña
             setTimeout(() => {
                 mapInstance.invalidateSize();
                 
