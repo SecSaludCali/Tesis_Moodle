@@ -492,7 +492,35 @@
             "¿El material utilizado permitió el entendimiento del tema?": "Calidad del Material", 
             "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción General (eNPS Base)" 
         };
-        const coloresDona = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6'];
+
+        // MAPEO DETERMINÍSTICO DE COLORES (Evita el "Color Thrashing")
+        const mapeoColores = {
+            // Sexo
+            "Femenino": "#e11d48", // Rose
+            "Masculino": "#0ea5e9", // Blue
+            "N/A": "#94a3b8", // Slate
+            "Otro": "#8b5cf6", // Purple
+            // Curso de Vida
+            "Primera infancia": "#f43f5e",
+            "Infancia": "#f97316",
+            "Adolescencia": "#eab308",
+            "Juventud": "#84cc16",
+            "Adultez": "#06b6d4",
+            "Vejez": "#6366f1",
+            // Perfil
+            "Médico": "#05cd99", // Success
+            "Enfermera": "#4318ff", // Primary
+            "Auxiliar": "#ffb547", // Warning
+            "Estudiante": "#ee5d50", // Danger
+            // Escolaridad
+            "Profesional": "#3b82f6",
+            "Técnico": "#10b981",
+            "Tecnólogo": "#14b8a6",
+            "Especialización": "#8b5cf6",
+            "Maestría": "#6366f1"
+        };
+        // Array de respaldo (fallback) por si llega un dato que no está en el diccionario
+        const coloresRespaldo = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6', '#f43f5e', '#f97316'];
 
         function cambiarTema(tema) {
             document.documentElement.setAttribute('data-theme', tema);
@@ -708,8 +736,14 @@
         };
 
         function generarInsightsIABloques(esGlobal, cursoObj, datosFilt = null) {
-            let totalDemo = esGlobal ? cursoObj.Total_Inscritos : cursoObj.Total_Inscritos;
-            let demoData = esGlobal ? cursoObj.Demografia : cursoObj.Demografia;
+            let totalDemo = esGlobal ? dashboardData.metadata.total_estudiantes_unicos : cursoObj.Total_Inscritos;
+            let demoData = esGlobal ? dashboardData.demografia_global : cursoObj.Demografia;
+            
+            // Si hay un año seleccionado, recalculamos el totalDemo para que coincida
+            if(esGlobal && añoActual !== "ALL") {
+                let curArr = dashboardData.cursos.filter(c => (c.Edicion || "").includes(añoActual));
+                totalDemo = curArr.reduce((sum, c) => sum + (c.Total_Inscritos || 0), 0);
+            }
             if(datosFilt) { totalDemo = datosFilt.Total_Encuestas; demoData = datosFilt.Demografia; }
 
             let pMujeres = 0, pDom = "N/A", pP = 0, eDom = "N/A";
@@ -734,7 +768,7 @@
 
             document.getElementById('ia-txt-demo').innerHTML = `
                 <div class="row g-4 mb-4">
-                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${totalDemo ? totalDemo.toLocaleString() : 0}</div><div class="ia-lbl">${datosFilt ? 'Encuestas Filtradas' : 'Matrículas'}</div></div></div>
+                    <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-indigo-soft"><i class="bi bi-people-fill"></i></div><div class="ia-val">${totalDemo ? totalDemo.toLocaleString() : 0}</div><div class="ia-lbl">${datosFilt ? 'Encuestas Filtradas' : 'Participantes'}</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-rose-soft"><i class="bi bi-gender-female"></i></div><div class="ia-val">${pMujeres}%</div><div class="ia-lbl">Fuerza Femenina</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-emerald-soft"><i class="bi bi-briefcase-fill"></i></div><div class="ia-val" style="font-size: 1.2rem;">${pDom}</div><div class="ia-lbl mt-1">Perfil Dominante (${pP}%)</div></div></div>
                     <div class="col-md-6 col-lg-3"><div class="ia-mini-card"><div class="ia-icon-wrapper bg-amber-soft"><i class="bi bi-clock-history"></i></div><div class="ia-val" style="font-size: 1.2rem;">${eDom}</div><div class="ia-lbl mt-1">Ciclo de Vida General</div></div></div>
@@ -1164,8 +1198,14 @@
 
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
+            
+            // LÓGICA DE COLORES DETERMINÍSTICOS
+            let labels = Object.keys(dataObject);
+            let datos = Object.values(dataObject);
+            let coloresFijos = labels.map((label, index) => mapeoColores[label] || coloresRespaldo[index % coloresRespaldo.length]);
+
             chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
-                type: 'doughnut', data: { labels: Object.keys(dataObject), datasets: [{ data: Object.values(dataObject), backgroundColor: coloresDona, borderWidth: 2, borderColor: 'transparent', hoverOffset: 8 }] }, 
+                type: 'doughnut', data: { labels: labels, datasets: [{ data: datos, backgroundColor: coloresFijos, borderWidth: 2, borderColor: 'transparent', hoverOffset: 8 }] }, 
                 options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 11, family: 'Inter' } } } } } 
             }); 
         }
