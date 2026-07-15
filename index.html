@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Librerías de Visualización y Mapas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -165,7 +165,6 @@
 </head>
 
 <body>
-
     <div id="welcome_portal">
         <div class="blob-3"></div>
         <div class="portal-content">
@@ -263,7 +262,6 @@
     </div>
 
 
-    <!-- DASHBOARD INTERNO -->
     <div class="container-fluid py-5 px-4 px-xl-5" id="dashboard_content">
         
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3" id="header-dashboard">
@@ -271,13 +269,19 @@
                 <h2 class="d-flex align-items-center gap-3 text-primary">Inteligencia Analítica</h2>
                 <div class="text-muted mt-2">Panel interactivo de monitoreo de cohortes y calidad percibida.</div>
             </div>
-            <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2" onclick="volverAlPortal()" style="border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px); color: var(--text-main);">
-                <i class="bi bi-house-door-fill text-primary"></i> Volver al Inicio
-            </button>
+            
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <!-- BOTÓN EXPORTAR A WORD -->
+                <button class="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center justify-content-center gap-2" onclick="generarInformeWord()" id="btn-export-word">
+                    <i class="bi bi-file-earmark-word-fill"></i> Exportar Informe Word
+                </button>
+                <button class="btn btn-light rounded-pill px-4 py-2 fw-semibold shadow-sm d-flex align-items-center justify-content-center gap-2" onclick="volverAlPortal()" style="border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px); color: var(--text-main);">
+                    <i class="bi bi-house-door-fill text-primary"></i> Volver al Inicio
+                </button>
+            </div>
         </div>
 
         <div class="row mb-4 g-4" id="selectores-container">
-            <!-- NUEVO SELECTOR DE AÑO -->
             <div class="col-md-3">
                 <select id="selector-anio" class="form-select" style="border: 2px solid var(--primary); font-weight: 700; color: var(--primary);">
                     <option value="ALL">📅 Todos los Años</option>
@@ -460,8 +464,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         let dashboardData = {}; 
         let cursosPorBase = {}; 
@@ -521,6 +523,13 @@
         };
         // Array de respaldo (fallback) por si llega un dato que no está en el diccionario
         const coloresRespaldo = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6', '#f43f5e', '#f97316'];
+
+        // Variables globales para guardar los textos extraídos por la IA y enviarlos al Word
+        let textosIAParaWord = {
+            demografia: "",
+            moodle: "",
+            calidad: ""
+        };
 
         function cambiarTema(tema) {
             document.documentElement.setAttribute('data-theme', tema);
@@ -585,6 +594,158 @@
             enlace.download = `${nombreBase}${sufijo}.png`.replace(/\s+/g, '');
             enlace.href = tempCanvas.toDataURL('image/png', 1.0);
             enlace.click();
+        }
+
+        // ==========================================
+        // FUNCIÓN EXPORTAR REPORTE WORD (DATOS Y TABLAS)
+        // ==========================================
+        async function generarInformeWord() {
+            const btn = document.getElementById('btn-export-word');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Generando Informe...';
+            btn.disabled = true;
+
+            try {
+                // Importación dinámica de docx.js
+                const docx = await import('https://cdn.jsdelivr.net/npm/docx@8.5.0/+esm');
+                const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = docx;
+
+                // --- 1. DATOS DE CONTEXTO ---
+                let tituloReporte = cursoActual ? `Reporte Analítico: ${cursoActual.Nombre_Curso}` : "Reporte Analítico: Consolidado Institucional";
+                let subtitulo = añoActual === "ALL" ? "Histórico General" : `Datos filtrados del año ${añoActual}`;
+                
+                // Preparar datos demográficos
+                let datosDemograficos = cursoActual ? (datosFiltradosActuales ? datosFiltradosActuales.Demografia : cursoActual.Demografia) : dashboardData.demografia_global;
+                
+                // Preparar datos de encuesta
+                let datosEncuesta = cursoActual ? (datosFiltradosActuales ? datosFiltradosActuales.Detalle_Preguntas : cursoActual.Detalle_Preguntas) : promediosGlobalesPreguntas;
+
+                // --- 2. CONFIGURACIÓN DE ESTILOS ---
+                const styles = {
+                    paragraphStyles: [
+                        { id: "Normal", name: "Normal", run: { font: "Calibri", size: 22, color: "333333" }, paragraph: { spacing: { before: 120, after: 120 } } },
+                        { id: "TituloPrincipal", name: "Titulo Principal", run: { font: "Calibri", size: 36, bold: true, color: "1E293B" }, paragraph: { alignment: AlignmentType.CENTER, spacing: { before: 240, after: 120 } } },
+                        { id: "Subtitulo", name: "Subtitulo", run: { font: "Calibri", size: 28, bold: true, color: "4318FF" }, paragraph: { spacing: { before: 300, after: 120 }, border: { bottom: { color: "CBD5E1", space: 1, value: "single", size: 6 } } } }
+                    ]
+                };
+
+                let children = [];
+
+                // --- 3. PORTADA ---
+                children.push(new Paragraph({ text: "SISTEMA DE INTELIGENCIA ANALÍTICA", alignment: AlignmentType.CENTER, run: { font: "Calibri", size: 20, color: "64748B", bold: true, tracking: 2 } }));
+                children.push(new Paragraph({ text: tituloReporte, style: "TituloPrincipal" }));
+                children.push(new Paragraph({ text: subtitulo, alignment: AlignmentType.CENTER, run: { font: "Calibri", size: 24, color: "64748B", italics: true } }));
+                children.push(new Paragraph({ text: `Fecha de emisión: ${new Date().toLocaleDateString()}`, alignment: AlignmentType.CENTER, run: { font: "Calibri", size: 20, color: "94A3B8" }, spacing: { after: 400 } }));
+
+                // --- 4. SECCIÓN 1: DEMOGRAFÍA ---
+                children.push(new Paragraph({ text: "1. Análisis Demográfico", style: "Subtitulo" }));
+                children.push(new Paragraph({ text: textosIAParaWord.demografia, style: "Normal" }));
+
+                // Función auxiliar para crear tablas demográficas bonitas
+                const crearTablaDemografica = (titulo, objetoDatos) => {
+                    if (!objetoDatos || Object.keys(objetoDatos).length === 0) return null;
+                    
+                    // Ordenar datos de mayor a menor
+                    const datosOrdenados = Object.entries(objetoDatos).sort((a, b) => b[1] - a[1]);
+                    
+                    let filas = [
+                        new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: titulo, run: { bold: true, color: "FFFFFF" }, alignment: AlignmentType.CENTER })], shading: { fill: "4318FF" }, margins: { top: 100, bottom: 100 } }),
+                                new TableCell({ children: [new Paragraph({ text: "Cantidad", run: { bold: true, color: "FFFFFF" }, alignment: AlignmentType.CENTER })], shading: { fill: "4318FF" }, margins: { top: 100, bottom: 100 } })
+                            ]
+                        })
+                    ];
+
+                    datosOrdenados.forEach(([etiqueta, valor]) => {
+                        filas.push(new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: etiqueta, run: { size: 20 } })], margins: { left: 100, top: 50, bottom: 50 } }),
+                                new TableCell({ children: [new Paragraph({ text: valor.toString(), run: { size: 20 }, alignment: AlignmentType.CENTER })], margins: { top: 50, bottom: 50 } })
+                            ]
+                        }));
+                    });
+
+                    return new Table({ rows: filas, width: { size: 100, type: WidthType.PERCENTAGE }, borders: { top: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, bottom: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, left: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, right: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" } } });
+                };
+
+                // Insertar Tablas Demográficas (Sexo y Perfil como ejemplo)
+                if (datosDemograficos) {
+                    const tablaSexo = crearTablaDemografica("Distribución por Sexo", datosDemograficos.Sexo);
+                    if(tablaSexo) {
+                        children.push(tablaSexo);
+                        children.push(new Paragraph({ text: "", spacing: { after: 200 } })); // Espaciador
+                    }
+                    
+                    let keyEdad = datosDemograficos['Edad'] ? 'Edad' : 'Curso de Vida';
+                    const tablaEdad = crearTablaDemografica("Distribución por Etapa de Vida", datosDemograficos[keyEdad]);
+                    if(tablaEdad) {
+                        children.push(tablaEdad);
+                        children.push(new Paragraph({ text: "", spacing: { after: 200 } }));
+                    }
+
+                    const tablaPerfil = crearTablaDemografica("Distribución por Perfil Profesional", datosDemograficos.Perfil);
+                    if(tablaPerfil) children.push(tablaPerfil);
+                }
+
+                // --- 5. SECCIÓN 2: OPERATIVO ---
+                children.push(new Paragraph({ text: "2. Rendimiento Operativo (Plataforma)", style: "Subtitulo", pageBreakBefore: true }));
+                children.push(new Paragraph({ text: textosIAParaWord.moodle, style: "Normal" }));
+
+                // --- 6. SECCIÓN 3: CALIDAD PERCIBIDA ---
+                children.push(new Paragraph({ text: "3. Calidad Percibida (Encuestas)", style: "Subtitulo" }));
+                children.push(new Paragraph({ text: textosIAParaWord.calidad, style: "Normal" }));
+
+                // Tabla Detallada de Encuestas
+                if (datosEncuesta && Object.keys(datosEncuesta).length > 0) {
+                    children.push(new Paragraph({ text: "Desglose de Calificaciones por Dimensión (Escala 1 a 5)", run: { font: "Calibri", size: 20, bold: true, color: "64748B" }, spacing: { after: 120 } }));
+
+                    let filasEncuesta = [
+                        new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: "Pregunta / Dimensión Evaluada", run: { bold: true, color: "FFFFFF" } })], shading: { fill: "0EA5E9" }, margins: { top: 100, bottom: 100, left: 100 } }),
+                                new TableCell({ children: [new Paragraph({ text: "Puntaje", run: { bold: true, color: "FFFFFF" }, alignment: AlignmentType.CENTER })], shading: { fill: "0EA5E9" }, margins: { top: 100, bottom: 100 } })
+                            ]
+                        })
+                    ];
+
+                    Object.entries(datosEncuesta).forEach(([pregunta, valor]) => {
+                        let colorPuntaje = valor >= 4.5 ? "05CD99" : (valor < 4.0 ? "EE5D50" : "333333"); // Verde si es bueno, Rojo si es malo
+                        
+                        filasEncuesta.push(new TableRow({
+                            children: [
+                                new TableCell({ children: [new Paragraph({ text: pregunta, run: { size: 18 } })], margins: { left: 100, top: 80, bottom: 80, right: 100 } }),
+                                new TableCell({ children: [new Paragraph({ text: valor.toFixed(1), run: { size: 22, bold: true, color: colorPuntaje }, alignment: AlignmentType.CENTER })], verticalAlign: "center" })
+                            ]
+                        }));
+                    });
+
+                    children.push(new Table({ rows: filasEncuesta, width: { size: 100, type: WidthType.PERCENTAGE }, borders: { top: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, bottom: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, left: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, right: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" }, insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "E2E8F0" } } }));
+                }
+
+                // --- 7. ENSAMBLAR Y DESCARGAR ---
+                const doc = new Document({ styles: styles, sections: [{ properties: {}, children: children }] });
+                
+                const blob = await Packer.toBlob(doc);
+                let fileNameBase = cursoActual ? cursoActual.Nombre_Curso.replace(/\s+/g, '_') : 'Consolidado_Institucional';
+                
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `Reporte_Datos_${fileNameBase}_${añoActual}.docx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+            } catch (error) {
+                console.error("Error generando Word", error);
+                alert("Hubo un error al generar el archivo Word de datos.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -764,7 +925,8 @@
                 } 
             } catch (e) {}
 
-            let txtDemoConclu = esGlobal ? `A nivel consolidado, la Secretaría impacta principalmente a <strong>${pDom}</strong>.` : `La analítica revela un grupo sesgado hacia <strong>${pDom}</strong>.`;
+            let txtDemoConclu = esGlobal ? `A nivel consolidado, la Secretaría impacta principalmente a ${pDom}.` : `La analítica revela un grupo sesgado hacia ${pDom}.`;
+            textosIAParaWord.demografia = txtDemoConclu + ` El ${pMujeres}% de la población es femenina, y la etapa de vida predominante es ${eDom}.`;
 
             document.getElementById('ia-txt-demo').innerHTML = `
                 <div class="row g-4 mb-4">
@@ -792,13 +954,15 @@
                 fin = cursoObj['Tasa_Finalizacion_%']; abd = cursoObj['Tasa_Abandono_%']; inact = cursoObj['Tasa_Inactividad_%'];
             }
 
-            let mIcon = "bi-info-circle-fill", mColor = "primary", mText = "<strong>Comportamiento Estándar.</strong>"; 
-            if (fin >= 80) { mIcon = "bi-check-circle-fill"; mColor = "success"; mText = "<strong>Excelente Eficiencia Terminal.</strong>"; } 
-            else if (inact > fin && inact > 40) { mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; mText = `<strong>Fricción Severa en Onboarding.</strong> El ${inact}% nunca inició.`; } 
-            else if (abd > 30) { mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; mText = `<strong>Alerta de Deserción.</strong> Existe una fuga del ${abd}%.`; } 
+            let mIcon = "bi-info-circle-fill", mColor = "primary", mText = "Comportamiento Estándar."; 
+            if (fin >= 80) { mIcon = "bi-check-circle-fill"; mColor = "success"; mText = "Excelente Eficiencia Terminal."; } 
+            else if (inact > fin && inact > 40) { mIcon = "bi-exclamation-octagon-fill"; mColor = "danger"; mText = `Fricción Severa en Onboarding. El ${inact}% nunca inició.`; } 
+            else if (abd > 30) { mIcon = "bi-exclamation-triangle-fill"; mColor = "warning"; mText = `Alerta de Deserción. Existe una fuga del ${abd}%.`; } 
+
+            textosIAParaWord.moodle = `${mText} La tasa de aprobación se sitúa en el ${fin}%, mientras que el abandono académico es del ${abd}% y la inactividad de plataforma del ${inact}%.`;
 
             document.getElementById('ia-txt-moodle').innerHTML = `
-                <div class="alert alert-${mColor} d-flex align-items-center mb-4 p-4 border-0 shadow-sm rounded-4"><i class="bi ${mIcon} fs-1 me-4"></i> <div class="fs-6">${mText}</div></div>
+                <div class="alert alert-${mColor} d-flex align-items-center mb-4 p-4 border-0 shadow-sm rounded-4"><i class="bi ${mIcon} fs-1 me-4"></i> <div class="fs-6"><strong>${mText}</strong></div></div>
                 <div class="row g-4">
                     <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">Aprobación</div><div class="ia-val">${fin}%</div></div></div>
                     <div class="col-md-4"><div class="ia-mini-card"><div class="ia-lbl">${esGlobal ? 'Fuga Histórica' : 'Fuga Académica'}</div><div class="ia-val">${abd}%</div></div></div>
@@ -812,6 +976,7 @@
             if(datosFilt) { nps = datosFilt.e_NPS; encuestas = datosFilt.Total_Encuestas; pregData = datosFilt.Detalle_Preguntas; }
 
             if (encuestas < 5) {
+                textosIAParaWord.calidad = "Muestra estadística baja. Diagnóstico de calidad pausado debido a falta de datos representativos.";
                 document.getElementById('ia-txt-radar').innerHTML = `<div class="alert bg-indigo-soft border-0 p-4 rounded-4 d-flex align-items-center"><i class="bi bi-bar-chart-fill fs-1 me-4"></i><div class="fs-6">Muestra estadística baja (<strong>${encuestas} respuestas</strong>). Diagnóstico pausado.</div></div>`;
             } else {
                 let maxScore = -1, minScore = 6, mejorPregunta = "", peorPregunta = "";
@@ -821,6 +986,8 @@
                     if(val > maxScore) { maxScore = val; mejorPregunta = mapeoPreguntas[q] || q; }
                     if(val < minScore) { minScore = val; peorPregunta = mapeoPreguntas[q] || q; }
                 }
+
+                textosIAParaWord.calidad = `Basado en ${encuestas} respuestas, el índice de lealtad (e-NPS) es de ${nps}. La dimensión mejor evaluada es "${mejorPregunta}" (${maxScore.toFixed(1)}/5.0), mientras que el área crítica de mejora recae en "${peorPregunta}" (${minScore.toFixed(1)}/5.0).`;
 
                 let npsColor = nps > 20 ? "success" : (nps < 0 ? "danger" : "warning"); 
                 document.getElementById('ia-txt-radar').innerHTML = `
@@ -944,6 +1111,7 @@
         }
 
         function calcularBenchmarkGlobal(arrayCursos) { 
+            if(!arrayCursos) arrayCursos = dashboardData.cursos; // Fallback
             const sum = {}; const count = {}; 
             arrayCursos.forEach(curso => { 
                 if (curso.Detalle_Preguntas && curso.Total_Encuestas > 0) { 
@@ -1082,9 +1250,6 @@
             generarInsightsIABloques(false, cursoActual, datosOlap);
         }
 
-        // ==========================================
-        // COMPONENTES UI Y DIBUJO
-        // ==========================================
         function crearTarjetaKPI(label, valor, porcentaje = null) { 
             let htmlPorcentaje = porcentaje ? `<span style="font-size: 0.8rem; font-weight: 700; color: var(--success); background: rgba(5, 205, 153, 0.15); padding: 4px 8px; border-radius: 20px; margin-left: 8px; vertical-align: middle;">${porcentaje}</span>` : ''; 
             return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-card h-100"><div class="kpi-value d-flex align-items-center flex-wrap">${valor} ${htmlPorcentaje}</div><div class="kpi-label">${label}</div></div></div>`; 
@@ -1199,7 +1364,6 @@
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
             if (chartInstances[canvasId]) chartInstances[canvasId].destroy(); 
             
-            // LÓGICA DE COLORES DETERMINÍSTICOS
             let labels = Object.keys(dataObject);
             let datos = Object.values(dataObject);
             let coloresFijos = labels.map((label, index) => mapeoColores[label] || coloresRespaldo[index % coloresRespaldo.length]);
