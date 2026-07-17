@@ -323,7 +323,7 @@
             // MODO SIMULACIÓN
             if (isSimulacion) {
                 await new Promise(res => setTimeout(res, 1500)); 
-                if (esPrimerMensaje) return `¡Hola ${datosEstudiante.nombre.split(' ')[0]}! Soy tu Tutor IA. Para armar tu ruta de aprendizaje, empecemos: ¿Qué harías en el primer paso de atención clínica según la norma? (Puedes escribir 'fin' para probar el envío al profesor).`;
+                if (esPrimerMensaje) return `¡Hola! Soy tu Tutor IA. Para armar tu ruta de aprendizaje, empecemos: ¿Qué harías en el primer paso de atención clínica según la norma? (Puedes escribir 'fin' para probar el envío al profesor).`;
                 if (mensajeUsuario.toLowerCase().includes("fin")) {
                     let textoDictamen = "DICTAMEN FINAL:\nHemos terminado. Detecté vacíos importantes en Examen Físico.\n\nDebes matricularte obligatoriamente en el Módulo 3. ¡Mucho éxito!";
                     guardarResultadoEnSheets(textoDictamen); 
@@ -341,9 +341,8 @@
             };
 
             // CADENA DE MODELOS DE RESPALDO (Enterprise-grade Fallback)
-            // CAMBIO AQUÍ: Usamos 3.5-pro como principal (alto límite de tokens) y 3.5-flash como respaldo. 
-            // Eliminamos el 3.1-preview que nos estaba bloqueando por TPM.
-            const modelosCandidatos = ["gemini-3.5-pro", "gemini-3.5-flash"];
+            // SOLUCIÓN: Usamos flash como principal, y 3.1-pro (versión estable, sin "preview") como respaldo.
+            const modelosCandidatos = ["gemini-3.5-flash", "gemini-3.1-pro"];
             let aiText = null;
             let exito = false;
             let ultimoError = "";
@@ -364,6 +363,9 @@
                             if (response.status === 429) {
                                 throw new Error("HTTP_429"); // Flag especial para Quota/Rate Limit
                             }
+                            if (response.status === 404) {
+                                throw new Error("HTTP_404"); // Flag para modelo no encontrado
+                            }
                             throw new Error(`HTTP ${response.status}`);
                         }
                         
@@ -375,11 +377,17 @@
                         ultimoError = error.message;
                         intentos--;
                         
-                        // Si el error es 429, Google bloqueó la API Key temporalmente.
+                        // Si es 404, el modelo no existe, no perdemos tiempo reintentando, pasamos al siguiente.
+                        if (ultimoError === "HTTP_404") {
+                            console.warn(`[Motor IA] El modelo ${modeloActual} no está disponible (404). Saltando al respaldo...`);
+                            break; 
+                        }
+
+                        // Si el error es 429, Google bloqueó por Tokens (TPM).
                         // Necesitamos una pausa MUCHO más larga para dejar que se enfríe.
                         if (ultimoError === "HTTP_429") {
                             console.warn(`[Motor IA] Límite de Cuota (429) detectado en ${modeloActual}. Pausa extendida...`);
-                            esperaMs = 4000; // Forzamos una espera de 4 segundos
+                            esperaMs = 4500; // Forzamos una espera de 4.5 segundos
                         }
 
                         if (intentos > 0) {
@@ -396,7 +404,7 @@
             // Si los 2 modelos fallaron tras todos los intentos
             if (!exito) {
                 if (ultimoError === "HTTP_429") {
-                    throw new Error("Límite de solicitudes de la API alcanzado. Hay demasiados estudiantes conectados al mismo tiempo. Por favor, espera 1 minuto y vuelve a enviar tu mensaje.");
+                    throw new Error("Límite de Tokens de la API alcanzado. El documento normativo es muy pesado para el plan actual. Por favor, espera 1 minuto y vuelve a intentar.");
                 } else {
                     throw new Error(`Los servidores de Google AI están temporalmente saturados. Detalle: ${ultimoError}. Por favor, vuelve a enviar tu mensaje.`);
                 }
