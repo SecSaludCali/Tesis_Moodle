@@ -20,28 +20,36 @@
         body::before { width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(67, 24, 255, 0.12) 0%, transparent 70%); top: -15%; left: -15%; }
         body::after { width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(5, 205, 153, 0.12) 0%, transparent 70%); bottom: -15%; right: -5%; animation-delay: -5s; }
         @keyframes float { 0% { transform: translate3d(0, 0, 0) scale(1); } 100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); } }
+        
         #selector_pantalla { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(244, 247, 254, 0.5); }
         .selector-card { background: var(--card-bg); border-radius: 28px; box-shadow: var(--card-shadow); padding: 40px; width: 100%; max-width: 500px; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); text-align: center; animation: fadeIn 0.5s ease-out; }
-        .icon-robot { font-size: 4rem; color: var(--primary); margin-bottom: 20px; display: inline-block; filter: drop-shadow(0 10px 15px rgba(67, 24, 255, 0.3)); }
-        .form-select-custom { background: rgba(255,255,255,0.8); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 20px; font-size: 1.05rem; color: var(--text-main); width: 100%; margin-bottom: 24px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); outline: none; transition: all 0.3s; }
-        .form-select-custom:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); }
-        .btn-start { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; border: none; border-radius: 16px; padding: 16px; width: 100%; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3); }
+        .icon-robot { font-size: 4rem; color: var(--primary); margin-bottom: 10px; display: inline-block; filter: drop-shadow(0 10px 15px rgba(67, 24, 255, 0.3)); }
+        
+        .form-label-custom { text-align: left; display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; margin-left: 5px; }
+        .form-select-custom { background: rgba(255,255,255,0.8); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px 20px; font-size: 1.05rem; color: var(--text-main); width: 100%; margin-bottom: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); outline: none; transition: all 0.3s; }
+        .form-select-custom:focus { border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); }
+        
+        .btn-start { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; border: none; border-radius: 16px; padding: 16px; width: 100%; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3); margin-top: 10px; }
         .btn-start:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(67, 24, 255, 0.4); color: white; }
+        
         #chat_pantalla { display: none; flex-direction: column; height: 100vh; max-width: 1000px; margin: 0 auto; width: 100%; padding: 20px; }
         .chat-header { background: var(--card-bg); border-radius: 24px; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-bottom: 20px; flex-shrink: 0; }
         .badge-tema { background: rgba(67, 24, 255, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; border: 1px solid rgba(67, 24, 255, 0.2); display: flex; align-items: center; }
         .chat-history { flex-grow: 1; background: transparent; overflow-y: auto; padding: 10px 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
         .chat-history::-webkit-scrollbar { width: 6px; } .chat-history::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        
         .msg { max-width: 80%; padding: 18px 24px; border-radius: 24px; font-size: 1.05rem; line-height: 1.6; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; word-wrap: break-word; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .msg-bot { align-self: flex-start; background: var(--chat-bot-bg); color: var(--chat-bot-text); border-bottom-left-radius: 4px; border: 1px solid var(--chat-bot-border); }
         .msg-bot strong { color: var(--primary); }
         .msg-user { align-self: flex-end; background: var(--chat-user-bg); color: var(--chat-user-text); border-bottom-right-radius: 4px; }
+        
         .chat-input-area { background: var(--card-bg); border-radius: 24px; padding: 15px; display: flex; gap: 15px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-top: 20px; flex-shrink: 0; align-items: center; }
         .chat-input { flex-grow: 1; border: none; background: transparent; padding: 10px 15px; font-size: 1.05rem; color: var(--text-main); outline: none; resize: none; max-height: 120px; min-height: 45px; font-family: 'Inter', sans-serif; }
         .btn-send { background: var(--primary); color: white; border: none; width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
         .btn-send:hover { transform: scale(1.05); background: #3210cc; }
         .btn-send:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        
         .typing { display: flex; gap: 5px; align-items: center; height: 24px;}
         .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; opacity: 0.7;}
         .dot:nth-child(1) { animation-delay: -0.32s; } .dot:nth-child(2) { animation-delay: -0.16s; }
@@ -56,11 +64,24 @@
         </a>
         <div class="selector-card">
             <div class="icon-robot"><i class="bi bi-robot"></i></div>
-            <h2 class="fw-bold mb-2">Evaluador Clínico IA</h2>
-            <p class="text-muted mb-4">Ingresa el identificador (ID) del módulo normativo o curso que deseas evaluar.</p>
-            <div class="mb-4">
-                <input type="text" id="input_tema_id" class="form-select-custom py-3 text-center fw-bold" placeholder="Ej: primera_infancia" style="font-size: 1.1rem; margin-bottom: 0; letter-spacing: 1px;">
+            <h3 class="fw-bold mb-1">Evaluador Clínico IA</h3>
+            <p class="text-muted mb-4 small">Por favor ingresa tus datos para validar tu sesión.</p>
+            
+            <div>
+                <label class="form-label-custom">Nombre Completo</label>
+                <input type="text" id="input_nombre" class="form-select-custom" placeholder="Ej: Dra. María López" required>
             </div>
+            
+            <div>
+                <label class="form-label-custom">Documento de Identidad</label>
+                <input type="text" id="input_documento" class="form-select-custom" placeholder="Ej: 1144..." required>
+            </div>
+
+            <div>
+                <label class="form-label-custom">ID del Módulo Normativo</label>
+                <input type="text" id="input_tema_id" class="form-select-custom fw-bold text-primary" placeholder="Ej: primera_infancia" required>
+            </div>
+
             <button class="btn-start" id="btn_iniciar" onclick="iniciarEvaluacion()">
                 <i class="bi bi-play-fill me-1"></i> Iniciar Evaluación
             </button>
@@ -97,12 +118,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // ==========================================
+        // CONFIGURACIÓN DE IA Y TRACKING (BACKEND)
+        // ==========================================
         let MODEL = "gemini-2.5-flash"; 
         const geminiP1 = "AQ.Ab8RN6JQAtMlVOg3cL2L"; 
         const geminiP2 = "kf6xOq5UQhTxII--Bba3yHFzfZKySQ"; 
         let apiKey = geminiP1.trim() + geminiP2.trim();
         let isSimulacion = false;
         const host = window.location.hostname;
+        
+        // URL DE GOOGLE SHEETS PARA RASTREAR A LOS ESTUDIANTES
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwP9pw4qRSSS0GerUghj0-vtCx2TVqRW8hehMSAzDddEC8c9YNgm-wfAYFrv8Eo57Z5/exec';
+        
+        // OBJETO DEL ESTUDIANTE
+        let datosEstudiante = { nombre: '', documento: '', tema: '' };
+
         if (host.includes("googleusercontent.com") || host === "") { apiKey = ""; MODEL = "gemini-2.5-flash-preview-09-2025"; } 
         else if (apiKey.length < 20 || apiKey.includes("AQUÍ_TU_MITAD")) { isSimulacion = true; }
         
@@ -136,21 +167,27 @@
         }
 
         async function iniciarEvaluacion() {
+            const inputNombre = document.getElementById('input_nombre');
+            const inputDocumento = document.getElementById('input_documento');
             const inputTemaId = document.getElementById('input_tema_id');
             const btnIniciar = document.getElementById('btn_iniciar');
             const errorCarga = document.getElementById('error_carga');
-            const badgeTema = document.getElementById('tema_actual_badge');
-            const selectorPantalla = document.getElementById('selector_pantalla');
-            const chatPantalla = document.getElementById('chat_pantalla');
+            
+            // VALIDACIÓN DEL FORMULARIO Y TRACKING
+            datosEstudiante.nombre = inputNombre ? inputNombre.value.trim() : "";
+            datosEstudiante.documento = inputDocumento ? inputDocumento.value.trim() : "";
+            datosEstudiante.tema = inputTemaId ? inputTemaId.value.trim() : "";
 
-            const temaId = inputTemaId ? inputTemaId.value.trim() : "";
-            if (!temaId) { mostrarError("Por favor escribe un ID válido."); return; }
+            if (!datosEstudiante.nombre || !datosEstudiante.documento || !datosEstudiante.tema) { 
+                mostrarError("Por favor, completa todos los campos (Nombre, Documento e ID)."); 
+                return; 
+            }
 
             if (btnIniciar) { btnIniciar.disabled = true; btnIniciar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Analizando...'; }
             if (errorCarga) errorCarga.style.display = 'none';
 
             try {
-                const urlJson = `./conocimiento_ia/conocimiento_${temaId}.json`;
+                const urlJson = `./conocimiento_ia/conocimiento_${datosEstudiante.tema}.json`;
                 let contextoExtraido = "";
                 let estructuraCurso = "";
 
@@ -162,7 +199,7 @@
                     contextoExtraido = textoCompleto.length > 50000 ? textoCompleto.substring(0, 50000) + "... [Fin]" : textoCompleto;
                     estructuraCurso = data.estructura_curso || "La estructura del curso se basa en los capítulos principales del documento normativo.";
                 } catch (fetchError) {
-                    if (!isSimulacion) throw new Error(`El tema '${temaId}' no existe.`);
+                    if (!isSimulacion) throw new Error(`El tema '${datosEstudiante.tema}' no existe.`);
                     contextoExtraido = "DOCUMENTO DE EJEMPLO GENÉRICO. Capítulo 1, Capítulo 2, Capítulo 3.";
                     estructuraCurso = "Módulo 1, Módulo 2 y Módulo 3.";
                 }
@@ -177,19 +214,20 @@
                     ${estructuraCurso}
 
                     REGLAS ESTRICTAS DE INTERACCIÓN:
-                    1. INICIO: Preséntate, dile que evaluarás su conocimiento para armar su ruta de estudio y haz tu primera pregunta práctica basada en el primer módulo.
+                    1. INICIO: Preséntate llamándolo por su nombre ("${datosEstudiante.nombre.split(' ')[0]}"), dile que evaluarás su conocimiento para armar su ruta de estudio y haz tu primera pregunta práctica basada en el primer módulo.
                     2. PREGUNTA A PREGUNTA: Haz SOLO UNA pregunta a la vez. Espera siempre su respuesta.
-                    3. INDAGACIÓN DINÁMICA (Drill-down): Si el estudiante responde de forma incompleta, ambigua o "a medias" (ej. 50% correcto), NO pases al siguiente tema. Hazle una pregunta de seguimiento (Ej: "¿Y qué harías si el paciente presenta X síntoma adicional?" o "¿Podrías detallar más la dosis?") para descubrir si es falta de conocimiento o simple brevedad al escribir.
+                    3. INDAGACIÓN DINÁMICA (Drill-down): Si el estudiante responde de forma incompleta, ambigua o "a medias" (ej. 50% correcto), NO pases al siguiente tema. Hazle una pregunta de seguimiento para descubrir si es falta de conocimiento o simple brevedad al escribir.
                     4. RETROALIMENTACIÓN: Cuando tengas claro si domina o no un tema, dale una retroalimentación cortés y pasa al siguiente módulo o concepto clave.
-                    5. SIN LÍMITE FIJO: Sigue evaluando módulo por módulo de manera fluida y conversacional.
-                    6. FINALIZACIÓN: Cuando consideres que tienes un mapa claro de sus conocimientos respecto a la estructura del curso, emite un "DICTAMEN FINAL".
-                    7. DICTAMEN FINAL: Enumera sus fortalezas clínicas y dictamina EXACTAMENTE en qué MÓDULOS de la "ESTRUCTURA DEL CURSO" debe matricularse obligatoriamente para subsanar sus falencias de conocimiento. Despídete.
+                    5. FINALIZACIÓN: Cuando consideres que tienes un mapa claro de sus conocimientos respecto a la estructura del curso, emite un "DICTAMEN FINAL".
+                    6. DICTAMEN FINAL: Enumera sus fortalezas clínicas y dictamina EXACTAMENTE en qué MÓDULOS de la "ESTRUCTURA DEL CURSO" debe matricularse obligatoriamente para subsanar sus falencias de conocimiento. Despídete.
                 `;
 
                 verificarModoIa();
-                if (badgeTema) badgeTema.innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${temaId.toUpperCase().replace(/_/g, ' ')}`;
-                if (selectorPantalla) selectorPantalla.style.display = 'none';
-                if (chatPantalla) chatPantalla.style.display = 'flex';
+                const badgeTema = document.getElementById('tema_actual_badge');
+                if (badgeTema) badgeTema.innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${datosEstudiante.tema.toUpperCase().replace(/_/g, ' ')}`;
+                
+                document.getElementById('selector_pantalla').style.display = 'none';
+                document.getElementById('chat_pantalla').style.display = 'flex';
 
                 arrancarConversacion();
 
@@ -207,7 +245,7 @@
         async function arrancarConversacion() {
             mostrarTyping();
             try {
-                const promptOculto = "Hola. Preséntate, indícame qué temas detectaste y hazme la primera pregunta para iniciar la evaluación.";
+                const promptOculto = "Hola. Preséntate con mi nombre, indícame qué temas detectaste y hazme la primera pregunta para iniciar la evaluación.";
                 const respuesta = await procesarGeminiAPI(promptOculto, true);
                 quitarTyping();
                 agregarMensaje(respuesta, 'bot');
@@ -269,13 +307,37 @@
             if (indicator) indicator.remove();
         }
 
+        function guardarResultadoEnSheets(dictamen) {
+            const formData = new FormData();
+            formData.append('action', 'guardar_evaluacion');
+            formData.append('nombre', datosEstudiante.nombre);
+            formData.append('documento', datosEstudiante.documento);
+            formData.append('tema', datosEstudiante.tema);
+            formData.append('dictamen', dictamen);
+
+            fetch(SCRIPT_URL, { method: 'POST', body: formData })
+                .then(res => console.log("✔ Resultado enviado al profesor exitosamente."))
+                .catch(err => console.error("Error guardando el resultado:", err));
+        }
+
         async function procesarGeminiAPI(mensajeUsuario, esPrimerMensaje = false) {
+            // MODO SIMULACIÓN
             if (isSimulacion) {
                 await new Promise(res => setTimeout(res, 1500)); 
-                if (esPrimerMensaje) return "¡Hola! Soy tu Tutor IA. Para armar tu ruta de aprendizaje, empecemos: ¿Qué harías en el primer paso de atención clínica según la norma?";
+                
+                if (esPrimerMensaje) return `¡Hola ${datosEstudiante.nombre.split(' ')[0]}! Soy tu Tutor IA. Para armar tu ruta de aprendizaje, empecemos: ¿Qué harías en el primer paso de atención clínica según la norma? (Puedes escribir 'fin' para probar el envío al profesor).`;
+                
+                // MAGIA DE PRUEBA: Detecta si escribe "fin" para enviar el reporte
+                if (mensajeUsuario.toLowerCase().includes("fin")) {
+                    let textoDictamen = "DICTAMEN FINAL:\nHemos terminado. Detecté vacíos importantes en Examen Físico.\n\nDebes matricularte obligatoriamente en el Módulo 3. ¡Mucho éxito!";
+                    guardarResultadoEnSheets(textoDictamen); // Guarda en Google Sheets
+                    return textoDictamen;
+                }
+                
                 return "Buena respuesta, pero incompleta. ¿Podrías ser más específico sobre la dosis a administrar?";
             }
 
+            // MODO REAL
             if (!esPrimerMensaje) chatHistory.push({ role: "user", parts: [{ text: mensajeUsuario }] });
 
             const payload = {
@@ -303,6 +365,12 @@
                     } else {
                         chatHistory.push({ role: "model", parts: [{ text: aiText }] });
                     }
+                    
+                    // EL DETECTOR MÁGICO: Si la IA da el dictamen, lo envía al Excel del profesor
+                    if (aiText.toUpperCase().includes("DICTAMEN FINAL")) {
+                        guardarResultadoEnSheets(aiText);
+                    }
+
                     return aiText;
                 } catch (error) {
                     if (attempt === 2 || error.message.includes("20 segundos")) throw error;
