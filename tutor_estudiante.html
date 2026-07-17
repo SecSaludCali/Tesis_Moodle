@@ -341,7 +341,9 @@
             };
 
             // CADENA DE MODELOS DE RESPALDO (Enterprise-grade Fallback)
-            const modelosCandidatos = ["gemini-3.5-flash", "gemini-3.1-pro-preview"];
+            // CAMBIO AQUÍ: Usamos 3.5-pro como principal (alto límite de tokens) y 3.5-flash como respaldo. 
+            // Eliminamos el 3.1-preview que nos estaba bloqueando por TPM.
+            const modelosCandidatos = ["gemini-3.5-pro", "gemini-3.5-flash"];
             let aiText = null;
             let exito = false;
             let ultimoError = "";
