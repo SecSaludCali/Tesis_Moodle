@@ -194,7 +194,11 @@
                     if (!response.ok) throw new Error("Archivo no encontrado");
                     const data = await response.json();
                     let textoCompleto = data.contexto_base || "";
-                    contextoExtraido = textoCompleto.length > 50000 ? textoCompleto.substring(0, 50000) + "... [Fin]" : textoCompleto;
+                    
+                    // CRITICAL FIX: REDUCED PAYLOAD TO PREVENT 429 ERRORS ON PREVIEW MODELS
+                    // We send only the first 15,000 characters to ensure we stay well below token limits for this presentation
+                    contextoExtraido = textoCompleto.length > 15000 ? textoCompleto.substring(0, 15000) + "... [Texto truncado por seguridad de demostración]" : textoCompleto;
+                    
                     estructuraCurso = data.estructura_curso || "La estructura del curso se basa en los capítulos principales del documento normativo.";
                 } catch (fetchError) {
                     if (!isSimulacion) throw new Error(`El tema '${datosEstudiante.tema}' no existe.`);
@@ -320,7 +324,6 @@
         }
 
         async function procesarGeminiAPI(mensajeUsuario, esPrimerMensaje = false) {
-            // MODO SIMULACIÓN
             if (isSimulacion) {
                 await new Promise(res => setTimeout(res, 1500)); 
                 if (esPrimerMensaje) return `¡Hola! Soy tu Tutor IA. Para armar tu ruta de aprendizaje, empecemos: ¿Qué harías en el primer paso de atención clínica según la norma? (Puedes escribir 'fin' para probar el envío al profesor).`;
@@ -332,7 +335,6 @@
                 return "Buena respuesta, pero incompleta. ¿Podrías ser más específico sobre la dosis a administrar?";
             }
 
-            // MODO REAL: Agregamos la respuesta del usuario al historial
             if (!esPrimerMensaje) chatHistory.push({ role: "user", parts: [{ text: mensajeUsuario }] });
 
             const payload = {
@@ -340,9 +342,8 @@
                 systemInstruction: { parts: [{ text: systemPromptBase }] }
             };
 
-            // CADENA DE MODELOS DE RESPALDO (Enterprise-grade Fallback)
-            // SOLUCIÓN: Usamos flash como principal, y 3.1-pro (versión estable, sin "preview") como respaldo.
-            const modelosCandidatos = ["gemini-3.5-flash", "gemini-3.1-pro"];
+            // CADENA DE MODELOS CORRECTA PARA JULIO 2026
+            const modelosCandidatos = ["gemini-3.5-flash", "gemini-3.1-pro-preview"];
             let aiText = null;
             let exito = false;
             let ultimoError = "";
@@ -361,10 +362,10 @@
                         // LÓGICA INTELIGENTE DE ERRORES 
                         if (!response.ok) {
                             if (response.status === 429) {
-                                throw new Error("HTTP_429"); // Flag especial para Quota/Rate Limit
+                                throw new Error("HTTP_429"); // Quota/Rate Limit
                             }
                             if (response.status === 404) {
-                                throw new Error("HTTP_404"); // Flag para modelo no encontrado
+                                throw new Error("HTTP_404"); // Modelo no encontrado
                             }
                             throw new Error(`HTTP ${response.status}`);
                         }
@@ -377,17 +378,15 @@
                         ultimoError = error.message;
                         intentos--;
                         
-                        // Si es 404, el modelo no existe, no perdemos tiempo reintentando, pasamos al siguiente.
                         if (ultimoError === "HTTP_404") {
                             console.warn(`[Motor IA] El modelo ${modeloActual} no está disponible (404). Saltando al respaldo...`);
                             break; 
                         }
 
-                        // Si el error es 429, Google bloqueó por Tokens (TPM).
-                        // Necesitamos una pausa MUCHO más larga para dejar que se enfríe.
+                        // SMART BACKOFF FOR 429
                         if (ultimoError === "HTTP_429") {
                             console.warn(`[Motor IA] Límite de Cuota (429) detectado en ${modeloActual}. Pausa extendida...`);
-                            esperaMs = 4500; // Forzamos una espera de 4.5 segundos
+                            esperaMs = 4000; // Wait 4 seconds to let quota refresh
                         }
 
                         if (intentos > 0) {
@@ -401,16 +400,14 @@
                 }
             }
 
-            // Si los 2 modelos fallaron tras todos los intentos
             if (!exito) {
                 if (ultimoError === "HTTP_429") {
-                    throw new Error("Límite de Tokens de la API alcanzado. El documento normativo es muy pesado para el plan actual. Por favor, espera 1 minuto y vuelve a intentar.");
+                    throw new Error("Límite de solicitudes de la API alcanzado. El documento normativo supera el límite del modelo de respaldo actual. Por favor, intenta de nuevo en 1 minuto.");
                 } else {
                     throw new Error(`Los servidores de Google AI están temporalmente saturados. Detalle: ${ultimoError}. Por favor, vuelve a enviar tu mensaje.`);
                 }
             }
 
-            // Guardar en el historial
             if (esPrimerMensaje) {
                 chatHistory = [
                     { role: "user", parts: [{ text: "Inicia la evaluación." }] },
@@ -420,7 +417,6 @@
                 chatHistory.push({ role: "model", parts: [{ text: aiText }] });
             }
             
-            // DISPARADOR INVISIBLE AL PROFESOR
             if (aiText.toUpperCase().includes("DICTAMEN FINAL")) {
                 guardarResultadoEnSheets(aiText);
             }
