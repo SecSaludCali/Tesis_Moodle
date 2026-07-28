@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 43,
-        "total_encuestas_historicas": 3890,
+        "total_encuestas_historicas": 3891,
         "total_estudiantes_unicos": 5776
     },
     "kpis_globales": {
@@ -10,24 +10,24 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2850,
+            "Femenino": 2851,
             "Masculino": 1036,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2808,
+            "Área de la salud": 2809,
             "Estudiante": 702,
             "Otro": 380
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2307,
+            "Adultez (29 - 59 años)": 2308,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 701,
             "Vejez (60 años o más)": 161
         },
         "Comuna": {
             "COMUNA 17": 446,
-            "COMUNA 19": 231,
+            "COMUNA 19": 232,
             "COMUNA 1": 223,
             "COMUNA 2": 201,
             "COMUNA 10": 199,
@@ -67,7 +67,7 @@
         "Escolaridad": {
             "Pregrado": 1748,
             "Bachiller": 1090,
-            "Postgrado": 996,
+            "Postgrado": 997,
             "Ninguna": 56
         }
     },
@@ -23057,9 +23057,9 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2026 - 01",
             "ID_Moodle_Original": "sello_01_2026",
             "Total_Inscritos": 165,
-            "Tasa_Finalizacion_%": 15.2,
+            "Tasa_Finalizacion_%": 15.8,
             "Tasa_Abandono_%": 2.4,
-            "Tasa_Inactividad_%": 82.4,
+            "Tasa_Inactividad_%": 81.8,
             "Tiempo_Promedio_Dias": 1.0,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
@@ -23067,7 +23067,7 @@
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 15.2,
+            "Salud_Curso_CHS": 15.8,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
