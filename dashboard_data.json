@@ -1,33 +1,33 @@
 {
     "metadata": {
         "total_cursos_analizados": 43,
-        "total_encuestas_historicas": 3893,
+        "total_encuestas_historicas": 3895,
         "total_estudiantes_unicos": 5776
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 55.4,
+        "chs_promedio_secretaria": 55.5,
         "nps_global": 67.5
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2853,
+            "Femenino": 2855,
             "Masculino": 1036,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2811,
+            "Área de la salud": 2813,
             "Estudiante": 702,
             "Otro": 380
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2310,
+            "Adultez (29 - 59 años)": 2311,
             "Adolescencia (12 - 17 años)": 721,
-            "Juventud (18 - 28 años)": 701,
+            "Juventud (18 - 28 años)": 702,
             "Vejez (60 años o más)": 161
         },
         "Comuna": {
-            "COMUNA 17": 446,
-            "COMUNA 19": 234,
+            "COMUNA 17": 447,
+            "COMUNA 19": 235,
             "COMUNA 1": 223,
             "COMUNA 2": 201,
             "COMUNA 10": 199,
@@ -67,7 +67,7 @@
         "Escolaridad": {
             "Pregrado": 1748,
             "Bachiller": 1090,
-            "Postgrado": 999,
+            "Postgrado": 1001,
             "Ninguna": 56
         }
     },
@@ -23077,8 +23077,8 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2026 - 01",
             "ID_Moodle_Original": "sello_01_2026",
             "Total_Inscritos": 165,
-            "Tasa_Finalizacion_%": 15.8,
-            "Tasa_Abandono_%": 3.6,
+            "Tasa_Finalizacion_%": 17.0,
+            "Tasa_Abandono_%": 2.4,
             "Tasa_Inactividad_%": 80.6,
             "Tiempo_Promedio_Dias": 1.0,
             "Total_Encuestas": 0.0,
@@ -23087,7 +23087,7 @@
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 15.8,
+            "Salud_Curso_CHS": 17.0,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
