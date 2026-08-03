@@ -1,341 +1,304 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrenamiento IA - Secretaría de Salud</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-    <!-- LIBRERÍA MÁGICA: PDF.js para leer PDFs en el navegador sin backend -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- LIBRERÍA MÁGICA: PDF.js para leer PDFs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
     <style>
-        /* Reutilizamos nuestra paleta Liquid Glass */
         :root[data-theme="light"] {
-            --bg-color: #f4f7fe;
-            --card-bg: rgba(255, 255, 255, 0.6);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --primary: #4318ff;
-            --success: #05cd99;
-            --border-light: rgba(255, 255, 255, 0.8);
-            --border-color: rgba(255, 255, 255, 0.5);
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
-            --blob-1: rgba(67, 24, 255, 0.25);
-            --blob-2: rgba(5, 205, 153, 0.25);
+            --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #1e293b; --text-muted: #64748b; --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5);
+            --card-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.05);
+            --blob-1: rgba(67, 24, 255, 0.1); --blob-2: rgba(5, 205, 153, 0.1);
         }
 
-        body {
-            background-color: var(--bg-color);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            padding: 20px 0;
+        :root[data-theme="dark"] {
+            --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.95); --card-bg: rgba(17, 28, 68, 0.85); 
+            --text-main: #f8fafc; --text-muted: #a3aed1; --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50;
+            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08);
+            --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
+            --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1);
         }
 
-        /* Burbujas flotantes de fondo */
-        body::before, body::after {
-            content: ''; position: fixed; border-radius: 50%; filter: blur(80px);
-            z-index: -1; animation: float 15s infinite alternate ease-in-out;
-            will-change: transform; transform: translateZ(0); pointer-events: none;
+        :root[data-theme="rose"] {
+            --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #4c0519; --text-muted: #9f1239; --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15);
+            --card-shadow: 0 4px 20px 0 rgba(225, 29, 72, 0.05);
+            --blob-1: rgba(225, 29, 72, 0.1); --blob-2: rgba(244, 63, 94, 0.1);
+        }
+
+        :root[data-theme="amber"] {
+            --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #451a03; --text-muted: #92400e; --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15);
+            --card-shadow: 0 4px 20px 0 rgba(217, 119, 6, 0.05);
+            --blob-1: rgba(217, 119, 6, 0.1); --blob-2: rgba(245, 158, 11, 0.1);
+        }
+
+        body { 
+            background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); 
+            margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh;
+        }
+
+        body::before, body::after { 
+            content: ''; position: fixed; border-radius: 50%; z-index: -2; pointer-events: none; 
+            will-change: transform; transform: translateZ(0); filter: blur(60px);
         }
         body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
-        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; animation-delay: -5s; }
+        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; }
 
-        @keyframes float {
-            0% { transform: translate3d(0, 0, 0) scale(1); }
-            100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); }
+        #app-layout { display: flex; min-height: 100vh; width: 100%; overflow-x: hidden; }
+        
+        #sidebar {
+            width: 80px; min-height: 100vh; background: var(--sidebar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding: 24px 0;
+            position: fixed; top: 0; left: 0; z-index: 1000; transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 4px 0 15px rgba(0,0,0,0.02); overflow: hidden; white-space: nowrap;
+        }
+        #sidebar:hover { width: 250px; align-items: flex-start; padding-left: 20px; padding-right: 20px;}
+
+        .sidebar-brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; cursor: pointer; height: 45px;}
+        .sidebar-brand img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0;}
+        .sidebar-brand span { font-weight: 800; font-size: 1.1rem; color: var(--text-main); opacity: 0; transition: opacity 0.2s; }
+        #sidebar:hover .sidebar-brand span { opacity: 1; transition-delay: 0.1s;}
+
+        .nav-item-custom {
+            display: flex; align-items: center; gap: 18px; width: 100%; padding: 12px; border-radius: 12px; margin-bottom: 8px;
+            color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer;
+            transition: all 0.2s ease; border: 1px solid transparent;
+        }
+        .nav-item-custom i { font-size: 1.3rem; flex-shrink: 0; transition: color 0.2s;}
+        .nav-text { opacity: 0; transition: opacity 0.2s; }
+        #sidebar:hover .nav-text { opacity: 1; transition-delay: 0.1s;}
+        
+        .nav-item-custom:hover { background: rgba(67, 24, 255, 0.05); color: var(--primary); }
+        .nav-item-custom.active { background: var(--primary); color: white; border-color: rgba(0,0,0,0.1); box-shadow: 0 4px 10px rgba(67, 24, 255, 0.2); }
+        .nav-item-custom.active i { color: white; }
+
+        .sidebar-footer { margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 15px;}
+        
+        .theme-grid { display: flex; gap: 6px; justify-content: center; width: 100%; opacity: 0; transition: opacity 0.2s;}
+        #sidebar:hover .theme-grid { opacity: 1; transition-delay: 0.1s; }
+        .theme-btn { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: var(--primary); transform: scale(1.1);}
+
+        #main-content {
+            flex-grow: 1; margin-left: 80px; min-height: 100vh; transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative; max-width: calc(100vw - 80px); overflow-x: hidden;
+            display: flex; align-items: center; justify-content: center; padding: 20px;
         }
 
-        /* Tarjeta principal estilo Liquid */
+        #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: fixed; top: 0; width: 100%; z-index: 990; align-items: center; justify-content: space-between;}
+        .mobile-toggle { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); }
+
+        @media (max-width: 768px) {
+            #sidebar { transform: translateX(-100%); width: 250px; padding-left: 20px; align-items: flex-start;}
+            #sidebar.mobile-open { transform: translateX(0); }
+            #main-content { margin-left: 0; max-width: 100vw; padding-top: 80px; align-items: flex-start;}
+            #mobile-top-bar { display: flex; }
+            .nav-text, .sidebar-brand span, .theme-grid { opacity: 1; }
+        }
+
         .admin-card {
-            background: var(--card-bg);
-            border-radius: 28px;
-            box-shadow: var(--card-shadow);
-            padding: 40px;
-            width: 100%;
-            max-width: 700px;
-            border: 1px solid var(--border-color);
-            border-top: 1px solid var(--border-light);
-            border-left: 1px solid var(--border-light);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 10;
-            animation: fadeIn 0.5s ease-out;
+            background: var(--card-bg); border-radius: 28px; box-shadow: var(--card-shadow); padding: 40px; 
+            width: 100%; max-width: 700px; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); 
+            border-left: 1px solid var(--border-light); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); 
+            z-index: 10; animation: fadeIn 0.5s ease-out; margin: auto;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         h2 { font-weight: 800; letter-spacing: -0.03em; color: var(--primary); margin-bottom: 8px;}
         .subtitle { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 30px; }
 
-        /* Estilos de inputs */
         .form-label { font-weight: 600; color: var(--text-main); margin-bottom: 8px; font-size: 0.95rem;}
         .form-control {
-            background: rgba(255,255,255,0.7);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 14px 20px;
-            color: var(--text-main);
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 16px; 
+            padding: 14px 20px; color: var(--text-main); transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15);
-            background: #ffffff;
-            outline: none;
-        }
+        :root[data-theme="dark"] .form-control { background: rgba(0,0,0,0.2); }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); background: var(--bg-color); outline: none; }
 
-        /* Zona de Drop para el PDF */
         .drop-zone {
-            border: 2px dashed var(--primary);
-            border-radius: 20px;
-            padding: 40px 20px;
-            text-align: center;
-            background: rgba(67, 24, 255, 0.03);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 24px;
+            border: 2px dashed var(--primary); border-radius: 20px; padding: 40px 20px; text-align: center; 
+            background: rgba(67, 24, 255, 0.03); cursor: pointer; transition: all 0.3s ease; margin-bottom: 24px;
         }
-        .drop-zone:hover, .drop-zone.dragover {
-            background: rgba(67, 24, 255, 0.1);
-            transform: translateY(-2px);
-        }
+        .drop-zone:hover, .drop-zone.dragover { background: rgba(67, 24, 255, 0.1); transform: translateY(-2px); }
         .drop-zone i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; display: block;}
         .drop-zone p { font-weight: 600; color: var(--primary); margin-bottom: 5px; }
         .drop-zone span { font-size: 0.85rem; color: var(--text-muted); }
 
-        /* Botón de procesamiento */
         .btn-train {
-            background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            padding: 16px;
-            width: 100%;
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 0.03em;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3), inset 0 2px 4px rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; border: none; 
+            border-radius: 16px; padding: 16px; width: 100%; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.03em; 
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3);
         }
-        .btn-train:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(67, 24, 255, 0.4), inset 0 2px 4px rgba(255,255,255,0.3);
-        }
-        .btn-train:disabled {
-            background: #cbd5e1;
-            transform: none;
-            box-shadow: none;
-            cursor: not-allowed;
-        }
+        .btn-train:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(67, 24, 255, 0.4); }
+        .btn-train:disabled { background: #cbd5e1; transform: none; box-shadow: none; cursor: not-allowed; }
 
-        /* Consola de estado */
-        .status-console {
-            background: rgba(0,0,0,0.85);
-            color: #10b981;
-            font-family: monospace;
-            padding: 16px;
-            border-radius: 12px;
-            margin-top: 24px;
-            font-size: 0.85rem;
-            display: none;
-            max-height: 150px;
-            overflow-y: auto;
-        }
+        .status-console { background: rgba(0,0,0,0.85); color: #10b981; font-family: monospace; padding: 16px; border-radius: 12px; margin-top: 24px; font-size: 0.85rem; display: none; max-height: 150px; overflow-y: auto; }
         .status-console.error { color: #ef4444; }
 
-        /* LISTA DE IDs EXISTENTES */
-        .id-list-container {
-            margin-top: 30px;
-            padding-top: 24px;
-            border-top: 1px dashed var(--border-color);
-            display: none; /* Se muestra solo si hay IDs */
-        }
-        .id-list-title {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .id-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .id-chip {
-            background: rgba(67, 24, 255, 0.1);
-            color: var(--primary);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid rgba(67, 24, 255, 0.2);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .id-chip:hover {
-            background: var(--primary);
-            color: white;
-        }
+        .id-list-container { margin-top: 30px; padding-top: 24px; border-top: 1px dashed var(--border-color); display: none; }
+        .id-list-title { font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .id-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+        .id-chip { background: rgba(67, 24, 255, 0.1); color: var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(67, 24, 255, 0.2); cursor: pointer; transition: all 0.2s; }
+        .id-chip:hover { background: var(--primary); color: white; }
 
-        /* Estilos específicos del Login */
-        .login-icon-container {
-            background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%);
-            color: white;
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            margin: 0 auto 20px;
-            box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3), inset 0 2px 4px rgba(255,255,255,0.2);
-        }
-
-        /* Animación del Loader inicial */
-        .initial-loader {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-out;
-        }
+        .login-icon-container { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; width: 72px; height: 72px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 20px; box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3); }
+        .initial-loader { display: flex; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.3s ease-out; }
     </style>
 </head>
 
 <body>
-
-    <div class="container d-flex justify-content-center w-100 position-relative">
+    <div id="app-layout">
         
-        <!-- BOTÓN VOLVER AL DASHBOARD -->
-        <a href="index.html" class="btn btn-light position-absolute top-0 start-0 mt-3 ms-3 rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; z-index: 100; border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px);" title="Volver al Dashboard">
-            <i class="bi bi-arrow-left fs-5" style="color: var(--text-main);"></i>
-        </a>
-
-        <!-- ========================================== -->
-        <!-- PANTALLA DE CARGA INICIAL                  -->
-        <!-- ========================================== -->
-        <div id="initial_loader" class="initial-loader">
-            <div class="spinner-border mb-3" style="color: var(--primary); width: 3.5rem; height: 3.5rem;" role="status"></div>
-            <h5 class="fw-bold" style="color: var(--text-muted);">Iniciando seguridad...</h5>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Conectando con la Secretaría de Salud</p>
+        <div id="mobile-top-bar">
+            <div class="sidebar-brand m-0">
+                <img src="Recurso.png" alt="Logo" onerror="this.style.display='none'">
+                <span>Configuración IA</span>
+            </div>
+            <button class="mobile-toggle" onclick="toggleMobileMenu()"><i class="bi bi-list"></i></button>
         </div>
 
-        <!-- ========================================== -->
-        <!-- PANTALLA DE LOGIN CON FIREBASE REAL        -->
-        <!-- ========================================== -->
-        <!-- Oculto por defecto hasta que el loader termine -->
-        <div class="admin-card text-center" id="login_card" style="max-width: 450px; display: none;">
-            <div class="login-icon-container">
-                <i class="bi bi-shield-lock-fill"></i>
+        <nav id="sidebar">
+            <div class="sidebar-brand">
+                <img src="Recurso.png" alt="Logo" onerror="this.style.display='none'">
+                <span>Alcaldía de Cali</span>
             </div>
-            <h2>Acceso Restringido</h2>
-            <div class="subtitle">Portal exclusivo para el Curador de Inteligencia Analítica.</div>
+            
+            <a href="index.html" class="nav-item-custom">
+                <i class="bi bi-house-door"></i> <span class="nav-text">Inicio / Dashboard</span>
+            </a>
+            <a href="tutor_estudiante.html" class="nav-item-custom">
+                <i class="bi bi-robot"></i> <span class="nav-text">Tutor Clínico (IA)</span>
+            </a>
+            <a href="admin_conocimiento.html" class="nav-item-custom active">
+                <i class="bi bi-shield-lock"></i> <span class="nav-text">Configuración IA</span>
+            </a>
 
-            <div class="mb-3 text-start">
-                <label for="admin_email" class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" id="admin_email" placeholder="admin@secretariasalud.gov.co" autocomplete="email">
-            </div>
-
-            <div class="mb-4 text-start">
-                <label for="admin_password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control text-center tracking-widest" id="admin_password" placeholder="••••••••••" autocomplete="current-password">
-                <div id="login_error" class="text-danger mt-2 text-center" style="display: none; font-size: 0.85rem; font-weight: 600;">
-                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Credenciales incorrectas. Verifica tu acceso.
+            <div class="sidebar-footer">
+                <div class="theme-grid">
+                    <div class="theme-btn" data-theme-btn="light" style="background:#f4f7fe;" onclick="cambiarTema('light')"></div>
+                    <div class="theme-btn" data-theme-btn="dark" style="background:#0b1437;" onclick="cambiarTema('dark')"></div>
+                    <div class="theme-btn" data-theme-btn="rose" style="background:#fff1f2;" onclick="cambiarTema('rose')"></div>
+                    <div class="theme-btn" data-theme-btn="amber" style="background:#fffbeb;" onclick="cambiarTema('amber')"></div>
                 </div>
             </div>
+        </nav>
 
-            <button class="btn-train" id="btn_login_submit" onclick="window.verificarAcceso()">
-                <i class="bi bi-box-arrow-in-right me-2"></i> Ingresar al Sistema
-            </button>
-        </div>
-
-
-        <!-- ========================================== -->
-        <!-- PANTALLA DE ENTRENAMIENTO IA               -->
-        <!-- ========================================== -->
-        <!-- Oculto por defecto hasta que se verifique el Login -->
-        <div class="admin-card" id="main_admin_card" style="display: none;">
-            <h2><i class="bi bi-cpu-fill me-2"></i>Entrenamiento IA</h2>
-            <div class="subtitle">Sube un documento normativo para crear un nuevo "Cerebro" de evaluación. El archivo JSON resultante debe subirse manualmente a GitHub.</div>
-
-            <div class="mb-4">
-                <label for="tema_id" class="form-label">Identificador del Curso o Tema</label>
-                <input type="text" class="form-control" id="tema_id" placeholder="Ej: res_3280_pym" required>
-                <div class="form-text mt-2" style="font-size: 0.8rem;">Usa minúsculas y guiones bajos (_). Este ID es la llave que conectará a la IA con el tema.</div>
-            </div>
-
-            <div class="mb-4">
-                <label for="estructura_curso" class="form-label">Estructura del Curso (Módulos) <span class="text-muted fw-normal">- Opcional</span></label>
-                <textarea class="form-control" id="estructura_curso" rows="3" placeholder="Ej: Módulo 1: Introducción a la Res 3280, Módulo 2: Primera Infancia, Módulo 3: Vejez..."></textarea>
-                <div class="form-text mt-2" style="font-size: 0.8rem;">Dile a la IA cuáles son los módulos exactos del curso para que sepa dónde matricular al estudiante al final del examen.</div>
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label">Documento Base (PDF)</label>
-                <!-- Zona oculta de input de archivo -->
-                <input type="file" id="pdf_file" accept="application/pdf" style="display: none;">
+        <main id="main-content">
+            <div class="container d-flex justify-content-center w-100">
                 
-                <!-- Zona visual de Drop -->
-                <div class="drop-zone" id="drop_zone" onclick="document.getElementById('pdf_file').click()">
-                    <i class="bi bi-cloud-arrow-up-fill"></i>
-                    <p id="drop_text">Haz clic o arrastra un PDF aquí</p>
-                    <span id="drop_subtext">Solo archivos .pdf (Máx. 10MB)</span>
+                <div id="initial_loader" class="initial-loader text-center">
+                    <div class="spinner-border mb-3" style="color: var(--primary); width: 3.5rem; height: 3.5rem;" role="status"></div>
+                    <h5 class="fw-bold text-muted">Iniciando seguridad...</h5>
+                    <p class="text-muted small">Conectando con la Secretaría de Salud</p>
                 </div>
-            </div>
 
-            <button class="btn-train" id="btn_train" disabled onclick="window.procesarPDF()">
-                <i class="bi bi-magic me-2"></i> Procesar y Descargar Cerebro (JSON)
-            </button>
+                <div class="admin-card text-center" id="login_card" style="max-width: 450px; display: none;">
+                    <div class="login-icon-container"><i class="bi bi-shield-lock-fill"></i></div>
+                    <h2>Acceso Restringido</h2>
+                    <div class="subtitle">Portal exclusivo para el Curador de Inteligencia Analítica.</div>
 
-            <!-- Consola de salida -->
-            <div class="status-console" id="status_console"></div>
+                    <div class="mb-3 text-start">
+                        <label for="admin_email" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="admin_email" placeholder="admin@secretariasalud.gov.co" autocomplete="email">
+                    </div>
 
-            <!-- Lista de IDs previos (Memoria Local) -->
-            <div class="id-list-container" id="id_list_container">
-                <div class="id-list-title">
-                    <i class="bi bi-tags-fill text-primary"></i> Temas generados previamente en este equipo:
+                    <div class="mb-4 text-start">
+                        <label for="admin_password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control text-center tracking-widest" id="admin_password" placeholder="••••••••••" autocomplete="current-password">
+                        <div id="login_error" class="text-danger mt-2 text-center" style="display: none; font-size: 0.85rem; font-weight: 600;">
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i> Credenciales incorrectas. Verifica tu acceso.
+                        </div>
+                    </div>
+
+                    <button class="btn-train" id="btn_login_submit" onclick="window.verificarAcceso()">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Ingresar al Sistema
+                    </button>
                 </div>
-                <div class="id-chips" id="id_chips">
-                    <!-- Los chips se insertan aquí vía JS -->
-                </div>
-                <div class="form-text mt-2" style="font-size: 0.75rem;">Haz clic en un ID para reutilizarlo si vas a subir una actualización del mismo tema.</div>
-            </div>
 
-            <div class="mt-4 text-center">
-                <button class="btn btn-link text-muted text-decoration-none" onclick="window.cerrarSesion()" style="font-size: 0.85rem;">
-                    <i class="bi bi-box-arrow-left me-1"></i> Cerrar sesión
-                </button>
+                <div class="admin-card" id="main_admin_card" style="display: none;">
+                    <h2><i class="bi bi-cpu-fill me-2"></i>Entrenamiento IA</h2>
+                    <div class="subtitle">Sube un documento normativo para crear un nuevo "Cerebro" de evaluación. El archivo JSON resultante debe subirse manualmente a GitHub.</div>
+
+                    <div class="mb-4">
+                        <label for="tema_id" class="form-label">Identificador del Curso o Tema</label>
+                        <input type="text" class="form-control" id="tema_id" placeholder="Ej: res_3280_pym" required>
+                        <div class="form-text mt-2" style="font-size: 0.8rem;">Usa minúsculas y guiones bajos (_). Este ID es la llave que conectará a la IA con el tema.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="estructura_curso" class="form-label">Estructura del Curso (Módulos) <span class="text-muted fw-normal">- Opcional</span></label>
+                        <textarea class="form-control" id="estructura_curso" rows="3" placeholder="Ej: Módulo 1: Introducción a la Res 3280, Módulo 2: Primera Infancia, Módulo 3: Vejez..."></textarea>
+                        <div class="form-text mt-2" style="font-size: 0.8rem;">Dile a la IA cuáles son los módulos exactos del curso para que sepa dónde matricular al estudiante al final del examen.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Documento Base (PDF)</label>
+                        <input type="file" id="pdf_file" accept="application/pdf" style="display: none;">
+                        
+                        <div class="drop-zone" id="drop_zone" onclick="document.getElementById('pdf_file').click()">
+                            <i class="bi bi-cloud-arrow-up-fill"></i>
+                            <p id="drop_text">Haz clic o arrastra un PDF aquí</p>
+                            <span id="drop_subtext">Solo archivos .pdf (Máx. 10MB)</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-train" id="btn_train" disabled onclick="window.procesarPDF()">
+                        <i class="bi bi-magic me-2"></i> Procesar y Descargar Cerebro (JSON)
+                    </button>
+
+                    <div class="status-console" id="status_console"></div>
+
+                    <div class="id-list-container" id="id_list_container">
+                        <div class="id-list-title"><i class="bi bi-tags-fill text-primary"></i> Temas generados previamente en este equipo:</div>
+                        <div class="id-chips" id="id_chips"></div>
+                        <div class="form-text mt-2" style="font-size: 0.75rem;">Haz clic en un ID para reutilizarlo si vas a subir una actualización del mismo tema.</div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button class="btn btn-link text-muted text-decoration-none" onclick="window.cerrarSesion()" style="font-size: 0.85rem;">
+                            <i class="bi bi-box-arrow-left me-1"></i> Cerrar sesión
+                        </button>
+                    </div>
+                </div>
+
             </div>
-        </div>
+        </main>
     </div>
 
-    <!-- Convertimos el script en módulo para usar la versión moderna de Firebase -->
+    <script>
+        function toggleMobileMenu() { document.getElementById('sidebar').classList.toggle('mobile-open'); }
+        
+        function cambiarTema(tema) {
+            document.documentElement.setAttribute('data-theme', tema); localStorage.setItem('temaDashboard', tema);
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll(`.theme-btn[data-theme-btn="${tema}"]`).forEach(b => b.classList.add('active'));
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            let temaGuardado = localStorage.getItem('temaDashboard') || 'light';
+            cambiarTema(temaGuardado);
+        });
+    </script>
+
     <script type="module">
-        // 1. IMPORTACIONES OFICIALES DE FIREBASE (Actualizado a v12.14.0)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
-        // ====================================================================
-        // 🔥 TRUCO ANTI-ESCÁNER DE GITHUB: Partimos la llave en dos
-        // ====================================================================
         const fbKeyP1 = "AIzaSyBYtrXh9H";
         const fbKeyP2 = "6vixROM4PLk0ACK_gqQZjgLVU";
         
@@ -347,24 +310,16 @@
             messagingSenderId: "562525969759",
             appId: "1:562525969759:web:c59dc5c99818057b466aea"
         };
-        // ====================================================================
 
-        // Inicializamos Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // FORZAR CIERRE DE SESIÓN AL CARGAR LA PÁGINA (Asegurando que pida contraseña siempre)
         signOut(auth).then(() => {
             document.getElementById('initial_loader').style.display = 'none';
             document.getElementById('login_card').style.display = 'block';
             document.getElementById('main_admin_card').style.display = 'none';
-        }).catch((error) => {
-            console.error("Error al cerrar sesión previa:", error);
-        });
+        }).catch((error) => console.error("Error al cerrar sesión previa:", error));
 
-        // ==========================================
-        // LÓGICA DE LOGIN CON BASE DE DATOS REAL
-        // ==========================================
         window.verificarAcceso = async () => {
             const emailVal = document.getElementById('admin_email').value.trim();
             const passVal = document.getElementById('admin_password').value.trim();
@@ -372,32 +327,22 @@
             const btnLogin = document.getElementById('btn_login_submit');
             
             if(!emailVal || !passVal) {
-                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Por favor ingresa tu correo y contraseña.';
-                errorDiv.style.display = 'block';
-                return;
+                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Ingresa tu correo y contraseña.';
+                errorDiv.style.display = 'block'; return;
             }
 
             btnLogin.disabled = true;
-            btnLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Autenticando...';
+            btnLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Autenticando...';
 
             try {
-                // CONEXIÓN REAL A TU FIREBASE
                 await signInWithEmailAndPassword(auth, emailVal, passVal);
-
-                // Solo si las credenciales son válidas, pasamos al panel
                 document.getElementById('admin_password').value = '';
                 errorDiv.style.display = 'none';
-                
                 document.getElementById('login_card').style.display = 'none';
                 document.getElementById('main_admin_card').style.display = 'block';
-
             } catch (error) {
-                console.error("Error devuelto por Firebase:", error.message);
-                // Login fallido 
-                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Credenciales incorrectas. Verifica tu acceso.';
+                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Credenciales incorrectas.';
                 errorDiv.style.display = 'block';
-                
-                // Efecto de rebote de error
                 const loginCard = document.getElementById('login_card');
                 loginCard.style.transform = 'translateX(-10px)';
                 setTimeout(() => loginCard.style.transform = 'translateX(10px)', 100);
@@ -413,28 +358,12 @@
             await signOut(auth);
             document.getElementById('main_admin_card').style.display = 'none';
             document.getElementById('login_card').style.display = 'block';
-            document.getElementById('admin_email').value = '';
-            document.getElementById('admin_password').value = '';
+            document.getElementById('admin_email').value = ''; document.getElementById('admin_password').value = '';
         };
 
-        // Permitir usar la tecla Enter en los inputs de login
-        document.getElementById('admin_password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                window.verificarAcceso();
-            }
-        });
-        document.getElementById('admin_email').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                window.verificarAcceso();
-            }
-        });
+        document.getElementById('admin_password').addEventListener('keypress', e => { if (e.key === 'Enter') { e.preventDefault(); window.verificarAcceso(); } });
+        document.getElementById('admin_email').addEventListener('keypress', e => { if (e.key === 'Enter') { e.preventDefault(); window.verificarAcceso(); } });
 
-        // ==========================================
-        // LÓGICA DE PROCESAMIENTO PDF
-        // ==========================================
-        
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         const dropZone = document.getElementById('drop_zone');
@@ -447,26 +376,13 @@
         const idChipsContainer = document.getElementById('id_chips');
 
         let archivoSeleccionado = null;
-
         cargarIDsGuardados();
 
-        temaInput.addEventListener('input', function(e) {
-            let val = e.target.value;
-            val = val.toLowerCase().replace(/[^a-z0-9_]/g, '_');
-            e.target.value = val;
-            validarFormulario();
-        });
-
-        // Manejo drag and drop
-        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        temaInput.addEventListener('input', e => { e.target.value = e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '_'); validarFormulario(); });
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
         dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault(); dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length) { fileInput.files = e.dataTransfer.files; manejarArchivo(e.dataTransfer.files[0]); }
-        });
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) manejarArchivo(e.target.files[0]);
-        });
+        dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); if (e.dataTransfer.files.length) { fileInput.files = e.dataTransfer.files; manejarArchivo(e.dataTransfer.files[0]); } });
+        fileInput.addEventListener('change', e => { if (e.target.files.length) manejarArchivo(e.target.files[0]); });
 
         function manejarArchivo(file) {
             if (file.type !== "application/pdf") { mostrarLog("Error: El archivo debe ser un PDF.", true); return; }
@@ -475,101 +391,67 @@
             validarFormulario();
         }
 
-        function validarFormulario() {
-            if (archivoSeleccionado && temaInput.value.trim().length > 2) btnTrain.disabled = false;
-            else btnTrain.disabled = true;
-        }
+        function validarFormulario() { btnTrain.disabled = !(archivoSeleccionado && temaInput.value.trim().length > 2); }
 
         function mostrarLog(mensaje, esError = false) {
-            consoleLog.style.display = 'block';
-            consoleLog.className = `status-console ${esError ? 'error' : ''}`;
-            consoleLog.innerHTML += `> ${mensaje}<br>`;
-            consoleLog.scrollTop = consoleLog.scrollHeight;
+            consoleLog.style.display = 'block'; consoleLog.className = `status-console ${esError ? 'error' : ''}`;
+            consoleLog.innerHTML += `> ${mensaje}<br>`; consoleLog.scrollTop = consoleLog.scrollHeight;
         }
 
         function guardarID(nuevoId) {
-            let idsGuardados = JSON.parse(localStorage.getItem('tutor_ia_temas')) || [];
-            if (!idsGuardados.includes(nuevoId)) {
-                idsGuardados.push(nuevoId);
-                localStorage.setItem('tutor_ia_temas', JSON.stringify(idsGuardados));
-                cargarIDsGuardados(); 
-            }
+            let ids = JSON.parse(localStorage.getItem('tutor_ia_temas')) || [];
+            if (!ids.includes(nuevoId)) { ids.push(nuevoId); localStorage.setItem('tutor_ia_temas', JSON.stringify(ids)); cargarIDsGuardados(); }
         }
 
         function cargarIDsGuardados() {
-            let idsGuardados = JSON.parse(localStorage.getItem('tutor_ia_temas')) || [];
-            if (idsGuardados.length > 0) {
-                idListContainer.style.display = 'block';
-                idChipsContainer.innerHTML = '';
-                idsGuardados.forEach(id => {
+            let ids = JSON.parse(localStorage.getItem('tutor_ia_temas')) || [];
+            if (ids.length > 0) {
+                idListContainer.style.display = 'block'; idChipsContainer.innerHTML = '';
+                ids.forEach(id => {
                     let chip = document.createElement('div'); chip.className = 'id-chip'; chip.innerText = id;
-                    chip.onclick = () => { temaInput.value = id; validarFormulario(); };
-                    idChipsContainer.appendChild(chip);
+                    chip.onclick = () => { temaInput.value = id; validarFormulario(); }; idChipsContainer.appendChild(chip);
                 });
             }
         }
 
-        // Exponemos la función al entorno global para el onclick del HTML
         window.procesarPDF = async () => {
             const temaId = temaInput.value.trim();
-            btnTrain.disabled = true;
-            btnTrain.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Procesando...';
-            consoleLog.innerHTML = '';
-            
-            mostrarLog(`Iniciando lectura de: ${archivoSeleccionado.name}`);
+            btnTrain.disabled = true; btnTrain.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Procesando...';
+            consoleLog.innerHTML = ''; mostrarLog(`Iniciando lectura de: ${archivoSeleccionado.name}`);
             
             try {
                 const arrayBuffer = await archivoSeleccionado.arrayBuffer();
                 mostrarLog("Cargando motor de lectura PDF.js...");
                 const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                const totalPaginas = pdf.numPages;
-                mostrarLog(`PDF cargado exitosamente. Total páginas: ${totalPaginas}`);
+                const totalPaginas = pdf.numPages; mostrarLog(`PDF cargado exitosamente. Total páginas: ${totalPaginas}`);
                 
                 let textoExtraido = "";
                 for (let i = 1; i <= totalPaginas; i++) {
                     mostrarLog(`Analizando página ${i} de ${totalPaginas}...`);
-                    const pagina = await pdf.getPage(i);
-                    const contenido = await pagina.getTextContent();
-                    const textoPagina = contenido.items.map(item => item.str).join(' ');
-                    textoExtraido += textoPagina + "\n\n";
+                    const pagina = await pdf.getPage(i); const contenido = await pagina.getTextContent();
+                    textoExtraido += contenido.items.map(item => item.str).join(' ') + "\n\n";
                 }
 
-                mostrarLog("Extracción de texto completada. Limpiando caracteres ocultos...");
-                const textoLimpio = textoExtraido.replace(/\s+/g, ' ').trim();
-                
-                const estructuraMapeada = document.getElementById('estructura_curso').value.trim();
-
+                mostrarLog("Extracción de texto completada. Limpiando...");
                 const conocimientoIA = {
-                    id_tema: temaId,
-                    fecha_creacion: new Date().toISOString(),
-                    origen_archivo: archivoSeleccionado.name,
-                    estructura_curso: estructuraMapeada,
-                    contexto_base: textoLimpio
+                    id_tema: temaId, fecha_creacion: new Date().toISOString(), origen_archivo: archivoSeleccionado.name,
+                    estructura_curso: document.getElementById('estructura_curso').value.trim(), contexto_base: textoExtraido.replace(/\s+/g, ' ').trim()
                 };
 
-                mostrarLog("Empaquetando cerebro (JSON) completado.");
-                descargarArchivoJSON(conocimientoIA, `conocimiento_${temaId}.json`);
-                guardarID(temaId);
-
-                mostrarLog("¡PROCESO EXITOSO! Sube el archivo .json descargado a tu repositorio en GitHub.");
+                descargarArchivoJSON(conocimientoIA, `conocimiento_${temaId}.json`); guardarID(temaId);
+                mostrarLog("¡PROCESO EXITOSO! Sube el archivo .json a tu repositorio.");
                 btnTrain.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i> Completado (Descargado)';
                 btnTrain.classList.replace('btn-train', 'btn-success');
             } catch (error) {
-                console.error(error);
-                mostrarLog(`ERROR FATAL: No se pudo procesar el PDF. ${error.message}`, true);
-                btnTrain.innerHTML = '<i class="bi bi-magic me-2"></i> Procesar y Descargar Cerebro (JSON)';
-                btnTrain.disabled = false;
+                mostrarLog(`ERROR FATAL: ${error.message}`, true);
+                btnTrain.innerHTML = '<i class="bi bi-magic me-2"></i> Procesar y Descargar Cerebro (JSON)'; btnTrain.disabled = false;
             }
         };
 
         function descargarArchivoJSON(objeto, nombreArchivo) {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(objeto));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", nombreArchivo);
-            document.body.appendChild(downloadAnchorNode); 
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
+            const a = document.createElement('a'); a.setAttribute("href", dataStr); a.setAttribute("download", nombreArchivo);
+            document.body.appendChild(a); a.click(); a.remove();
         }
     </script>
 </body>
