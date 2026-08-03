@@ -100,7 +100,7 @@
             position: relative; max-width: calc(100vw - 80px); overflow-x: hidden;
         }
 
-        .view-section { display: none; padding: 30px 40px; opacity: 0; transition: opacity 0.3s ease; width: 100%; box-sizing: border-box;}
+        .view-section { display: none; padding: 0; opacity: 0; transition: opacity 0.3s ease; width: 100%; box-sizing: border-box;}
         .view-section.active-view { display: block; opacity: 1; }
 
         #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 990; align-items: center; justify-content: space-between;}
@@ -109,11 +109,10 @@
         .glass-card { 
             background: var(--card-bg); border-radius: 20px; box-shadow: var(--card-shadow); padding: 24px; height: 100%; 
             border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); 
-            will-change: transform; transform: translateZ(0); transition: transform 0.2s ease, border-color 0.2s ease;
+            will-change: transform, opacity; transform: translateZ(0); transition: transform 0.2s ease, border-color 0.2s ease;
         }
-        .glass-card:hover { transform: translateY(-3px); }
+        .glass-card:hover { transform: translateY(-3px) translateZ(0); }
 
-        /* VIEW: HOME */
         .home-header { margin-bottom: 40px; text-align: center; }
         .home-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 8px;}
         .home-subtitle { color: var(--text-muted); font-size: 1.05rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
@@ -188,7 +187,6 @@
             #main-content { margin-left: 0; max-width: 100vw; }
             #mobile-top-bar { display: flex; }
             .nav-text, .sidebar-brand span, .theme-grid { opacity: 1; }
-            .view-section { padding: 20px 15px; }
         }
     </style>
 </head>
@@ -235,10 +233,12 @@
 
         <main id="main-content">
             
+            <!-- VISTA: INICIO -->
             <section id="home_view" class="view-section active-view">
-                <div class="container-fluid p-0">
-                    <div class="home-header">
-                        <img src="Recurso.png" alt="Logo Institucional" style="max-height: 100px; object-fit: contain; margin-bottom: 20px;">
+                <!-- Se agregó padding para evitar desbordes -->
+                <div class="container-fluid px-4 py-4">
+                    <div class="home-header pt-4">
+                        <img src="Recurso.png" alt="Logo Institucional" style="max-height: 140px; object-fit: contain; margin-bottom: 25px;">
                         <h1 class="home-title">Ecosistema Educativo en Salud</h1>
                         <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
                     </div>
@@ -317,8 +317,11 @@
                 </div>
             </section>
 
+            <!-- VISTA: DASHBOARD -->
             <section id="dashboard_view" class="view-section">
-                <div class="container-fluid p-0">
+                <!-- Se agregó padding general para evitar que los .row choquen con el sidebar -->
+                <div class="container-fluid px-4 py-4">
+                    
                     <!-- TOP BAR: Selectores Macro -->
                     <div class="dashboard-top-bar">
                         <div class="pill-selectors">
@@ -476,7 +479,6 @@
             if(element) element.classList.add('active');
             if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open');
             
-            // EL DESPERTADOR: Si entramos al dashboard, redimensionamos los gráficos que estaban en 0x0
             if(viewId === 'dashboard_view') {
                 setTimeout(() => {
                     if(mapInstance) mapInstance.invalidateSize();
@@ -540,15 +542,35 @@
         }
         window.limpiarFiltros = function() { if(!cursoActual) return; ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
 
-        function inicializarMapa() { if (mapInstance) return; mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO', maxZoom: 20 }).addTo(mapInstance); }
+        function inicializarMapa() { 
+            if (mapInstance) return; 
+            mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); 
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO', maxZoom: 20 }).addTo(mapInstance); 
+        }
         function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
         
         function dibujarMapaCoropletico(dataComunas) { 
             if (!mapInstance || !geoJsonDataRaw) return; 
-            let mapNorm = {}; let maxP = 0; for (let n in dataComunas) { let id = (n||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?n.trim():String(parseInt(id,10)); mapNorm[id] = (mapNorm[id]||0)+(dataComunas[n]||0); if(mapNorm[id]>maxP && !isNaN(id)) maxP=mapNorm[id]; } 
+            let mapNorm = {}; let maxP = 0; 
+            for (let n in dataComunas) { 
+                let id = String(n||"N/A").replace(/\D/g, ''); 
+                id = isNaN(parseInt(id,10)) ? String(n).trim() : String(parseInt(id,10)); 
+                mapNorm[id] = (mapNorm[id]||0) + (dataComunas[n]||0); 
+                if(mapNorm[id] > maxP && !isNaN(id)) maxP = mapNorm[id]; 
+            } 
             if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
-            geoJsonLayer = L.geoJSON(geoJsonDataRaw, { style: (f) => { let id = (f.properties.comuna||f.properties.nombre||f.properties.id).replace(/\D/g, ''); id = isNaN(parseInt(id,10))?f.properties.comuna:String(parseInt(id,10)); let p = mapNorm[id]||0; return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p>0?0.85:0.1 }; } }).addTo(mapInstance); 
-            mapInstance.invalidateSize();
+            
+            geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
+                style: (f) => { 
+                    // CORRECCIÓN CRÍTICA DE PROPIEDADES INDEFINIDAS
+                    let propComuna = f.properties.comuna || f.properties.COMUNA || f.properties.nombre || f.properties.id || "N/A";
+                    let id = String(propComuna).replace(/\D/g, ''); 
+                    id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
+                    let p = mapNorm[id]||0; 
+                    return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p>0?0.85:0.1 }; 
+                } 
+            }).addTo(mapInstance); 
+            setTimeout(() => mapInstance.invalidateSize(), 200);
         }
 
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
@@ -557,13 +579,13 @@
             else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'doughnut', data: { labels: labels, datasets: [{ data: datos, backgroundColor: cols, borderWidth: 0, hoverOffset: 4 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 10, family: 'Inter' } } } }, animation: false } }); }
         }
         function dibujarGraficoComunas(canvasId, dataObject) { 
-            let ag = {}; for (let k in dataObject) { let id = (k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?k.trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
+            let ag = {}; for (let k in dataObject) { let id = String(k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?String(k).trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
             let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
             if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); } 
             else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false } }); }
         }
         function dibujarBarraMoodle(canvasId, c) { 
-            let d = [c['Tasa_Finalizacion_%'], c['Tasa_Abandono_%'], c['Tasa_Inactividad_%']];
+            let d = [c['Tasa_Finalizacion_%']||0, c['Tasa_Abandono_%']||0, c['Tasa_Inactividad_%']||0];
             if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data=[d[0]]; chartInstances[canvasId].data.datasets[1].data=[d[1]]; chartInstances[canvasId].data.datasets[2].data=[d[2]]; chartInstances[canvasId].update('none'); } 
             else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#ffb547' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: false } }); }
         }
@@ -601,7 +623,12 @@
             if (añoActual==="ALL") { dG = dashboardData.demografia_global; tE = dashboardData.metadata.total_encuestas_historicas; dashboardData.cursos.forEach(c => tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100)); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; dashboardData.cursos.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; } 
             else { cF.forEach(c => { tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); tE+=(c.Total_Encuestas||0); chsS+=(c.Salud_Curso_CHS||0); if(c.Demografia){ for(let k in c.Demografia.Sexo) dG.Sexo[k]=(dG.Sexo[k]||0)+c.Demografia.Sexo[k]; let kE=c.Demografia.Edad?'Edad':'Curso de Vida'; for(let k in c.Demografia[kE]) dG['Curso de Vida'][k]=(dG['Curso de Vida'][k]||0)+c.Demografia[kE][k]; for(let k in c.Demografia.Perfil) dG.Perfil[k]=(dG.Perfil[k]||0)+c.Demografia.Perfil[k]; for(let k in c.Demografia.Comuna) dG.Comuna[k]=(dG.Comuna[k]||0)+c.Demografia.Comuna[k]; for(let k in c.Demografia.Escolaridad) dG.Escolaridad[k]=(dG.Escolaridad[k]||0)+c.Demografia.Escolaridad[k]; } if(c.Total_Encuestas>0){let p=Math.round((c.e_NPS+100)/2); npsP+=(p*c.Total_Encuestas)/100; npsD+=((100-p)*c.Total_Encuestas)/100;} }); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; cF.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; }
             document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Activos", tC, null, "bi-journal-bookmark", "primary")} ${crearTarjetaKPI("Matrículas", tI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", tCert.toLocaleString(), tI?Math.round((tCert/tI)*100)+"%":"0%", "bi-check-circle", "success")} ${crearTarjetaKPI("Encuestas", tE.toLocaleString(), null, "bi-ui-radios", "warning")} ${crearTarjetaKPI("CHS", añoActual==="ALL"?dashboardData.kpis_globales.chs_promedio_secretaria:(tC?(chsS/tC).toFixed(1):0), null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", añoActual==="ALL"?dashboardData.kpis_globales.nps_global:(tE?Math.round(((npsP-npsD)/tE)*100):0), null, "bi-emoji-smile", "primary")}`; 
-            dibujarGraficoDona('chartSexo', dG['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dG['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dG['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dG['Escolaridad'], 'right'); dibujarMapaCoropletico(dG['Comuna']); dibujarGraficoComunas('chartComunas', dG['Comuna']); 
+            
+            dibujarGraficoDona('chartSexo', dG['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dG['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dG['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dG['Escolaridad'], 'right'); 
+            // Dibujar Mapa
+            dibujarMapaCoropletico(dG['Comuna']); 
+            dibujarGraficoComunas('chartComunas', dG['Comuna']); 
+            
             let tF=0, tA=0, tIn=0, sD=0, cD=0; cF.forEach(c => { let i = c.Total_Inscritos||0; tF+=(c['Tasa_Finalizacion_%']/100)*i; tA+=(c['Tasa_Abandono_%']/100)*i; tIn+=(c['Tasa_Inactividad_%']/100)*i; if (c.Tiempo_Promedio_Dias) { sD+=c.Tiempo_Promedio_Dias; cD++; } }); 
             let pF=tI?Math.round((tF/tI)*100):0; let pA=tI?Math.round((tA/tI)*100):0; let pI=tI?Math.round((tIn/tI)*100):0; 
             document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI+"%", null, "bi-door-closed", "danger")}`; 
@@ -621,35 +648,54 @@
         document.addEventListener("DOMContentLoaded", async () => {
             cambiarTema(localStorage.getItem('temaDashboard') || 'light');
             
-            // DESPERTADOR EXTRA para Pestañas:
-            document.querySelectorAll('.tab-clean').forEach(t => { 
-                t.addEventListener('click', function() { 
-                    if(this.classList.contains('locked')) return; 
-                    document.querySelectorAll('.tab-clean').forEach(b=>b.classList.remove('active')); 
-                    this.classList.add('active'); 
-                    setTimeout(() => {
-                        for (let id in chartInstances) {
-                            if (chartInstances[id]) chartInstances[id].resize();
-                        }
-                    }, 50);
-                }); 
+            // EL DESPERTADOR: Redimensionar gráficos al cambiar de pestaña
+            const triggerTabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
+            triggerTabList.forEach(triggerEl => {
+              triggerEl.addEventListener('shown.bs.tab', event => {
+                for (let id in chartInstances) {
+                    if (chartInstances[id]) chartInstances[id].resize();
+                }
+                if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) {
+                    setTimeout(() => mapInstance.invalidateSize(), 50);
+                }
+              });
             });
 
             proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
             
+            // Carga Datos Principales
             try { 
-                const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); dashboardData = await res.json(); 
-                const gRes = await fetch('mc_comunas.json'); let gd = await gRes.json(); 
-                gd.features.forEach(f=>{if(f.geometry&&f.geometry.coordinates){if(f.geometry.type==="Polygon")f.geometry.coordinates=f.geometry.coordinates.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c)));else if(f.geometry.type==="MultiPolygon")f.geometry.coordinates=f.geometry.coordinates.map(p=>p.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c))));}}); geoJsonDataRaw = gd;
-            } catch (e) { console.error("Error cargando datos. Validar entorno.", e); return; }
+                const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); 
+                dashboardData = await res.json(); 
+            } catch (e) { 
+                console.error("No se pudo cargar el archivo dashboard_data.json.", e); 
+                return; 
+            }
+
+            // Carga Mapa (Separado para que si falla no rompa todo el sistema)
+            try {
+                const gRes = await fetch('mc_comunas.json'); 
+                let gd = await gRes.json(); 
+                if(gd && gd.features) {
+                    gd.features.forEach(f=>{if(f.geometry&&f.geometry.coordinates){if(f.geometry.type==="Polygon")f.geometry.coordinates=f.geometry.coordinates.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c)));else if(f.geometry.type==="MultiPolygon")f.geometry.coordinates=f.geometry.coordinates.map(p=>p.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c))));}}); 
+                    geoJsonDataRaw = gd;
+                }
+            } catch (e) {
+                console.warn("No se pudo cargar el mapa geoJSON (mc_comunas.json). Se omitirá el mapa.", e);
+            }
             
-            Chart.defaults.font.family = 'Inter'; inicializarMapa(); agruparCursos(); 
-            document.getElementById('selector-anio').addEventListener('change', manejarCambioAnio); document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase); document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
+            Chart.defaults.font.family = 'Inter'; 
+            inicializarMapa(); 
+            agruparCursos(); 
+            
+            document.getElementById('selector-anio').addEventListener('change', manejarCambioAnio); 
+            document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase); 
+            document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
             
             const tI = dashboardData.cursos.reduce((s, c) => s+(c.Total_Inscritos||0), 0); let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); });
             document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados||0; document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString(); document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
 
-            // ESTA ES LA LÍNEA QUE FALTABA: Cargar la analítica por defecto.
+            // INICIALIZACIÓN
             actualizarPantallaGlobal();
         });
     </script>
