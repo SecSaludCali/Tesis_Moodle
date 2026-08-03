@@ -4,39 +4,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tutor IA - Secretaría de Salud</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root[data-theme="light"] {
-            --bg-color: #f4f7fe; --card-bg: rgba(255, 255, 255, 0.7); --text-main: #1e293b; --text-muted: #64748b;
-            --primary: #4318ff; --success: #05cd99; --danger: #ee5d50; --warning: #ffb547;
-            --border-light: rgba(255, 255, 255, 0.8); --border-color: rgba(255, 255, 255, 0.5);
-            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08); --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%);
-            --chat-user-text: #ffffff; --chat-bot-bg: rgba(255, 255, 255, 0.9); --chat-bot-text: #1e293b; --chat-bot-border: rgba(67, 24, 255, 0.1);
+            --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #1e293b; --text-muted: #64748b; --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5);
+            --card-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.05);
+            --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); --chat-user-text: #ffffff; 
+            --chat-bot-bg: rgba(255, 255, 255, 0.9); --chat-bot-text: #1e293b; --chat-bot-border: rgba(67, 24, 255, 0.1);
+            --blob-1: rgba(67, 24, 255, 0.1); --blob-2: rgba(5, 205, 153, 0.1);
         }
-        body { background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; margin: 0; }
-        body::before, body::after { content: ''; position: fixed; border-radius: 50%; z-index: -1; animation: float 15s infinite alternate ease-in-out; will-change: transform; pointer-events: none; }
-        body::before { width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(67, 24, 255, 0.12) 0%, transparent 70%); top: -15%; left: -15%; }
-        body::after { width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(5, 205, 153, 0.12) 0%, transparent 70%); bottom: -15%; right: -5%; animation-delay: -5s; }
-        @keyframes float { 0% { transform: translate3d(0, 0, 0) scale(1); } 100% { transform: translate3d(6vw, 6vh, 0) scale(1.1); } }
+
+        :root[data-theme="dark"] {
+            --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.95); --card-bg: rgba(17, 28, 68, 0.85); 
+            --text-main: #f8fafc; --text-muted: #a3aed1; --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50;
+            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08);
+            --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
+            --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #9378ff 100%); --chat-user-text: #ffffff; 
+            --chat-bot-bg: rgba(17, 28, 68, 0.9); --chat-bot-text: #f8fafc; --chat-bot-border: rgba(255, 255, 255, 0.1);
+            --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1);
+        }
+
+        :root[data-theme="rose"] {
+            --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #4c0519; --text-muted: #9f1239; --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15);
+            --card-shadow: 0 4px 20px 0 rgba(225, 29, 72, 0.05);
+            --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #f43f5e 100%); --chat-user-text: #ffffff; 
+            --chat-bot-bg: rgba(255, 255, 255, 0.9); --chat-bot-text: #4c0519; --chat-bot-border: rgba(225, 29, 72, 0.15);
+            --blob-1: rgba(225, 29, 72, 0.1); --blob-2: rgba(244, 63, 94, 0.1);
+        }
+
+        :root[data-theme="amber"] {
+            --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #451a03; --text-muted: #92400e; --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15);
+            --card-shadow: 0 4px 20px 0 rgba(217, 119, 6, 0.05);
+            --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #f59e0b 100%); --chat-user-text: #ffffff; 
+            --chat-bot-bg: rgba(255, 255, 255, 0.9); --chat-bot-text: #451a03; --chat-bot-border: rgba(217, 119, 6, 0.15);
+            --blob-1: rgba(217, 119, 6, 0.1); --blob-2: rgba(245, 158, 11, 0.1);
+        }
+
+        body { 
+            background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); 
+            margin: 0; padding: 0; overflow-x: hidden; height: 100vh; display: flex; flex-direction: column;
+        }
+
+        body::before, body::after { 
+            content: ''; position: fixed; border-radius: 50%; z-index: -2; pointer-events: none; 
+            will-change: transform; transform: translateZ(0); filter: blur(60px);
+        }
+        body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
+        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; }
+
+        #app-layout { display: flex; height: 100vh; width: 100%; overflow: hidden; }
         
-        #selector_pantalla { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(244, 247, 254, 0.5); overflow-y: auto; padding: 20px;}
-        .selector-card { background: var(--card-bg); border-radius: 28px; box-shadow: var(--card-shadow); padding: 40px; width: 100%; max-width: 500px; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); border-left: 1px solid var(--border-light); text-align: center; animation: fadeIn 0.5s ease-out; margin: auto;}
+        #sidebar {
+            width: 80px; min-height: 100vh; background: var(--sidebar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding: 24px 0;
+            position: relative; z-index: 1000; transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 4px 0 15px rgba(0,0,0,0.02); overflow: hidden; white-space: nowrap; flex-shrink: 0;
+        }
+        #sidebar:hover { width: 250px; align-items: flex-start; padding-left: 20px; padding-right: 20px;}
+
+        .sidebar-brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; cursor: pointer; height: 45px;}
+        .sidebar-brand img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0;}
+        .sidebar-brand span { font-weight: 800; font-size: 1.1rem; color: var(--text-main); opacity: 0; transition: opacity 0.2s; }
+        #sidebar:hover .sidebar-brand span { opacity: 1; transition-delay: 0.1s;}
+
+        .nav-item-custom {
+            display: flex; align-items: center; gap: 18px; width: 100%; padding: 12px; border-radius: 12px; margin-bottom: 8px;
+            color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer;
+            transition: all 0.2s ease; border: 1px solid transparent;
+        }
+        .nav-item-custom i { font-size: 1.3rem; flex-shrink: 0; transition: color 0.2s;}
+        .nav-text { opacity: 0; transition: opacity 0.2s; }
+        #sidebar:hover .nav-text { opacity: 1; transition-delay: 0.1s;}
+        
+        .nav-item-custom:hover { background: rgba(67, 24, 255, 0.05); color: var(--primary); }
+        .nav-item-custom.active { background: var(--primary); color: white; border-color: rgba(0,0,0,0.1); box-shadow: 0 4px 10px rgba(67, 24, 255, 0.2); }
+        .nav-item-custom.active i { color: white; }
+
+        .sidebar-footer { margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 15px;}
+        
+        .theme-grid { display: flex; gap: 6px; justify-content: center; width: 100%; opacity: 0; transition: opacity 0.2s;}
+        #sidebar:hover .theme-grid { opacity: 1; transition-delay: 0.1s; }
+        .theme-btn { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: var(--primary); transform: scale(1.1);}
+
+        #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: fixed; top: 0; width: 100%; z-index: 990; align-items: center; justify-content: space-between;}
+        .mobile-toggle { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); }
+
+        #main-content {
+            flex-grow: 1; position: relative; max-width: calc(100vw - 80px); height: 100vh; display: flex; flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            #sidebar { position: fixed; transform: translateX(-100%); width: 250px; padding-left: 20px; align-items: flex-start;}
+            #sidebar.mobile-open { transform: translateX(0); }
+            #main-content { max-width: 100vw; padding-top: 70px; height: calc(100vh - 70px);}
+            #mobile-top-bar { display: flex; }
+            .nav-text, .sidebar-brand span, .theme-grid { opacity: 1; }
+        }
+
+        /* Pantalla Selectora */
+        #selector_pantalla { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 50; overflow-y: auto; padding: 20px;}
+        .selector-card { background: var(--card-bg); border-radius: 28px; box-shadow: var(--card-shadow); padding: 40px; width: 100%; max-width: 500px; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); text-align: center; animation: fadeIn 0.5s ease-out; margin: auto; backdrop-filter: blur(12px);}
         .icon-robot { font-size: 4rem; color: var(--primary); margin-bottom: 10px; display: inline-block; filter: drop-shadow(0 10px 15px rgba(67, 24, 255, 0.3)); }
         
         .form-label-custom { text-align: left; display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; margin-left: 5px; }
-        .form-select-custom { background: rgba(255,255,255,0.8); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px 20px; font-size: 1.05rem; color: var(--text-main); width: 100%; margin-bottom: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); outline: none; transition: all 0.3s; }
-        .form-select-custom:focus { border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); }
+        .form-select-custom { background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px 20px; font-size: 1.05rem; color: var(--text-main); width: 100%; margin-bottom: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); outline: none; transition: all 0.3s; }
+        :root[data-theme="dark"] .form-select-custom { background: rgba(0,0,0,0.2); }
+        .form-select-custom:focus { border-color: var(--primary); background: var(--bg-color); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); }
         
         .btn-start { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; border: none; border-radius: 16px; padding: 16px; width: 100%; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3); margin-top: 10px; }
         .btn-start:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(67, 24, 255, 0.4); color: white; }
         
-        #chat_pantalla { display: none; flex-direction: column; height: 100vh; max-width: 1000px; margin: 0 auto; width: 100%; padding: 20px; }
+        #chat_pantalla { display: none; flex-direction: column; height: 100%; max-width: 1000px; margin: 0 auto; width: 100%; padding: 20px; }
         .chat-header { background: var(--card-bg); border-radius: 24px; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-bottom: 20px; flex-shrink: 0; }
         .badge-tema { background: rgba(67, 24, 255, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; border: 1px solid rgba(67, 24, 255, 0.2); display: flex; align-items: center; }
+        
         .chat-history { flex-grow: 1; background: transparent; overflow-y: auto; padding: 10px 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
         .chat-history::-webkit-scrollbar { width: 6px; } .chat-history::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        :root[data-theme="dark"] .chat-history::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
         
         .msg { max-width: 80%; padding: 18px 24px; border-radius: 24px; font-size: 1.05rem; line-height: 1.6; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; word-wrap: break-word; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -47,7 +143,7 @@
         .chat-input-area { background: var(--card-bg); border-radius: 24px; padding: 15px; display: flex; gap: 15px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-top: 20px; flex-shrink: 0; align-items: center; }
         .chat-input { flex-grow: 1; border: none; background: transparent; padding: 10px 15px; font-size: 1.05rem; color: var(--text-main); outline: none; resize: none; max-height: 120px; min-height: 45px; font-family: 'Inter', sans-serif; }
         .btn-send { background: var(--primary); color: white; border: none; width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
-        .btn-send:hover { transform: scale(1.05); background: #3210cc; }
+        .btn-send:hover { transform: scale(1.05); filter: brightness(1.1); }
         .btn-send:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
         
         .typing { display: flex; gap: 5px; align-items: center; height: 24px;}
@@ -58,78 +154,118 @@
 </head>
 
 <body>
-    <div id="selector_pantalla">
-        <a href="index.html" class="btn btn-light position-absolute top-0 start-0 m-4 rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; z-index: 100; border: 1px solid var(--border-color); background: var(--card-bg); backdrop-filter: blur(10px);" title="Volver al Portal">
-            <i class="bi bi-house-door-fill fs-5" style="color: var(--text-main);"></i>
-        </a>
-        <div class="selector-card">
-            <div class="icon-robot"><i class="bi bi-robot"></i></div>
-            <h3 class="fw-bold mb-1">Evaluador Clínico IA</h3>
-            <p class="text-muted mb-4 small">Por favor ingresa tus datos para validar tu sesión.</p>
-            
-            <div>
-                <label class="form-label-custom">Nombre Completo</label>
-                <input type="text" id="input_nombre" class="form-select-custom" placeholder="Ej: Dra. María López" required>
+    <div id="app-layout">
+        
+        <div id="mobile-top-bar">
+            <div class="sidebar-brand m-0">
+                <img src="Recurso.png" alt="Logo" onerror="this.style.display='none'">
+                <span>Tutor IA</span>
             </div>
-            
-            <div>
-                <label class="form-label-custom">Documento de Identidad</label>
-                <input type="text" id="input_documento" class="form-select-custom" placeholder="Ej: 1144..." required>
-            </div>
-
-            <div>
-                <label class="form-label-custom">ID del Módulo Normativo</label>
-                <input type="text" id="input_tema_id" class="form-select-custom fw-bold text-primary" placeholder="Ej: primera_infancia" required>
-            </div>
-
-            <button class="btn-start" id="btn_iniciar" onclick="iniciarEvaluacion()">
-                <i class="bi bi-play-fill me-1"></i> Iniciar Evaluación
-            </button>
-            <div id="error_carga" class="text-danger mt-3" style="display: none; font-size: 0.9rem; font-weight: 600;"></div>
+            <button class="mobile-toggle" onclick="toggleMobileMenu()"><i class="bi bi-list"></i></button>
         </div>
-    </div>
 
-    <div id="chat_pantalla">
-        <div class="chat-header">
-            <div class="d-flex align-items-center gap-3">
-                <a href="index.html" class="btn btn-light rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 42px; height: 42px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.5);" title="Volver al Portal">
-                    <i class="bi bi-house-door-fill" style="color: var(--text-main);"></i>
-                </a>
-                <div style="background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3);">
-                    <i class="bi bi-robot"></i>
-                </div>
-                <div>
-                    <h5 class="mb-0 fw-bold" style="color: var(--text-main);">Tutor Evaluador</h5>
-                    <div class="text-muted" style="font-size: 0.85rem;" id="estado_ia_badge"><i class="bi bi-circle-fill text-warning" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> Inicializando...</div>
+        <nav id="sidebar">
+            <div class="sidebar-brand">
+                <img src="Recurso.png" alt="Logo" onerror="this.style.display='none'">
+                <span>Alcaldía de Cali</span>
+            </div>
+            
+            <a href="index.html" class="nav-item-custom">
+                <i class="bi bi-house-door"></i> <span class="nav-text">Inicio / Dashboard</span>
+            </a>
+            <a href="tutor_estudiante.html" class="nav-item-custom active">
+                <i class="bi bi-robot"></i> <span class="nav-text">Tutor Clínico (IA)</span>
+            </a>
+            <a href="admin_conocimiento.html" class="nav-item-custom">
+                <i class="bi bi-shield-lock"></i> <span class="nav-text">Configuración IA</span>
+            </a>
+
+            <div class="sidebar-footer">
+                <div class="theme-grid">
+                    <div class="theme-btn" data-theme-btn="light" style="background:#f4f7fe;" onclick="cambiarTema('light')"></div>
+                    <div class="theme-btn" data-theme-btn="dark" style="background:#0b1437;" onclick="cambiarTema('dark')"></div>
+                    <div class="theme-btn" data-theme-btn="rose" style="background:#fff1f2;" onclick="cambiarTema('rose')"></div>
+                    <div class="theme-btn" data-theme-btn="amber" style="background:#fffbeb;" onclick="cambiarTema('amber')"></div>
                 </div>
             </div>
-            <div class="badge-tema" id="tema_actual_badge">
-                <i class="bi bi-journal-medical me-1"></i> Tema
+        </nav>
+
+        <main id="main-content">
+            
+            <div id="selector_pantalla">
+                <div class="selector-card">
+                    <div class="icon-robot"><i class="bi bi-robot"></i></div>
+                    <h3 class="fw-bold mb-1">Evaluador Clínico IA</h3>
+                    <p class="text-muted mb-4 small">Por favor ingresa tus datos para validar tu sesión.</p>
+                    
+                    <div>
+                        <label class="form-label-custom">Nombre Completo</label>
+                        <input type="text" id="input_nombre" class="form-select-custom" placeholder="Ej: Dra. María López" required>
+                    </div>
+                    
+                    <div>
+                        <label class="form-label-custom">Documento de Identidad</label>
+                        <input type="text" id="input_documento" class="form-select-custom" placeholder="Ej: 1144..." required>
+                    </div>
+
+                    <div>
+                        <label class="form-label-custom">ID del Módulo Normativo</label>
+                        <input type="text" id="input_tema_id" class="form-select-custom fw-bold text-primary" placeholder="Ej: primera_infancia" required>
+                    </div>
+
+                    <button class="btn-start" id="btn_iniciar" onclick="iniciarEvaluacion()">
+                        <i class="bi bi-play-fill me-1"></i> Iniciar Evaluación
+                    </button>
+                    <div id="error_carga" class="text-danger mt-3" style="display: none; font-size: 0.9rem; font-weight: 600;"></div>
+                </div>
             </div>
-        </div>
-        <div class="chat-history" id="chat_history"></div>
-        <div class="chat-input-area">
-            <textarea id="user_input" class="chat-input" placeholder="Escribe tu respuesta aquí... (Presiona Enter para enviar)" rows="1" oninput="autoResize(this)"></textarea>
-            <button id="btn_send" class="btn-send" onclick="enviarMensaje()">
-                <i class="bi bi-send-fill"></i>
-            </button>
-        </div>
+
+            <div id="chat_pantalla">
+                <div class="chat-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3);">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold" style="color: var(--text-main);">Tutor Evaluador</h5>
+                            <div class="text-muted" style="font-size: 0.85rem;" id="estado_ia_badge"><i class="bi bi-circle-fill text-warning" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> Inicializando...</div>
+                        </div>
+                    </div>
+                    <div class="badge-tema" id="tema_actual_badge">
+                        <i class="bi bi-journal-medical me-1"></i> Tema
+                    </div>
+                </div>
+                
+                <div class="chat-history" id="chat_history"></div>
+                
+                <div class="chat-input-area">
+                    <textarea id="user_input" class="chat-input" placeholder="Escribe tu respuesta aquí... (Presiona Enter para enviar)" rows="1" oninput="autoResize(this)"></textarea>
+                    <button id="btn_send" class="btn-send" onclick="enviarMensaje()">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ==========================================
-        // CONFIGURACIÓN DE IA Y TRACKING
-        // ==========================================
+        function toggleMobileMenu() { document.getElementById('sidebar').classList.toggle('mobile-open'); }
+        
+        function cambiarTema(tema) {
+            document.documentElement.setAttribute('data-theme', tema); localStorage.setItem('temaDashboard', tema);
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll(`.theme-btn[data-theme-btn="${tema}"]`).forEach(b => b.classList.add('active'));
+        }
+    </script>
+
+    <script>
         const geminiP1 = "AQ.Ab8RN6J4z7vC_nc1FxB8wCj-"; 
         const geminiP2 = "njBsmweooxoYrXgrjiDrWa8HXA"; 
         let apiKey = geminiP1.trim() + geminiP2.trim();
         let isSimulacion = false;
         const host = window.location.hostname;
         
-        // URL DE GOOGLE SHEETS PARA RASTREAR A LOS ESTUDIANTES
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwP9pw4qRSSS0GerUghj0-vtCx2TVqRW8hehMSAzDddEC8c9YNgm-wfAYFrv8Eo57Z5/exec';
-        
         let datosEstudiante = { nombre: '', documento: '', tema: '' };
 
         if (host.includes("googleusercontent.com") || host === "") { apiKey = ""; } 
@@ -139,6 +275,9 @@
         let systemPromptBase = "";
         
         document.addEventListener('DOMContentLoaded', () => {
+            let temaGuardado = localStorage.getItem('temaDashboard') || 'light';
+            cambiarTema(temaGuardado);
+
             const userInput = document.getElementById('user_input');
             if (userInput) {
                 userInput.addEventListener('keypress', function (e) {
@@ -171,14 +310,12 @@
             const btnIniciar = document.getElementById('btn_iniciar');
             const errorCarga = document.getElementById('error_carga');
             
-            // VALIDACIÓN DEL FORMULARIO Y TRACKING
             datosEstudiante.nombre = inputNombre ? inputNombre.value.trim() : "";
             datosEstudiante.documento = inputDocumento ? inputDocumento.value.trim() : "";
             datosEstudiante.tema = inputTemaId ? inputTemaId.value.trim() : "";
 
             if (!datosEstudiante.nombre || !datosEstudiante.documento || !datosEstudiante.tema) { 
-                mostrarError("Por favor, completa todos los campos (Nombre, Documento e ID)."); 
-                return; 
+                mostrarError("Por favor, completa todos los campos."); return; 
             }
 
             if (btnIniciar) { btnIniciar.disabled = true; btnIniciar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Analizando...'; }
@@ -186,42 +323,30 @@
 
             try {
                 const urlJson = `./conocimiento_ia/conocimiento_${datosEstudiante.tema}.json`;
-                let contextoExtraido = "";
-                let estructuraCurso = "";
+                let contextoExtraido = ""; let estructuraCurso = "";
 
                 try {
                     const response = await fetch(urlJson);
                     if (!response.ok) throw new Error("Archivo no encontrado");
                     const data = await response.json();
                     let textoCompleto = data.contexto_base || "";
-                    
-                    // CRITICAL FIX: REDUCED PAYLOAD TO PREVENT 429 ERRORS ON PREVIEW MODELS
-                    // We send only the first 15,000 characters to ensure we stay well below token limits for this presentation
-                    contextoExtraido = textoCompleto.length > 15000 ? textoCompleto.substring(0, 15000) + "... [Texto truncado por seguridad de demostración]" : textoCompleto;
-                    
-                    estructuraCurso = data.estructura_curso || "La estructura del curso se basa en los capítulos principales del documento normativo.";
+                    contextoExtraido = textoCompleto.length > 15000 ? textoCompleto.substring(0, 15000) + "... [Texto truncado]" : textoCompleto;
+                    estructuraCurso = data.estructura_curso || "Módulos principales del documento normativo.";
                 } catch (fetchError) {
                     if (!isSimulacion) throw new Error(`El tema '${datosEstudiante.tema}' no existe.`);
-                    contextoExtraido = "DOCUMENTO DE EJEMPLO GENÉRICO. Capítulo 1, Capítulo 2, Capítulo 3.";
-                    estructuraCurso = "Módulo 1, Módulo 2 y Módulo 3.";
+                    contextoExtraido = "DOCUMENTO GENÉRICO. Capítulo 1, Capítulo 2."; estructuraCurso = "Módulo 1, Módulo 2.";
                 }
 
                 systemPromptBase = `
                     Eres un Tutor y Evaluador Clínico Inteligente de la Secretaría de Salud. Tu objetivo es evaluar el nivel real del estudiante mediante un diálogo socrático y determinar a qué módulos del curso debe inscribirse.
-
-                    CONOCIMIENTO BASE (Normativa/Documento): 
-                    ${contextoExtraido}
-
-                    ESTRUCTURA DEL CURSO (Módulos a recomendar):
-                    ${estructuraCurso}
-
-                    REGLAS ESTRICTAS DE INTERACCIÓN:
-                    1. INICIO: Preséntate llamándolo por su nombre ("${datosEstudiante.nombre.split(' ')[0]}"), dile que evaluarás su conocimiento para armar su ruta de estudio y haz tu primera pregunta práctica basada en el primer módulo.
-                    2. PREGUNTA A PREGUNTA: Haz SOLO UNA pregunta a la vez. Espera siempre su respuesta.
-                    3. INDAGACIÓN DINÁMICA (Drill-down): Si el estudiante responde de forma incompleta, ambigua o "a medias" (ej. 50% correcto), NO pases al siguiente tema. Hazle una pregunta de seguimiento para descubrir si es falta de conocimiento o simple brevedad al escribir.
-                    4. RETROALIMENTACIÓN: Cuando tengas claro si domina o no un tema, dale una retroalimentación cortés y pasa al siguiente módulo o concepto clave.
-                    5. FINALIZACIÓN: Cuando consideres que tienes un mapa claro de sus conocimientos respecto a la estructura del curso, emite un "DICTAMEN FINAL".
-                    6. DICTAMEN FINAL: Enumera sus fortalezas clínicas y dictamina EXACTAMENTE en qué MÓDULOS de la "ESTRUCTURA DEL CURSO" debe matricularse obligatoriamente para subsanar sus falencias de conocimiento. Despídete.
+                    CONOCIMIENTO BASE: ${contextoExtraido}
+                    ESTRUCTURA DEL CURSO: ${estructuraCurso}
+                    REGLAS:
+                    1. INICIO: Preséntate llamándolo "${datosEstudiante.nombre.split(' ')[0]}" y haz tu primera pregunta.
+                    2. PREGUNTA A PREGUNTA: Haz SOLO UNA pregunta a la vez.
+                    3. INDAGACIÓN: Si responde a medias, no pases al siguiente tema. Haz una pregunta de seguimiento.
+                    4. RETROALIMENTACIÓN: Dale retroalimentación cortés y pasa al siguiente concepto.
+                    5. DICTAMEN FINAL: Enumera sus fortalezas clínicas y dictamina EXACTAMENTE en qué MÓDULOS debe matricularse. Despídete.
                 `;
 
                 verificarModoIa();
@@ -247,13 +372,11 @@
         async function arrancarConversacion() {
             mostrarTyping();
             try {
-                const promptOculto = "Hola. Preséntate con mi nombre, indícame qué temas detectaste y hazme la primera pregunta para iniciar la evaluación.";
+                const promptOculto = "Hola. Preséntate con mi nombre y hazme la primera pregunta para iniciar la evaluación.";
                 const respuesta = await procesarGeminiAPI(promptOculto, true);
-                quitarTyping();
-                agregarMensaje(respuesta, 'bot');
+                quitarTyping(); agregarMensaje(respuesta, 'bot');
             } catch (error) {
-                quitarTyping();
-                agregarMensaje(`❌ <strong>Error:</strong> ${error.message}`, 'bot');
+                quitarTyping(); agregarMensaje(`❌ <strong>Error:</strong> ${error.message}`, 'bot');
             }
         }
 
@@ -265,19 +388,15 @@
             if (!texto) return;
 
             agregarMensaje(texto, 'user');
-            userInput.value = '';
-            userInput.style.height = 'auto';
-            userInput.focus();
+            userInput.value = ''; userInput.style.height = 'auto'; userInput.focus();
             if (btnSend) btnSend.disabled = true;
             mostrarTyping();
 
             try {
                 const respuesta = await procesarGeminiAPI(texto, false);
-                quitarTyping();
-                agregarMensaje(respuesta, 'bot');
+                quitarTyping(); agregarMensaje(respuesta, 'bot');
             } catch (error) {
-                quitarTyping();
-                agregarMensaje(`⚠️ <strong>Error del Sistema:</strong> ${error.message}`, 'bot');
+                quitarTyping(); agregarMensaje(`⚠️ <strong>Error del Sistema:</strong> ${error.message}`, 'bot');
             } finally {
                 if (btnSend) btnSend.disabled = false;
             }
@@ -297,42 +416,31 @@
             const chatHistoryDiv = document.getElementById('chat_history');
             if (!chatHistoryDiv) return;
             const div = document.createElement('div');
-            div.classList.add('msg', 'msg-bot');
-            div.id = 'typing_indicator';
+            div.classList.add('msg', 'msg-bot'); div.id = 'typing_indicator';
             div.innerHTML = `<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
             chatHistoryDiv.appendChild(div);
             chatHistoryDiv.scrollTo({ top: chatHistoryDiv.scrollHeight, behavior: 'smooth' });
         }
 
-        function quitarTyping() {
-            const indicator = document.getElementById('typing_indicator');
-            if (indicator) indicator.remove();
-        }
+        function quitarTyping() { const ind = document.getElementById('typing_indicator'); if (ind) ind.remove(); }
 
         function guardarResultadoEnSheets(dictamen) {
             const formData = new FormData();
-            formData.append('action', 'guardar_evaluacion');
-            formData.append('nombre', datosEstudiante.nombre);
-            formData.append('documento', datosEstudiante.documento);
-            formData.append('tema', datosEstudiante.tema);
+            formData.append('action', 'guardar_evaluacion'); formData.append('nombre', datosEstudiante.nombre);
+            formData.append('documento', datosEstudiante.documento); formData.append('tema', datosEstudiante.tema);
             formData.append('dictamen', dictamen);
-
-            // CORRECCIÓN CORS: Añadimos mode: 'no-cors'
-            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData })
-                .then(res => console.log("✔ Resultado enviado al profesor (modo silencioso)."))
-                .catch(err => console.error("Error al disparar el resultado:", err));
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(err => console.error(err));
         }
 
         async function procesarGeminiAPI(mensajeUsuario, esPrimerMensaje = false) {
             if (isSimulacion) {
                 await new Promise(res => setTimeout(res, 1500)); 
-                if (esPrimerMensaje) return `¡Hola! Soy tu Tutor IA. Para armar tu ruta de aprendizaje, empecemos: ¿Qué harías en el primer paso de atención clínica según la norma? (Puedes escribir 'fin' para probar el envío al profesor).`;
+                if (esPrimerMensaje) return `¡Hola! Soy tu Tutor IA. ¿Qué harías en el primer paso de atención clínica? (Escribe 'fin' para finalizar).`;
                 if (mensajeUsuario.toLowerCase().includes("fin")) {
-                    let textoDictamen = "DICTAMEN FINAL:\nHemos terminado. Detecté vacíos importantes en Examen Físico.\n\nDebes matricularte obligatoriamente en el Módulo 3. ¡Mucho éxito!";
-                    guardarResultadoEnSheets(textoDictamen); 
-                    return textoDictamen;
+                    let txt = "DICTAMEN FINAL:\nHemos terminado. Debes matricularte en el Módulo 3.";
+                    guardarResultadoEnSheets(txt); return txt;
                 }
-                return "Buena respuesta, pero incompleta. ¿Podrías ser más específico sobre la dosis a administrar?";
+                return "Buena respuesta, pero incompleta. ¿Podrías ser más específico?";
             }
 
             if (!esPrimerMensaje) chatHistory.push({ role: "user", parts: [{ text: mensajeUsuario }] });
@@ -342,85 +450,45 @@
                 systemInstruction: { parts: [{ text: systemPromptBase }] }
             };
 
-            // CADENA DE MODELOS CORRECTA PARA JULIO 2026
             const modelosCandidatos = ["gemini-3.5-flash", "gemini-3.1-pro-preview"];
-            let aiText = null;
-            let exito = false;
-            let ultimoError = "";
+            let aiText = null; let exito = false; let ultimoError = "";
 
             for (let i = 0; i < modelosCandidatos.length && !exito; i++) {
-                let modeloActual = modelosCandidatos[i];
-                let intentos = 3; 
-                let esperaMs = 1500; // Tiempo base
-
-                while (intentos > 0 && !exito) {
+                let mod = modelosCandidatos[i]; let int = 3; let esp = 1500;
+                while (int > 0 && !exito) {
                     try {
-                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modeloActual}:generateContent?key=${apiKey}`, {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${mod}:generateContent?key=${apiKey}`, {
                             method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
                         });
-                        
-                        // LÓGICA INTELIGENTE DE ERRORES 
-                        if (!response.ok) {
-                            if (response.status === 429) {
-                                throw new Error("HTTP_429"); // Quota/Rate Limit
-                            }
-                            if (response.status === 404) {
-                                throw new Error("HTTP_404"); // Modelo no encontrado
-                            }
-                            throw new Error(`HTTP ${response.status}`);
+                        if (!res.ok) {
+                            if (res.status === 429) throw new Error("HTTP_429");
+                            if (res.status === 404) throw new Error("HTTP_404");
+                            throw new Error(`HTTP ${res.status}`);
                         }
-                        
-                        const data = await response.json();
+                        const data = await res.json();
                         aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sin respuesta.";
                         exito = true; 
-                        
                     } catch (error) {
-                        ultimoError = error.message;
-                        intentos--;
-                        
-                        if (ultimoError === "HTTP_404") {
-                            console.warn(`[Motor IA] El modelo ${modeloActual} no está disponible (404). Saltando al respaldo...`);
-                            break; 
-                        }
-
-                        // SMART BACKOFF FOR 429
-                        if (ultimoError === "HTTP_429") {
-                            console.warn(`[Motor IA] Límite de Cuota (429) detectado en ${modeloActual}. Pausa extendida...`);
-                            esperaMs = 4000; // Wait 4 seconds to let quota refresh
-                        }
-
-                        if (intentos > 0) {
-                            console.warn(`[Motor IA] Error con ${modeloActual}. Reintentando en ${esperaMs/1000}s...`);
-                            await new Promise(res => setTimeout(res, esperaMs));
-                            esperaMs *= 2; 
-                        } else if (i < modelosCandidatos.length - 1) {
-                            console.warn(`[Motor IA] El modelo ${modeloActual} falló. Activando modelo de respaldo...`);
-                        }
+                        ultimoError = error.message; int--;
+                        if (ultimoError === "HTTP_404") break; 
+                        if (ultimoError === "HTTP_429") esp = 4000;
+                        if (int > 0) { await new Promise(r => setTimeout(r, esp)); esp *= 2; }
                     }
                 }
             }
 
             if (!exito) {
-                if (ultimoError === "HTTP_429") {
-                    throw new Error("Límite de solicitudes de la API alcanzado. El documento normativo supera el límite del modelo de respaldo actual. Por favor, intenta de nuevo en 1 minuto.");
-                } else {
-                    throw new Error(`Los servidores de Google AI están temporalmente saturados. Detalle: ${ultimoError}. Por favor, vuelve a enviar tu mensaje.`);
-                }
+                if (ultimoError === "HTTP_429") throw new Error("Límite de solicitudes alcanzado. Intenta en 1 minuto.");
+                else throw new Error("Servidores saturados. Vuelve a enviar tu mensaje.");
             }
 
             if (esPrimerMensaje) {
-                chatHistory = [
-                    { role: "user", parts: [{ text: "Inicia la evaluación." }] },
-                    { role: "model", parts: [{ text: aiText }] }
-                ];
+                chatHistory = [ { role: "user", parts: [{ text: "Inicia la evaluación." }] }, { role: "model", parts: [{ text: aiText }] } ];
             } else {
                 chatHistory.push({ role: "model", parts: [{ text: aiText }] });
             }
             
-            if (aiText.toUpperCase().includes("DICTAMEN FINAL")) {
-                guardarResultadoEnSheets(aiText);
-            }
-
+            if (aiText.toUpperCase().includes("DICTAMEN FINAL")) guardarResultadoEnSheets(aiText);
             return aiText;
         }
     </script>
