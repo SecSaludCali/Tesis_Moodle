@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecosistema IA - Secretaría de Salud</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,33 +16,33 @@
 
     <style>
         :root[data-theme="light"] {
-            --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.85); --card-bg: rgba(255, 255, 255, 0.8); 
+            --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #1e293b; --text-muted: #64748b; --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.4);
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5);
             --card-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.05);
             --blob-1: rgba(67, 24, 255, 0.1); --blob-2: rgba(5, 205, 153, 0.1);
         }
 
         :root[data-theme="dark"] {
-            --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.9); --card-bg: rgba(17, 28, 68, 0.75); 
+            --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.95); --card-bg: rgba(17, 28, 68, 0.85); 
             --text-main: #f8fafc; --text-muted: #a3aed1; --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.05);
+            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08);
             --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
             --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1);
         }
 
         :root[data-theme="rose"] {
-            --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.85); --card-bg: rgba(255, 255, 255, 0.8); 
+            --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #4c0519; --text-muted: #9f1239; --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.1);
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15);
             --card-shadow: 0 4px 20px 0 rgba(225, 29, 72, 0.05);
             --blob-1: rgba(225, 29, 72, 0.1); --blob-2: rgba(244, 63, 94, 0.1);
         }
 
         :root[data-theme="amber"] {
-            --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.85); --card-bg: rgba(255, 255, 255, 0.8); 
+            --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #451a03; --text-muted: #92400e; --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.1);
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15);
             --card-shadow: 0 4px 20px 0 rgba(217, 119, 6, 0.05);
             --blob-1: rgba(217, 119, 6, 0.1); --blob-2: rgba(245, 158, 11, 0.1);
         }
@@ -51,7 +52,6 @@
             margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh;
         }
 
-        /* HARDWARE ACCELERATED BLOBS */
         body::before, body::after { 
             content: ''; position: fixed; border-radius: 50%; z-index: -2; pointer-events: none; 
             will-change: transform; transform: translateZ(0); filter: blur(60px);
@@ -59,8 +59,7 @@
         body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
         body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; }
 
-        /* Estructura GRID principal de la aplicación */
-        #app-layout { display: flex; min-height: 100vh; width: 100%; transition: all 0.3s; }
+        #app-layout { display: flex; min-height: 100vh; width: 100%; overflow-x: hidden; }
         
         #sidebar {
             width: 80px; min-height: 100vh; background: var(--sidebar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -98,17 +97,15 @@
 
         #main-content {
             flex-grow: 1; margin-left: 80px; min-height: 100vh; transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
+            position: relative; max-width: calc(100vw - 80px); overflow-x: hidden;
         }
 
-        .view-section { display: none; padding: 30px 40px; opacity: 0; transition: opacity 0.3s ease; }
+        .view-section { display: none; padding: 30px 40px; opacity: 0; transition: opacity 0.3s ease; width: 100%; box-sizing: border-box;}
         .view-section.active-view { display: block; opacity: 1; }
 
-        /* Top Mobile Bar (Hidden on Desktop) */
         #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 990; align-items: center; justify-content: space-between;}
         .mobile-toggle { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); }
 
-        /* Tarjetas Rápidas con Aceleración GPU */
         .glass-card { 
             background: var(--card-bg); border-radius: 20px; box-shadow: var(--card-shadow); padding: 24px; height: 100%; 
             border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); 
@@ -116,10 +113,10 @@
         }
         .glass-card:hover { transform: translateY(-3px); }
 
-        /* VIEW: HOME (Bento Box Rediseñado) */
-        .home-header { margin-bottom: 40px; }
-        .home-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 8px;}
-        .home-subtitle { color: var(--text-muted); font-size: 1.05rem; }
+        /* VIEW: HOME */
+        .home-header { margin-bottom: 40px; text-align: center; }
+        .home-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 8px;}
+        .home-subtitle { color: var(--text-muted); font-size: 1.05rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
 
         .bento-kpi { display: flex; align-items: center; gap: 20px; padding: 25px;}
         .kpi-icon-lg { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
@@ -133,7 +130,6 @@
         .hub-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;}
         .hub-card:hover { border-color: var(--primary); }
 
-        /* Macro Selectors - Top Pill */
         .dashboard-top-bar { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
         .pill-selectors { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50px; padding: 6px 12px; display: inline-flex; align-items: center; flex-wrap: wrap; box-shadow: var(--card-shadow); backdrop-filter: blur(8px); }
         .macro-select { background: transparent; color: var(--text-main); border: none; padding: 8px 16px; font-weight: 600; font-size: 0.9rem; cursor: pointer; outline: none; border-radius: 30px; transition: background 0.2s;}
@@ -141,7 +137,6 @@
         .macro-select option { background: var(--bg-color); color: var(--text-main); }
         .pill-divider { width: 1px; height: 20px; background: var(--border-color); margin: 0 10px; }
 
-        /* Fast-UI OLAP Filters (Chips) */
         .olap-container { display: none; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; animation: fadeIn 0.3s ease-out; background: var(--card-bg); padding: 12px 20px; border-radius: 16px; border: 1px solid var(--border-color); }
         .olap-title { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 10px;}
         .olap-chip { background: rgba(255,255,255,0.5); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 20px; font-size: 0.85rem; font-weight: 600; padding: 6px 14px 6px 32px; appearance: none; -webkit-appearance: none; cursor: pointer; outline: none; transition: all 0.2s; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-funnel-fill' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 10px center; }
@@ -152,7 +147,6 @@
         .btn-limpiar:hover { color: var(--danger); }
         .filtro-lock { opacity: 0.4; filter: grayscale(100%); pointer-events: none; transition: all 0.3s; }
 
-        /* KPIs Secundarios y Gráficos */
         .kpi-mini { display: flex; flex-direction: column; justify-content: center; padding: 20px;}
         .kpi-mini-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;}
         .kpi-mini-icon { width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
@@ -173,7 +167,6 @@
         .glass-card:hover .btn-download-img { opacity: 1; }
         .btn-download-img:hover { background: rgba(67, 24, 255, 0.1); color: var(--primary); }
 
-        /* Nav Tabs Limpios */
         .nav-tabs-clean { display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; padding-bottom: 5px;}
         .nav-tabs-clean::-webkit-scrollbar { height: 0px; }
         .tab-clean { background: transparent; border: none; color: var(--text-muted); font-weight: 600; padding: 10px 16px; border-radius: 12px; transition: all 0.2s; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 8px;}
@@ -184,7 +177,6 @@
         #panel-lobby-curso { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Utilidades Rápidas de Color */
         .text-indigo { color: var(--primary); } .bg-indigo-soft { background: rgba(67, 24, 255, 0.1); color: var(--primary); }
         .text-emerald { color: var(--success); } .bg-emerald-soft { background: rgba(5, 205, 153, 0.1); color: var(--success); }
         .text-amber { color: var(--warning); } .bg-amber-soft { background: rgba(255, 181, 71, 0.1); color: var(--warning); }
@@ -193,7 +185,7 @@
         @media (max-width: 768px) {
             #sidebar { transform: translateX(-100%); width: 250px; padding-left: 20px; align-items: flex-start;}
             #sidebar.mobile-open { transform: translateX(0); }
-            #main-content { margin-left: 0; }
+            #main-content { margin-left: 0; max-width: 100vw; }
             #mobile-top-bar { display: flex; }
             .nav-text, .sidebar-brand span, .theme-grid { opacity: 1; }
             .view-section { padding: 20px 15px; }
@@ -204,7 +196,6 @@
 <body>
     <div id="app-layout">
         
-        <!-- Mobile Header -->
         <div id="mobile-top-bar">
             <div class="sidebar-brand m-0">
                 <img src="Recurso.png" alt="Logo">
@@ -245,207 +236,209 @@
         <main id="main-content">
             
             <section id="home_view" class="view-section active-view">
-                <div class="home-header">
-                    <!-- LOGO INSTITUCIONAL INSERTADO AQUÍ -->
-                    <img src="Recurso.png" alt="Logo Institucional" style="max-height: 100px; object-fit: contain; margin-bottom: 20px;">
-                    <h1 class="home-title">Ecosistema Educativo en Salud</h1>
-                    <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
-                </div>
+                <div class="container-fluid p-0">
+                    <div class="home-header">
+                        <img src="Recurso.png" alt="Logo Institucional" style="max-height: 100px; object-fit: contain; margin-bottom: 20px;">
+                        <h1 class="home-title">Ecosistema Educativo en Salud</h1>
+                        <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
+                    </div>
 
-                <!-- Bento KPIs -->
-                <div class="row g-4 mb-5">
-                    <div class="col-md-6 col-xl-3">
-                        <div class="glass-card bento-kpi">
-                            <div class="kpi-icon-lg bg-indigo-soft"><i class="bi bi-journal-check"></i></div>
-                            <div>
-                                <div class="kpi-val" id="bento-cursos">-</div>
-                                <div class="kpi-lbl">Cursos Activos</div>
+                    <!-- Bento KPIs -->
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6 col-xl-3">
+                            <div class="glass-card bento-kpi">
+                                <div class="kpi-icon-lg bg-indigo-soft"><i class="bi bi-journal-check"></i></div>
+                                <div>
+                                    <div class="kpi-val" id="bento-cursos">-</div>
+                                    <div class="kpi-lbl">Cursos Activos</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="glass-card bento-kpi">
+                                <div class="kpi-icon-lg bg-emerald-soft"><i class="bi bi-people"></i></div>
+                                <div>
+                                    <div class="kpi-val" id="bento-matriculas">-</div>
+                                    <div class="kpi-lbl">Matrículas</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="glass-card bento-kpi">
+                                <div class="kpi-icon-lg bg-amber-soft"><i class="bi bi-ui-radios"></i></div>
+                                <div>
+                                    <div class="kpi-val" id="bento-encuestas">-</div>
+                                    <div class="kpi-lbl">Encuestas de Calidad</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="glass-card bento-kpi">
+                                <div class="kpi-icon-lg bg-rose-soft"><i class="bi bi-heart-pulse"></i></div>
+                                <div>
+                                    <div class="kpi-val text-rose" id="bento-chs">-</div>
+                                    <div class="kpi-lbl">Score CHS Institucional</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xl-3">
-                        <div class="glass-card bento-kpi">
-                            <div class="kpi-icon-lg bg-emerald-soft"><i class="bi bi-people"></i></div>
-                            <div>
-                                <div class="kpi-val" id="bento-matriculas">-</div>
-                                <div class="kpi-lbl">Matrículas</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xl-3">
-                        <div class="glass-card bento-kpi">
-                            <div class="kpi-icon-lg bg-amber-soft"><i class="bi bi-ui-radios"></i></div>
-                            <div>
-                                <div class="kpi-val" id="bento-encuestas">-</div>
-                                <div class="kpi-lbl">Encuestas de Calidad</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xl-3">
-                        <div class="glass-card bento-kpi">
-                            <div class="kpi-icon-lg bg-rose-soft"><i class="bi bi-heart-pulse"></i></div>
-                            <div>
-                                <div class="kpi-val text-rose" id="bento-chs">-</div>
-                                <div class="kpi-lbl">Score CHS Institucional</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Hubs de Acceso Rápido -->
-                <h4 class="fw-bold mb-3">Módulos del Sistema</h4>
-                <div class="row g-4">
-                    <div class="col-lg-4">
-                        <a href="#" class="hub-link" onclick="document.querySelectorAll('.nav-item-custom')[1].click()">
-                            <div class="glass-card hub-card" style="border-top-color: var(--primary);">
-                                <div class="kpi-icon-lg bg-primary text-white"><i class="bi bi-bar-chart-fill"></i></div>
-                                <h4>Dashboard Analítico</h4>
-                                <p>Ingresa para filtrar por cohorte, analizar datos demográficos y cruzar encuestas de percepción.</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4">
-                        <a href="tutor_estudiante.html" class="hub-link">
-                            <div class="glass-card hub-card" style="border-top-color: var(--success);">
-                                <div class="kpi-icon-lg bg-success text-white"><i class="bi bi-robot"></i></div>
-                                <h4>Tutor IA (Estudiante)</h4>
-                                <p>Simulador Socrático para evaluar los conocimientos del personal y recomendar su ruta de estudio.</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4">
-                        <a href="admin_conocimiento.html" class="hub-link">
-                            <div class="glass-card hub-card" style="border-top-color: var(--danger);">
-                                <div class="kpi-icon-lg bg-danger text-white"><i class="bi bi-shield-lock-fill"></i></div>
-                                <h4>Configuración IA</h4>
-                                <p>Acceso curador. Sube documentos normativos en PDF para entrenar nuevos cerebros JSON para el Tutor.</p>
-                            </div>
-                        </a>
+                    <!-- Hubs de Acceso Rápido -->
+                    <h4 class="fw-bold mb-3">Módulos del Sistema</h4>
+                    <div class="row g-4">
+                        <div class="col-lg-4">
+                            <a href="#" class="hub-link" onclick="document.querySelectorAll('.nav-item-custom')[1].click()">
+                                <div class="glass-card hub-card" style="border-top-color: var(--primary);">
+                                    <div class="kpi-icon-lg bg-primary text-white"><i class="bi bi-bar-chart-fill"></i></div>
+                                    <h4>Dashboard Analítico</h4>
+                                    <p>Ingresa para filtrar por cohorte, analizar datos demográficos y cruzar encuestas de percepción.</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="tutor_estudiante.html" class="hub-link">
+                                <div class="glass-card hub-card" style="border-top-color: var(--success);">
+                                    <div class="kpi-icon-lg bg-success text-white"><i class="bi bi-robot"></i></div>
+                                    <h4>Tutor IA (Estudiante)</h4>
+                                    <p>Simulador Socrático para evaluar los conocimientos del personal y recomendar su ruta de estudio.</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="admin_conocimiento.html" class="hub-link">
+                                <div class="glass-card hub-card" style="border-top-color: var(--danger);">
+                                    <div class="kpi-icon-lg bg-danger text-white"><i class="bi bi-shield-lock-fill"></i></div>
+                                    <h4>Configuración IA</h4>
+                                    <p>Acceso curador. Sube documentos normativos en PDF para entrenar nuevos cerebros JSON para el Tutor.</p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <section id="dashboard_view" class="view-section">
-                
-                <!-- TOP BAR: Selectores Macro -->
-                <div class="dashboard-top-bar">
-                    <div class="pill-selectors">
-                        <i class="bi bi-calendar3 ms-2 text-primary"></i>
-                        <select id="selector-anio" class="macro-select text-primary"><option value="ALL">Todos los Años</option></select>
-                        <div class="pill-divider"></div>
-                        <i class="bi bi-journal-bookmark-fill text-muted"></i>
-                        <select id="selector-curso-base" class="macro-select"><option value="ALL">Consolidado Global</option></select>
-                        <div class="pill-divider" id="div-cohorte" style="display: none;"></div>
-                        <i class="bi bi-tags-fill text-success" id="icon-cohorte" style="display: none;"></i>
-                        <select id="selector-cohorte" class="macro-select text-success" style="display: none;"></select>
-                    </div>
-                    
-                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold shadow-sm d-none d-md-flex align-items-center gap-2" onclick="alert('Generación de Word disponible en versión completa.')">
-                        <i class="bi bi-file-word-fill"></i> Exportar Informe
-                    </button>
-                </div>
-
-                <!-- FAST-UI OLAP FILTERS (CHIPS) -->
-                <div id="filtros-cruzados-bar" class="olap-container">
-                    <div class="olap-title"><i class="bi bi-funnel-fill text-primary"></i> Filtros de Encuesta</div>
-                    <select id="f-sexo" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Sexo</option></select>
-                    <select id="f-edad" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Edad</option></select>
-                    <select id="f-perfil" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Perfil</option></select>
-                    <select id="f-comuna" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Comuna</option></select>
-                    <button class="btn-limpiar ms-auto" onclick="limpiarFiltros()" title="Borrar filtros"><i class="bi bi-x-circle-fill"></i> Limpiar</button>
-                </div>
-
-                <!-- LOBBY DE COHORTES -->
-                <div id="panel-lobby-curso" style="display: none; min-height: 40vh;" class="mb-4"></div>
-
-                <!-- CONTENEDOR TABS Y GRÁFICOS -->
-                <div id="contenedor-tabs" style="display: block;">
-                    
-                    <div class="nav-tabs-clean" role="tablist">
-                        <button class="tab-clean active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab"><i class="bi bi-pie-chart-fill"></i> Demografía</button>
-                        <button class="tab-clean" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab">
-                            <i class="bi bi-speedometer2"></i> Operativo <i class="bi bi-lock-fill text-danger ms-1 d-none" id="lock-icon" title="Bloqueado por filtros"></i>
-                        </button>
-                        <button class="tab-clean" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill"></i> Calidad Percibida</button>
-                    </div>
-
-                    <div class="tab-content" id="myTabContent">
+                <div class="container-fluid p-0">
+                    <!-- TOP BAR: Selectores Macro -->
+                    <div class="dashboard-top-bar">
+                        <div class="pill-selectors">
+                            <i class="bi bi-calendar3 ms-2 text-primary"></i>
+                            <select id="selector-anio" class="macro-select text-primary"><option value="ALL">Todos los Años</option></select>
+                            <div class="pill-divider"></div>
+                            <i class="bi bi-journal-bookmark-fill text-muted"></i>
+                            <select id="selector-curso-base" class="macro-select"><option value="ALL">Consolidado Global</option></select>
+                            <div class="pill-divider" id="div-cohorte" style="display: none;"></div>
+                            <i class="bi bi-tags-fill text-success" id="icon-cohorte" style="display: none;"></i>
+                            <select id="selector-cohorte" class="macro-select text-success" style="display: none;"></select>
+                        </div>
                         
-                        <!-- TAB 1: DEMOGRAFÍA -->
-                        <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
-                            <div class="row g-3 mb-4" id="kpi-global-row"></div>
+                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold shadow-sm d-none d-md-flex align-items-center gap-2" onclick="alert('Generación de Word disponible en versión completa.')">
+                            <i class="bi bi-file-word-fill"></i> Exportar Informe
+                        </button>
+                    </div>
+
+                    <!-- FAST-UI OLAP FILTERS (CHIPS) -->
+                    <div id="filtros-cruzados-bar" class="olap-container">
+                        <div class="olap-title"><i class="bi bi-funnel-fill text-primary"></i> Filtros de Encuesta</div>
+                        <select id="f-sexo" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Sexo</option></select>
+                        <select id="f-edad" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Edad</option></select>
+                        <select id="f-perfil" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Perfil</option></select>
+                        <select id="f-comuna" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Comuna</option></select>
+                        <button class="btn-limpiar ms-auto" onclick="limpiarFiltros()" title="Borrar filtros"><i class="bi bi-x-circle-fill"></i> Limpiar</button>
+                    </div>
+
+                    <!-- LOBBY DE COHORTES -->
+                    <div id="panel-lobby-curso" style="display: none; min-height: 40vh;" class="mb-4"></div>
+
+                    <!-- CONTENEDOR TABS Y GRÁFICOS -->
+                    <div id="contenedor-tabs" style="display: block;">
+                        
+                        <div class="nav-tabs-clean" role="tablist">
+                            <button class="tab-clean active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab"><i class="bi bi-pie-chart-fill"></i> Demografía</button>
+                            <button class="tab-clean" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab">
+                                <i class="bi bi-speedometer2"></i> Operativo <i class="bi bi-lock-fill text-danger ms-1 d-none" id="lock-icon" title="Bloqueado por filtros"></i>
+                            </button>
+                            <button class="tab-clean" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill"></i> Calidad Percibida</button>
+                        </div>
+
+                        <div class="tab-content" id="myTabContent">
                             
-                            <div class="row g-3 mb-4">
-                                <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Sexo</h6><button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartSexo"></canvas></div></div></div>
-                                <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6><button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Edad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartEdad"></canvas></div></div></div>
-                                <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6><button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Perfil')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartPerfil"></canvas></div></div></div>
-                                <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Escolaridad</h6><button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartEscolaridad"></canvas></div></div></div>
-                            </div>
-
-                            <div class="row g-3 mb-4">
-                                <div class="col-lg-5 col-md-12 d-flex">
-                                    <div class="glass-card p-3 d-flex flex-column w-100">
-                                        <h6 class="mb-2 fw-bold fs-6">Mapa de Participación</h6>
-                                        <div id="map-container"></div>
-                                    </div>
+                            <!-- TAB 1: DEMOGRAFÍA -->
+                            <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
+                                <div class="row g-3 mb-4" id="kpi-global-row"></div>
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Sexo</h6><button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartSexo"></canvas></div></div></div>
+                                    <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6><button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Edad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartEdad"></canvas></div></div></div>
+                                    <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6><button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Perfil')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartPerfil"></canvas></div></div></div>
+                                    <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Escolaridad</h6><button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartEscolaridad"></canvas></div></div></div>
                                 </div>
-                                <div class="col-lg-7 col-md-12">
-                                    <div class="glass-card p-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <h6 class="mb-0 fw-bold fs-6">Distribución por Ubicación</h6>
-                                            <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Comunas')"><i class="bi bi-download"></i></button>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-lg-5 col-md-12 d-flex">
+                                        <div class="glass-card p-3 d-flex flex-column w-100">
+                                            <h6 class="mb-2 fw-bold fs-6">Mapa de Participación</h6>
+                                            <div id="map-container"></div>
                                         </div>
-                                        <div class="chart-wrapper" style="height: 400px; margin-top: 0;"><canvas id="chartComunas"></canvas></div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- TAB 2: OPERATIVO -->
-                        <div class="tab-pane fade" id="panel-moodle" role="tabpanel">
-                            <div class="row g-3 mb-4" id="kpi-moodle-row"></div>
-                            <div class="row g-3 mb-4" id="moodle-charts-wrapper">
-                                <div class="col-md-8">
-                                    <div class="glass-card p-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <h6 class="mb-0 fw-bold fs-6">Embudo de Capacitación</h6>
-                                            <button class="btn-download-img" onclick="descargarGrafico('chartMoodleBar', 'Operativo')"><i class="bi bi-download"></i></button>
+                                    <div class="col-lg-7 col-md-12">
+                                        <div class="glass-card p-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <h6 class="mb-0 fw-bold fs-6">Distribución por Ubicación</h6>
+                                                <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Comunas')"><i class="bi bi-download"></i></button>
+                                            </div>
+                                            <div class="chart-wrapper" style="height: 400px; margin-top: 0;"><canvas id="chartComunas"></canvas></div>
                                         </div>
-                                        <div class="chart-wrapper"><canvas id="chartMoodleBar"></canvas></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="glass-card text-center d-flex flex-column justify-content-center align-items-center">
-                                        <div class="kpi-mini-icon bg-indigo-soft mb-2"><i class="bi bi-stopwatch-fill"></i></div>
-                                        <h6 class="fw-bold fs-6 mb-3">Ritmo de Aprendizaje</h6>
-                                        <div class="kpi-mini-val text-primary" style="font-size: 3rem;" id="tiempo-consumo-dias">0</div>
-                                        <div class="kpi-mini-lbl">Días Promedio para Finalizar</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- TAB 3: CALIDAD PERCIBIDA -->
-                        <div class="tab-pane fade" id="panel-radar" role="tabpanel">
-                            <div class="row g-3 mb-4">
-                                <div class="col-lg-6">
-                                    <div class="glass-card p-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <h6 class="mb-0 fw-bold fs-6" id="titulo-radar">Radar vs Benchmark</h6>
-                                            <button class="btn-download-img" onclick="descargarGrafico('chartRadar', 'Radar')"><i class="bi bi-download"></i></button>
+                            <!-- TAB 2: OPERATIVO -->
+                            <div class="tab-pane fade" id="panel-moodle" role="tabpanel">
+                                <div class="row g-3 mb-4" id="kpi-moodle-row"></div>
+                                <div class="row g-3 mb-4" id="moodle-charts-wrapper">
+                                    <div class="col-md-8">
+                                        <div class="glass-card p-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="mb-0 fw-bold fs-6">Embudo de Capacitación</h6>
+                                                <button class="btn-download-img" onclick="descargarGrafico('chartMoodleBar', 'Operativo')"><i class="bi bi-download"></i></button>
+                                            </div>
+                                            <div class="chart-wrapper"><canvas id="chartMoodleBar"></canvas></div>
                                         </div>
-                                        <div class="radar-wrapper"><canvas id="chartRadar"></canvas></div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="glass-card p-4">
-                                        <h6 class="fw-bold fs-6 mb-3 text-primary" id="titulo-desglose">Desglose Detallado (0 - 5.0)</h6>
-                                        <div id="diagnostico-detalles" style="max-height: 330px; overflow-y: auto; padding-right: 10px;"></div>
+                                    <div class="col-md-4">
+                                        <div class="glass-card text-center d-flex flex-column justify-content-center align-items-center">
+                                            <div class="kpi-mini-icon bg-indigo-soft mb-2"><i class="bi bi-stopwatch-fill"></i></div>
+                                            <h6 class="fw-bold fs-6 mb-3">Ritmo de Aprendizaje</h6>
+                                            <div class="kpi-mini-val text-primary" style="font-size: 3rem;" id="tiempo-consumo-dias">0</div>
+                                            <div class="kpi-mini-lbl">Días Promedio para Finalizar</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                            <!-- TAB 3: CALIDAD PERCIBIDA -->
+                            <div class="tab-pane fade" id="panel-radar" role="tabpanel">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-lg-6">
+                                        <div class="glass-card p-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="mb-0 fw-bold fs-6" id="titulo-radar">Radar vs Benchmark</h6>
+                                                <button class="btn-download-img" onclick="descargarGrafico('chartRadar', 'Radar')"><i class="bi bi-download"></i></button>
+                                            </div>
+                                            <div class="radar-wrapper"><canvas id="chartRadar"></canvas></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="glass-card p-4">
+                                            <h6 class="fw-bold fs-6 mb-3 text-primary" id="titulo-desglose">Desglose Detallado (0 - 5.0)</h6>
+                                            <div id="diagnostico-detalles" style="max-height: 330px; overflow-y: auto; padding-right: 10px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </section>
@@ -471,21 +464,29 @@
         const mapeoColores = {
             "Femenino": "#e11d48", "Masculino": "#0ea5e9", "N/A": "#94a3b8", "Otro": "#8b5cf6",
             "Primera infancia": "#f43f5e", "Infancia": "#f97316", "Adolescencia": "#eab308", "Juventud": "#84cc16", "Adultez": "#06b6d4", "Vejez": "#6366f1",
-            "Médico": "#05cd99", "Enfermera": "#4318ff", "Auxiliar": "#ffb547", "Estudiante": "#ee5d50",
-            "Profesional": "#3b82f6", "Técnico": "#10b981", "Tecnólogo": "#14b8a6", "Especialización": "#8b5cf6", "Maestría": "#6366f1"
+            "Médico": "#05cd99", "Enfermera": "#4318ff", "Auxiliar": "#ffb547", "Estudiante": "#ee5d50", "Área de la salud": "#05cd99",
+            "Profesional": "#3b82f6", "Técnico": "#10b981", "Tecnólogo": "#14b8a6", "Especialización": "#8b5cf6", "Maestría": "#6366f1", "Postgrado": "#8b5cf6", "Pregrado": "#3b82f6", "Bachiller": "#f59e0b", "Ninguna": "#94a3b8"
         };
         const coloresRespaldo = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6', '#f43f5e', '#f97316'];
 
-        // --- SISTEMA DE VISTAS Y NAVEGACIÓN ---
         function switchView(viewId, element) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
             document.getElementById(viewId).classList.add('active-view');
             document.querySelectorAll('.nav-item-custom').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
             if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open');
-            // Fix map sizing when showing dashboard
-            if(viewId === 'dashboard_view' && mapInstance) setTimeout(() => mapInstance.invalidateSize(), 100);
+            
+            // EL DESPERTADOR: Si entramos al dashboard, redimensionamos los gráficos que estaban en 0x0
+            if(viewId === 'dashboard_view') {
+                setTimeout(() => {
+                    if(mapInstance) mapInstance.invalidateSize();
+                    for(let id in chartInstances) {
+                        if(chartInstances[id]) chartInstances[id].resize();
+                    }
+                }, 100);
+            }
         }
+
         function toggleMobileMenu() { document.getElementById('sidebar').classList.toggle('mobile-open'); }
 
         function cambiarTema(tema) {
@@ -497,7 +498,6 @@
             if (mapInstance && geoJsonDataRaw) setTimeout(() => mapInstance.invalidateSize(), 100);
         }
 
-        // --- FILTROS OLAP DE ALTO RENDIMIENTO (DEBOUNCED) ---
         function cargarFiltrosOLAP() {
             if(!cursoActual || !cursoActual.Registros_Crudos || cursoActual.Registros_Crudos.length === 0) { document.getElementById('filtros-cruzados-bar').style.display = 'none'; return; }
             document.getElementById('filtros-cruzados-bar').style.display = 'flex';
@@ -509,7 +509,7 @@
 
         function aplicarFiltrosDebounced() {
             ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { const el = document.getElementById(id); if(el.value !== "ALL") el.classList.add('active-chip'); else el.classList.remove('active-chip'); });
-            clearTimeout(filterDebounceTimer); filterDebounceTimer = setTimeout(aplicarFiltrosReal, 200); // 200ms debounce
+            clearTimeout(filterDebounceTimer); filterDebounceTimer = setTimeout(aplicarFiltrosReal, 200);
         }
 
         function aplicarFiltrosReal() {
@@ -540,18 +540,17 @@
         }
         window.limpiarFiltros = function() { if(!cursoActual) return; ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
 
-        // --- MAPA CANVAS Y GRÁFICOS RECICLABLES ---
         function inicializarMapa() { if (mapInstance) return; mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO', maxZoom: 20 }).addTo(mapInstance); }
         function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
+        
         function dibujarMapaCoropletico(dataComunas) { 
             if (!mapInstance || !geoJsonDataRaw) return; 
             let mapNorm = {}; let maxP = 0; for (let n in dataComunas) { let id = (n||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?n.trim():String(parseInt(id,10)); mapNorm[id] = (mapNorm[id]||0)+(dataComunas[n]||0); if(mapNorm[id]>maxP && !isNaN(id)) maxP=mapNorm[id]; } 
             if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, { style: (f) => { let id = (f.properties.comuna||f.properties.nombre||f.properties.id).replace(/\D/g, ''); id = isNaN(parseInt(id,10))?f.properties.comuna:String(parseInt(id,10)); let p = mapNorm[id]||0; return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p>0?0.85:0.1 }; } }).addTo(mapInstance); 
-            mapInstance.invalidateSize(); // Fast resize check
+            mapInstance.invalidateSize();
         }
 
-        // Fast update logic: Replace data, don't destroy chart
         function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
             let labels = Object.keys(dataObject); let datos = Object.values(dataObject); let cols = labels.map((l, i) => mapeoColores[l] || coloresRespaldo[i % coloresRespaldo.length]); 
             if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update('none'); } 
@@ -574,7 +573,6 @@
             else { let arr = [{ label: isG ? 'Promedio' : 'Cohorte', data: d1, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 3 }]; if (!isG) arr.push({ label: 'Benchmark', data: d2, backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: lbl, datasets: arr }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 9, family: 'Inter', weight: '600' } } } }, animation: false } }); }
         }
 
-        // --- RENDERIZADO UI ---
         function crearTarjetaKPI(l, v, pct = null, i = "bi-bar-chart", c="primary") { let bp = pct ? `<span class="badge-kpi bg-${c} bg-opacity-10 text-${c}">${pct}</span>` : ''; return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-mini"><div class="kpi-mini-header"><div class="kpi-mini-icon bg-${c}-soft"><i class="bi ${i}"></i></div>${bp}</div><div class="kpi-mini-val">${v}</div><div class="kpi-mini-lbl">${l}</div></div></div>`; }
         function generarBarrasCalidad(d) { let h = ''; for (let q in d) { let v = parseFloat(d[q]) || 0; let c = v >= 4.5 ? 'success' : (v >= 4.0 ? 'info' : 'danger'); h += `<div class="progress-bar-container mb-3"><div class="progress-label"><span>${q}</span><span class="fw-bold text-${c}">${v.toFixed(1)}</span></div><div class="progress-bg"><div class="progress-fill bg-${c}" style="width: ${(v/5)*100}%"></div></div></div>`; } return h; }
 
@@ -620,19 +618,15 @@
             document.getElementById('titulo-radar').innerText = dOlap?"Radar Filtrado vs Benchmark":"Radar vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
         }
 
-        // --- INICIALIZACIÓN ---
         document.addEventListener("DOMContentLoaded", async () => {
             cambiarTema(localStorage.getItem('temaDashboard') || 'light');
+            
+            // DESPERTADOR EXTRA para Pestañas:
             document.querySelectorAll('.tab-clean').forEach(t => { 
                 t.addEventListener('click', function() { 
                     if(this.classList.contains('locked')) return; 
                     document.querySelectorAll('.tab-clean').forEach(b=>b.classList.remove('active')); 
                     this.classList.add('active'); 
-                    
-                    // Despertador para el Mapa
-                    if(this.id==='global-tab'&&mapInstance) setTimeout(()=>mapInstance.invalidateSize(), 150); 
-                    
-                    // DESPERTADOR PARA CHART.JS (Solución al bug de 0 píxeles)
                     setTimeout(() => {
                         for (let id in chartInstances) {
                             if (chartInstances[id]) chartInstances[id].resize();
@@ -640,18 +634,23 @@
                     }, 50);
                 }); 
             });
+
             proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+            
             try { 
                 const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); dashboardData = await res.json(); 
                 const gRes = await fetch('mc_comunas.json'); let gd = await gRes.json(); 
                 gd.features.forEach(f=>{if(f.geometry&&f.geometry.coordinates){if(f.geometry.type==="Polygon")f.geometry.coordinates=f.geometry.coordinates.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c)));else if(f.geometry.type==="MultiPolygon")f.geometry.coordinates=f.geometry.coordinates.map(p=>p.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c))));}}); geoJsonDataRaw = gd;
             } catch (e) { console.error("Error cargando datos. Validar entorno.", e); return; }
+            
             Chart.defaults.font.family = 'Inter'; inicializarMapa(); agruparCursos(); 
             document.getElementById('selector-anio').addEventListener('change', manejarCambioAnio); document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase); document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
             
-            // Llenar Landing KPIs
             const tI = dashboardData.cursos.reduce((s, c) => s+(c.Total_Inscritos||0), 0); let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); });
             document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados||0; document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString(); document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
+
+            // ESTA ES LA LÍNEA QUE FALTABA: Cargar la analítica por defecto.
+            actualizarPantallaGlobal();
         });
     </script>
 </body>
