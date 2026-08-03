@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecosistema IA - Secretaría de Salud</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -17,816 +15,195 @@
 
     <style>
         :root[data-theme="light"] {
-            --bg-color: #f4f7fe;
-            --sidebar-bg: rgba(255, 255, 255, 0.85);
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --primary: #4318ff;
-            --success: #05cd99;
-            --warning: #ffb547;
-            --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.9);
-            --border-color: rgba(203, 213, 225, 0.4);
+            --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.85); --card-bg: rgba(255, 255, 255, 0.8); 
+            --text-main: #1e293b; --text-muted: #64748b; --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.4);
             --card-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.05);
-            --blob-1: rgba(67, 24, 255, 0.1);
-            --blob-2: rgba(5, 205, 153, 0.1);
+            --blob-1: rgba(67, 24, 255, 0.1); --blob-2: rgba(5, 205, 153, 0.1);
         }
 
         :root[data-theme="dark"] {
-            --bg-color: #0b1437;
-            --sidebar-bg: rgba(17, 28, 68, 0.9);
-            --card-bg: rgba(17, 28, 68, 0.75);
-            --text-main: #f8fafc;
-            --text-muted: #a3aed1;
-            --primary: #7551ff;
-            --success: #01b574;
-            --warning: #ffb547;
-            --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.1);
-            --border-color: rgba(255, 255, 255, 0.05);
+            --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.9); --card-bg: rgba(17, 28, 68, 0.75); 
+            --text-main: #f8fafc; --text-muted: #a3aed1; --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50;
+            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.05);
             --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
-            --blob-1: rgba(117, 81, 255, 0.15);
-            --blob-2: rgba(14, 165, 233, 0.1);
+            --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1);
         }
 
         :root[data-theme="rose"] {
-            --bg-color: #fff1f2;
-            --sidebar-bg: rgba(255, 255, 255, 0.85);
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --text-main: #4c0519;
-            --text-muted: #9f1239;
-            --primary: #e11d48;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #be123c;
-            --border-light: rgba(255, 255, 255, 0.9);
-            --border-color: rgba(225, 29, 72, 0.1);
+            --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.85); --card-bg: rgba(255, 255, 255, 0.8); 
+            --text-main: #4c0519; --text-muted: #9f1239; --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.1);
             --card-shadow: 0 4px 20px 0 rgba(225, 29, 72, 0.05);
-            --blob-1: rgba(225, 29, 72, 0.1);
-            --blob-2: rgba(244, 63, 94, 0.1);
+            --blob-1: rgba(225, 29, 72, 0.1); --blob-2: rgba(244, 63, 94, 0.1);
         }
 
         :root[data-theme="amber"] {
-            --bg-color: #fffbeb;
-            --sidebar-bg: rgba(255, 255, 255, 0.85);
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --text-main: #451a03;
-            --text-muted: #92400e;
-            --primary: #d97706;
-            --success: #059669;
-            --warning: #d97706;
-            --danger: #dc2626;
-            --border-light: rgba(255, 255, 255, 0.9);
-            --border-color: rgba(217, 119, 6, 0.1);
+            --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.85); --card-bg: rgba(255, 255, 255, 0.8); 
+            --text-main: #451a03; --text-muted: #92400e; --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.1);
             --card-shadow: 0 4px 20px 0 rgba(217, 119, 6, 0.05);
-            --blob-1: rgba(217, 119, 6, 0.1);
-            --blob-2: rgba(245, 158, 11, 0.1);
+            --blob-1: rgba(217, 119, 6, 0.1); --blob-2: rgba(245, 158, 11, 0.1);
         }
 
-        body {
-            background-color: var(--bg-color);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            min-height: 100vh;
+        body { 
+            background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); 
+            margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh;
         }
 
         /* HARDWARE ACCELERATED BLOBS */
-        body::before,
-        body::after {
-            content: '';
-            position: fixed;
-            border-radius: 50%;
-            z-index: -2;
-            pointer-events: none;
-            will-change: transform;
-            transform: translateZ(0);
-            filter: blur(60px);
+        body::before, body::after { 
+            content: ''; position: fixed; border-radius: 50%; z-index: -2; pointer-events: none; 
+            will-change: transform; transform: translateZ(0); filter: blur(60px);
         }
-
-        body::before {
-            width: 45vw;
-            height: 45vw;
-            background: var(--blob-1);
-            top: -10%;
-            left: -10%;
-        }
-
-        body::after {
-            width: 35vw;
-            height: 35vw;
-            background: var(--blob-2);
-            bottom: -10%;
-            right: -5%;
-        }
+        body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
+        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; }
 
         /* Estructura GRID principal de la aplicación */
-        #app-layout {
-            display: flex;
-            min-height: 100vh;
-            width: 100%;
-            transition: all 0.3s;
-        }
-
+        #app-layout { display: flex; min-height: 100vh; width: 100%; transition: all 0.3s; }
+        
         #sidebar {
-            width: 80px;
-            min-height: 100vh;
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 24px 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.02);
-            overflow: hidden;
-            white-space: nowrap;
+            width: 80px; min-height: 100vh; background: var(--sidebar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding: 24px 0;
+            position: fixed; top: 0; left: 0; z-index: 1000; transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 4px 0 15px rgba(0,0,0,0.02); overflow: hidden; white-space: nowrap;
         }
+        #sidebar:hover { width: 250px; align-items: flex-start; padding-left: 20px; padding-right: 20px;}
 
-        #sidebar:hover {
-            width: 250px;
-            align-items: flex-start;
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        .sidebar-brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 40px;
-            cursor: pointer;
-            height: 45px;
-        }
-
-        .sidebar-brand img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        .sidebar-brand span {
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: var(--text-main);
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        #sidebar:hover .sidebar-brand span {
-            opacity: 1;
-            transition-delay: 0.1s;
-        }
+        .sidebar-brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; cursor: pointer; height: 45px;}
+        .sidebar-brand img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0;}
+        .sidebar-brand span { font-weight: 800; font-size: 1.1rem; color: var(--text-main); opacity: 0; transition: opacity 0.2s; }
+        #sidebar:hover .sidebar-brand span { opacity: 1; transition-delay: 0.1s;}
 
         .nav-item-custom {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+            display: flex; align-items: center; gap: 18px; width: 100%; padding: 12px; border-radius: 12px; margin-bottom: 8px;
+            color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer;
+            transition: all 0.2s ease; border: 1px solid transparent;
         }
+        .nav-item-custom i { font-size: 1.3rem; flex-shrink: 0; transition: color 0.2s;}
+        .nav-text { opacity: 0; transition: opacity 0.2s; }
+        #sidebar:hover .nav-text { opacity: 1; transition-delay: 0.1s;}
+        
+        .nav-item-custom:hover { background: rgba(67, 24, 255, 0.05); color: var(--primary); }
+        .nav-item-custom.active { background: var(--primary); color: white; border-color: rgba(0,0,0,0.1); box-shadow: 0 4px 10px rgba(67, 24, 255, 0.2); }
+        .nav-item-custom.active i { color: white; }
 
-        .nav-item-custom i {
-            font-size: 1.3rem;
-            flex-shrink: 0;
-            transition: color 0.2s;
-        }
-
-        .nav-text {
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        #sidebar:hover .nav-text {
-            opacity: 1;
-            transition-delay: 0.1s;
-        }
-
-        .nav-item-custom:hover {
-            background: rgba(67, 24, 255, 0.05);
-            color: var(--primary);
-        }
-
-        .nav-item-custom.active {
-            background: var(--primary);
-            color: white;
-            border-color: rgba(0, 0, 0, 0.1);
-            box-shadow: 0 4px 10px rgba(67, 24, 255, 0.2);
-        }
-
-        .nav-item-custom.active i {
-            color: white;
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .theme-grid {
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-            width: 100%;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        #sidebar:hover .theme-grid {
-            opacity: 1;
-            transition-delay: 0.1s;
-        }
-
-        .theme-btn {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .theme-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .theme-btn.active {
-            border-color: var(--primary);
-            transform: scale(1.1);
-        }
+        .sidebar-footer { margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 15px;}
+        
+        .theme-grid { display: flex; gap: 6px; justify-content: center; width: 100%; opacity: 0; transition: opacity 0.2s;}
+        #sidebar:hover .theme-grid { opacity: 1; transition-delay: 0.1s; }
+        .theme-btn { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: var(--primary); transform: scale(1.1);}
 
         #main-content {
-            flex-grow: 1;
-            margin-left: 80px;
-            min-height: 100vh;
-            transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            flex-grow: 1; margin-left: 80px; min-height: 100vh; transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
         }
 
-        .view-section {
-            display: none;
-            padding: 30px 40px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .view-section.active-view {
-            display: block;
-            opacity: 1;
-        }
+        .view-section { display: none; padding: 30px 40px; opacity: 0; transition: opacity 0.3s ease; }
+        .view-section.active-view { display: block; opacity: 1; }
 
         /* Top Mobile Bar (Hidden on Desktop) */
-        #mobile-top-bar {
-            display: none;
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 990;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .mobile-toggle {
-            background: transparent;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-main);
-        }
+        #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 990; align-items: center; justify-content: space-between;}
+        .mobile-toggle { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); }
 
         /* Tarjetas Rápidas con Aceleración GPU */
-        .glass-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            padding: 24px;
-            height: 100%;
-            border: 1px solid var(--border-color);
-            border-top: 1px solid var(--border-light);
-            /* GPU Acceleration */
-            will-change: transform;
-            transform: translateZ(0);
-            transition: transform 0.2s ease, border-color 0.2s ease;
+        .glass-card { 
+            background: var(--card-bg); border-radius: 20px; box-shadow: var(--card-shadow); padding: 24px; height: 100%; 
+            border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); 
+            will-change: transform; transform: translateZ(0); transition: transform 0.2s ease, border-color 0.2s ease;
         }
-
-        .glass-card:hover {
-            transform: translateY(-3px);
-        }
+        .glass-card:hover { transform: translateY(-3px); }
 
         /* VIEW: HOME (Bento Box Rediseñado) */
-        .home-header {
-            margin-bottom: 40px;
-        }
+        .home-header { margin-bottom: 40px; }
+        .home-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 8px;}
+        .home-subtitle { color: var(--text-muted); font-size: 1.05rem; }
 
-        .home-title {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-
-        .home-subtitle {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-        }
-
-        .bento-kpi {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 25px;
-        }
-
-        .kpi-icon-lg {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            flex-shrink: 0;
-        }
-
-        .bento-kpi .kpi-val {
-            font-size: 2.2rem;
-            font-weight: 800;
-            line-height: 1;
-            color: var(--text-main);
-            margin-bottom: 4px;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: -0.04em;
-        }
-
-        .bento-kpi .kpi-lbl {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .hub-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            height: 100%;
-        }
-
-        .hub-card {
-            text-align: left;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            cursor: pointer;
-            background: var(--card-bg);
-        }
-
-        .hub-card .kpi-icon-lg {
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .hub-card h4 {
-            font-weight: 800;
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-        }
-
-        .hub-card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 0;
-        }
-
-        .hub-card:hover {
-            border-color: var(--primary);
-        }
+        .bento-kpi { display: flex; align-items: center; gap: 20px; padding: 25px;}
+        .kpi-icon-lg { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+        .bento-kpi .kpi-val { font-size: 2.2rem; font-weight: 800; line-height: 1; color: var(--text-main); margin-bottom: 4px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em;}
+        .bento-kpi .kpi-lbl { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
+        
+        .hub-link { text-decoration: none; color: inherit; display: block; height: 100%;}
+        .hub-card { text-align: left; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; cursor: pointer; background: var(--card-bg);}
+        .hub-card .kpi-icon-lg { margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);}
+        .hub-card h4 { font-weight: 800; font-size: 1.3rem; margin-bottom: 10px;}
+        .hub-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;}
+        .hub-card:hover { border-color: var(--primary); }
 
         /* Macro Selectors - Top Pill */
-        .dashboard-top-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .pill-selectors {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            padding: 6px 12px;
-            display: inline-flex;
-            align-items: center;
-            flex-wrap: wrap;
-            box-shadow: var(--card-shadow);
-            backdrop-filter: blur(8px);
-        }
-
-        .macro-select {
-            background: transparent;
-            color: var(--text-main);
-            border: none;
-            padding: 8px 16px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            outline: none;
-            border-radius: 30px;
-            transition: background 0.2s;
-        }
-
-        .macro-select:hover,
-        .macro-select:focus {
-            background: rgba(67, 24, 255, 0.05);
-            color: var(--primary);
-        }
-
-        .macro-select option {
-            background: var(--bg-color);
-            color: var(--text-main);
-        }
-
-        .pill-divider {
-            width: 1px;
-            height: 20px;
-            background: var(--border-color);
-            margin: 0 10px;
-        }
+        .dashboard-top-bar { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .pill-selectors { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 50px; padding: 6px 12px; display: inline-flex; align-items: center; flex-wrap: wrap; box-shadow: var(--card-shadow); backdrop-filter: blur(8px); }
+        .macro-select { background: transparent; color: var(--text-main); border: none; padding: 8px 16px; font-weight: 600; font-size: 0.9rem; cursor: pointer; outline: none; border-radius: 30px; transition: background 0.2s;}
+        .macro-select:hover, .macro-select:focus { background: rgba(67, 24, 255, 0.05); color: var(--primary); }
+        .macro-select option { background: var(--bg-color); color: var(--text-main); }
+        .pill-divider { width: 1px; height: 20px; background: var(--border-color); margin: 0 10px; }
 
         /* Fast-UI OLAP Filters (Chips) */
-        .olap-container {
-            display: none;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-            animation: fadeIn 0.3s ease-out;
-            background: var(--card-bg);
-            padding: 12px 20px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-        }
-
-        .olap-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-right: 10px;
-        }
-
-        .olap-chip {
-            background: rgba(255, 255, 255, 0.5);
-            color: var(--text-muted);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 6px 14px 6px 32px;
-            appearance: none;
-            -webkit-appearance: none;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.2s;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-funnel-fill' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: 10px center;
-        }
-
-        :root[data-theme="dark"] .olap-chip {
-            background-color: rgba(0, 0, 0, 0.3);
-        }
-
-        .olap-chip:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .olap-chip.active-chip {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' class='bi bi-funnel-fill' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z'/%3E%3C/svg%3E");
-        }
-
-        .btn-limpiar {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .btn-limpiar:hover {
-            color: var(--danger);
-        }
-
-        .filtro-lock {
-            opacity: 0.4;
-            filter: grayscale(100%);
-            pointer-events: none;
-            transition: all 0.3s;
-        }
+        .olap-container { display: none; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; animation: fadeIn 0.3s ease-out; background: var(--card-bg); padding: 12px 20px; border-radius: 16px; border: 1px solid var(--border-color); }
+        .olap-title { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 10px;}
+        .olap-chip { background: rgba(255,255,255,0.5); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 20px; font-size: 0.85rem; font-weight: 600; padding: 6px 14px 6px 32px; appearance: none; -webkit-appearance: none; cursor: pointer; outline: none; transition: all 0.2s; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-funnel-fill' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 10px center; }
+        :root[data-theme="dark"] .olap-chip { background-color: rgba(0,0,0,0.3); }
+        .olap-chip:hover { border-color: var(--primary); color: var(--primary); }
+        .olap-chip.active-chip { background-color: var(--primary); color: white; border-color: var(--primary); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' class='bi bi-funnel-fill' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z'/%3E%3C/svg%3E"); }
+        .btn-limpiar { background: transparent; border: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: color 0.2s; display: flex; align-items: center; gap: 4px;}
+        .btn-limpiar:hover { color: var(--danger); }
+        .filtro-lock { opacity: 0.4; filter: grayscale(100%); pointer-events: none; transition: all 0.3s; }
 
         /* KPIs Secundarios y Gráficos */
-        .kpi-mini {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 20px;
-        }
+        .kpi-mini { display: flex; flex-direction: column; justify-content: center; padding: 20px;}
+        .kpi-mini-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;}
+        .kpi-mini-icon { width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .kpi-mini-val { font-size: 1.8rem; font-weight: 800; line-height: 1; color: var(--text-main); font-variant-numeric: tabular-nums;}
+        .kpi-mini-lbl { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-top: 5px;}
+        .badge-kpi { font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 12px; }
 
-        .kpi-mini-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
+        .chart-wrapper { position: relative; height: 260px; width: 100%; margin-top: 10px; }
+        .radar-wrapper { position: relative; height: 360px; width: 100%; display: flex; justify-content: center; }
+        #map-container { border-radius: 16px; border: 1px solid var(--border-color); transform: translateZ(0); width: 100%; flex-grow: 1; min-height: 400px;}
+        
+        .progress-label { display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.8rem; margin-bottom: 6px; color: var(--text-main); font-weight: 500;}
+        .progress-bg { height: 8px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden; transform: translateZ(0); }
+        :root[data-theme="dark"] .progress-bg { background: rgba(255,255,255,0.05); }
+        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease-out; }
 
-        .kpi-mini-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        .kpi-mini-val {
-            font-size: 1.8rem;
-            font-weight: 800;
-            line-height: 1;
-            color: var(--text-main);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .kpi-mini-lbl {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-top: 5px;
-        }
-
-        .badge-kpi {
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 12px;
-        }
-
-        .chart-wrapper {
-            position: relative;
-            height: 260px;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .radar-wrapper {
-            position: relative;
-            height: 360px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-        #map-container {
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            transform: translateZ(0);
-            width: 100%;
-            flex-grow: 1;
-            min-height: 400px;
-        }
-
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            font-size: 0.8rem;
-            margin-bottom: 6px;
-            color: var(--text-main);
-            font-weight: 500;
-        }
-
-        .progress-bg {
-            height: 8px;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 4px;
-            overflow: hidden;
-            transform: translateZ(0);
-        }
-
-        :root[data-theme="dark"] .progress-bg {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.4s ease-out;
-        }
-
-        .btn-download-img {
-            background: transparent;
-            color: var(--text-muted);
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            opacity: 0;
-        }
-
-        .glass-card:hover .btn-download-img {
-            opacity: 1;
-        }
-
-        .btn-download-img:hover {
-            background: rgba(67, 24, 255, 0.1);
-            color: var(--primary);
-        }
+        .btn-download-img { background: transparent; color: var(--text-muted); border: none; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; opacity: 0;}
+        .glass-card:hover .btn-download-img { opacity: 1; }
+        .btn-download-img:hover { background: rgba(67, 24, 255, 0.1); color: var(--primary); }
 
         /* Nav Tabs Limpios */
-        .nav-tabs-clean {
-            display: flex;
-            gap: 10px;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 25px;
-            overflow-x: auto;
-            flex-wrap: nowrap;
-            white-space: nowrap;
-            padding-bottom: 5px;
-        }
+        .nav-tabs-clean { display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; padding-bottom: 5px;}
+        .nav-tabs-clean::-webkit-scrollbar { height: 0px; }
+        .tab-clean { background: transparent; border: none; color: var(--text-muted); font-weight: 600; padding: 10px 16px; border-radius: 12px; transition: all 0.2s; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 8px;}
+        .tab-clean:hover { background: rgba(67, 24, 255, 0.05); color: var(--text-main); }
+        .tab-clean.active { background: var(--primary); color: white; }
+        .tab-clean.locked { color: var(--text-muted); opacity: 0.6; cursor: not-allowed;}
 
-        .nav-tabs-clean::-webkit-scrollbar {
-            height: 0px;
-        }
-
-        .tab-clean {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            padding: 10px 16px;
-            border-radius: 12px;
-            transition: all 0.2s;
-            font-size: 0.95rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .tab-clean:hover {
-            background: rgba(67, 24, 255, 0.05);
-            color: var(--text-main);
-        }
-
-        .tab-clean.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .tab-clean.locked {
-            color: var(--text-muted);
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        #panel-lobby-curso {
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        #panel-lobby-curso { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Utilidades Rápidas de Color */
-        .text-indigo {
-            color: var(--primary);
-        }
-
-        .bg-indigo-soft {
-            background: rgba(67, 24, 255, 0.1);
-            color: var(--primary);
-        }
-
-        .text-emerald {
-            color: var(--success);
-        }
-
-        .bg-emerald-soft {
-            background: rgba(5, 205, 153, 0.1);
-            color: var(--success);
-        }
-
-        .text-amber {
-            color: var(--warning);
-        }
-
-        .bg-amber-soft {
-            background: rgba(255, 181, 71, 0.1);
-            color: var(--warning);
-        }
-
-        .text-rose {
-            color: var(--danger);
-        }
-
-        .bg-rose-soft {
-            background: rgba(238, 93, 80, 0.1);
-            color: var(--danger);
-        }
+        .text-indigo { color: var(--primary); } .bg-indigo-soft { background: rgba(67, 24, 255, 0.1); color: var(--primary); }
+        .text-emerald { color: var(--success); } .bg-emerald-soft { background: rgba(5, 205, 153, 0.1); color: var(--success); }
+        .text-amber { color: var(--warning); } .bg-amber-soft { background: rgba(255, 181, 71, 0.1); color: var(--warning); }
+        .text-rose { color: var(--danger); } .bg-rose-soft { background: rgba(238, 93, 80, 0.1); color: var(--danger); }
 
         @media (max-width: 768px) {
-            #sidebar {
-                transform: translateX(-100%);
-                width: 250px;
-                padding-left: 20px;
-                align-items: flex-start;
-            }
-
-            #sidebar.mobile-open {
-                transform: translateX(0);
-            }
-
-            #main-content {
-                margin-left: 0;
-            }
-
-            #mobile-top-bar {
-                display: flex;
-            }
-
-            .nav-text,
-            .sidebar-brand span,
-            .theme-grid {
-                opacity: 1;
-            }
-
-            .view-section {
-                padding: 20px 15px;
-            }
+            #sidebar { transform: translateX(-100%); width: 250px; padding-left: 20px; align-items: flex-start;}
+            #sidebar.mobile-open { transform: translateX(0); }
+            #main-content { margin-left: 0; }
+            #mobile-top-bar { display: flex; }
+            .nav-text, .sidebar-brand span, .theme-grid { opacity: 1; }
+            .view-section { padding: 20px 15px; }
         }
     </style>
 </head>
 
 <body>
     <div id="app-layout">
-
+        
         <!-- Mobile Header -->
         <div id="mobile-top-bar">
             <div class="sidebar-brand m-0">
@@ -841,7 +218,7 @@
                 <img src="Recurso.png" alt="Logo">
                 <span>Alcaldía de Cali</span>
             </div>
-
+            
             <a href="#" class="nav-item-custom active" onclick="switchView('home_view', this)">
                 <i class="bi bi-house-door"></i> <span class="nav-text">Inicio</span>
             </a>
@@ -857,22 +234,20 @@
 
             <div class="sidebar-footer">
                 <div class="theme-grid">
-                    <div class="theme-btn" data-theme-btn="light" style="background:#f4f7fe;"
-                        onclick="cambiarTema('light')"></div>
-                    <div class="theme-btn" data-theme-btn="dark" style="background:#0b1437;"
-                        onclick="cambiarTema('dark')"></div>
-                    <div class="theme-btn" data-theme-btn="rose" style="background:#fff1f2;"
-                        onclick="cambiarTema('rose')"></div>
-                    <div class="theme-btn" data-theme-btn="amber" style="background:#fffbeb;"
-                        onclick="cambiarTema('amber')"></div>
+                    <div class="theme-btn" data-theme-btn="light" style="background:#f4f7fe;" onclick="cambiarTema('light')"></div>
+                    <div class="theme-btn" data-theme-btn="dark" style="background:#0b1437;" onclick="cambiarTema('dark')"></div>
+                    <div class="theme-btn" data-theme-btn="rose" style="background:#fff1f2;" onclick="cambiarTema('rose')"></div>
+                    <div class="theme-btn" data-theme-btn="amber" style="background:#fffbeb;" onclick="cambiarTema('amber')"></div>
                 </div>
             </div>
         </nav>
 
         <main id="main-content">
-
+            
             <section id="home_view" class="view-section active-view">
                 <div class="home-header">
+                    <!-- LOGO INSTITUCIONAL INSERTADO AQUÍ -->
+                    <img src="Recurso.png" alt="Logo Institucional" style="max-height: 100px; object-fit: contain; margin-bottom: 20px;">
                     <h1 class="home-title">Ecosistema Educativo en Salud</h1>
                     <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
                 </div>
@@ -923,11 +298,9 @@
                     <div class="col-lg-4">
                         <a href="#" class="hub-link" onclick="document.querySelectorAll('.nav-item-custom')[1].click()">
                             <div class="glass-card hub-card" style="border-top-color: var(--primary);">
-                                <div class="kpi-icon-lg bg-primary text-white"><i class="bi bi-bar-chart-fill"></i>
-                                </div>
+                                <div class="kpi-icon-lg bg-primary text-white"><i class="bi bi-bar-chart-fill"></i></div>
                                 <h4>Dashboard Analítico</h4>
-                                <p>Ingresa para filtrar por cohorte, analizar datos demográficos y cruzar encuestas de
-                                    percepción.</p>
+                                <p>Ingresa para filtrar por cohorte, analizar datos demográficos y cruzar encuestas de percepción.</p>
                             </div>
                         </a>
                     </div>
@@ -936,48 +309,38 @@
                             <div class="glass-card hub-card" style="border-top-color: var(--success);">
                                 <div class="kpi-icon-lg bg-success text-white"><i class="bi bi-robot"></i></div>
                                 <h4>Tutor IA (Estudiante)</h4>
-                                <p>Simulador Socrático para evaluar los conocimientos del personal y recomendar su ruta
-                                    de estudio.</p>
+                                <p>Simulador Socrático para evaluar los conocimientos del personal y recomendar su ruta de estudio.</p>
                             </div>
                         </a>
                     </div>
                     <div class="col-lg-4">
                         <a href="admin_conocimiento.html" class="hub-link">
                             <div class="glass-card hub-card" style="border-top-color: var(--danger);">
-                                <div class="kpi-icon-lg bg-danger text-white"><i class="bi bi-shield-lock-fill"></i>
-                                </div>
+                                <div class="kpi-icon-lg bg-danger text-white"><i class="bi bi-shield-lock-fill"></i></div>
                                 <h4>Configuración IA</h4>
-                                <p>Acceso curador. Sube documentos normativos en PDF para entrenar nuevos cerebros JSON
-                                    para el Tutor.</p>
+                                <p>Acceso curador. Sube documentos normativos en PDF para entrenar nuevos cerebros JSON para el Tutor.</p>
                             </div>
                         </a>
                     </div>
                 </div>
             </section>
 
-
             <section id="dashboard_view" class="view-section">
-
+                
                 <!-- TOP BAR: Selectores Macro -->
                 <div class="dashboard-top-bar">
                     <div class="pill-selectors">
                         <i class="bi bi-calendar3 ms-2 text-primary"></i>
-                        <select id="selector-anio" class="macro-select text-primary">
-                            <option value="ALL">Todos los Años</option>
-                        </select>
+                        <select id="selector-anio" class="macro-select text-primary"><option value="ALL">Todos los Años</option></select>
                         <div class="pill-divider"></div>
                         <i class="bi bi-journal-bookmark-fill text-muted"></i>
-                        <select id="selector-curso-base" class="macro-select">
-                            <option value="ALL">Consolidado Global</option>
-                        </select>
+                        <select id="selector-curso-base" class="macro-select"><option value="ALL">Consolidado Global</option></select>
                         <div class="pill-divider" id="div-cohorte" style="display: none;"></div>
                         <i class="bi bi-tags-fill text-success" id="icon-cohorte" style="display: none;"></i>
                         <select id="selector-cohorte" class="macro-select text-success" style="display: none;"></select>
                     </div>
-
-                    <button
-                        class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold shadow-sm d-none d-md-flex align-items-center gap-2"
-                        onclick="alert('Generación de Word disponible en versión completa.')">
+                    
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold shadow-sm d-none d-md-flex align-items-center gap-2" onclick="alert('Generación de Word disponible en versión completa.')">
                         <i class="bi bi-file-word-fill"></i> Exportar Informe
                     </button>
                 </div>
@@ -985,20 +348,11 @@
                 <!-- FAST-UI OLAP FILTERS (CHIPS) -->
                 <div id="filtros-cruzados-bar" class="olap-container">
                     <div class="olap-title"><i class="bi bi-funnel-fill text-primary"></i> Filtros de Encuesta</div>
-                    <select id="f-sexo" class="olap-chip" onchange="aplicarFiltrosDebounced()">
-                        <option value="ALL">Sexo</option>
-                    </select>
-                    <select id="f-edad" class="olap-chip" onchange="aplicarFiltrosDebounced()">
-                        <option value="ALL">Edad</option>
-                    </select>
-                    <select id="f-perfil" class="olap-chip" onchange="aplicarFiltrosDebounced()">
-                        <option value="ALL">Perfil</option>
-                    </select>
-                    <select id="f-comuna" class="olap-chip" onchange="aplicarFiltrosDebounced()">
-                        <option value="ALL">Comuna</option>
-                    </select>
-                    <button class="btn-limpiar ms-auto" onclick="limpiarFiltros()" title="Borrar filtros"><i
-                            class="bi bi-x-circle-fill"></i> Limpiar</button>
+                    <select id="f-sexo" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Sexo</option></select>
+                    <select id="f-edad" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Edad</option></select>
+                    <select id="f-perfil" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Perfil</option></select>
+                    <select id="f-comuna" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Comuna</option></select>
+                    <button class="btn-limpiar ms-auto" onclick="limpiarFiltros()" title="Borrar filtros"><i class="bi bi-x-circle-fill"></i> Limpiar</button>
                 </div>
 
                 <!-- LOBBY DE COHORTES -->
@@ -1006,75 +360,26 @@
 
                 <!-- CONTENEDOR TABS Y GRÁFICOS -->
                 <div id="contenedor-tabs" style="display: block;">
-
+                    
                     <div class="nav-tabs-clean" role="tablist">
-                        <button class="tab-clean active" id="global-tab" data-bs-toggle="tab"
-                            data-bs-target="#panel-global" type="button" role="tab"><i class="bi bi-pie-chart-fill"></i>
-                            Demografía</button>
-                        <button class="tab-clean" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle"
-                            type="button" role="tab">
-                            <i class="bi bi-speedometer2"></i> Operativo <i
-                                class="bi bi-lock-fill text-danger ms-1 d-none" id="lock-icon"
-                                title="Bloqueado por filtros"></i>
+                        <button class="tab-clean active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab"><i class="bi bi-pie-chart-fill"></i> Demografía</button>
+                        <button class="tab-clean" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab">
+                            <i class="bi bi-speedometer2"></i> Operativo <i class="bi bi-lock-fill text-danger ms-1 d-none" id="lock-icon" title="Bloqueado por filtros"></i>
                         </button>
-                        <button class="tab-clean" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar"
-                            type="button" role="tab"><i class="bi bi-star-fill"></i> Calidad Percibida</button>
+                        <button class="tab-clean" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill"></i> Calidad Percibida</button>
                     </div>
 
                     <div class="tab-content" id="myTabContent">
-
+                        
                         <!-- TAB 1: DEMOGRAFÍA -->
                         <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                             <div class="row g-3 mb-4" id="kpi-global-row"></div>
-
+                            
                             <div class="row g-3 mb-4">
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="glass-card p-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <h6 class="mb-0 fw-bold fs-6">Sexo</h6><button class="btn-download-img"
-                                                onclick="descargarGrafico('chartSexo', 'Sexo')"><i
-                                                    class="bi bi-download"></i></button>
-                                        </div>
-                                        <div class="chart-wrapper" style="height: 180px;"><canvas
-                                                id="chartSexo"></canvas></div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="glass-card p-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6><button
-                                                class="btn-download-img"
-                                                onclick="descargarGrafico('chartEdad', 'Edad')"><i
-                                                    class="bi bi-download"></i></button>
-                                        </div>
-                                        <div class="chart-wrapper" style="height: 180px;"><canvas
-                                                id="chartEdad"></canvas></div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="glass-card p-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6><button
-                                                class="btn-download-img"
-                                                onclick="descargarGrafico('chartPerfil', 'Perfil')"><i
-                                                    class="bi bi-download"></i></button>
-                                        </div>
-                                        <div class="chart-wrapper" style="height: 180px;"><canvas
-                                                id="chartPerfil"></canvas></div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3 col-md-6">
-                                    <div class="glass-card p-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <h6 class="mb-0 fw-bold fs-6">Escolaridad</h6><button
-                                                class="btn-download-img"
-                                                onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i
-                                                    class="bi bi-download"></i></button>
-                                        </div>
-                                        <div class="chart-wrapper" style="height: 180px;"><canvas
-                                                id="chartEscolaridad"></canvas></div>
-                                    </div>
-                                </div>
+                                <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Sexo</h6><button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartSexo"></canvas></div></div></div>
+                                <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6><button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Edad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartEdad"></canvas></div></div></div>
+                                <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6><button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Perfil')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartPerfil"></canvas></div></div></div>
+                                <div class="col-xl-3 col-md-6"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Escolaridad</h6><button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper" style="height: 180px;"><canvas id="chartEscolaridad"></canvas></div></div></div>
                             </div>
 
                             <div class="row g-3 mb-4">
@@ -1088,12 +393,9 @@
                                     <div class="glass-card p-3">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <h6 class="mb-0 fw-bold fs-6">Distribución por Ubicación</h6>
-                                            <button class="btn-download-img"
-                                                onclick="descargarGrafico('chartComunas', 'Comunas')"><i
-                                                    class="bi bi-download"></i></button>
+                                            <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Comunas')"><i class="bi bi-download"></i></button>
                                         </div>
-                                        <div class="chart-wrapper" style="height: 400px; margin-top: 0;"><canvas
-                                                id="chartComunas"></canvas></div>
+                                        <div class="chart-wrapper" style="height: 400px; margin-top: 0;"><canvas id="chartComunas"></canvas></div>
                                     </div>
                                 </div>
                             </div>
@@ -1107,21 +409,16 @@
                                     <div class="glass-card p-3">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <h6 class="mb-0 fw-bold fs-6">Embudo de Capacitación</h6>
-                                            <button class="btn-download-img"
-                                                onclick="descargarGrafico('chartMoodleBar', 'Operativo')"><i
-                                                    class="bi bi-download"></i></button>
+                                            <button class="btn-download-img" onclick="descargarGrafico('chartMoodleBar', 'Operativo')"><i class="bi bi-download"></i></button>
                                         </div>
                                         <div class="chart-wrapper"><canvas id="chartMoodleBar"></canvas></div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div
-                                        class="glass-card text-center d-flex flex-column justify-content-center align-items-center">
-                                        <div class="kpi-mini-icon bg-indigo-soft mb-2"><i
-                                                class="bi bi-stopwatch-fill"></i></div>
+                                    <div class="glass-card text-center d-flex flex-column justify-content-center align-items-center">
+                                        <div class="kpi-mini-icon bg-indigo-soft mb-2"><i class="bi bi-stopwatch-fill"></i></div>
                                         <h6 class="fw-bold fs-6 mb-3">Ritmo de Aprendizaje</h6>
-                                        <div class="kpi-mini-val text-primary" style="font-size: 3rem;"
-                                            id="tiempo-consumo-dias">0</div>
+                                        <div class="kpi-mini-val text-primary" style="font-size: 3rem;" id="tiempo-consumo-dias">0</div>
                                         <div class="kpi-mini-lbl">Días Promedio para Finalizar</div>
                                     </div>
                                 </div>
@@ -1135,19 +432,15 @@
                                     <div class="glass-card p-3">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <h6 class="mb-0 fw-bold fs-6" id="titulo-radar">Radar vs Benchmark</h6>
-                                            <button class="btn-download-img"
-                                                onclick="descargarGrafico('chartRadar', 'Radar')"><i
-                                                    class="bi bi-download"></i></button>
+                                            <button class="btn-download-img" onclick="descargarGrafico('chartRadar', 'Radar')"><i class="bi bi-download"></i></button>
                                         </div>
                                         <div class="radar-wrapper"><canvas id="chartRadar"></canvas></div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="glass-card p-4">
-                                        <h6 class="fw-bold fs-6 mb-3 text-primary" id="titulo-desglose">Desglose
-                                            Detallado (0 - 5.0)</h6>
-                                        <div id="diagnostico-detalles"
-                                            style="max-height: 330px; overflow-y: auto; padding-right: 10px;"></div>
+                                        <h6 class="fw-bold fs-6 mb-3 text-primary" id="titulo-desglose">Desglose Detallado (0 - 5.0)</h6>
+                                        <div id="diagnostico-detalles" style="max-height: 330px; overflow-y: auto; padding-right: 10px;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -1161,18 +454,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let datosFiltradosActuales = null;
-        let chartInstances = {}; let promediosGlobalesPreguntas = {}; let mapInstance = null; let geoJsonLayer = null;
+        let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let datosFiltradosActuales = null; 
+        let chartInstances = {}; let promediosGlobalesPreguntas = {}; let mapInstance = null; let geoJsonLayer = null; 
         let geoJsonDataRaw = null; let añosDisponibles = new Set(); let añoActual = "ALL"; let filterDebounceTimer = null;
 
-        const mapeoPreguntas = {
-            "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Obj. Cumplido",
-            "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia", "¿Los temas se desarrollaron en el tiempo previsto?": "Tiempo",
-            "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Aporte Nuevo", "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Práctica",
-            "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente",
-            "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Inquietudes",
-            "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "UX Virtual", "¿El material utilizado permitió el entendimiento del tema?": "Material",
-            "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción (eNPS)"
+        const mapeoPreguntas = { 
+            "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Obj. Cumplido", 
+            "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia", "¿Los temas se desarrollaron en el tiempo previsto?": "Tiempo", 
+            "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": "Aporte Nuevo", "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": "Práctica", 
+            "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": "Metodología", "¿El facilitador demostró el dominio del tema brindado?": "Dominio Docente", 
+            "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": "Participación", "¿Durante la capacitación se dio espacio para la solución de inquietudes?": "Inquietudes", 
+            "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": "UX Virtual", "¿El material utilizado permitió el entendimiento del tema?": "Material", 
+            "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción (eNPS)" 
         };
 
         const mapeoColores = {
@@ -1188,10 +481,10 @@
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
             document.getElementById(viewId).classList.add('active-view');
             document.querySelectorAll('.nav-item-custom').forEach(el => el.classList.remove('active'));
-            if (element) element.classList.add('active');
-            if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open');
+            if(element) element.classList.add('active');
+            if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('mobile-open');
             // Fix map sizing when showing dashboard
-            if (viewId === 'dashboard_view' && mapInstance) setTimeout(() => mapInstance.invalidateSize(), 100);
+            if(viewId === 'dashboard_view' && mapInstance) setTimeout(() => mapInstance.invalidateSize(), 100);
         }
         function toggleMobileMenu() { document.getElementById('sidebar').classList.toggle('mobile-open'); }
 
@@ -1206,145 +499,160 @@
 
         // --- FILTROS OLAP DE ALTO RENDIMIENTO (DEBOUNCED) ---
         function cargarFiltrosOLAP() {
-            if (!cursoActual || !cursoActual.Registros_Crudos || cursoActual.Registros_Crudos.length === 0) { document.getElementById('filtros-cruzados-bar').style.display = 'none'; return; }
+            if(!cursoActual || !cursoActual.Registros_Crudos || cursoActual.Registros_Crudos.length === 0) { document.getElementById('filtros-cruzados-bar').style.display = 'none'; return; }
             document.getElementById('filtros-cruzados-bar').style.display = 'flex';
             const fSexo = new Set(), fEdad = new Set(), fPerf = new Set(), fCom = new Set();
             cursoActual.Registros_Crudos.forEach(r => { fSexo.add(r['Sexo']); fEdad.add(r['Curso de vida']); fPerf.add(r['Perfil']); fCom.add(r['Comuna_Unificada']); });
-            const setOpts = (id, set, lbl) => { const el = document.getElementById(id); el.innerHTML = `<option value="ALL">${lbl}</option>`; Array.from(set).sort().forEach(v => { if (v && v !== "N/A") el.appendChild(new Option(v, v)); }); el.classList.remove('active-chip'); };
+            const setOpts = (id, set, lbl) => { const el = document.getElementById(id); el.innerHTML = `<option value="ALL">${lbl}</option>`; Array.from(set).sort().forEach(v => { if(v && v!=="N/A") el.appendChild(new Option(v, v)); }); el.classList.remove('active-chip'); };
             setOpts('f-sexo', fSexo, 'Sexo'); setOpts('f-edad', fEdad, 'Edad'); setOpts('f-perfil', fPerf, 'Perfil'); setOpts('f-comuna', fCom, 'Comuna');
         }
 
         function aplicarFiltrosDebounced() {
-            ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { const el = document.getElementById(id); if (el.value !== "ALL") el.classList.add('active-chip'); else el.classList.remove('active-chip'); });
+            ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { const el = document.getElementById(id); if(el.value !== "ALL") el.classList.add('active-chip'); else el.classList.remove('active-chip'); });
             clearTimeout(filterDebounceTimer); filterDebounceTimer = setTimeout(aplicarFiltrosReal, 200); // 200ms debounce
         }
 
         function aplicarFiltrosReal() {
-            if (!cursoActual || !cursoActual.Registros_Crudos) return;
+            if(!cursoActual || !cursoActual.Registros_Crudos) return;
             const vS = document.getElementById('f-sexo').value, vE = document.getElementById('f-edad').value, vP = document.getElementById('f-perfil').value, vC = document.getElementById('f-comuna').value;
-            const esFiltrado = (vS !== "ALL" || vE !== "ALL" || vP !== "ALL" || vC !== "ALL");
+            const esFiltrado = (vS!=="ALL" || vE!=="ALL" || vP!=="ALL" || vC!=="ALL");
 
             const moodleTab = document.getElementById('moodle-tab'); const radarTab = document.getElementById('radar-tab'); const lockIcon = document.getElementById('lock-icon');
 
-            if (!esFiltrado) {
+            if(!esFiltrado) {
                 datosFiltradosActuales = null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock');
                 moodleTab.classList.remove('locked'); moodleTab.setAttribute('data-bs-toggle', 'tab'); lockIcon.classList.add('d-none'); actualizarPantallaCurso(null); return;
             }
 
             document.getElementById('kpi-moodle-row').classList.add('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.add('filtro-lock');
             moodleTab.classList.add('locked'); moodleTab.removeAttribute('data-bs-toggle'); lockIcon.classList.remove('d-none');
-            if (moodleTab.classList.contains('active')) { let tab = new bootstrap.Tab(radarTab); tab.show(); document.querySelectorAll('.tab-clean').forEach(t => t.classList.remove('active')); radarTab.classList.add('active'); }
+            if(moodleTab.classList.contains('active')) { let tab = new bootstrap.Tab(radarTab); tab.show(); document.querySelectorAll('.tab-clean').forEach(t => t.classList.remove('active')); radarTab.classList.add('active'); }
 
-            let arrF = cursoActual.Registros_Crudos.filter(r => (vS === "ALL" || r['Sexo'] === vS) && (vE === "ALL" || r['Curso de vida'] === vE) && (vP === "ALL" || r['Perfil'] === vP) && (vC === "ALL" || r['Comuna_Unificada'] === vC));
-            let nD = { 'Sexo': {}, 'Edad': {}, 'Perfil': {}, 'Comuna': {}, 'Escolaridad': {} }; let sumQ = {}; let cQ = arrF.length; let p = 0, d = 0;
+            let arrF = cursoActual.Registros_Crudos.filter(r => (vS==="ALL" || r['Sexo']===vS) && (vE==="ALL" || r['Curso de vida']===vE) && (vP==="ALL" || r['Perfil']===vP) && (vC==="ALL" || r['Comuna_Unificada']===vC));
+            let nD = { 'Sexo':{}, 'Edad':{}, 'Perfil':{}, 'Comuna':{}, 'Escolaridad':{} }; let sumQ = {}; let cQ = arrF.length; let p = 0, d = 0;
             arrF.forEach(r => {
-                nD.Sexo[r['Sexo']] = (nD.Sexo[r['Sexo']] || 0) + 1; nD.Edad[r['Curso de vida']] = (nD.Edad[r['Curso de vida']] || 0) + 1; nD.Perfil[r['Perfil']] = (nD.Perfil[r['Perfil']] || 0) + 1; nD.Comuna[r['Comuna_Unificada']] = (nD.Comuna[r['Comuna_Unificada']] || 0) + 1; nD.Escolaridad[r['Escolaridad']] = (nD.Escolaridad[r['Escolaridad']] || 0) + 1;
-                Object.keys(mapeoPreguntas).forEach(q => { sumQ[q] = (sumQ[q] || 0) + (parseFloat(r[q]) || 0); });
-                let vg = parseFloat(r['En general, ¿Cómo se sintió con la actividad de capacitación realizada?']) || 0; if (vg === 5) p++; else if (vg <= 3 && vg > 0) d++;
+                nD.Sexo[r['Sexo']]=(nD.Sexo[r['Sexo']]||0)+1; nD.Edad[r['Curso de vida']]=(nD.Edad[r['Curso de vida']]||0)+1; nD.Perfil[r['Perfil']]=(nD.Perfil[r['Perfil']]||0)+1; nD.Comuna[r['Comuna_Unificada']]=(nD.Comuna[r['Comuna_Unificada']]||0)+1; nD.Escolaridad[r['Escolaridad']]=(nD.Escolaridad[r['Escolaridad']]||0)+1;
+                Object.keys(mapeoPreguntas).forEach(q => { sumQ[q]=(sumQ[q]||0)+(parseFloat(r[q])||0); });
+                let vg = parseFloat(r['En general, ¿Cómo se sintió con la actividad de capacitación realizada?'])||0; if(vg===5) p++; else if(vg<=3 && vg>0) d++;
             });
-            datosFiltradosActuales = { Total_Encuestas: cQ, e_NPS: cQ > 0 ? Math.round(((p - d) / cQ) * 100, 1) : 0, Demografia: nD, Detalle_Preguntas: (() => { let n = {}; Object.keys(sumQ).forEach(q => n[q] = cQ > 0 ? (sumQ[q] / cQ) : 0); return n })(), isFiltered: true };
+            datosFiltradosActuales = { Total_Encuestas: cQ, e_NPS: cQ>0?Math.round(((p-d)/cQ)*100,1):0, Demografia: nD, Detalle_Preguntas: (()=>{let n={}; Object.keys(sumQ).forEach(q=>n[q]=cQ>0?(sumQ[q]/cQ):0); return n})(), isFiltered: true };
             actualizarPantallaCurso(datosFiltradosActuales);
         }
-        window.limpiarFiltros = function () { if (!cursoActual) return;['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip'); }); aplicarFiltrosReal(); };
+        window.limpiarFiltros = function() { if(!cursoActual) return; ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
 
         // --- MAPA CANVAS Y GRÁFICOS RECICLABLES ---
         function inicializarMapa() { if (mapInstance) return; mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO', maxZoom: 20 }).addTo(mapInstance); }
-        function getColorMapa(v, max) { if (v === 0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme') === 'rose' ? ['#fff1f2', '#fecdd3', '#fda4af', '#f43f5e', '#be123c'] : document.documentElement.getAttribute('data-theme') === 'amber' ? ['#fffbeb', '#fef08a', '#f59e0b', '#d97706', '#92400e'] : ['#ece6ff', '#d1c4ff', '#a389ff', '#7551ff', '#4318ff']; if (v > max * 0.8) return c[4]; if (v > max * 0.6) return c[3]; if (v > max * 0.4) return c[2]; if (v > max * 0.2) return c[1]; return c[0]; }
-        function dibujarMapaCoropletico(dataComunas) {
-            if (!mapInstance || !geoJsonDataRaw) return;
-            let mapNorm = {}; let maxP = 0; for (let n in dataComunas) { let id = (n || "N/A").replace(/\D/g, ''); id = isNaN(parseInt(id, 10)) ? n.trim() : String(parseInt(id, 10)); mapNorm[id] = (mapNorm[id] || 0) + (dataComunas[n] || 0); if (mapNorm[id] > maxP && !isNaN(id)) maxP = mapNorm[id]; }
-            if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer);
-            geoJsonLayer = L.geoJSON(geoJsonDataRaw, { style: (f) => { let id = (f.properties.comuna || f.properties.nombre || f.properties.id).replace(/\D/g, ''); id = isNaN(parseInt(id, 10)) ? f.properties.comuna : String(parseInt(id, 10)); let p = mapNorm[id] || 0; return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p > 0 ? 0.85 : 0.1 }; } }).addTo(mapInstance);
+        function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
+        function dibujarMapaCoropletico(dataComunas) { 
+            if (!mapInstance || !geoJsonDataRaw) return; 
+            let mapNorm = {}; let maxP = 0; for (let n in dataComunas) { let id = (n||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?n.trim():String(parseInt(id,10)); mapNorm[id] = (mapNorm[id]||0)+(dataComunas[n]||0); if(mapNorm[id]>maxP && !isNaN(id)) maxP=mapNorm[id]; } 
+            if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
+            geoJsonLayer = L.geoJSON(geoJsonDataRaw, { style: (f) => { let id = (f.properties.comuna||f.properties.nombre||f.properties.id).replace(/\D/g, ''); id = isNaN(parseInt(id,10))?f.properties.comuna:String(parseInt(id,10)); let p = mapNorm[id]||0; return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p>0?0.85:0.1 }; } }).addTo(mapInstance); 
             mapInstance.invalidateSize(); // Fast resize check
         }
 
         // Fast update logic: Replace data, don't destroy chart
-        function dibujarGraficoDona(canvasId, dataObject, legendPosition) {
-            let labels = Object.keys(dataObject); let datos = Object.values(dataObject); let cols = labels.map((l, i) => mapeoColores[l] || coloresRespaldo[i % coloresRespaldo.length]);
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update('none'); }
+        function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
+            let labels = Object.keys(dataObject); let datos = Object.values(dataObject); let cols = labels.map((l, i) => mapeoColores[l] || coloresRespaldo[i % coloresRespaldo.length]); 
+            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update('none'); } 
             else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'doughnut', data: { labels: labels, datasets: [{ data: datos, backgroundColor: cols, borderWidth: 0, hoverOffset: 4 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 10, family: 'Inter' } } } }, animation: false } }); }
         }
-        function dibujarGraficoComunas(canvasId, dataObject) {
-            let ag = {}; for (let k in dataObject) { let id = (k || "N/A").replace(/\D/g, ''); id = isNaN(parseInt(id, 10)) ? k.trim() : String(parseInt(id, 10)); let l = (id === "N/A" ? "Fuera de Cali" : (!isNaN(id) ? "Comuna " + id : "Correg. " + id)); ag[l] = (ag[l] || 0) + dataObject[k]; }
-            let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i => i[0]); let data = sort.map(i => i[1]);
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); }
+        function dibujarGraficoComunas(canvasId, dataObject) { 
+            let ag = {}; for (let k in dataObject) { let id = (k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?k.trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
+            let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
+            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); } 
             else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false } }); }
         }
-        function dibujarBarraMoodle(canvasId, c) {
+        function dibujarBarraMoodle(canvasId, c) { 
             let d = [c['Tasa_Finalizacion_%'], c['Tasa_Abandono_%'], c['Tasa_Inactividad_%']];
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data = [d[0]]; chartInstances[canvasId].data.datasets[1].data = [d[1]]; chartInstances[canvasId].data.datasets[2].data = [d[2]]; chartInstances[canvasId].update('none'); }
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [{ label: 'Finalizaron', data: [d[0]], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#ffb547' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } }] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } }, animation: false } }); }
+            if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data=[d[0]]; chartInstances[canvasId].data.datasets[1].data=[d[1]]; chartInstances[canvasId].data.datasets[2].data=[d[2]]; chartInstances[canvasId].update('none'); } 
+            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#ffb547' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: false } }); }
         }
-        function dibujarRadar(pC, isG = false) {
+        function dibujarRadar(pC, isG = false) { 
             const lbl = Object.keys(pC).map(q => mapeoPreguntas[q] || "Pregunta"); let d1 = Object.values(pC); let d2 = Object.keys(pC).map(q => promediosGlobalesPreguntas[q] || 0);
-            if (chartInstances['chartRadar']) { chartInstances['chartRadar'].data.labels = lbl; chartInstances['chartRadar'].data.datasets[0].data = d1; chartInstances['chartRadar'].data.datasets[0].label = isG ? 'Promedio' : 'Cohorte'; if (!isG) { if (!chartInstances['chartRadar'].data.datasets[1]) chartInstances['chartRadar'].data.datasets.push({ label: 'Benchmark', backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'].data.datasets[1].data = d2; } else if (chartInstances['chartRadar'].data.datasets.length > 1) { chartInstances['chartRadar'].data.datasets.pop(); } chartInstances['chartRadar'].update('none'); }
+            if (chartInstances['chartRadar']) { chartInstances['chartRadar'].data.labels = lbl; chartInstances['chartRadar'].data.datasets[0].data = d1; chartInstances['chartRadar'].data.datasets[0].label = isG ? 'Promedio' : 'Cohorte'; if(!isG) { if(!chartInstances['chartRadar'].data.datasets[1]) chartInstances['chartRadar'].data.datasets.push({ label: 'Benchmark', backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'].data.datasets[1].data = d2; } else if (chartInstances['chartRadar'].data.datasets.length > 1) { chartInstances['chartRadar'].data.datasets.pop(); } chartInstances['chartRadar'].update('none'); } 
             else { let arr = [{ label: isG ? 'Promedio' : 'Cohorte', data: d1, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 3 }]; if (!isG) arr.push({ label: 'Benchmark', data: d2, backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: lbl, datasets: arr }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 9, family: 'Inter', weight: '600' } } } }, animation: false } }); }
         }
 
         // --- RENDERIZADO UI ---
-        function crearTarjetaKPI(l, v, pct = null, i = "bi-bar-chart", c = "primary") { let bp = pct ? `<span class="badge-kpi bg-${c} bg-opacity-10 text-${c}">${pct}</span>` : ''; return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-mini"><div class="kpi-mini-header"><div class="kpi-mini-icon bg-${c}-soft"><i class="bi ${i}"></i></div>${bp}</div><div class="kpi-mini-val">${v}</div><div class="kpi-mini-lbl">${l}</div></div></div>`; }
-        function generarBarrasCalidad(d) { let h = ''; for (let q in d) { let v = parseFloat(d[q]) || 0; let c = v >= 4.5 ? 'success' : (v >= 4.0 ? 'info' : 'danger'); h += `<div class="progress-bar-container mb-3"><div class="progress-label"><span>${q}</span><span class="fw-bold text-${c}">${v.toFixed(1)}</span></div><div class="progress-bg"><div class="progress-fill bg-${c}" style="width: ${(v / 5) * 100}%"></div></div></div>`; } return h; }
+        function crearTarjetaKPI(l, v, pct = null, i = "bi-bar-chart", c="primary") { let bp = pct ? `<span class="badge-kpi bg-${c} bg-opacity-10 text-${c}">${pct}</span>` : ''; return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-mini"><div class="kpi-mini-header"><div class="kpi-mini-icon bg-${c}-soft"><i class="bi ${i}"></i></div>${bp}</div><div class="kpi-mini-val">${v}</div><div class="kpi-mini-lbl">${l}</div></div></div>`; }
+        function generarBarrasCalidad(d) { let h = ''; for (let q in d) { let v = parseFloat(d[q]) || 0; let c = v >= 4.5 ? 'success' : (v >= 4.0 ? 'info' : 'danger'); h += `<div class="progress-bar-container mb-3"><div class="progress-label"><span>${q}</span><span class="fw-bold text-${c}">${v.toFixed(1)}</span></div><div class="progress-bg"><div class="progress-fill bg-${c}" style="width: ${(v/5)*100}%"></div></div></div>`; } return h; }
 
-        function agruparCursos() { const sA = document.getElementById('selector-anio'); const sB = document.getElementById('selector-curso-base'); dashboardData.cursos.forEach(c => { let m = (c.Edicion || "").match(/\b(20\d{2})\b/); if (m) añosDisponibles.add(m[1]); const b = c.Curso_Base || c.Nombre_Curso; if (!cursosPorBase[b]) cursosPorBase[b] = []; cursosPorBase[b].push(c); }); Array.from(añosDisponibles).sort().reverse().forEach(a => sA.appendChild(new Option(a, a))); Object.keys(cursosPorBase).sort().forEach(b => sB.appendChild(new Option(b, b))); }
+        function agruparCursos() { const sA = document.getElementById('selector-anio'); const sB = document.getElementById('selector-curso-base'); dashboardData.cursos.forEach(c => { let m = (c.Edicion||"").match(/\b(20\d{2})\b/); if(m) añosDisponibles.add(m[1]); const b = c.Curso_Base || c.Nombre_Curso; if (!cursosPorBase[b]) cursosPorBase[b] = []; cursosPorBase[b].push(c); }); Array.from(añosDisponibles).sort().reverse().forEach(a => sA.appendChild(new Option(a, a))); Object.keys(cursosPorBase).sort().forEach(b => sB.appendChild(new Option(b, b))); }
         function manejarCambioAnio() { añoActual = this.value; const b = document.getElementById('selector-curso-base').value; if (b === "ALL") actualizarPantallaGlobal(); else document.getElementById('selector-curso-base').dispatchEvent(new Event('change')); }
-        function manejarCambioBase() {
-            const s = this.value; const sC = document.getElementById('selector-cohorte'); const ic = document.getElementById('icon-cohorte'); const dc = document.getElementById('div-cohorte'); const lob = document.getElementById('panel-lobby-curso'); const tab = document.getElementById('contenedor-tabs');
-            if (s === "ALL") { sC.style.display = "none"; ic.style.display = "none"; dc.style.display = "none"; cursoActual = null; lob.style.display = "none"; tab.style.display = "block"; actualizarPantallaGlobal(); }
-            else {
-                let cohs = cursosPorBase[s]; if (añoActual !== "ALL") cohs = cohs.filter(c => (c.Edicion || "").includes(añoActual)); cohs = cohs.sort((a, b) => b.Edicion.localeCompare(a.Edicion));
-                sC.innerHTML = '<option value="">⬅ Seleccione Edición</option>'; cohs.forEach(c => sC.appendChild(new Option(c.Edicion, c.Nombre_Curso)));
-                sC.style.display = "block"; ic.style.display = "block"; dc.style.display = "block"; sC.value = ""; tab.style.display = "none"; lob.style.display = "block"; document.getElementById('filtros-cruzados-bar').style.display = 'none';
-                let hL = `<div class="mb-4 text-start"><h5 class="fw-bold text-primary">${s}</h5><p class="text-muted small">Seleccione una edición</p></div><div class="row g-3">`;
-                if (cohs.length === 0) hL += `<div class="col-12 text-muted py-4"><i class="bi bi-folder-x fs-2"></i> No hay cohortes este año.</div>`;
-                else cohs.forEach(c => { hL += `<div class="col-md-4 col-xl-3"><div class="glass-card text-start py-3 px-4" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="d-flex align-items-center gap-3"><i class="bi bi-mortarboard-fill fs-3 text-primary"></i><div><h6 class="fw-bold m-0">${c.Edicion}</h6><small class="text-muted">${c.Total_Inscritos} Estudiantes</small></div></div></div></div>`; });
-                lob.innerHTML = hL + `</div>`;
-            }
+        function manejarCambioBase() { 
+            const s = this.value; const sC = document.getElementById('selector-cohorte'); const ic = document.getElementById('icon-cohorte'); const dc = document.getElementById('div-cohorte'); const lob = document.getElementById('panel-lobby-curso'); const tab = document.getElementById('contenedor-tabs'); 
+            if (s === "ALL") { sC.style.display="none"; ic.style.display="none"; dc.style.display="none"; cursoActual=null; lob.style.display="none"; tab.style.display="block"; actualizarPantallaGlobal(); } 
+            else { 
+                let cohs = cursosPorBase[s]; if(añoActual!=="ALL") cohs = cohs.filter(c => (c.Edicion||"").includes(añoActual)); cohs = cohs.sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                sC.innerHTML = '<option value="">⬅ Seleccione Edición</option>'; cohs.forEach(c => sC.appendChild(new Option(c.Edicion, c.Nombre_Curso))); 
+                sC.style.display="block"; ic.style.display="block"; dc.style.display="block"; sC.value=""; tab.style.display="none"; lob.style.display="block"; document.getElementById('filtros-cruzados-bar').style.display='none';
+                let hL = `<div class="mb-4 text-start"><h5 class="fw-bold text-primary">${s}</h5><p class="text-muted small">Seleccione una edición</p></div><div class="row g-3">`; 
+                if(cohs.length===0) hL += `<div class="col-12 text-muted py-4"><i class="bi bi-folder-x fs-2"></i> No hay cohortes este año.</div>`; 
+                else cohs.forEach(c => { hL += `<div class="col-md-4 col-xl-3"><div class="glass-card text-start py-3 px-4" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="d-flex align-items-center gap-3"><i class="bi bi-mortarboard-fill fs-3 text-primary"></i><div><h6 class="fw-bold m-0">${c.Edicion}</h6><small class="text-muted">${c.Total_Inscritos} Estudiantes</small></div></div></div></div>`; }); 
+                lob.innerHTML = hL + `</div>`; 
+            } 
         }
-        window.seleccionarCohorteDesdeLobby = function (n) { document.getElementById('selector-cohorte').value = n; document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block'; cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === n); actualizarPantallaCurso(); };
-        function manejarCambioCohorte() { if (!this.value) { document.getElementById('panel-lobby-curso').style.display = 'block'; document.getElementById('contenedor-tabs').style.display = 'none'; return; } document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block'; cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); actualizarPantallaCurso(); }
+        window.seleccionarCohorteDesdeLobby = function(n) { document.getElementById('selector-cohorte').value = n; document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block'; cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === n); actualizarPantallaCurso(); };
+        function manejarCambioCohorte() { if (!this.value) { document.getElementById('panel-lobby-curso').style.display='block'; document.getElementById('contenedor-tabs').style.display='none'; return; } document.getElementById('panel-lobby-curso').style.display='none'; document.getElementById('contenedor-tabs').style.display='block'; cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); actualizarPantallaCurso(); }
 
-        function actualizarPantallaGlobal() {
-            document.getElementById('filtros-cruzados-bar').style.display = 'none'; datosFiltradosActuales = null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock'); document.getElementById('moodle-tab').classList.remove('locked'); document.getElementById('moodle-tab').setAttribute('data-bs-toggle', 'tab'); document.getElementById('lock-icon').classList.add('d-none');
-            let cF = dashboardData.cursos; if (añoActual !== "ALL") cF = cF.filter(c => (c.Edicion || "").includes(añoActual));
-            const tC = cF.length; const tI = cF.reduce((s, c) => s + (c.Total_Inscritos || 0), 0); let tCert = 0, tE = 0, npsP = 0, npsD = 0, chsS = 0; let dG = { 'Sexo': {}, 'Curso de Vida': {}, 'Perfil': {}, 'Escolaridad': {}, 'Comuna': {} };
-            if (añoActual === "ALL") { dG = dashboardData.demografia_global; tE = dashboardData.metadata.total_encuestas_historicas; dashboardData.cursos.forEach(c => tCert += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100)); promediosGlobalesPreguntas = {}; let s = {}; let cnt = {}; dashboardData.cursos.forEach(c => { if (c.Detalle_Preguntas && c.Total_Encuestas > 0) { for (let k in c.Detalle_Preguntas) { if (c.Detalle_Preguntas[k] > 0) { s[k] = (s[k] || 0) + c.Detalle_Preguntas[k]; cnt[k] = (cnt[k] || 0) + 1; } } } }); for (let k in s) promediosGlobalesPreguntas[k] = s[k] / cnt[k]; }
-            else { cF.forEach(c => { tCert += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); tE += (c.Total_Encuestas || 0); chsS += (c.Salud_Curso_CHS || 0); if (c.Demografia) { for (let k in c.Demografia.Sexo) dG.Sexo[k] = (dG.Sexo[k] || 0) + c.Demografia.Sexo[k]; let kE = c.Demografia.Edad ? 'Edad' : 'Curso de Vida'; for (let k in c.Demografia[kE]) dG['Curso de Vida'][k] = (dG['Curso de Vida'][k] || 0) + c.Demografia[kE][k]; for (let k in c.Demografia.Perfil) dG.Perfil[k] = (dG.Perfil[k] || 0) + c.Demografia.Perfil[k]; for (let k in c.Demografia.Comuna) dG.Comuna[k] = (dG.Comuna[k] || 0) + c.Demografia.Comuna[k]; for (let k in c.Demografia.Escolaridad) dG.Escolaridad[k] = (dG.Escolaridad[k] || 0) + c.Demografia.Escolaridad[k]; } if (c.Total_Encuestas > 0) { let p = Math.round((c.e_NPS + 100) / 2); npsP += (p * c.Total_Encuestas) / 100; npsD += ((100 - p) * c.Total_Encuestas) / 100; } }); promediosGlobalesPreguntas = {}; let s = {}; let cnt = {}; cF.forEach(c => { if (c.Detalle_Preguntas && c.Total_Encuestas > 0) { for (let k in c.Detalle_Preguntas) { if (c.Detalle_Preguntas[k] > 0) { s[k] = (s[k] || 0) + c.Detalle_Preguntas[k]; cnt[k] = (cnt[k] || 0) + 1; } } } }); for (let k in s) promediosGlobalesPreguntas[k] = s[k] / cnt[k]; }
-            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Activos", tC, null, "bi-journal-bookmark", "primary")} ${crearTarjetaKPI("Matrículas", tI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", tCert.toLocaleString(), tI ? Math.round((tCert / tI) * 100) + "%" : "0%", "bi-check-circle", "success")} ${crearTarjetaKPI("Encuestas", tE.toLocaleString(), null, "bi-ui-radios", "warning")} ${crearTarjetaKPI("CHS", añoActual === "ALL" ? dashboardData.kpis_globales.chs_promedio_secretaria : (tC ? (chsS / tC).toFixed(1) : 0), null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", añoActual === "ALL" ? dashboardData.kpis_globales.nps_global : (tE ? Math.round(((npsP - npsD) / tE) * 100) : 0), null, "bi-emoji-smile", "primary")}`;
-            dibujarGraficoDona('chartSexo', dG['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dG['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dG['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dG['Escolaridad'], 'right'); dibujarMapaCoropletico(dG['Comuna']); dibujarGraficoComunas('chartComunas', dG['Comuna']);
-            let tF = 0, tA = 0, tIn = 0, sD = 0, cD = 0; cF.forEach(c => { let i = c.Total_Inscritos || 0; tF += (c['Tasa_Finalizacion_%'] / 100) * i; tA += (c['Tasa_Abandono_%'] / 100) * i; tIn += (c['Tasa_Inactividad_%'] / 100) * i; if (c.Tiempo_Promedio_Dias) { sD += c.Tiempo_Promedio_Dias; cD++; } });
-            let pF = tI ? Math.round((tF / tI) * 100) : 0; let pA = tI ? Math.round((tA / tI) * 100) : 0; let pI = tI ? Math.round((tIn / tI) * 100) : 0;
-            document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF + "%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA + "%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI + "%", null, "bi-door-closed", "danger")}`;
-            document.getElementById('tiempo-consumo-dias').innerText = cD ? Math.round(sD / cD) : 0; dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pF, 'Tasa_Abandono_%': pA, 'Tasa_Inactividad_%': pI });
-            document.getElementById('titulo-radar').innerText = añoActual === "ALL" ? "Perfil Institucional Consolidado" : `Perfil Consolidado (${añoActual})`; dibujarRadar(promediosGlobalesPreguntas, true); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
+        function actualizarPantallaGlobal() { 
+            document.getElementById('filtros-cruzados-bar').style.display='none'; datosFiltradosActuales=null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock'); document.getElementById('moodle-tab').classList.remove('locked'); document.getElementById('moodle-tab').setAttribute('data-bs-toggle', 'tab'); document.getElementById('lock-icon').classList.add('d-none');
+            let cF = dashboardData.cursos; if(añoActual!=="ALL") cF = cF.filter(c => (c.Edicion||"").includes(añoActual));
+            const tC = cF.length; const tI = cF.reduce((s, c) => s+(c.Total_Inscritos||0), 0); let tCert = 0, tE = 0, npsP = 0, npsD = 0, chsS = 0; let dG = { 'Sexo':{}, 'Curso de Vida':{}, 'Perfil':{}, 'Escolaridad':{}, 'Comuna':{} };
+            if (añoActual==="ALL") { dG = dashboardData.demografia_global; tE = dashboardData.metadata.total_encuestas_historicas; dashboardData.cursos.forEach(c => tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100)); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; dashboardData.cursos.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; } 
+            else { cF.forEach(c => { tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); tE+=(c.Total_Encuestas||0); chsS+=(c.Salud_Curso_CHS||0); if(c.Demografia){ for(let k in c.Demografia.Sexo) dG.Sexo[k]=(dG.Sexo[k]||0)+c.Demografia.Sexo[k]; let kE=c.Demografia.Edad?'Edad':'Curso de Vida'; for(let k in c.Demografia[kE]) dG['Curso de Vida'][k]=(dG['Curso de Vida'][k]||0)+c.Demografia[kE][k]; for(let k in c.Demografia.Perfil) dG.Perfil[k]=(dG.Perfil[k]||0)+c.Demografia.Perfil[k]; for(let k in c.Demografia.Comuna) dG.Comuna[k]=(dG.Comuna[k]||0)+c.Demografia.Comuna[k]; for(let k in c.Demografia.Escolaridad) dG.Escolaridad[k]=(dG.Escolaridad[k]||0)+c.Demografia.Escolaridad[k]; } if(c.Total_Encuestas>0){let p=Math.round((c.e_NPS+100)/2); npsP+=(p*c.Total_Encuestas)/100; npsD+=((100-p)*c.Total_Encuestas)/100;} }); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; cF.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; }
+            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Activos", tC, null, "bi-journal-bookmark", "primary")} ${crearTarjetaKPI("Matrículas", tI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", tCert.toLocaleString(), tI?Math.round((tCert/tI)*100)+"%":"0%", "bi-check-circle", "success")} ${crearTarjetaKPI("Encuestas", tE.toLocaleString(), null, "bi-ui-radios", "warning")} ${crearTarjetaKPI("CHS", añoActual==="ALL"?dashboardData.kpis_globales.chs_promedio_secretaria:(tC?(chsS/tC).toFixed(1):0), null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", añoActual==="ALL"?dashboardData.kpis_globales.nps_global:(tE?Math.round(((npsP-npsD)/tE)*100):0), null, "bi-emoji-smile", "primary")}`; 
+            dibujarGraficoDona('chartSexo', dG['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dG['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dG['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dG['Escolaridad'], 'right'); dibujarMapaCoropletico(dG['Comuna']); dibujarGraficoComunas('chartComunas', dG['Comuna']); 
+            let tF=0, tA=0, tIn=0, sD=0, cD=0; cF.forEach(c => { let i = c.Total_Inscritos||0; tF+=(c['Tasa_Finalizacion_%']/100)*i; tA+=(c['Tasa_Abandono_%']/100)*i; tIn+=(c['Tasa_Inactividad_%']/100)*i; if (c.Tiempo_Promedio_Dias) { sD+=c.Tiempo_Promedio_Dias; cD++; } }); 
+            let pF=tI?Math.round((tF/tI)*100):0; let pA=tI?Math.round((tA/tI)*100):0; let pI=tI?Math.round((tIn/tI)*100):0; 
+            document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI+"%", null, "bi-door-closed", "danger")}`; 
+            document.getElementById('tiempo-consumo-dias').innerText = cD?Math.round(sD/cD):0; dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pF, 'Tasa_Abandono_%': pA, 'Tasa_Inactividad_%': pI }); 
+            document.getElementById('titulo-radar').innerText = añoActual==="ALL"?"Perfil Institucional Consolidado":`Perfil Consolidado (${añoActual})`; dibujarRadar(promediosGlobalesPreguntas, true); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
         }
 
-        function actualizarPantallaCurso(dOlap = null) {
-            if (!dOlap) cargarFiltrosOLAP();
-            const dD = dOlap ? dOlap.Demografia : cursoActual.Demografia; const dP = dOlap ? dOlap.Detalle_Preguntas : cursoActual.Detalle_Preguntas; const tE = dOlap ? dOlap.Total_Encuestas : cursoActual.Total_Encuestas; const dN = dOlap ? dOlap.e_NPS : cursoActual.e_NPS; const bI = cursoActual.Total_Inscritos; const tF = cursoActual['Tasa_Finalizacion_%'];
-            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Matrículas", bI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", Math.round((bI * tF) / 100).toLocaleString(), tF + "%", "bi-check-circle", "success")} ${crearTarjetaKPI(dOlap ? "Encuestas (Filtro)" : "Encuestas", tE.toLocaleString(), null, "bi-ui-radios", dOlap ? "primary" : "warning")} ${crearTarjetaKPI("CHS", cursoActual.Salud_Curso_CHS, null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", dN, null, "bi-emoji-smile", "primary")}`;
-            let kE = dD['Edad'] ? 'Edad' : 'Curso de Vida'; dibujarGraficoDona('chartSexo', dD['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dD[kE], 'right'); dibujarGraficoDona('chartPerfil', dD['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dD['Escolaridad'], 'right'); dibujarMapaCoropletico(dD['Comuna']); dibujarGraficoComunas('chartComunas', dD['Comuna']);
-            if (!dOlap) { document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF + "%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%'] + "%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%'] + "%", null, "bi-door-closed", "danger")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); }
-            document.getElementById('titulo-radar').innerText = dOlap ? "Radar Filtrado vs Benchmark" : "Radar vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
+        function actualizarPantallaCurso(dOlap = null) { 
+            if(!dOlap) cargarFiltrosOLAP();
+            const dD = dOlap?dOlap.Demografia:cursoActual.Demografia; const dP = dOlap?dOlap.Detalle_Preguntas:cursoActual.Detalle_Preguntas; const tE = dOlap?dOlap.Total_Encuestas:cursoActual.Total_Encuestas; const dN = dOlap?dOlap.e_NPS:cursoActual.e_NPS; const bI = cursoActual.Total_Inscritos; const tF = cursoActual['Tasa_Finalizacion_%'];
+            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Matrículas", bI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", Math.round((bI*tF)/100).toLocaleString(), tF+"%", "bi-check-circle", "success")} ${crearTarjetaKPI(dOlap?"Encuestas (Filtro)":"Encuestas", tE.toLocaleString(), null, "bi-ui-radios", dOlap?"primary":"warning")} ${crearTarjetaKPI("CHS", cursoActual.Salud_Curso_CHS, null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", dN, null, "bi-emoji-smile", "primary")}`; 
+            let kE = dD['Edad']?'Edad':'Curso de Vida'; dibujarGraficoDona('chartSexo', dD['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dD[kE], 'right'); dibujarGraficoDona('chartPerfil', dD['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dD['Escolaridad'], 'right'); dibujarMapaCoropletico(dD['Comuna']); dibujarGraficoComunas('chartComunas', dD['Comuna']); 
+            if(!dOlap) { document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); }
+            document.getElementById('titulo-radar').innerText = dOlap?"Radar Filtrado vs Benchmark":"Radar vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
         }
 
         // --- INICIALIZACIÓN ---
         document.addEventListener("DOMContentLoaded", async () => {
             cambiarTema(localStorage.getItem('temaDashboard') || 'light');
-            document.querySelectorAll('.tab-clean').forEach(t => { t.addEventListener('click', function () { if (this.classList.contains('locked')) return; document.querySelectorAll('.tab-clean').forEach(b => b.classList.remove('active')); this.classList.add('active'); if (this.id === 'global-tab' && mapInstance) setTimeout(() => mapInstance.invalidateSize(), 150); }); });
+            document.querySelectorAll('.tab-clean').forEach(t => { 
+                t.addEventListener('click', function() { 
+                    if(this.classList.contains('locked')) return; 
+                    document.querySelectorAll('.tab-clean').forEach(b=>b.classList.remove('active')); 
+                    this.classList.add('active'); 
+                    
+                    // Despertador para el Mapa
+                    if(this.id==='global-tab'&&mapInstance) setTimeout(()=>mapInstance.invalidateSize(), 150); 
+                    
+                    // DESPERTADOR PARA CHART.JS (Solución al bug de 0 píxeles)
+                    setTimeout(() => {
+                        for (let id in chartInstances) {
+                            if (chartInstances[id]) chartInstances[id].resize();
+                        }
+                    }, 50);
+                }); 
+            });
             proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-            try {
-                const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); dashboardData = await res.json();
-                const gRes = await fetch('mc_comunas.json'); let gd = await gRes.json();
-                gd.features.forEach(f => { if (f.geometry && f.geometry.coordinates) { if (f.geometry.type === "Polygon") f.geometry.coordinates = f.geometry.coordinates.map(r => r.map(c => proj4("EPSG:3115", "EPSG:4326", c))); else if (f.geometry.type === "MultiPolygon") f.geometry.coordinates = f.geometry.coordinates.map(p => p.map(r => r.map(c => proj4("EPSG:3115", "EPSG:4326", c)))); } }); geoJsonDataRaw = gd;
+            try { 
+                const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); dashboardData = await res.json(); 
+                const gRes = await fetch('mc_comunas.json'); let gd = await gRes.json(); 
+                gd.features.forEach(f=>{if(f.geometry&&f.geometry.coordinates){if(f.geometry.type==="Polygon")f.geometry.coordinates=f.geometry.coordinates.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c)));else if(f.geometry.type==="MultiPolygon")f.geometry.coordinates=f.geometry.coordinates.map(p=>p.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c))));}}); geoJsonDataRaw = gd;
             } catch (e) { console.error("Error cargando datos. Validar entorno.", e); return; }
-            Chart.defaults.font.family = 'Inter'; inicializarMapa(); agruparCursos();
+            Chart.defaults.font.family = 'Inter'; inicializarMapa(); agruparCursos(); 
             document.getElementById('selector-anio').addEventListener('change', manejarCambioAnio); document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase); document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
-
+            
             // Llenar Landing KPIs
-            const tI = dashboardData.cursos.reduce((s, c) => s + (c.Total_Inscritos || 0), 0); let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos || 0) * (c['Tasa_Finalizacion_%'] || 0) / 100); });
-            document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados || 0; document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString(); document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
+            const tI = dashboardData.cursos.reduce((s, c) => s+(c.Total_Inscritos||0), 0); let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); });
+            document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados||0; document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString(); document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
         });
     </script>
 </body>
-
 </html>
