@@ -196,7 +196,8 @@
             <div class="container-fluid p-4 p-md-5">
                 
                 <div class="text-center" id="header_principal" style="margin-bottom: 45px;">
-                    <img src="Recurso.png" alt="Logo Secretaría de Salud" onerror="this.style.display='none'" style="width: 85px; margin-bottom: 25px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+                    <!-- Ajuste de Logo solicitado: 70px de ancho y margen inferior de 40px -->
+                    <img src="Recurso.png" alt="Logo Secretaría de Salud" onerror="this.style.display='none'" style="width: 70px; margin-bottom: 40px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
                     <h1 class="fw-bolder mb-2" style="font-size: 2.5rem; letter-spacing: -0.05em; color: var(--text-main);">Ecosistema Educativo en Salud</h1>
                     <p class="text-muted fs-5">Panel Analítico y de Monitoreo - Secretaría de Salud Pública</p>
                 </div>
@@ -215,6 +216,7 @@
                                 <div class="bento-icon" style="background: rgba(5, 205, 153, 0.1); color: var(--success);"><i class="bi bi-people-fill"></i></div>
                                 <div class="kpi-val" id="val_matriculas">0</div>
                                 <div class="kpi-label">Matrículas Totales</div>
+                                <!-- Burbuja integrada debajo -->
                                 <div class="mt-2">
                                     <div class="badge-sub" style="background: rgba(5, 205, 153, 0.1); color: var(--success);">
                                         <i class="bi bi-person-check-fill"></i> <span id="val_unicos">0</span> Estudiantes Únicos
@@ -229,7 +231,7 @@
                                 <div class="kpi-label">NPS (Satisfacción)</div>
                                 <div class="mt-2">
                                     <div class="badge-sub" style="background: rgba(255, 181, 71, 0.1); color: var(--warning);">
-                                        <i class="bi bi-chat-heart-fill"></i> 79% Promotores
+                                        <i class="bi bi-chat-heart-fill"></i> Promedio Global
                                     </div>
                                 </div>
                             </div>
@@ -239,9 +241,10 @@
                                 <div class="bento-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;"><i class="bi bi-clipboard-data-fill"></i></div>
                                 <div class="kpi-val" id="val_encuestas">0</div>
                                 <div class="kpi-label">Encuestas de Calidad</div>
+                                <!-- Burbuja integrada debajo -->
                                 <div class="mt-2">
                                     <div class="badge-sub" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
-                                        <i class="bi bi-award-fill"></i> <span id="val_aprobados">0</span> Aprobados
+                                        <i class="bi bi-award-fill"></i> <span id="val_aprobados">0</span> Aprobados Totales
                                     </div>
                                 </div>
                             </div>
@@ -485,10 +488,7 @@
 
         function llenarTarjetasInicio(dataTotal) {
             try {
-                if (!dataTotal || typeof dataTotal !== 'object') {
-                    console.warn("Datos inválidos o faltantes para llenar tarjetas.");
-                    return;
-                }
+                if (!dataTotal) return; // Si no hay datos, salir para no romper.
                 
                 let valCursos = dataTotal.Cursos_Analizados || 0;
                 let valMatriculas = dataTotal.Total_Matriculas || 0;
@@ -497,23 +497,37 @@
                 let valEncuestas = dataTotal.Total_Encuestas || 0;
                 let valAprobados = dataTotal.Total_Aprobados || 0;
 
-                // Verificación extra en caso de que las variables maestras no estén en la raíz
+                // CÁLCULO SEGURO: Si los datos no están en la raíz, los calculamos sumando los cursos
                 if (dataTotal.cursos && Array.isArray(dataTotal.cursos)) {
                     if (valCursos === 0) valCursos = dataTotal.cursos.length;
-                    if (valMatriculas === 0) {
-                        dataTotal.cursos.forEach(c => {
-                            valMatriculas += (Number(c.Total_Inscritos) || 0);
-                            valAprobados += (Number(c.Terminaron) || Number(c.Aprobados) || 0);
-                        });
-                    }
+                    
+                    let tempMatriculas = 0;
+                    let tempAprobados = 0;
+                    let tempNpsSum = 0;
+                    let npsCount = 0;
+
+                    dataTotal.cursos.forEach(c => {
+                        tempMatriculas += (Number(c.Total_Inscritos) || 0);
+                        tempAprobados += (Number(c.Terminaron) || Number(c.Aprobados) || 0);
+                        if(c.e_NPS) { tempNpsSum += Number(c.e_NPS); npsCount++; }
+                    });
+
+                    if (valMatriculas === 0) valMatriculas = tempMatriculas;
+                    if (valAprobados === 0) valAprobados = tempAprobados;
+                    if (valNps === 0 && npsCount > 0) valNps = Math.round(tempNpsSum / npsCount);
                 }
+
+                // Asegurar encuestas contando las filas crudas si es necesario
                 if (valEncuestas === 0 && dataTotal.registros_crudos && Array.isArray(dataTotal.registros_crudos)) {
                     valEncuestas = dataTotal.registros_crudos.length;
                 }
-                if (valUnicos === 0) {
-                    valUnicos = Math.floor(valMatriculas * 0.75);
+                
+                // Estimación de estudiantes únicos si el dato no existe
+                if (valUnicos === 0 && valMatriculas > 0) {
+                    valUnicos = Math.floor(valMatriculas * 0.75); 
                 }
 
+                // Inyección segura al HTML
                 const setDom = (id, valor) => { const el = document.getElementById(id); if (el) el.innerText = valor; };
                 
                 setDom('val_cursos', valCursos);
@@ -562,6 +576,7 @@
             return d > 300 ? '#4318ff' : d > 150 ? '#7551ff' : d > 50 ? '#a389ff' : d > 10 ? '#d1c4ff' : '#f4f7fe';
         }
 
+        // Masonry Dinámico: Oculta la tarjeta si no hay datos.
         function checkEmptyChart(canvasId, boxId, labels, data) {
             const box = document.getElementById(boxId);
             if(!box) return;
