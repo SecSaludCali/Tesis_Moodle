@@ -278,6 +278,19 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="row g-4 mb-5">
+                        <div class="col-md-6">
+                            <div class="glass-card bento-kpi justify-content-center" style="padding: 20px;">
+                                <div class="kpi-val fs-3" id="bento-unicos">-</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="glass-card bento-kpi justify-content-center" style="padding: 20px;">
+                                <div class="kpi-val fs-3 text-success" id="bento-certificados">-</div>
+                            </div>
+                        </div>
+                    </div>
 
                     <h4 class="fw-bold mb-3">Módulos del Sistema</h4>
                     <div class="row g-4">
@@ -561,6 +574,7 @@
             mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); 
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO', maxZoom: 20 }).addTo(mapInstance); 
         }
+        
         function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
         
         function dibujarMapaCoropletico(dataComunas) { 
@@ -590,17 +604,20 @@
             if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update('none'); } 
             else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'doughnut', data: { labels: labels, datasets: [{ data: datos, backgroundColor: cols, borderWidth: 0, hoverOffset: 4 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 10, family: 'Inter' } } } }, animation: false } }); }
         }
+        
         function dibujarGraficoComunas(canvasId, dataObject) { 
             let ag = {}; for (let k in dataObject) { let id = String(k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?String(k).trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
             let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
             if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); } 
             else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false } }); }
         }
+        
         function dibujarBarraMoodle(canvasId, c) { 
             let d = [c['Tasa_Finalizacion_%']||0, c['Tasa_Abandono_%']||0, c['Tasa_Inactividad_%']||0];
             if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data=[d[0]]; chartInstances[canvasId].data.datasets[1].data=[d[1]]; chartInstances[canvasId].data.datasets[2].data=[d[2]]; chartInstances[canvasId].update('none'); } 
             else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#ffb547' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: false } }); }
         }
+        
         function dibujarRadar(pC, isG = false) { 
             const lbl = Object.keys(pC).map(q => mapeoPreguntas[q] || "Pregunta"); let d1 = Object.values(pC); let d2 = Object.keys(pC).map(q => promediosGlobalesPreguntas[q] || 0);
             if (chartInstances['chartRadar']) { chartInstances['chartRadar'].data.labels = lbl; chartInstances['chartRadar'].data.datasets[0].data = d1; chartInstances['chartRadar'].data.datasets[0].label = isG ? 'Promedio' : 'Cohorte'; if(!isG) { if(!chartInstances['chartRadar'].data.datasets[1]) chartInstances['chartRadar'].data.datasets.push({ label: 'Benchmark', backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'].data.datasets[1].data = d2; } else if (chartInstances['chartRadar'].data.datasets.length > 1) { chartInstances['chartRadar'].data.datasets.pop(); } chartInstances['chartRadar'].update('none'); } 
@@ -693,8 +710,18 @@
             document.getElementById('selector-curso-base').addEventListener('change', manejarCambioBase); 
             document.getElementById('selector-cohorte').addEventListener('change', manejarCambioCohorte);
             
-            const tI = dashboardData.cursos.reduce((s, c) => s+(c.Total_Inscritos||0), 0); let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); });
-            document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados||0; document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString(); document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
+            const tI = dashboardData.cursos.reduce((s, c) => s+(c.Total_Inscritos||0), 0); 
+            let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); });
+            
+            document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados||0; 
+            document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); 
+            document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString(); 
+            document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
+
+            // Novedad: Inyectar datos de estudiantes únicos y aprobados (Certificados)
+            const unicos = dashboardData.metadata.total_estudiantes_unicos || tI;
+            document.getElementById('bento-unicos').innerHTML = `<i class="bi bi-person-check-fill me-1"></i>${unicos.toLocaleString()} Únicos`;
+            document.getElementById('bento-certificados').innerHTML = `<i class="bi bi-mortarboard-fill me-1"></i>${tC.toLocaleString()} Aprobados`;
 
             actualizarPantallaGlobal();
         });
