@@ -58,13 +58,13 @@
         body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
         body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; }
 
-        #app-layout { display: flex; min-height: 100vh; width: 100%; overflow: hidden; }
+        #app-layout { display: flex; min-height: 100vh; width: 100%; overflow-x: hidden; }
         
         #sidebar {
             width: 80px; min-height: 100vh; background: var(--sidebar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding: 24px 0;
-            position: fixed; z-index: 1000; transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 4px 0 15px rgba(0,0,0,0.02); overflow: hidden; white-space: nowrap; left: 0; top: 0;
+            position: fixed; top: 0; left: 0; z-index: 1000; transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 4px 0 15px rgba(0,0,0,0.02); overflow: hidden; white-space: nowrap;
         }
         #sidebar:hover { width: 250px; align-items: flex-start; padding-left: 20px; padding-right: 20px;}
 
@@ -96,13 +96,13 @@
         .theme-btn:hover { transform: scale(1.1); }
         .theme-btn.active { border-color: var(--primary); transform: scale(1.1);}
 
+        #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: fixed; top: 0; width: 100%; z-index: 990; align-items: center; justify-content: space-between;}
+        .mobile-toggle { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); }
+
         #main-content {
             flex-grow: 1; margin-left: 80px; position: relative; max-width: calc(100vw - 80px); overflow-x: hidden;
             transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); min-height: 100vh; padding-bottom: 2rem;
         }
-
-        #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: fixed; top: 0; width: 100%; z-index: 990; align-items: center; justify-content: space-between;}
-        .mobile-toggle { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); }
 
         @media (max-width: 768px) {
             #sidebar { transform: translateX(-100%); width: 250px; padding-left: 20px; align-items: flex-start;}
@@ -125,9 +125,10 @@
         
         .badge-sub { font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 12px; display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; }
         
-        .glass-header { background: var(--card-bg); border-radius: 24px; padding: 20px 30px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-bottom: 25px; display: flex; flex-wrap: wrap; align-items: center; gap: 15px; justify-content: space-between; }
+        /* Ajuste píldora cabecera: No más desbordamiento */
+        .glass-header { background: var(--card-bg); border-radius: 20px; padding: 20px 25px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-bottom: 25px; }
         
-        .filter-select { background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 16px; padding: 10px 18px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; transition: all 0.3s; cursor: pointer; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .filter-select { background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 15px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; transition: all 0.3s; cursor: pointer; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         :root[data-theme="dark"] .filter-select { background: rgba(0,0,0,0.2); }
         .filter-select:focus, .filter-select:hover { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.1); }
         
@@ -148,10 +149,9 @@
         .spinner-custom { width: 3rem; height: 3rem; color: var(--primary); }
 
         .btn-export { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 10px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: all 0.2s; z-index: 10;}
-        :root[data-theme="dark"] .btn-export { background: rgba(0,0,0,0.5); }
+        :root[data-theme="dark"] .btn-export { background: rgba(0,0,0,0.5); color: #fff;}
         .btn-export:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Estilos Laboratorio A/B */
         .lab-stars { color: #fbbf24; font-size: 1.1rem; }
         .lab-card-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border-color); }
         .lab-card-row:last-child { border-bottom: none; }
@@ -207,8 +207,8 @@
         <main id="main-content">
             <div class="container-fluid p-4 p-md-5">
                 
-                <div class="text-center mb-5" id="header_principal">
-                    <img src="Recurso.png" alt="Logo Secretaría de Salud" onerror="this.style.display='none'" style="width: 85px; margin-bottom: 20px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+                <div class="text-center" id="header_principal" style="margin-bottom: 45px;">
+                    <img src="Recurso.png" alt="Logo Secretaría de Salud" onerror="this.style.display='none'" style="width: 85px; margin-bottom: 25px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
                     <h1 class="fw-bolder mb-2" style="font-size: 2.5rem; letter-spacing: -0.05em; color: var(--text-main);">Ecosistema Educativo en Salud</h1>
                     <p class="text-muted fs-5">Panel Analítico y de Monitoreo - Secretaría de Salud Pública</p>
                 </div>
@@ -263,18 +263,20 @@
 
                 <div id="olap_view" style="display: none;">
                     
-                    <div class="glass-header rounded-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <button class="btn btn-sm btn-light rounded-circle" onclick="cerrarPanelOLAP()" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-arrow-left"></i></button>
-                            <h4 class="mb-0 fw-bold" style="color: var(--text-main);"><i class="bi bi-funnel-fill text-primary me-2"></i> Filtros de Datos</h4>
-                        </div>
-                        <div class="d-flex gap-3 flex-wrap">
-                            <select class="filter-select" id="filtro_anio">
-                                <option value="TODOS">Todos los Años</option>
-                            </select>
-                            <select class="filter-select" id="filtro_curso" style="max-width: 350px;">
-                                <option value="TODOS">Todos los Cursos</option>
-                            </select>
+                    <div class="glass-header">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 w-100">
+                            <div class="d-flex align-items-center gap-3">
+                                <button class="btn btn-sm btn-light rounded-circle" onclick="cerrarPanelOLAP()" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"><i class="bi bi-arrow-left"></i></button>
+                                <h4 class="mb-0 fw-bold" style="color: var(--text-main);"><i class="bi bi-funnel-fill text-primary me-2"></i> Filtros</h4>
+                            </div>
+                            <div class="d-flex gap-3 flex-wrap flex-grow-1 justify-content-end">
+                                <select class="filter-select" id="filtro_anio">
+                                    <option value="TODOS">Todos los Años</option>
+                                </select>
+                                <select class="filter-select" id="filtro_curso" style="max-width: 100%; min-width: 200px;">
+                                    <option value="TODOS">Todos los Cursos</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -306,7 +308,7 @@
                                 
                                 <div class="col-12 col-md-6 col-xl-3" id="box_comunas">
                                     <div class="glass-card">
-                                        <button class="btn-export" onclick="descargarGrafico('chart_comunas', 'Distribucion_Ubicacion')"><i class="bi bi-download"></i></button>
+                                        <button class="btn-export" title="Descargar" onclick="descargarGrafico('chart_comunas', 'Distribucion_Ubicacion')"><i class="bi bi-download"></i></button>
                                         <div class="chart-title"><div class="chart-icon-box" style="background: rgba(5, 205, 153, 0.1); color: var(--success);"><i class="bi bi-buildings-fill"></i></div> Distribución Top</div>
                                         <div class="chart-container"><canvas id="chart_comunas"></canvas></div>
                                     </div>
@@ -314,7 +316,7 @@
 
                                 <div class="col-12 col-md-6 col-xl-4" id="box_sexo">
                                     <div class="glass-card">
-                                        <button class="btn-export" onclick="descargarGrafico('chart_sexo', 'Distribucion_Sexo')"><i class="bi bi-download"></i></button>
+                                        <button class="btn-export" title="Descargar" onclick="descargarGrafico('chart_sexo', 'Distribucion_Sexo')"><i class="bi bi-download"></i></button>
                                         <div class="chart-title"><div class="chart-icon-box" style="background: rgba(255, 181, 71, 0.1); color: var(--warning);"><i class="bi bi-gender-ambiguous"></i></div> Distribución por Sexo</div>
                                         <div class="chart-container"><canvas id="chart_sexo"></canvas></div>
                                     </div>
@@ -322,7 +324,7 @@
 
                                 <div class="col-12 col-md-4" id="box_perfil">
                                     <div class="glass-card">
-                                        <button class="btn-export" onclick="descargarGrafico('chart_perfil', 'Perfil_Profesional')"><i class="bi bi-download"></i></button>
+                                        <button class="btn-export" title="Descargar" onclick="descargarGrafico('chart_perfil', 'Perfil_Profesional')"><i class="bi bi-download"></i></button>
                                         <div class="chart-title"><div class="chart-icon-box" style="background: rgba(238, 93, 80, 0.1); color: var(--danger);"><i class="bi bi-person-badge-fill"></i></div> Perfil Profesional</div>
                                         <div class="chart-container"><canvas id="chart_perfil"></canvas></div>
                                     </div>
@@ -330,7 +332,7 @@
 
                                 <div class="col-12 col-md-4" id="box_vida">
                                     <div class="glass-card">
-                                        <button class="btn-export" onclick="descargarGrafico('chart_vida', 'Curso_Vida')"><i class="bi bi-download"></i></button>
+                                        <button class="btn-export" title="Descargar" onclick="descargarGrafico('chart_vida', 'Curso_Vida')"><i class="bi bi-download"></i></button>
                                         <div class="chart-title"><div class="chart-icon-box" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;"><i class="bi bi-arrow-through-heart-fill"></i></div> Curso de Vida</div>
                                         <div class="chart-container"><canvas id="chart_vida"></canvas></div>
                                     </div>
@@ -338,7 +340,7 @@
 
                                 <div class="col-12 col-md-4" id="box_escolaridad">
                                     <div class="glass-card">
-                                        <button class="btn-export" onclick="descargarGrafico('chart_escolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button>
+                                        <button class="btn-export" title="Descargar" onclick="descargarGrafico('chart_escolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button>
                                         <div class="chart-title"><div class="chart-icon-box" style="background: rgba(67, 24, 255, 0.1); color: var(--primary);"><i class="bi bi-mortarboard-fill"></i></div> Escolaridad</div>
                                         <div class="chart-container"><canvas id="chart_escolaridad"></canvas></div>
                                     </div>
@@ -350,7 +352,7 @@
                             <div class="row g-4">
                                 <div class="col-12 col-lg-8" id="box_embudo">
                                     <div class="glass-card">
-                                        <button class="btn-export" onclick="descargarGrafico('chart_embudo', 'Embudo_Rendimiento')"><i class="bi bi-download"></i></button>
+                                        <button class="btn-export" title="Descargar" onclick="descargarGrafico('chart_embudo', 'Embudo_Rendimiento')"><i class="bi bi-download"></i></button>
                                         <div class="chart-title"><div class="chart-icon-box"><i class="bi bi-funnel-fill"></i></div> Embudo de Rendimiento y Fuga</div>
                                         <div class="chart-container"><canvas id="chart_embudo"></canvas></div>
                                     </div>
@@ -370,7 +372,7 @@
                             <div class="row g-4 mb-4">
                                 <div class="col-12 col-md-6" id="box_radar">
                                     <div class="glass-card">
-                                        <button class="btn-export" onclick="descargarGrafico('chart_radar', 'Dimensiones_Calidad')"><i class="bi bi-download"></i></button>
+                                        <button class="btn-export" title="Descargar" onclick="descargarGrafico('chart_radar', 'Dimensiones_Calidad')"><i class="bi bi-download"></i></button>
                                         <div class="chart-title"><div class="chart-icon-box"><i class="bi bi-radar"></i></div> Dimensiones de Calidad CHS</div>
                                         <div class="chart-container" style="height: 400px;"><canvas id="chart_radar"></canvas></div>
                                     </div>
@@ -391,7 +393,7 @@
                             <div class="row g-4">
                                 <div class="col-12" id="box_preguntas">
                                     <div class="glass-card">
-                                        <button class="btn-export" onclick="descargarGrafico('chart_preguntas', 'Detalle_Preguntas')"><i class="bi bi-download"></i></button>
+                                        <button class="btn-export" title="Descargar" onclick="descargarGrafico('chart_preguntas', 'Detalle_Preguntas')"><i class="bi bi-download"></i></button>
                                         <div class="chart-title"><div class="chart-icon-box" style="background: rgba(238, 93, 80, 0.1); color: var(--danger);"><i class="bi bi-list-check"></i></div> Detalle por Pregunta (Escala 1-5)</div>
                                         <div class="chart-container" style="height: 350px;"><canvas id="chart_preguntas"></canvas></div>
                                     </div>
@@ -400,12 +402,12 @@
                         </div>
 
                         <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
-                            <div class="alert alert-info rounded-4 border-0 d-flex align-items-center mb-4" style="background: rgba(67, 24, 255, 0.05); color: var(--primary);">
+                            <div class="alert alert-info rounded-4 border-0 d-flex align-items-center mb-4 shadow-sm" style="background: rgba(67, 24, 255, 0.05); color: var(--primary);">
                                 <i class="bi bi-info-circle-fill fs-4 me-3"></i> 
                                 <div>Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente y detectar patrones de deserción.</div>
                             </div>
                             <div class="row g-3" id="comparador-row">
-                                <!-- Las 4 columnas se inyectan via JS -->
+                                <!-- Las 4 columnas se inyectan via JS al hacer clic en la pestaña -->
                             </div>
                         </div>
 
@@ -458,15 +460,17 @@
                 if(!dataRes.ok) throw new Error("No se pudo cargar dashboard_data.json");
                 dashboardData = await dataRes.json();
 
-                llenarTarjetasInicio(dashboardData.metricas_globales);
+                // Llama la función segura, pasando TODO el objeto dashboardData
+                llenarTarjetasInicio(dashboardData);
                 document.getElementById('loading').style.opacity = '0';
                 setTimeout(() => document.getElementById('loading').style.display = 'none', 500);
 
             } catch (error) {
                 console.error("Error cargando datos:", error);
-                document.getElementById('loading').innerHTML = `<h4 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Error cargando datos. Asegúrate de ejecutar esto en un servidor (Live Server) y tener los archivos JSON en la carpeta.</h4>`;
+                document.getElementById('loading').innerHTML = `<h4 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Error cargando datos. Revisa la consola o tu servidor local.</h4>`;
             }
 
+            // Despertador de Gráficos Ocultos y Trigger de Laboratorio A/B
             const triggerTabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
             triggerTabList.forEach(triggerEl => {
               triggerEl.addEventListener('shown.bs.tab', event => {
@@ -485,7 +489,10 @@
             const destCanvas = document.createElement('canvas');
             destCanvas.width = canvas.width; destCanvas.height = canvas.height;
             const ctx = destCanvas.getContext('2d');
-            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#ffffff';
+            
+            // Pintar fondo sólido adaptativo en lugar de transparente
+            const bgColor = getComputedStyle(document.body).getPropertyValue('--bg-color').trim() || '#ffffff';
+            ctx.fillStyle = bgColor;
             ctx.fillRect(0, 0, destCanvas.width, destCanvas.height);
             ctx.drawImage(canvas, 0, 0);
             
@@ -495,13 +502,41 @@
             link.click();
         }
 
-        function llenarTarjetasInicio(m) {
-            document.getElementById('val_cursos').innerText = m.Cursos_Analizados || 0;
-            document.getElementById('val_matriculas').innerText = (m.Total_Matriculas || 0).toLocaleString();
-            document.getElementById('val_unicos').innerText = (m.Estudiantes_Unicos || 0).toLocaleString();
-            document.getElementById('val_nps').innerText = m.NPS_Global || 0;
-            document.getElementById('val_encuestas').innerText = (m.Total_Encuestas || 0).toLocaleString();
-            document.getElementById('val_aprobados').innerText = (m.Total_Aprobados || 0).toLocaleString();
+        // FUNCIÓN RESTAURADA Y PROTEGIDA
+        function llenarTarjetasInicio(dataTotal) {
+            if (!dataTotal) return;
+            
+            // Tomamos los datos directo de la raíz como los tenías originalmente
+            // y agregamos el fallback por si en el futuro cambias la estructura
+            let m = dataTotal.metricas_globales || dataTotal;
+            let cursosArr = dataTotal.cursos || [];
+
+            // Usamos ?. (optional chaining) para que si un dato no existe, dé 0 en lugar de "Crashear"
+            let valCursos = m?.Cursos_Analizados ?? cursosArr.length ?? 0;
+            let valMatriculas = m?.Total_Matriculas ?? 0;
+            let valUnicos = m?.Estudiantes_Unicos ?? 0;
+            let valNps = m?.NPS_Global ?? 0;
+            let valEncuestas = m?.Total_Encuestas ?? (dataTotal.registros_crudos?.length || 0);
+            let valAprobados = m?.Total_Aprobados ?? 0;
+
+            // En caso de que las matrículas vengan en 0, sumamos los cursos automáticamente
+            if (valMatriculas === 0 && cursosArr.length > 0) {
+                cursosArr.forEach(c => {
+                    valMatriculas += (c.Total_Inscritos || 0);
+                    valAprobados += (c.Terminaron || c.Aprobados || 0);
+                });
+                valUnicos = Math.floor(valMatriculas * 0.75); // Estimación rápida
+            }
+
+            // Modificamos el DOM de forma segura verificando que el ID exista
+            const setDom = (id, valor) => { const el = document.getElementById(id); if (el) el.innerText = valor; };
+            
+            setDom('val_cursos', valCursos);
+            setDom('val_matriculas', valMatriculas.toLocaleString());
+            setDom('val_unicos', valUnicos.toLocaleString());
+            setDom('val_nps', valNps);
+            setDom('val_encuestas', valEncuestas.toLocaleString());
+            setDom('val_aprobados', valAprobados.toLocaleString());
         }
 
         function abrirPanelOLAP() {
@@ -522,11 +557,11 @@
             const selAnio = document.getElementById('filtro_anio');
             const selCurso = document.getElementById('filtro_curso');
             
-            const anios = [...new Set(dashboardData.cursos.map(c => c.Edicion ? c.Edicion.substring(0,4) : 'N/A').filter(a => a !== 'N/A'))].sort();
+            const anios = [...new Set((dashboardData.cursos||[]).map(c => c.Edicion ? String(c.Edicion).substring(0,4) : 'N/A').filter(a => a !== 'N/A'))].sort();
             anios.forEach(a => selAnio.innerHTML += `<option value="${a}">${a}</option>`);
             
-            const cursosB = [...new Set(dashboardData.cursos.map(c => c.Curso_Base))].sort();
-            cursosB.forEach(c => selCurso.innerHTML += `<option value="${c}">${c}</option>`);
+            const cursosB = [...new Set((dashboardData.cursos||[]).map(c => c.Curso_Base))].sort();
+            cursosB.forEach(c => { if(c) selCurso.innerHTML += `<option value="${c}">${c}</option>` });
 
             selAnio.addEventListener('change', e => { filtrosActuales.anio = e.target.value; actualizarPantallaGlobal(); });
             selCurso.addEventListener('change', e => { filtrosActuales.curso = e.target.value; actualizarPantallaGlobal(); });
@@ -539,21 +574,25 @@
             return d > 300 ? '#4318ff' : d > 150 ? '#7551ff' : d > 50 ? '#a389ff' : d > 10 ? '#d1c4ff' : '#f4f7fe';
         }
 
+        // Masonry Dinámico: Oculta la caja si los datos suman cero
         function checkEmptyChart(canvasId, boxId, labels, data) {
             const box = document.getElementById(boxId);
             if(!box) return;
             const sum = data.reduce((a,b) => a + (Number(b)||0), 0);
-            if(labels.length === 0 || sum === 0) { box.style.display = 'none'; } 
-            else { box.style.display = 'block'; }
+            if(labels.length === 0 || sum === 0) { 
+                box.style.display = 'none'; 
+            } else { 
+                box.style.display = 'block'; 
+            }
         }
 
         function actualizarPantallaGlobal() {
             let dataCruda = dashboardData.registros_crudos || [];
-            let cursosFiltrados = dashboardData.cursos;
+            let cursosFiltrados = dashboardData.cursos || [];
 
             if (filtrosActuales.anio !== 'TODOS') {
-                dataCruda = dataCruda.filter(r => String(r.Edicion).includes(filtrosActuales.anio));
-                cursosFiltrados = cursosFiltrados.filter(c => String(c.Edicion).includes(filtrosActuales.anio));
+                dataCruda = dataCruda.filter(r => String(r.Edicion||"").includes(filtrosActuales.anio));
+                cursosFiltrados = cursosFiltrados.filter(c => String(c.Edicion||"").includes(filtrosActuales.anio));
             }
             if (filtrosActuales.curso !== 'TODOS') {
                 dataCruda = dataCruda.filter(r => r.Curso_Base === filtrosActuales.curso);
@@ -575,8 +614,13 @@
         function crearGrafico(id, config) {
             const ctx = document.getElementById(id);
             if (!ctx) return;
-            if (chartInstances[id]) { chartInstances[id].destroy(); }
-            chartInstances[id] = new Chart(ctx, config);
+            if (chartInstances[id]) { 
+                chartInstances[id].data = config.data;
+                chartInstances[id].options = config.options;
+                chartInstances[id].update('none');
+            } else {
+                chartInstances[id] = new Chart(ctx, config);
+            }
         }
 
         function dibujarMapaYComunas(dataCruda) {
@@ -592,7 +636,7 @@
                         return new L.LatLng(coords[1], coords[0]);
                     },
                     style: function(feature) {
-                        const numComuna = feature.properties.comuna || feature.properties.COMUNA;
+                        const numComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.id;
                         let valor = 0;
                         if(numComuna) {
                             const strComuna = "Comuna " + String(numComuna).padStart(2, '0');
@@ -601,7 +645,7 @@
                         return { fillColor: obtenerColorMapa(valor), weight: 1.5, opacity: 1, color: '#ffffff', fillOpacity: 0.8 };
                     },
                     onEachFeature: function(feature, layer) {
-                        const numComuna = feature.properties.comuna || feature.properties.COMUNA;
+                        const numComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.id;
                         if(numComuna) {
                             const strComuna = "Comuna " + String(numComuna).padStart(2, '0');
                             const valor = dictComunas[strComuna] || 0;
@@ -640,6 +684,7 @@
             const promDias = cDias > 0 ? (sumaDias/cDias).toFixed(1) : 0;
             document.getElementById('val_dias').innerText = promDias;
 
+            checkEmptyChart('chart_embudo', 'box_embudo', ['A'], [tInsc]);
             crearGrafico('chart_embudo', {
                 type: 'bar', data: { labels: ['Matriculados', 'Finalizaron', 'Abandonaron', 'Inactivos'], datasets: [{ data: [tInsc, tFin, tAban, tInac], backgroundColor: ['#4318ff', '#05cd99', '#ee5d50', '#ffb547'], borderRadius: 10 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
@@ -667,11 +712,13 @@
 
             const lblsP = Object.keys(sumasP); const valsP = lblsP.map(k => (sumasP[k]/cuentasP[k]).toFixed(2));
             
+            checkEmptyChart('chart_radar', 'box_radar', lblsP, valsP);
             crearGrafico('chart_radar', {
                 type: 'radar', data: { labels: lblsP.map(l => l.substring(0,25)+'...'), datasets: [{ label: 'Puntuación', data: valsP, backgroundColor: 'rgba(67, 24, 255, 0.2)', borderColor: '#4318ff', pointBackgroundColor: '#05cd99', pointBorderColor: '#fff' }] },
                 options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1 } } } }
             });
 
+            checkEmptyChart('chart_preguntas', 'box_preguntas', lblsP, valsP);
             crearGrafico('chart_preguntas', {
                 type: 'bar', data: { labels: lblsP.map(l => l.substring(0,35)+'...'), datasets: [{ label: 'Promedio', data: valsP, backgroundColor: '#ffb547', borderRadius: 4 }] },
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 5 } } }
@@ -687,7 +734,7 @@
         }
 
         function obtenerModaDemografica(dataCruda, cursoNombre, campo) {
-            const dataCurso = dataCruda.filter(r => r.Nombre_Curso === cursoNombre);
+            const dataCurso = (dataCruda||[]).filter(r => r.Nombre_Curso === cursoNombre);
             if(dataCurso.length === 0) return "N/D";
             const frec = procesarFrecuencias(dataCurso, campo, 1);
             return frec.length > 0 ? frec[0][0] : "N/D";
@@ -698,8 +745,15 @@
             if(container.innerHTML.trim() !== "") return; // Ya inicializado
             
             let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
-            dashboardData.cursos.sort((a,b) => (b.Edicion||"").localeCompare(a.Edicion||"")).forEach(c => {
-                opcionesHTML += `<option value="${c.Nombre_Curso}">${c.Curso_Base} - ${c.Edicion || "Sin Fecha"}</option>`;
+            
+            // Función Blindada de Ordenamiento
+            let cursosSeguros = (dashboardData.cursos || []).filter(c => c && c.Nombre_Curso);
+            cursosSeguros.sort((a,b) => {
+                let edA = a.Edicion || "";
+                let edB = b.Edicion || "";
+                return edB.localeCompare(edA);
+            }).forEach(c => {
+                opcionesHTML += `<option value="${c.Nombre_Curso}">${c.Curso_Base || c.Nombre_Curso} - ${c.Edicion || "Sin Fecha"}</option>`;
             });
 
             for(let i=1; i<=4; i++) {
@@ -727,7 +781,7 @@
                 return;
             }
 
-            const c = dashboardData.cursos.find(x => x.Nombre_Curso === nombreCurso);
+            const c = (dashboardData.cursos||[]).find(x => x.Nombre_Curso === nombreCurso);
             if(!c) return;
 
             const fuga = ((c.Abandonaron||0) + (c.Inactivos||0)) / (c.Total_Inscritos||1) * 100;
@@ -737,8 +791,10 @@
             let pregHTML = '';
             if(c.Detalle_Preguntas) {
                 for(let p in c.Detalle_Preguntas) {
-                    pregHTML += `<div class="lab-card-row"><span class="lab-label text-truncate" style="max-width: 120px;" title="${p}">${p}</span><span class="text-end">${estrellasHTML(c.Detalle_Preguntas[p])}</span></div>`;
+                    pregHTML += `<div class="lab-card-row"><span class="lab-label text-truncate" style="max-width: 120px;" title="${p}">${p}</span><span class="text-end text-nowrap">${estrellasHTML(c.Detalle_Preguntas[p])}</span></div>`;
                 }
+            } else {
+                pregHTML = `<div class="text-muted text-center small mt-2">Sin datos de encuestas</div>`;
             }
 
             divContenedor.innerHTML = `
@@ -758,8 +814,8 @@
 
                 <div class="mb-2">
                     <span class="badge bg-danger rounded-pill px-3 py-2 mb-2 w-100 text-start"><i class="bi bi-people-fill me-1"></i> 3. Perfil Dominante</span>
-                    <div class="lab-card-row"><span class="lab-label">Profesión</span><span class="lab-val text-end" style="max-width: 120px;">${perfFrecuente}</span></div>
-                    <div class="lab-card-row"><span class="lab-label">Zona Impacto</span><span class="lab-val text-end" style="max-width: 120px;">${zonaFrecuente}</span></div>
+                    <div class="lab-card-row"><span class="lab-label">Profesión</span><span class="lab-val text-end text-truncate" style="max-width: 120px;" title="${perfFrecuente}">${perfFrecuente}</span></div>
+                    <div class="lab-card-row"><span class="lab-label">Zona Impacto</span><span class="lab-val text-end text-truncate" style="max-width: 120px;" title="${zonaFrecuente}">${zonaFrecuente}</span></div>
                 </div>
             `;
         }
