@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 43,
-        "total_encuestas_historicas": 3895,
+        "total_encuestas_historicas": 3896,
         "total_estudiantes_unicos": 5776
     },
     "kpis_globales": {
@@ -10,17 +10,17 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2855,
+            "Femenino": 2856,
             "Masculino": 1036,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2813,
+            "Área de la salud": 2814,
             "Estudiante": 702,
             "Otro": 380
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2311,
+            "Adultez (29 - 59 años)": 2312,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 702,
             "Vejez (60 años o más)": 161
@@ -44,7 +44,7 @@
             "COMUNA 22": 106,
             "COMUNA 4": 101,
             "COMUNA 21": 98,
-            "COMUNA 11": 94,
+            "COMUNA 11": 95,
             "COMUNA 14": 90,
             "COMUNA 20": 84,
             "COMUNA 9": 66,
@@ -66,7 +66,7 @@
         },
         "Escolaridad": {
             "Pregrado": 1748,
-            "Bachiller": 1090,
+            "Bachiller": 1091,
             "Postgrado": 1001,
             "Ninguna": 56
         }
@@ -6452,8 +6452,8 @@
             "ID_Moodle_Original": "pir_sspm_2025",
             "Total_Inscritos": 1248,
             "Tasa_Finalizacion_%": 84.4,
-            "Tasa_Abandono_%": 2.2,
-            "Tasa_Inactividad_%": 13.4,
+            "Tasa_Abandono_%": 2.3,
+            "Tasa_Inactividad_%": 13.3,
             "Tiempo_Promedio_Dias": 2.5,
             "Total_Encuestas": 626.0,
             "ISG_Promedio": 4.5702875399361025,
