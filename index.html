@@ -645,12 +645,12 @@
             const s = this.value; const sC = document.getElementById('selector-cohorte'); const ic = document.getElementById('icon-cohorte'); const dc = document.getElementById('div-cohorte'); const lob = document.getElementById('panel-lobby-curso'); const tab = document.getElementById('contenedor-tabs'); 
             if (s === "ALL") { sC.style.display="none"; ic.style.display="none"; dc.style.display="none"; cursoActual=null; lob.style.display="none"; tab.style.display="block"; actualizarPantallaGlobal(); } 
             else { 
-                let cohs = cursosPorBase[s]; if(añoActual!=="ALL") cohs = cohs.filter(c => (c.Edicion||"").includes(añoActual)); cohs = cohs.sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
-                sC.innerHTML = '<option value="">⬅ Seleccione Edición</option>'; cohs.forEach(c => sC.appendChild(new Option(c.Edicion, c.Nombre_Curso))); 
+                let cohs = cursosPorBase[s]; if(añoActual!=="ALL") cohs = cohs.filter(c => (c.Edicion||"").includes(añoActual)); cohs = cohs.sort((a, b) => (b.Edicion || "Sin Fecha").localeCompare(a.Edicion || "Sin Fecha")); 
+                sC.innerHTML = '<option value="">⬅ Seleccione Edición</option>'; cohs.forEach(c => sC.appendChild(new Option(c.Edicion || "Sin Fecha", c.Nombre_Curso))); 
                 sC.style.display="block"; ic.style.display="block"; dc.style.display="block"; sC.value=""; tab.style.display="none"; lob.style.display="block"; document.getElementById('filtros-cruzados-bar').style.display='none';
                 let hL = `<div class="mb-4 text-start"><h5 class="fw-bold text-primary">${s}</h5><p class="text-muted small">Seleccione una edición</p></div><div class="row g-3">`; 
                 if(cohs.length===0) hL += `<div class="col-12 text-muted py-4"><i class="bi bi-folder-x fs-2"></i> No hay cohortes este año.</div>`; 
-                else cohs.forEach(c => { hL += `<div class="col-md-4 col-xl-3"><div class="glass-card text-start py-3 px-4" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="d-flex align-items-center gap-3"><i class="bi bi-mortarboard-fill fs-3 text-primary"></i><div><h6 class="fw-bold m-0">${c.Edicion}</h6><small class="text-muted">${c.Total_Inscritos} Estudiantes</small></div></div></div></div>`; }); 
+                else cohs.forEach(c => { hL += `<div class="col-md-4 col-xl-3"><div class="glass-card text-start py-3 px-4" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="d-flex align-items-center gap-3"><i class="bi bi-mortarboard-fill fs-3 text-primary"></i><div><h6 class="fw-bold m-0">${c.Edicion || "Sin Fecha"}</h6><small class="text-muted">${c.Total_Inscritos} Estudiantes</small></div></div></div></div>`; }); 
                 lob.innerHTML = hL + `</div>`; 
             } 
         }
@@ -708,13 +708,24 @@
 
         window.inicializarSelectoresComparador = function() {
             const container = document.getElementById('comparador-row');
-            if(container.innerHTML.trim() !== "") return; // Ya inicializado
+            if(container.innerHTML.trim() !== "") return; // Evita duplicar si ya se dibujó
             
             let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
-            dashboardData.cursos.sort((a,b) => b.Edicion.localeCompare(a.Edicion)).forEach(c => {
-                opcionesHTML += `<option value="${c.Nombre_Curso}">${c.Curso_Base} - ${c.Edicion}</option>`;
+            
+            // BLINDAJE: Ordenamiento a prueba de fallos para valores nulos/indefinidos
+            let cursosSeguros = [...dashboardData.cursos].sort((a,b) => {
+                let edA = a.Edicion || "Sin Fecha";
+                let edB = b.Edicion || "Sin Fecha";
+                return edB.localeCompare(edA);
             });
 
+            cursosSeguros.forEach(c => {
+                let nombreBase = c.Curso_Base || c.Nombre_Curso || "Curso";
+                let edicion = c.Edicion || "Sin Fecha";
+                opcionesHTML += `<option value="${c.Nombre_Curso}">${nombreBase} - ${edicion}</option>`;
+            });
+
+            // Dibujar las 4 columnas
             for(let i=1; i<=4; i++) {
                 container.innerHTML += `
                 <div class="col-xl-3 col-md-6">
@@ -759,12 +770,12 @@
 
             contentDiv.classList.remove('d-none'); emptyDiv.classList.add('d-none');
             
-            // Operativo
-            document.getElementById(`comp-mat-${slotIndex}`).innerText = curso.Total_Inscritos.toLocaleString();
+            // Llenar datos operativos
+            document.getElementById(`comp-mat-${slotIndex}`).innerText = (curso.Total_Inscritos || 0).toLocaleString();
             document.getElementById(`comp-fin-${slotIndex}`).innerText = (curso['Tasa_Finalizacion_%']||0) + "%";
             document.getElementById(`comp-fug-${slotIndex}`).innerText = ((curso['Tasa_Abandono_%']||0) + (curso['Tasa_Inactividad_%']||0)).toFixed(1) + "%";
             
-            // Calidad
+            // Llenar datos de calidad
             const qMet = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0;
             const qUx = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0;
             const qPrac = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0;
@@ -773,7 +784,7 @@
             document.getElementById(`comp-ux-${slotIndex}`).innerHTML = generarEstrellas(qUx);
             document.getElementById(`comp-prac-${slotIndex}`).innerHTML = generarEstrellas(qPrac);
             
-            // Demografía (Moda)
+            // Llenar datos demográficos (Moda)
             document.getElementById(`comp-prof-${slotIndex}`).innerText = curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A";
             let modaCom = curso.Demografia ? obtenerModa(curso.Demografia.Comuna) : "N/A";
             if(modaCom !== "N/A" && !isNaN(modaCom)) modaCom = "Comuna " + modaCom;
