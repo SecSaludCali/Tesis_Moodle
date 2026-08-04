@@ -147,12 +147,6 @@
         .btn-export { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 10px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; transition: all 0.2s; z-index: 10;}
         :root[data-theme="dark"] .btn-export { background: rgba(0,0,0,0.5); color: #fff;}
         .btn-export:hover { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .lab-stars { color: #fbbf24; font-size: 1.1rem; }
-        .lab-card-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--border-color); }
-        .lab-card-row:last-child { border-bottom: none; }
-        .lab-val { font-weight: 700; color: var(--text-main); }
-        .lab-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
     </style>
 </head>
 
@@ -290,14 +284,10 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="calidad-tab" data-bs-toggle="tab" data-bs-target="#panel-calidad" type="button" role="tab"><i class="bi bi-star-fill me-2"></i> Calidad Percibida</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link text-white" style="background: var(--primary);" id="comparador-tab" data-bs-toggle="tab" data-bs-target="#panel-comparador" type="button" role="tab"><i class="bi bi-layout-split me-2"></i> Laboratorio A/B</button>
-                        </li>
                     </ul>
 
                     <div class="tab-content mt-4" id="myTabContent">
                         
-                        <!-- Pestaña Demografía -->
                         <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                             <div class="row g-4">
                                 <div class="col-12 col-xl-5" id="box_mapa">
@@ -349,7 +339,6 @@
                             </div>
                         </div>
 
-                        <!-- Pestaña Operativo -->
                         <div class="tab-pane fade" id="panel-operativo" role="tabpanel">
                             <div class="row g-4">
                                 <div class="col-12 col-lg-8" id="box_embudo">
@@ -370,7 +359,6 @@
                             </div>
                         </div>
 
-                        <!-- Pestaña Calidad -->
                         <div class="tab-pane fade" id="panel-calidad" role="tabpanel">
                             <div class="row g-4 mb-4">
                                 <div class="col-12 col-md-6" id="box_radar">
@@ -401,17 +389,6 @@
                                         <div class="chart-container" style="height: 350px;"><canvas id="chart_preguntas"></canvas></div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Pestaña Laboratorio A/B -->
-                        <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
-                            <div class="alert alert-info rounded-4 border-0 d-flex align-items-center mb-4 shadow-sm" style="background: rgba(67, 24, 255, 0.05); color: var(--primary);">
-                                <i class="bi bi-info-circle-fill fs-4 me-3"></i> 
-                                <div>Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente y detectar patrones de deserción.</div>
-                            </div>
-                            <div class="row g-3" id="comparador-row">
-                                <!-- Las 4 columnas se inyectan via JS -->
                             </div>
                         </div>
 
@@ -470,7 +447,6 @@
                 const loading = document.getElementById('loading');
                 if(loading) loading.innerHTML = `<h4 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Error cargando JSON. Revisa la consola o tu servidor.</h4>`;
             } finally {
-                // Siempre ocultar la pantalla de carga, incluso si falla
                 const loadingOverlay = document.getElementById('loading');
                 if (loadingOverlay && !loadingOverlay.innerHTML.includes("Error")) {
                     loadingOverlay.style.opacity = '0';
@@ -483,7 +459,6 @@
               triggerEl.addEventListener('shown.bs.tab', event => {
                 for (let id in chartInstances) { if (chartInstances[id]) chartInstances[id].resize(); }
                 if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) { setTimeout(() => mapInstance.invalidateSize(), 50); }
-                if (event.target.getAttribute('data-bs-target') === '#panel-comparador') { window.inicializarSelectoresComparador(); }
               });
             });
 
@@ -510,23 +485,33 @@
 
         function llenarTarjetasInicio(dataTotal) {
             try {
-                if (!dataTotal) return;
+                if (!dataTotal || typeof dataTotal !== 'object') {
+                    console.warn("Datos inválidos o faltantes para llenar tarjetas.");
+                    return;
+                }
                 
-                // Lee directamente desde la raíz o usa fallbacks si las variables cambian de nombre
-                let valCursos = dataTotal.Cursos_Analizados || (dataTotal.cursos ? dataTotal.cursos.length : 0);
+                let valCursos = dataTotal.Cursos_Analizados || 0;
                 let valMatriculas = dataTotal.Total_Matriculas || 0;
                 let valUnicos = dataTotal.Estudiantes_Unicos || 0;
                 let valNps = dataTotal.NPS_Global || 0;
-                let valEncuestas = dataTotal.Total_Encuestas || (dataTotal.registros_crudos ? dataTotal.registros_crudos.length : 0);
+                let valEncuestas = dataTotal.Total_Encuestas || 0;
                 let valAprobados = dataTotal.Total_Aprobados || 0;
 
-                // Si por alguna razón el JSON no tiene las sumatorias maestras, las calculamos sumando los cursos
-                if (valMatriculas === 0 && dataTotal.cursos && dataTotal.cursos.length > 0) {
-                    dataTotal.cursos.forEach(c => {
-                        valMatriculas += (Number(c.Total_Inscritos) || 0);
-                        valAprobados += (Number(c.Terminaron) || Number(c.Aprobados) || 0);
-                    });
-                    if (valUnicos === 0) valUnicos = Math.floor(valMatriculas * 0.75); // Regla de negocio empírica
+                // Verificación extra en caso de que las variables maestras no estén en la raíz
+                if (dataTotal.cursos && Array.isArray(dataTotal.cursos)) {
+                    if (valCursos === 0) valCursos = dataTotal.cursos.length;
+                    if (valMatriculas === 0) {
+                        dataTotal.cursos.forEach(c => {
+                            valMatriculas += (Number(c.Total_Inscritos) || 0);
+                            valAprobados += (Number(c.Terminaron) || Number(c.Aprobados) || 0);
+                        });
+                    }
+                }
+                if (valEncuestas === 0 && dataTotal.registros_crudos && Array.isArray(dataTotal.registros_crudos)) {
+                    valEncuestas = dataTotal.registros_crudos.length;
+                }
+                if (valUnicos === 0) {
+                    valUnicos = Math.floor(valMatriculas * 0.75);
                 }
 
                 const setDom = (id, valor) => { const el = document.getElementById(id); if (el) el.innerText = valor; };
@@ -577,7 +562,6 @@
             return d > 300 ? '#4318ff' : d > 150 ? '#7551ff' : d > 50 ? '#a389ff' : d > 10 ? '#d1c4ff' : '#f4f7fe';
         }
 
-        // Masonry Automático: Oculta la caja si los datos suman 0
         function checkEmptyChart(canvasId, boxId, labels, data) {
             const box = document.getElementById(boxId);
             if(!box) return;
@@ -729,107 +713,6 @@
                 type: 'bar', data: { labels: lblsP.map(l => l.substring(0,35)+'...'), datasets: [{ label: 'Promedio', data: valsP, backgroundColor: '#ffb547', borderRadius: 4 }] },
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { min: 0, max: 5 } } }
             });
-        }
-
-        function estrellasHTML(valorNum) {
-            if(!valorNum) return `<span class="text-muted">N/D</span>`;
-            let html = ''; let enteros = Math.floor(valorNum); let dec = valorNum - enteros;
-            for(let i=0; i<enteros; i++) html += `<i class="bi bi-star-fill lab-stars"></i>`;
-            if(dec >= 0.5) html += `<i class="bi bi-star-half lab-stars"></i>`;
-            return html;
-        }
-
-        function obtenerModaDemografica(dataCruda, cursoNombre, campo) {
-            const dataCurso = (dataCruda||[]).filter(r => r.Nombre_Curso === cursoNombre);
-            if(dataCurso.length === 0) return "N/D";
-            const frec = procesarFrecuencias(dataCurso, campo, 1);
-            return frec.length > 0 ? frec[0][0] : "N/D";
-        }
-
-        window.inicializarSelectoresComparador = function() {
-            try {
-                const container = document.getElementById('comparador-row');
-                if(!container || container.innerHTML.trim() !== "") return; 
-                
-                let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
-                
-                // Filtramos de manera segura asegurando que el curso exista
-                let cursosSeguros = (dashboardData.cursos || []).filter(c => c && c.Nombre_Curso);
-                
-                // Ordenamiento seguro convirtiendo Edicion a String (evita crashear si Edicion es undefined o número)
-                cursosSeguros.sort((a,b) => {
-                    let edA = String(a.Edicion || "");
-                    let edB = String(b.Edicion || "");
-                    return edB.localeCompare(edA);
-                }).forEach(c => {
-                    opcionesHTML += `<option value="${c.Nombre_Curso}">${c.Curso_Base || c.Nombre_Curso} - ${c.Edicion || "Sin Fecha"}</option>`;
-                });
-
-                for(let i=1; i<=4; i++) {
-                    container.innerHTML += `
-                    <div class="col-12 col-md-6 col-xl-3 mb-4">
-                        <div class="card bg-white border-0 shadow-sm h-100 p-3 rounded-4" style="background: var(--card-bg) !important; backdrop-filter: blur(12px);">
-                            <select class="form-select mb-3 fw-bold text-primary shadow-sm border-0" onchange="window.cargarDatosComparador(this.value, ${i})" style="background: rgba(67, 24, 255, 0.05); border-radius: 12px; padding: 12px;">
-                                ${opcionesHTML}
-                            </select>
-                            <div id="col_comparador_${i}" class="h-100">
-                                <div class="text-center text-muted mt-5 mb-5 p-4 rounded-4" style="background: rgba(0,0,0,0.02); border: 1px dashed var(--border-color);">
-                                    <i class="bi bi-inboxes text-muted mb-2" style="font-size: 2rem;"></i><br>
-                                    Selecciona un curso arriba para ver sus métricas
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-                }
-            } catch (error) {
-                console.error("Error inicializando los selectores del comparador:", error);
-            }
-        }
-
-        window.cargarDatosComparador = function(nombreCurso, colIndex) {
-            const divContenedor = document.getElementById(`col_comparador_${colIndex}`);
-            if(!nombreCurso) {
-                divContenedor.innerHTML = `<div class="text-center text-muted mt-5 mb-5 p-4 rounded-4" style="background: rgba(0,0,0,0.02); border: 1px dashed var(--border-color);"><i class="bi bi-inboxes text-muted mb-2" style="font-size: 2rem;"></i><br>Selecciona un curso arriba para ver sus métricas</div>`;
-                return;
-            }
-
-            const c = (dashboardData.cursos||[]).find(x => x.Nombre_Curso === nombreCurso);
-            if(!c) return;
-
-            const fuga = ((Number(c.Abandonaron)||0) + (Number(c.Inactivos)||0)) / (Number(c.Total_Inscritos)||1) * 100;
-            const perfFrecuente = obtenerModaDemografica(dashboardData.registros_crudos, nombreCurso, 'Perfil');
-            const zonaFrecuente = obtenerModaDemografica(dashboardData.registros_crudos, nombreCurso, 'Comuna_Unificada');
-
-            let pregHTML = '';
-            if(c.Detalle_Preguntas) {
-                for(let p in c.Detalle_Preguntas) {
-                    pregHTML += `<div class="lab-card-row"><span class="lab-label text-truncate" style="max-width: 120px;" title="${p}">${p}</span><span class="text-end text-nowrap">${estrellasHTML(c.Detalle_Preguntas[p])}</span></div>`;
-                }
-            } else {
-                pregHTML = `<div class="text-muted text-center small mt-2">Sin datos de encuestas</div>`;
-            }
-
-            divContenedor.innerHTML = `
-                <div class="mb-3">
-                    <span class="badge bg-primary rounded-pill px-3 py-2 mb-2 w-100 text-start"><i class="bi bi-speedometer2 me-1"></i> 1. Operativo (Moodle)</span>
-                    <div class="lab-card-row"><span class="lab-label">Matrículas Totales</span><span class="lab-val">${c.Total_Inscritos||0}</span></div>
-                    <div class="lab-card-row"><span class="lab-label">Tasa Finalización</span><span class="lab-val text-success">${c['Tasa_Finalizacion_%']||0}%</span></div>
-                    <div class="lab-card-row"><span class="lab-label">Fuga Crítica</span><span class="lab-val text-danger fw-bolder">${fuga.toFixed(1)}%</span></div>
-                    <div class="lab-card-row"><span class="lab-label">Velocidad</span><span class="lab-val">${c.Tiempo_Promedio_Dias||0} días</span></div>
-                </div>
-                
-                <div class="mb-3">
-                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2 mb-2 w-100 text-start"><i class="bi bi-star-fill me-1"></i> 2. Calidad Percibida</span>
-                    <div class="lab-card-row"><span class="lab-label fw-bold">Salud CHS</span><span class="lab-val fs-5">${c.Salud_Curso_CHS||0}</span></div>
-                    ${pregHTML}
-                </div>
-
-                <div class="mb-2">
-                    <span class="badge bg-danger rounded-pill px-3 py-2 mb-2 w-100 text-start"><i class="bi bi-people-fill me-1"></i> 3. Perfil Dominante</span>
-                    <div class="lab-card-row"><span class="lab-label">Profesión</span><span class="lab-val text-end text-truncate" style="max-width: 120px;" title="${perfFrecuente}">${perfFrecuente}</span></div>
-                    <div class="lab-card-row"><span class="lab-label">Zona Impacto</span><span class="lab-val text-end text-truncate" style="max-width: 120px;" title="${zonaFrecuente}">${zonaFrecuente}</span></div>
-                </div>
-            `;
         }
     </script>
 </body>
