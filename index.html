@@ -117,7 +117,7 @@
         .home-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 8px;}
         .home-subtitle { color: var(--text-muted); font-size: 1.05rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
 
-        .bento-kpi { display: flex; align-items: center; gap: 20px; padding: 25px;}
+        .bento-kpi { display: flex; align-items: center; gap: 20px; padding: 25px; flex-wrap: wrap;}
         .kpi-icon-lg { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
         .bento-kpi .kpi-val { font-size: 2.2rem; font-weight: 800; line-height: 1; color: var(--text-main); margin-bottom: 4px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em;}
         .bento-kpi .kpi-lbl { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
@@ -129,7 +129,6 @@
         .hub-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;}
         .hub-card:hover { border-color: var(--primary); }
 
-        /* Estilos modificados para la píldora de selectores */
         .dashboard-top-bar { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
         .pill-selectors { 
             background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; 
@@ -179,6 +178,15 @@
 
         #panel-lobby-curso { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .select-comparador { background: rgba(255,255,255,0.5); border: 1px solid transparent; color: var(--text-main); outline: none; cursor: pointer; transition: all 0.2s; font-size: 0.85rem;}
+        :root[data-theme="dark"] .select-comparador { background: rgba(0,0,0,0.3); }
+        .select-comparador:focus, .select-comparador:hover { border-color: var(--primary); background: transparent; }
+        
+        .comp-metric-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.85rem;}
+        .comp-metric-row:last-child { border-bottom: none; }
+        .comp-label { color: var(--text-muted); font-weight: 600; }
+        .comp-val { font-weight: 800; color: var(--text-main); text-align: right;}
 
         .text-indigo { color: var(--primary); } .bg-indigo-soft { background: rgba(67, 24, 255, 0.1); color: var(--primary); }
         .text-emerald { color: var(--success); } .bg-emerald-soft { background: rgba(5, 205, 153, 0.1); color: var(--success); }
@@ -262,7 +270,6 @@
                                 <div>
                                     <div class="kpi-val" id="bento-matriculas">-</div>
                                     <div class="kpi-lbl">Matrículas Totales</div>
-                                    <!-- Burbuja de estudiantes únicos, integrada dentro de matrículas -->
                                     <div class="mt-2 badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 border border-success border-opacity-25" style="font-size: 0.75rem;">
                                         <i class="bi bi-person-check-fill"></i> <span id="bento-unicos">-</span>
                                     </div>
@@ -275,7 +282,6 @@
                                 <div>
                                     <div class="kpi-val text-warning" id="bento-certificados">-</div>
                                     <div class="kpi-lbl">Aprobados</div>
-                                    <!-- Burbuja de encuestas de calidad, integrada dentro de aprobados -->
                                     <div class="mt-2 badge bg-warning bg-opacity-10 text-warning rounded-pill px-2 py-1 border border-warning border-opacity-25" style="font-size: 0.75rem;">
                                         <i class="bi bi-ui-radios"></i> <span id="bento-encuestas">-</span>
                                     </div>
@@ -342,7 +348,6 @@
                         </div>
                     </div>
 
-                    <!-- Fast-UI OLAP Filters -->
                     <div id="filtros-cruzados-bar" class="olap-container">
                         <div class="olap-title"><i class="bi bi-funnel-fill text-primary"></i> Filtros</div>
                         <select id="f-sexo" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Sexo</option></select>
@@ -362,11 +367,12 @@
                                 <i class="bi bi-speedometer2"></i> Operativo <i class="bi bi-lock-fill text-danger ms-1 d-none" id="lock-icon" title="Bloqueado por filtros"></i>
                             </button>
                             <button class="tab-clean" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill"></i> Calidad Percibida</button>
+                            <!-- NUEVA PESTAÑA DE COMPARACIÓN -->
+                            <button class="tab-clean" id="comparador-tab" data-bs-toggle="tab" data-bs-target="#panel-comparador" type="button" role="tab" onclick="inicializarSelectoresComparador()"><i class="bi bi-layout-three-columns"></i> Laboratorio A/B</button>
                         </div>
 
                         <div class="tab-content" id="myTabContent">
                             
-                            <!-- TAB 1: DEMOGRAFÍA -->
                             <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                                 <div class="row g-3 mb-4" id="kpi-global-row"></div>
                                 
@@ -396,7 +402,6 @@
                                 </div>
                             </div>
 
-                            <!-- TAB 2: OPERATIVO -->
                             <div class="tab-pane fade" id="panel-moodle" role="tabpanel">
                                 <div class="row g-3 mb-4" id="kpi-moodle-row"></div>
                                 <div class="row g-3 mb-4" id="moodle-charts-wrapper">
@@ -420,7 +425,6 @@
                                 </div>
                             </div>
 
-                            <!-- TAB 3: CALIDAD PERCIBIDA -->
                             <div class="tab-pane fade" id="panel-radar" role="tabpanel">
                                 <div class="row g-3 mb-4">
                                     <div class="col-lg-6">
@@ -438,6 +442,13 @@
                                             <div id="diagnostico-detalles" style="max-height: 330px; overflow-y: auto; padding-right: 10px;"></div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
+                                <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente.</div>
+                                <div class="row g-3 mb-4" id="comparador-row">
+                                    <!-- Las 4 columnas se inyectarán aquí mediante JS -->
                                 </div>
                             </div>
 
@@ -677,6 +688,97 @@
             if(!dOlap) { document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); }
             document.getElementById('titulo-radar').innerText = dOlap?"Radar Filtrado vs Benchmark":"Radar vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
         }
+
+        function generarEstrellas(valor) {
+            let v = parseFloat(valor) || 0; let html = '';
+            for(let i=1; i<=5; i++) {
+                if(v >= i) html += '<i class="bi bi-star-fill text-warning"></i>';
+                else if(v >= i - 0.5) html += '<i class="bi bi-star-half text-warning"></i>';
+                else html += '<i class="bi bi-star text-warning"></i>';
+            }
+            return `<span style="letter-spacing:1px;">${html}</span> <span class="ms-1 small fw-bold text-muted">${v.toFixed(1)}</span>`;
+        }
+
+        function obtenerModa(objetoData) {
+            if(!objetoData || Object.keys(objetoData).length === 0) return "N/A";
+            let maxVal = -1; let moda = "N/A";
+            for (let key in objetoData) { if (objetoData[key] > maxVal && key !== "N/A") { maxVal = objetoData[key]; moda = key; } }
+            return moda;
+        }
+
+        window.inicializarSelectoresComparador = function() {
+            const container = document.getElementById('comparador-row');
+            if(container.innerHTML.trim() !== "") return; // Ya inicializado
+            
+            let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
+            dashboardData.cursos.sort((a,b) => b.Edicion.localeCompare(a.Edicion)).forEach(c => {
+                opcionesHTML += `<option value="${c.Nombre_Curso}">${c.Curso_Base} - ${c.Edicion}</option>`;
+            });
+
+            for(let i=1; i<=4; i++) {
+                container.innerHTML += `
+                <div class="col-xl-3 col-md-6">
+                    <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
+                        <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
+                            <select class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(${i}, this.value)">
+                                ${opcionesHTML}
+                            </select>
+                        </div>
+                        <div id="comp-content-${i}" class="p-3 d-none flex-grow-1">
+                            <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
+                            <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-${i}">-</span></div>
+                            <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-${i}">-</span></div>
+                            <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-${i}">-</span></div>
+                            
+                            <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
+                            <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-${i}">-</div></div>
+                            <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-${i}">-</div></div>
+                            <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-${i}">-</div></div>
+                            
+                            <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
+                            <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-${i}">-</span></div>
+                            <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-${i}">-</span></div>
+                        </div>
+                        <div id="comp-empty-${i}" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
+                            <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
+                            <p class="small">Elige una edición para analizar.</p>
+                        </div>
+                    </div>
+                </div>`;
+            }
+        };
+
+        window.actualizarComparador = function(slotIndex, courseName) {
+            const contentDiv = document.getElementById(`comp-content-${slotIndex}`);
+            const emptyDiv = document.getElementById(`comp-empty-${slotIndex}`);
+            
+            if(!courseName) { contentDiv.classList.add('d-none'); emptyDiv.classList.remove('d-none'); return; }
+            
+            const curso = dashboardData.cursos.find(c => c.Nombre_Curso === courseName);
+            if(!curso) return;
+
+            contentDiv.classList.remove('d-none'); emptyDiv.classList.add('d-none');
+            
+            // Operativo
+            document.getElementById(`comp-mat-${slotIndex}`).innerText = curso.Total_Inscritos.toLocaleString();
+            document.getElementById(`comp-fin-${slotIndex}`).innerText = (curso['Tasa_Finalizacion_%']||0) + "%";
+            document.getElementById(`comp-fug-${slotIndex}`).innerText = ((curso['Tasa_Abandono_%']||0) + (curso['Tasa_Inactividad_%']||0)).toFixed(1) + "%";
+            
+            // Calidad
+            const qMet = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0;
+            const qUx = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0;
+            const qPrac = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0;
+            
+            document.getElementById(`comp-met-${slotIndex}`).innerHTML = generarEstrellas(qMet);
+            document.getElementById(`comp-ux-${slotIndex}`).innerHTML = generarEstrellas(qUx);
+            document.getElementById(`comp-prac-${slotIndex}`).innerHTML = generarEstrellas(qPrac);
+            
+            // Demografía (Moda)
+            document.getElementById(`comp-prof-${slotIndex}`).innerText = curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A";
+            let modaCom = curso.Demografia ? obtenerModa(curso.Demografia.Comuna) : "N/A";
+            if(modaCom !== "N/A" && !isNaN(modaCom)) modaCom = "Comuna " + modaCom;
+            document.getElementById(`comp-com-${slotIndex}`).innerText = modaCom;
+        };
 
         document.addEventListener("DOMContentLoaded", async () => {
             cambiarTema(localStorage.getItem('temaDashboard') || 'light');
