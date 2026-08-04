@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecosistema Educativo - Dashboard</title>
     
-    <!-- Bootstrap & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Leaflet (Mapas) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     
     <style>
@@ -127,7 +124,7 @@
         
         .glass-header { background: var(--card-bg); border-radius: 20px; padding: 20px 25px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-bottom: 25px; }
         
-        .filter-select { background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 15px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; transition: all 0.3s; cursor: pointer; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .filter-select { background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 16px; padding: 10px 15px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; transition: all 0.3s; cursor: pointer; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         :root[data-theme="dark"] .filter-select { background: rgba(0,0,0,0.2); }
         .filter-select:focus, .filter-select:hover { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.1); }
         
@@ -156,8 +153,6 @@
         .lab-card-row:last-child { border-bottom: none; }
         .lab-val { font-weight: 700; color: var(--text-main); }
         .lab-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
-        .trend-up { color: var(--success); }
-        .trend-down { color: var(--danger); }
     </style>
 </head>
 
@@ -302,6 +297,7 @@
 
                     <div class="tab-content mt-4" id="myTabContent">
                         
+                        <!-- Pestaña Demografía -->
                         <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                             <div class="row g-4">
                                 <div class="col-12 col-xl-5" id="box_mapa">
@@ -353,6 +349,7 @@
                             </div>
                         </div>
 
+                        <!-- Pestaña Operativo -->
                         <div class="tab-pane fade" id="panel-operativo" role="tabpanel">
                             <div class="row g-4">
                                 <div class="col-12 col-lg-8" id="box_embudo">
@@ -373,6 +370,7 @@
                             </div>
                         </div>
 
+                        <!-- Pestaña Calidad -->
                         <div class="tab-pane fade" id="panel-calidad" role="tabpanel">
                             <div class="row g-4 mb-4">
                                 <div class="col-12 col-md-6" id="box_radar">
@@ -406,13 +404,14 @@
                             </div>
                         </div>
 
+                        <!-- Pestaña Laboratorio A/B -->
                         <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
                             <div class="alert alert-info rounded-4 border-0 d-flex align-items-center mb-4 shadow-sm" style="background: rgba(67, 24, 255, 0.05); color: var(--primary);">
                                 <i class="bi bi-info-circle-fill fs-4 me-3"></i> 
                                 <div>Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente y detectar patrones de deserción.</div>
                             </div>
                             <div class="row g-3" id="comparador-row">
-                                <!-- Las 4 columnas se inyectan via JS al hacer clic en la pestaña -->
+                                <!-- Las 4 columnas se inyectan via JS -->
                             </div>
                         </div>
 
@@ -422,7 +421,6 @@
         </main>
     </div>
 
-    <!-- Librerías JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -463,15 +461,21 @@
                 
                 const dataRes = await fetch('dashboard_data.json');
                 if(!dataRes.ok) throw new Error("No se pudo cargar dashboard_data.json");
+                
                 dashboardData = await dataRes.json();
-
                 llenarTarjetasInicio(dashboardData);
-                document.getElementById('loading').style.opacity = '0';
-                setTimeout(() => document.getElementById('loading').style.display = 'none', 500);
 
             } catch (error) {
-                console.error("Error cargando datos:", error);
-                document.getElementById('loading').innerHTML = `<h4 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Error cargando datos. Revisa la consola o tu servidor local.</h4>`;
+                console.error("Error crítico cargando datos:", error);
+                const loading = document.getElementById('loading');
+                if(loading) loading.innerHTML = `<h4 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Error cargando JSON. Revisa la consola o tu servidor.</h4>`;
+            } finally {
+                // Siempre ocultar la pantalla de carga, incluso si falla
+                const loadingOverlay = document.getElementById('loading');
+                if (loadingOverlay && !loadingOverlay.innerHTML.includes("Error")) {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(() => loadingOverlay.style.display = 'none', 500);
+                }
             }
 
             const triggerTabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
@@ -505,36 +509,37 @@
         }
 
         function llenarTarjetasInicio(dataTotal) {
-            if (!dataTotal) return;
-            
-            // Protección total: busca en "metricas_globales" o en la raíz directamente
-            let m = dataTotal.metricas_globales || dataTotal;
-            let cursosArr = dataTotal.cursos || [];
+            try {
+                if (!dataTotal) return;
+                
+                // Lee directamente desde la raíz o usa fallbacks si las variables cambian de nombre
+                let valCursos = dataTotal.Cursos_Analizados || (dataTotal.cursos ? dataTotal.cursos.length : 0);
+                let valMatriculas = dataTotal.Total_Matriculas || 0;
+                let valUnicos = dataTotal.Estudiantes_Unicos || 0;
+                let valNps = dataTotal.NPS_Global || 0;
+                let valEncuestas = dataTotal.Total_Encuestas || (dataTotal.registros_crudos ? dataTotal.registros_crudos.length : 0);
+                let valAprobados = dataTotal.Total_Aprobados || 0;
 
-            // Extraemos los datos usando un fallback seguro si algo no existe
-            let valCursos = m.Cursos_Analizados || cursosArr.length || 0;
-            let valMatriculas = m.Total_Matriculas || 0;
-            let valUnicos = m.Estudiantes_Unicos || 0;
-            let valNps = m.NPS_Global || 0;
-            let valEncuestas = m.Total_Encuestas || (dataTotal.registros_crudos ? dataTotal.registros_crudos.length : 0);
-            let valAprobados = m.Total_Aprobados || 0;
+                // Si por alguna razón el JSON no tiene las sumatorias maestras, las calculamos sumando los cursos
+                if (valMatriculas === 0 && dataTotal.cursos && dataTotal.cursos.length > 0) {
+                    dataTotal.cursos.forEach(c => {
+                        valMatriculas += (Number(c.Total_Inscritos) || 0);
+                        valAprobados += (Number(c.Terminaron) || Number(c.Aprobados) || 0);
+                    });
+                    if (valUnicos === 0) valUnicos = Math.floor(valMatriculas * 0.75); // Regla de negocio empírica
+                }
 
-            if (valMatriculas === 0 && cursosArr.length > 0) {
-                cursosArr.forEach(c => {
-                    valMatriculas += (c.Total_Inscritos || 0);
-                    valAprobados += (c.Terminaron || c.Aprobados || 0);
-                });
-                valUnicos = Math.floor(valMatriculas * 0.75);
+                const setDom = (id, valor) => { const el = document.getElementById(id); if (el) el.innerText = valor; };
+                
+                setDom('val_cursos', valCursos);
+                setDom('val_matriculas', valMatriculas.toLocaleString());
+                setDom('val_unicos', valUnicos.toLocaleString());
+                setDom('val_nps', valNps);
+                setDom('val_encuestas', valEncuestas.toLocaleString());
+                setDom('val_aprobados', valAprobados.toLocaleString());
+            } catch (error) {
+                console.error("Error calculando los KPIs de inicio:", error);
             }
-
-            const setDom = (id, valor) => { const el = document.getElementById(id); if (el) el.innerText = valor; };
-            
-            setDom('val_cursos', valCursos);
-            setDom('val_matriculas', valMatriculas.toLocaleString());
-            setDom('val_unicos', valUnicos.toLocaleString());
-            setDom('val_nps', valNps);
-            setDom('val_encuestas', valEncuestas.toLocaleString());
-            setDom('val_aprobados', valAprobados.toLocaleString());
         }
 
         function abrirPanelOLAP() {
@@ -572,6 +577,7 @@
             return d > 300 ? '#4318ff' : d > 150 ? '#7551ff' : d > 50 ? '#a389ff' : d > 10 ? '#d1c4ff' : '#f4f7fe';
         }
 
+        // Masonry Automático: Oculta la caja si los datos suman 0
         function checkEmptyChart(canvasId, boxId, labels, data) {
             const box = document.getElementById(boxId);
             if(!box) return;
@@ -675,8 +681,11 @@
         function dibujarGraficosOperativos(cursos) {
             let tInsc = 0, tFin = 0, tAban = 0, tInac = 0, sumaDias = 0, cDias = 0;
             cursos.forEach(c => {
-                tInsc += (c.Total_Inscritos || 0); tFin += (c.Terminaron || 0); tAban += (c.Abandonaron || 0); tInac += (c.Inactivos || 0);
-                if(c.Tiempo_Promedio_Dias) { sumaDias += c.Tiempo_Promedio_Dias; cDias++; }
+                tInsc += (Number(c.Total_Inscritos) || 0); 
+                tFin += (Number(c.Terminaron) || 0); 
+                tAban += (Number(c.Abandonaron) || 0); 
+                tInac += (Number(c.Inactivos) || 0);
+                if(c.Tiempo_Promedio_Dias) { sumaDias += Number(c.Tiempo_Promedio_Dias); cDias++; }
             });
             const promDias = cDias > 0 ? (sumaDias/cDias).toFixed(1) : 0;
             document.getElementById('val_dias').innerText = promDias;
@@ -693,10 +702,10 @@
             let sumasP = {}; let cuentasP = {};
             
             cursos.forEach(c => {
-                if(c.Salud_Curso_CHS) { chsTotal += c.Salud_Curso_CHS; cChs++; }
+                if(c.Salud_Curso_CHS) { chsTotal += Number(c.Salud_Curso_CHS); cChs++; }
                 if(c.Detalle_Preguntas) {
                     for(let k in c.Detalle_Preguntas) {
-                        sumasP[k] = (sumasP[k]||0) + c.Detalle_Preguntas[k]; cuentasP[k] = (cuentasP[k]||0) + 1;
+                        sumasP[k] = (sumasP[k]||0) + Number(c.Detalle_Preguntas[k]); cuentasP[k] = (cuentasP[k]||0) + 1;
                     }
                 }
             });
@@ -738,35 +747,42 @@
         }
 
         window.inicializarSelectoresComparador = function() {
-            const container = document.getElementById('comparador-row');
-            if(container.innerHTML.trim() !== "") return; 
-            
-            let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
-            
-            let cursosSeguros = (dashboardData.cursos || []).filter(c => c && c.Nombre_Curso);
-            cursosSeguros.sort((a,b) => {
-                let edA = a.Edicion || "";
-                let edB = b.Edicion || "";
-                return edB.localeCompare(edA);
-            }).forEach(c => {
-                opcionesHTML += `<option value="${c.Nombre_Curso}">${c.Curso_Base || c.Nombre_Curso} - ${c.Edicion || "Sin Fecha"}</option>`;
-            });
+            try {
+                const container = document.getElementById('comparador-row');
+                if(!container || container.innerHTML.trim() !== "") return; 
+                
+                let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
+                
+                // Filtramos de manera segura asegurando que el curso exista
+                let cursosSeguros = (dashboardData.cursos || []).filter(c => c && c.Nombre_Curso);
+                
+                // Ordenamiento seguro convirtiendo Edicion a String (evita crashear si Edicion es undefined o número)
+                cursosSeguros.sort((a,b) => {
+                    let edA = String(a.Edicion || "");
+                    let edB = String(b.Edicion || "");
+                    return edB.localeCompare(edA);
+                }).forEach(c => {
+                    opcionesHTML += `<option value="${c.Nombre_Curso}">${c.Curso_Base || c.Nombre_Curso} - ${c.Edicion || "Sin Fecha"}</option>`;
+                });
 
-            for(let i=1; i<=4; i++) {
-                container.innerHTML += `
-                <div class="col-12 col-md-6 col-xl-3 mb-4">
-                    <div class="card bg-white border-0 shadow-sm h-100 p-3 rounded-4" style="background: var(--card-bg) !important; backdrop-filter: blur(12px);">
-                        <select class="form-select mb-3 fw-bold text-primary shadow-sm border-0" onchange="window.cargarDatosComparador(this.value, ${i})" style="background: rgba(67, 24, 255, 0.05); border-radius: 12px; padding: 12px;">
-                            ${opcionesHTML}
-                        </select>
-                        <div id="col_comparador_${i}" class="h-100">
-                            <div class="text-center text-muted mt-5 mb-5 p-4 rounded-4" style="background: rgba(0,0,0,0.02); border: 1px dashed var(--border-color);">
-                                <i class="bi bi-inboxes text-muted mb-2" style="font-size: 2rem;"></i><br>
-                                Selecciona un curso arriba para ver sus métricas
+                for(let i=1; i<=4; i++) {
+                    container.innerHTML += `
+                    <div class="col-12 col-md-6 col-xl-3 mb-4">
+                        <div class="card bg-white border-0 shadow-sm h-100 p-3 rounded-4" style="background: var(--card-bg) !important; backdrop-filter: blur(12px);">
+                            <select class="form-select mb-3 fw-bold text-primary shadow-sm border-0" onchange="window.cargarDatosComparador(this.value, ${i})" style="background: rgba(67, 24, 255, 0.05); border-radius: 12px; padding: 12px;">
+                                ${opcionesHTML}
+                            </select>
+                            <div id="col_comparador_${i}" class="h-100">
+                                <div class="text-center text-muted mt-5 mb-5 p-4 rounded-4" style="background: rgba(0,0,0,0.02); border: 1px dashed var(--border-color);">
+                                    <i class="bi bi-inboxes text-muted mb-2" style="font-size: 2rem;"></i><br>
+                                    Selecciona un curso arriba para ver sus métricas
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>`;
+                    </div>`;
+                }
+            } catch (error) {
+                console.error("Error inicializando los selectores del comparador:", error);
             }
         }
 
@@ -780,7 +796,7 @@
             const c = (dashboardData.cursos||[]).find(x => x.Nombre_Curso === nombreCurso);
             if(!c) return;
 
-            const fuga = ((c.Abandonaron||0) + (c.Inactivos||0)) / (c.Total_Inscritos||1) * 100;
+            const fuga = ((Number(c.Abandonaron)||0) + (Number(c.Inactivos)||0)) / (Number(c.Total_Inscritos)||1) * 100;
             const perfFrecuente = obtenerModaDemografica(dashboardData.registros_crudos, nombreCurso, 'Perfil');
             const zonaFrecuente = obtenerModaDemografica(dashboardData.registros_crudos, nombreCurso, 'Comuna_Unificada');
 
