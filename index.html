@@ -125,7 +125,6 @@
         
         .badge-sub { font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 12px; display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; }
         
-        /* Ajuste píldora cabecera: No más desbordamiento */
         .glass-header { background: var(--card-bg); border-radius: 20px; padding: 20px 25px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-bottom: 25px; }
         
         .filter-select { background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 15px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; transition: all 0.3s; cursor: pointer; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
@@ -227,8 +226,10 @@
                                 <div class="bento-icon" style="background: rgba(5, 205, 153, 0.1); color: var(--success);"><i class="bi bi-people-fill"></i></div>
                                 <div class="kpi-val" id="val_matriculas">0</div>
                                 <div class="kpi-label">Matrículas Totales</div>
-                                <div class="badge-sub" style="background: rgba(5, 205, 153, 0.1); color: var(--success);">
-                                    <i class="bi bi-person-check-fill"></i> <span id="val_unicos">0</span> Estudiantes Únicos
+                                <div class="mt-2">
+                                    <div class="badge-sub" style="background: rgba(5, 205, 153, 0.1); color: var(--success);">
+                                        <i class="bi bi-person-check-fill"></i> <span id="val_unicos">0</span> Estudiantes Únicos
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -237,8 +238,10 @@
                                 <div class="bento-icon" style="background: rgba(255, 181, 71, 0.1); color: var(--warning);"><i class="bi bi-star-fill"></i></div>
                                 <div class="kpi-val" id="val_nps">0</div>
                                 <div class="kpi-label">NPS (Satisfacción)</div>
-                                <div class="badge-sub" style="background: rgba(255, 181, 71, 0.1); color: var(--warning);">
-                                    <i class="bi bi-chat-heart-fill"></i> 79% Promotores
+                                <div class="mt-2">
+                                    <div class="badge-sub" style="background: rgba(255, 181, 71, 0.1); color: var(--warning);">
+                                        <i class="bi bi-chat-heart-fill"></i> 79% Promotores
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -247,8 +250,10 @@
                                 <div class="bento-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;"><i class="bi bi-clipboard-data-fill"></i></div>
                                 <div class="kpi-val" id="val_encuestas">0</div>
                                 <div class="kpi-label">Encuestas de Calidad</div>
-                                <div class="badge-sub" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
-                                    <i class="bi bi-award-fill"></i> <span id="val_aprobados">0</span> Aprobados
+                                <div class="mt-2">
+                                    <div class="badge-sub" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                                        <i class="bi bi-award-fill"></i> <span id="val_aprobados">0</span> Aprobados
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -460,7 +465,6 @@
                 if(!dataRes.ok) throw new Error("No se pudo cargar dashboard_data.json");
                 dashboardData = await dataRes.json();
 
-                // Llama la función segura, pasando TODO el objeto dashboardData
                 llenarTarjetasInicio(dashboardData);
                 document.getElementById('loading').style.opacity = '0';
                 setTimeout(() => document.getElementById('loading').style.display = 'none', 500);
@@ -470,7 +474,6 @@
                 document.getElementById('loading').innerHTML = `<h4 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Error cargando datos. Revisa la consola o tu servidor local.</h4>`;
             }
 
-            // Despertador de Gráficos Ocultos y Trigger de Laboratorio A/B
             const triggerTabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
             triggerTabList.forEach(triggerEl => {
               triggerEl.addEventListener('shown.bs.tab', event => {
@@ -490,7 +493,6 @@
             destCanvas.width = canvas.width; destCanvas.height = canvas.height;
             const ctx = destCanvas.getContext('2d');
             
-            // Pintar fondo sólido adaptativo en lugar de transparente
             const bgColor = getComputedStyle(document.body).getPropertyValue('--bg-color').trim() || '#ffffff';
             ctx.fillStyle = bgColor;
             ctx.fillRect(0, 0, destCanvas.width, destCanvas.height);
@@ -502,33 +504,29 @@
             link.click();
         }
 
-        // FUNCIÓN RESTAURADA Y PROTEGIDA
         function llenarTarjetasInicio(dataTotal) {
             if (!dataTotal) return;
             
-            // Tomamos los datos directo de la raíz como los tenías originalmente
-            // y agregamos el fallback por si en el futuro cambias la estructura
+            // Protección total: busca en "metricas_globales" o en la raíz directamente
             let m = dataTotal.metricas_globales || dataTotal;
             let cursosArr = dataTotal.cursos || [];
 
-            // Usamos ?. (optional chaining) para que si un dato no existe, dé 0 en lugar de "Crashear"
-            let valCursos = m?.Cursos_Analizados ?? cursosArr.length ?? 0;
-            let valMatriculas = m?.Total_Matriculas ?? 0;
-            let valUnicos = m?.Estudiantes_Unicos ?? 0;
-            let valNps = m?.NPS_Global ?? 0;
-            let valEncuestas = m?.Total_Encuestas ?? (dataTotal.registros_crudos?.length || 0);
-            let valAprobados = m?.Total_Aprobados ?? 0;
+            // Extraemos los datos usando un fallback seguro si algo no existe
+            let valCursos = m.Cursos_Analizados || cursosArr.length || 0;
+            let valMatriculas = m.Total_Matriculas || 0;
+            let valUnicos = m.Estudiantes_Unicos || 0;
+            let valNps = m.NPS_Global || 0;
+            let valEncuestas = m.Total_Encuestas || (dataTotal.registros_crudos ? dataTotal.registros_crudos.length : 0);
+            let valAprobados = m.Total_Aprobados || 0;
 
-            // En caso de que las matrículas vengan en 0, sumamos los cursos automáticamente
             if (valMatriculas === 0 && cursosArr.length > 0) {
                 cursosArr.forEach(c => {
                     valMatriculas += (c.Total_Inscritos || 0);
                     valAprobados += (c.Terminaron || c.Aprobados || 0);
                 });
-                valUnicos = Math.floor(valMatriculas * 0.75); // Estimación rápida
+                valUnicos = Math.floor(valMatriculas * 0.75);
             }
 
-            // Modificamos el DOM de forma segura verificando que el ID exista
             const setDom = (id, valor) => { const el = document.getElementById(id); if (el) el.innerText = valor; };
             
             setDom('val_cursos', valCursos);
@@ -574,7 +572,6 @@
             return d > 300 ? '#4318ff' : d > 150 ? '#7551ff' : d > 50 ? '#a389ff' : d > 10 ? '#d1c4ff' : '#f4f7fe';
         }
 
-        // Masonry Dinámico: Oculta la caja si los datos suman cero
         function checkEmptyChart(canvasId, boxId, labels, data) {
             const box = document.getElementById(boxId);
             if(!box) return;
@@ -742,11 +739,10 @@
 
         window.inicializarSelectoresComparador = function() {
             const container = document.getElementById('comparador-row');
-            if(container.innerHTML.trim() !== "") return; // Ya inicializado
+            if(container.innerHTML.trim() !== "") return; 
             
             let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
             
-            // Función Blindada de Ordenamiento
             let cursosSeguros = (dashboardData.cursos || []).filter(c => c && c.Nombre_Curso);
             cursosSeguros.sort((a,b) => {
                 let edA = a.Edicion || "";
