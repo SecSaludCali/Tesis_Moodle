@@ -129,8 +129,13 @@
         .hub-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;}
         .hub-card:hover { border-color: var(--primary); }
 
+        /* Estilos modificados para la píldora de selectores */
         .dashboard-top-bar { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .pill-selectors { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px 18px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: var(--card-shadow); backdrop-filter: blur(8px); width: 100%; max-width: 100%; }
+        .pill-selectors { 
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; 
+            padding: 12px 18px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; 
+            box-shadow: var(--card-shadow); backdrop-filter: blur(8px); width: 100%; 
+        }
         .macro-select { background: transparent; color: var(--text-main); border: 1px solid transparent; padding: 8px 16px; font-weight: 600; font-size: 0.9rem; cursor: pointer; outline: none; border-radius: 12px; transition: all 0.2s;}
         .macro-select:hover, .macro-select:focus { background: rgba(67, 24, 255, 0.05); color: var(--primary); border-color: rgba(67, 24, 255, 0.2); }
         .macro-select option { background: var(--bg-color); color: var(--text-main); }
@@ -240,6 +245,7 @@
                         <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
                     </div>
 
+                    <!-- 4 Tarjetas de Bento con Datos Integrados -->
                     <div class="row g-4 mb-5">
                         <div class="col-md-6 col-xl-3">
                             <div class="glass-card bento-kpi">
@@ -255,16 +261,24 @@
                                 <div class="kpi-icon-lg bg-emerald-soft"><i class="bi bi-people"></i></div>
                                 <div>
                                     <div class="kpi-val" id="bento-matriculas">-</div>
-                                    <div class="kpi-lbl">Matrículas</div>
+                                    <div class="kpi-lbl">Matrículas Totales</div>
+                                    <!-- Burbuja de estudiantes únicos, integrada dentro de matrículas -->
+                                    <div class="mt-2 badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 border border-success border-opacity-25" style="font-size: 0.75rem;">
+                                        <i class="bi bi-person-check-fill"></i> <span id="bento-unicos">-</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 col-xl-3">
                             <div class="glass-card bento-kpi">
-                                <div class="kpi-icon-lg bg-amber-soft"><i class="bi bi-ui-radios"></i></div>
+                                <div class="kpi-icon-lg bg-amber-soft"><i class="bi bi-mortarboard"></i></div>
                                 <div>
-                                    <div class="kpi-val" id="bento-encuestas">-</div>
-                                    <div class="kpi-lbl">Encuestas de Calidad</div>
+                                    <div class="kpi-val text-warning" id="bento-certificados">-</div>
+                                    <div class="kpi-lbl">Aprobados</div>
+                                    <!-- Burbuja de encuestas de calidad, integrada dentro de aprobados -->
+                                    <div class="mt-2 badge bg-warning bg-opacity-10 text-warning rounded-pill px-2 py-1 border border-warning border-opacity-25" style="font-size: 0.75rem;">
+                                        <i class="bi bi-ui-radios"></i> <span id="bento-encuestas">-</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -275,19 +289,6 @@
                                     <div class="kpi-val text-rose" id="bento-chs">-</div>
                                     <div class="kpi-lbl">Score CHS Institucional</div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row g-4 mb-5">
-                        <div class="col-md-6">
-                            <div class="glass-card bento-kpi justify-content-center" style="padding: 20px;">
-                                <div class="kpi-val fs-3" id="bento-unicos">-</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="glass-card bento-kpi justify-content-center" style="padding: 20px;">
-                                <div class="kpi-val fs-3 text-success" id="bento-certificados">-</div>
                             </div>
                         </div>
                     </div>
@@ -712,16 +713,14 @@
             
             const tI = dashboardData.cursos.reduce((s, c) => s+(c.Total_Inscritos||0), 0); 
             let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); });
+            const unicos = dashboardData.metadata.total_estudiantes_unicos || tI;
             
             document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados||0; 
             document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); 
-            document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString(); 
+            document.getElementById('bento-unicos').innerText = unicos.toLocaleString() + " Únicos";
+            document.getElementById('bento-certificados').innerText = tC.toLocaleString();
+            document.getElementById('bento-encuestas').innerText = dashboardData.metadata.total_encuestas_historicas.toLocaleString() + " Encuestas";
             document.getElementById('bento-chs').innerText = dashboardData.kpis_globales.chs_promedio_secretaria;
-
-            // Novedad: Inyectar datos de estudiantes únicos y aprobados (Certificados)
-            const unicos = dashboardData.metadata.total_estudiantes_unicos || tI;
-            document.getElementById('bento-unicos').innerHTML = `<i class="bi bi-person-check-fill me-1"></i>${unicos.toLocaleString()} Únicos`;
-            document.getElementById('bento-certificados').innerHTML = `<i class="bi bi-mortarboard-fill me-1"></i>${tC.toLocaleString()} Aprobados`;
 
             actualizarPantallaGlobal();
         });
