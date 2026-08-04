@@ -253,7 +253,6 @@
                         <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
                     </div>
 
-                    <!-- 4 Tarjetas de Bento con Datos Integrados -->
                     <div class="row g-4 mb-5">
                         <div class="col-md-6 col-xl-3">
                             <div class="glass-card bento-kpi">
@@ -708,26 +707,29 @@
 
         window.inicializarSelectoresComparador = function() {
             const container = document.getElementById('comparador-row');
-            if(container.innerHTML.trim() !== "") return; // Evita duplicar si ya se dibujó
+            if (!container || container.innerHTML.trim() !== "") return; 
             
             let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
             
-            // BLINDAJE: Ordenamiento a prueba de fallos para valores nulos/indefinidos
-            let cursosSeguros = [...dashboardData.cursos].sort((a,b) => {
-                let edA = a.Edicion || "Sin Fecha";
-                let edB = b.Edicion || "Sin Fecha";
-                return edB.localeCompare(edA);
-            });
+            // Protección máxima contra datos faltantes o vacíos en la lista de cursos
+            if (dashboardData && dashboardData.cursos && Array.isArray(dashboardData.cursos)) {
+                let cursosSeguros = [...dashboardData.cursos].sort((a,b) => {
+                    let edA = a.Edicion ? String(a.Edicion) : "Sin Fecha";
+                    let edB = b.Edicion ? String(b.Edicion) : "Sin Fecha";
+                    return edB.localeCompare(edA);
+                });
 
-            cursosSeguros.forEach(c => {
-                let nombreBase = c.Curso_Base || c.Nombre_Curso || "Curso";
-                let edicion = c.Edicion || "Sin Fecha";
-                opcionesHTML += `<option value="${c.Nombre_Curso}">${nombreBase} - ${edicion}</option>`;
-            });
+                cursosSeguros.forEach(c => {
+                    let nBase = c.Curso_Base || c.Nombre_Curso || "Curso";
+                    let nEd = c.Edicion || "Sin Fecha";
+                    opcionesHTML += `<option value="${c.Nombre_Curso}">${nBase} - ${nEd}</option>`;
+                });
+            }
 
-            // Dibujar las 4 columnas
+            // Construir el HTML en memoria y volcarlo de una sola vez
+            let htmlFinal = "";
             for(let i=1; i<=4; i++) {
-                container.innerHTML += `
+                htmlFinal += `
                 <div class="col-xl-3 col-md-6">
                     <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
                         <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
@@ -757,6 +759,7 @@
                     </div>
                 </div>`;
             }
+            container.innerHTML = htmlFinal;
         };
 
         window.actualizarComparador = function(slotIndex, courseName) {
@@ -770,12 +773,12 @@
 
             contentDiv.classList.remove('d-none'); emptyDiv.classList.add('d-none');
             
-            // Llenar datos operativos
+            // Operativo
             document.getElementById(`comp-mat-${slotIndex}`).innerText = (curso.Total_Inscritos || 0).toLocaleString();
             document.getElementById(`comp-fin-${slotIndex}`).innerText = (curso['Tasa_Finalizacion_%']||0) + "%";
             document.getElementById(`comp-fug-${slotIndex}`).innerText = ((curso['Tasa_Abandono_%']||0) + (curso['Tasa_Inactividad_%']||0)).toFixed(1) + "%";
             
-            // Llenar datos de calidad
+            // Calidad
             const qMet = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0;
             const qUx = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0;
             const qPrac = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0;
@@ -784,7 +787,7 @@
             document.getElementById(`comp-ux-${slotIndex}`).innerHTML = generarEstrellas(qUx);
             document.getElementById(`comp-prac-${slotIndex}`).innerHTML = generarEstrellas(qPrac);
             
-            // Llenar datos demográficos (Moda)
+            // Demografía (Moda)
             document.getElementById(`comp-prof-${slotIndex}`).innerText = curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A";
             let modaCom = curso.Demografia ? obtenerModa(curso.Demografia.Comuna) : "N/A";
             if(modaCom !== "N/A" && !isNaN(modaCom)) modaCom = "Comuna " + modaCom;
