@@ -253,6 +253,7 @@
                         <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
                     </div>
 
+                    <!-- 4 Tarjetas de Bento con Datos Integrados -->
                     <div class="row g-4 mb-5">
                         <div class="col-md-6 col-xl-3">
                             <div class="glass-card bento-kpi">
@@ -366,8 +367,8 @@
                                 <i class="bi bi-speedometer2"></i> Operativo <i class="bi bi-lock-fill text-danger ms-1 d-none" id="lock-icon" title="Bloqueado por filtros"></i>
                             </button>
                             <button class="tab-clean" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill"></i> Calidad Percibida</button>
-                            <!-- NUEVA PESTAÑA DE COMPARACIÓN -->
-                            <button class="tab-clean" id="comparador-tab" data-bs-toggle="tab" data-bs-target="#panel-comparador" type="button" role="tab" onclick="inicializarSelectoresComparador()"><i class="bi bi-layout-three-columns"></i> Laboratorio A/B</button>
+                            <!-- La nueva pestaña del Laboratorio A/B ya NO necesita onClick, porque las cajas ya existen -->
+                            <button class="tab-clean" id="comparador-tab" data-bs-toggle="tab" data-bs-target="#panel-comparador" type="button" role="tab"><i class="bi bi-layout-three-columns"></i> Laboratorio A/B</button>
                         </div>
 
                         <div class="tab-content" id="myTabContent">
@@ -447,7 +448,127 @@
                             <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
                                 <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente.</div>
                                 <div class="row g-3 mb-4" id="comparador-row">
-                                    <!-- Las 4 columnas se inyectarán aquí mediante JS -->
+                                    
+                                    <!-- COLUMNA ESTATICA 1 -->
+                                    <div class="col-xl-3 col-md-6">
+                                        <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
+                                            <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
+                                                <select id="select-comp-1" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(1, this.value)">
+                                                    <option value="">+ Seleccionar Curso</option>
+                                                </select>
+                                            </div>
+                                            <div id="comp-content-1" class="p-3 d-none flex-grow-1">
+                                                <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
+                                                <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-1">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-1">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-1">-</span></div>
+                                                
+                                                <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-1">-</div></div>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-1">-</div></div>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-1">-</div></div>
+                                                
+                                                <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
+                                                <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-1">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-1">-</span></div>
+                                            </div>
+                                            <div id="comp-empty-1" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
+                                                <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
+                                                <p class="small">Elige una edición para analizar.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- COLUMNA ESTATICA 2 -->
+                                    <div class="col-xl-3 col-md-6">
+                                        <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
+                                            <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
+                                                <select id="select-comp-2" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(2, this.value)">
+                                                    <option value="">+ Seleccionar Curso</option>
+                                                </select>
+                                            </div>
+                                            <div id="comp-content-2" class="p-3 d-none flex-grow-1">
+                                                <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
+                                                <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-2">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-2">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-2">-</span></div>
+                                                
+                                                <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-2">-</div></div>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-2">-</div></div>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-2">-</div></div>
+                                                
+                                                <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
+                                                <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-2">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-2">-</span></div>
+                                            </div>
+                                            <div id="comp-empty-2" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
+                                                <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
+                                                <p class="small">Elige una edición para analizar.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- COLUMNA ESTATICA 3 -->
+                                    <div class="col-xl-3 col-md-6">
+                                        <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
+                                            <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
+                                                <select id="select-comp-3" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(3, this.value)">
+                                                    <option value="">+ Seleccionar Curso</option>
+                                                </select>
+                                            </div>
+                                            <div id="comp-content-3" class="p-3 d-none flex-grow-1">
+                                                <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
+                                                <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-3">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-3">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-3">-</span></div>
+                                                
+                                                <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-3">-</div></div>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-3">-</div></div>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-3">-</div></div>
+                                                
+                                                <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
+                                                <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-3">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-3">-</span></div>
+                                            </div>
+                                            <div id="comp-empty-3" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
+                                                <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
+                                                <p class="small">Elige una edición para analizar.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- COLUMNA ESTATICA 4 -->
+                                    <div class="col-xl-3 col-md-6">
+                                        <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
+                                            <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
+                                                <select id="select-comp-4" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(4, this.value)">
+                                                    <option value="">+ Seleccionar Curso</option>
+                                                </select>
+                                            </div>
+                                            <div id="comp-content-4" class="p-3 d-none flex-grow-1">
+                                                <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
+                                                <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-4">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-4">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-4">-</span></div>
+                                                
+                                                <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-4">-</div></div>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-4">-</div></div>
+                                                <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-4">-</div></div>
+                                                
+                                                <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
+                                                <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-4">-</span></div>
+                                                <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-4">-</span></div>
+                                            </div>
+                                            <div id="comp-empty-4" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
+                                                <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
+                                                <p class="small">Elige una edición para analizar.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -644,12 +765,12 @@
             const s = this.value; const sC = document.getElementById('selector-cohorte'); const ic = document.getElementById('icon-cohorte'); const dc = document.getElementById('div-cohorte'); const lob = document.getElementById('panel-lobby-curso'); const tab = document.getElementById('contenedor-tabs'); 
             if (s === "ALL") { sC.style.display="none"; ic.style.display="none"; dc.style.display="none"; cursoActual=null; lob.style.display="none"; tab.style.display="block"; actualizarPantallaGlobal(); } 
             else { 
-                let cohs = cursosPorBase[s]; if(añoActual!=="ALL") cohs = cohs.filter(c => (c.Edicion||"").includes(añoActual)); cohs = cohs.sort((a, b) => (b.Edicion || "Sin Fecha").localeCompare(a.Edicion || "Sin Fecha")); 
-                sC.innerHTML = '<option value="">⬅ Seleccione Edición</option>'; cohs.forEach(c => sC.appendChild(new Option(c.Edicion || "Sin Fecha", c.Nombre_Curso))); 
+                let cohs = cursosPorBase[s]; if(añoActual!=="ALL") cohs = cohs.filter(c => (c.Edicion||"").includes(añoActual)); cohs = cohs.sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                sC.innerHTML = '<option value="">⬅ Seleccione Edición</option>'; cohs.forEach(c => sC.appendChild(new Option(c.Edicion, c.Nombre_Curso))); 
                 sC.style.display="block"; ic.style.display="block"; dc.style.display="block"; sC.value=""; tab.style.display="none"; lob.style.display="block"; document.getElementById('filtros-cruzados-bar').style.display='none';
                 let hL = `<div class="mb-4 text-start"><h5 class="fw-bold text-primary">${s}</h5><p class="text-muted small">Seleccione una edición</p></div><div class="row g-3">`; 
                 if(cohs.length===0) hL += `<div class="col-12 text-muted py-4"><i class="bi bi-folder-x fs-2"></i> No hay cohortes este año.</div>`; 
-                else cohs.forEach(c => { hL += `<div class="col-md-4 col-xl-3"><div class="glass-card text-start py-3 px-4" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="d-flex align-items-center gap-3"><i class="bi bi-mortarboard-fill fs-3 text-primary"></i><div><h6 class="fw-bold m-0">${c.Edicion || "Sin Fecha"}</h6><small class="text-muted">${c.Total_Inscritos} Estudiantes</small></div></div></div></div>`; }); 
+                else cohs.forEach(c => { hL += `<div class="col-md-4 col-xl-3"><div class="glass-card text-start py-3 px-4" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="d-flex align-items-center gap-3"><i class="bi bi-mortarboard-fill fs-3 text-primary"></i><div><h6 class="fw-bold m-0">${c.Edicion}</h6><small class="text-muted">${c.Total_Inscritos} Estudiantes</small></div></div></div></div>`; }); 
                 lob.innerHTML = hL + `</div>`; 
             } 
         }
@@ -705,61 +826,31 @@
             return moda;
         }
 
-        window.inicializarSelectoresComparador = function() {
-            const container = document.getElementById('comparador-row');
-            if (!container || container.innerHTML.trim() !== "") return; 
+        // Nueva función: Poblar los `<select>` de forma segura al cargar la página
+        window.poblarSelectoresComparador = function() {
+            // Protección: Si los datos no existen aún, salir
+            if (!dashboardData || !dashboardData.cursos) return;
             
             let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
             
-            // Protección máxima contra datos faltantes o vacíos en la lista de cursos
-            if (dashboardData && dashboardData.cursos && Array.isArray(dashboardData.cursos)) {
-                let cursosSeguros = [...dashboardData.cursos].sort((a,b) => {
-                    let edA = a.Edicion ? String(a.Edicion) : "Sin Fecha";
-                    let edB = b.Edicion ? String(b.Edicion) : "Sin Fecha";
-                    return edB.localeCompare(edA);
-                });
+            // Ordenar los cursos protegiéndose contra fechas vacías
+            let cursosSeguros = [...dashboardData.cursos].sort((a,b) => {
+                let edA = a.Edicion ? String(a.Edicion) : "Sin Fecha";
+                let edB = b.Edicion ? String(b.Edicion) : "Sin Fecha";
+                return edB.localeCompare(edA);
+            });
 
-                cursosSeguros.forEach(c => {
-                    let nBase = c.Curso_Base || c.Nombre_Curso || "Curso";
-                    let nEd = c.Edicion || "Sin Fecha";
-                    opcionesHTML += `<option value="${c.Nombre_Curso}">${nBase} - ${nEd}</option>`;
-                });
-            }
+            cursosSeguros.forEach(c => {
+                let nBase = c.Curso_Base || c.Nombre_Curso || "Curso";
+                let nEd = c.Edicion || "Sin Fecha";
+                opcionesHTML += `<option value="${c.Nombre_Curso}">${nBase} - ${nEd}</option>`;
+            });
 
-            // Construir el HTML en memoria y volcarlo de una sola vez
-            let htmlFinal = "";
+            // Inyectar silenciosamente las opciones en los 4 selects fijos del HTML
             for(let i=1; i<=4; i++) {
-                htmlFinal += `
-                <div class="col-xl-3 col-md-6">
-                    <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                        <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                            <select class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(${i}, this.value)">
-                                ${opcionesHTML}
-                            </select>
-                        </div>
-                        <div id="comp-content-${i}" class="p-3 d-none flex-grow-1">
-                            <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                            <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-${i}">-</span></div>
-                            <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-${i}">-</span></div>
-                            <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-${i}">-</span></div>
-                            
-                            <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                            <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-${i}">-</div></div>
-                            <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-${i}">-</div></div>
-                            <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-${i}">-</div></div>
-                            
-                            <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                            <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-${i}">-</span></div>
-                            <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-${i}">-</span></div>
-                        </div>
-                        <div id="comp-empty-${i}" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                            <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                            <p class="small">Elige una edición para analizar.</p>
-                        </div>
-                    </div>
-                </div>`;
+                let sel = document.getElementById(`select-comp-${i}`);
+                if(sel) sel.innerHTML = opcionesHTML;
             }
-            container.innerHTML = htmlFinal;
         };
 
         window.actualizarComparador = function(slotIndex, courseName) {
@@ -810,6 +901,10 @@
             try { 
                 const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); 
                 dashboardData = await res.json(); 
+                
+                // Ejecutamos la carga de selectores justo después de recibir los datos!
+                window.poblarSelectoresComparador();
+
             } catch (e) { 
                 console.error("Fallo al cargar el JSON vía fetch. Asegúrese de estar en HTTP, no FILE://", e);
                 return;
