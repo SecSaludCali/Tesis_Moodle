@@ -75,23 +75,31 @@ class MoodleDataExtractor:
     def authenticate(self):
         """Maneja el inicio de sesión, incluyendo la doble validación requerida por Moodle."""
         logging.info("Iniciando proceso de autenticación.")
-        self.driver.get(self.login_url)
-        time.sleep(2)
-        
-        self._submit_credentials()
-        time.sleep(3)
-        
-        # Verificación de doble inicio de sesión
-        if 'login' in self.driver.current_url:
-            logging.warning("Moodle ha solicitado redirección o doble autenticación. Reintentando...")
+        try:
+            self.driver.get(self.login_url)
+            time.sleep(2)
+            
             self._submit_credentials()
             time.sleep(3)
             
-        if 'login' in self.driver.current_url:
-            logging.error("Fallo de autenticación tras dos intentos. Verifique credenciales.")
-            raise Exception("Autenticación denegada por Moodle.")
-        else:
-            logging.info("Autenticación completada exitosamente.")
+            # Verificación de doble inicio de sesión
+            if 'login' in self.driver.current_url:
+                logging.warning("Moodle ha solicitado redirección o doble autenticación. Reintentando...")
+                self._submit_credentials()
+                time.sleep(3)
+                
+            if 'login' in self.driver.current_url:
+                logging.error("Fallo de autenticación tras dos intentos. Verifique credenciales.")
+                raise Exception("Autenticación denegada por Moodle.")
+            else:
+                logging.info("Autenticación completada exitosamente.")
+                
+        except Exception as e:
+            # Novedad: Tomar captura de pantalla si algo falla
+            screenshot_path = os.path.join(self.base_dir, "error_login_moodle.png")
+            self.driver.save_screenshot(screenshot_path)
+            logging.error(f"Fallo crítico en la página de login. Captura guardada en: {screenshot_path}")
+            raise e # Volvemos a lanzar el error para que GitHub sepa que falló
 
     def _submit_credentials(self):
         """Inyecta las credenciales en el DOM y envía el formulario."""
@@ -242,5 +250,7 @@ if __name__ == "__main__":
         extractor.download_reports(target_course_ids)
     except Exception as e:
         logging.error(f"Interrupción de la ejecución principal: {e}")
+        import sys
+        sys.exit(1) # 👈 Esto fuerza a GitHub a detenerse y marcar el error en rojo
     finally:
         extractor.terminate_session()
