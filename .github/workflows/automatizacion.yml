@@ -39,6 +39,14 @@ jobs:
         python procesamiento.py
         python procesamiento_json.py
 
+    - name: Subir captura de error (Si Moodle falla)
+      uses: actions/upload-artifact@v4
+      if: always() # 👈 Asegura que intente buscar la foto aunque el scraper haya fallado
+      with:
+        name: captura-error-moodle
+        path: error_login_moodle.png
+        retention-days: 5 # Borra la foto en 5 días para no llenar el espacio
+
     - name: Autoguardar Cambios en GitHub
       run: |
         git config --global user.name 'Automated Scraper'
