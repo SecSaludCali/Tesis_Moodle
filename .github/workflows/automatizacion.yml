@@ -49,9 +49,9 @@ jobs:
         
         # 2. Forzar la adición de archivos clave (por si están en el .gitignore) y de todo lo demás
         git add -A
-        git add -f dashboard_data.json
-        git add -f descargas_moodle/*.csv
-        git add -f *.csv
+        git add -f dashboard_data.json || true
+        git add -f descargas_moodle/*.csv || true
+        git add -f *.csv || true
         
         # 3. Imprimir el estado para que podamos verlo en los logs si algo falla
         git status
