@@ -32,6 +32,26 @@ jobs:
         echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
         echo '${{ secrets.GOOGLE_TOKEN }}' > token.json
 
+    - name: Configurar VPN Gratuita (Cloudflare WARP)
+      run: |
+        # 1. Descargar e instalar Cloudflare WARP en el servidor de GitHub
+        curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
+        sudo apt-get update
+        sudo apt-get install -y cloudflare-warp
+        
+        # 2. Registrar el cliente y conectar la VPN
+        warp-cli --accept-tos registration new
+        warp-cli --accept-tos connect
+        
+        # 3. Esperar unos segundos a que la conexión se estabilice
+        sleep 5
+        
+        # 4. Imprimir la nueva IP en los logs para confirmar el cambio
+        echo "La nueva IP del bot es:"
+        curl ifconfig.me
+        echo ""
+
     - name: Ejecutar Extractor y Procesamiento
       run: |
         python scraper.py
