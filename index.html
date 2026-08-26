@@ -624,89 +624,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // MOCK DATA: Embedded to prevent fetch errors in sandboxed environments
-        const mockDashboardData = {
-            "metadata": {
-                "total_cursos_analizados": 4,
-                "total_encuestas_historicas": 1250,
-                "total_estudiantes_unicos": 3800
-            },
-            "kpis_globales": {
-                "chs_promedio_secretaria": "85.4",
-                "nps_global": 72
-            },
-            "demografia_global": {
-                "Sexo": { "Femenino": 2500, "Masculino": 1200, "Otro": 100 },
-                "Curso de Vida": { "Juventud": 1500, "Adultez": 2000, "Vejez": 300 },
-                "Perfil": { "Enfermera": 1800, "Médico": 1000, "Auxiliar": 700, "Estudiante": 300 },
-                "Escolaridad": { "Profesional": 1500, "Técnico": 1000, "Tecnólogo": 800, "Postgrado": 500 },
-                "Comuna": { "Comuna 2": 400, "Comuna 17": 350, "Comuna 19": 300, "Comuna 10": 250, "Comuna 3": 200 }
-            },
-            "cursos": [
-                {
-                    "Nombre_Curso": "Curso A",
-                    "Curso_Base": "Epidemiología Básica",
-                    "Edicion": "2024-01",
-                    "Total_Inscritos": 1200,
-                    "Tasa_Finalizacion_%": 75,
-                    "Tasa_Abandono_%": 15,
-                    "Tasa_Inactividad_%": 10,
-                    "Tiempo_Promedio_Dias": 14,
-                    "Total_Encuestas": 350,
-                    "Salud_Curso_CHS": 88,
-                    "e_NPS": 75,
-                    "Demografia": {
-                        "Sexo": { "Femenino": 800, "Masculino": 350, "Otro": 50 },
-                        "Edad": { "Juventud": 500, "Adultez": 600, "Vejez": 100 },
-                        "Perfil": { "Enfermera": 600, "Médico": 400, "Auxiliar": 200 },
-                        "Escolaridad": { "Profesional": 500, "Técnico": 400, "Tecnólogo": 300 },
-                        "Comuna": { "Comuna 2": 150, "Comuna 17": 120, "Comuna 19": 100 }
-                    },
-                    "Detalle_Preguntas": {
-                        "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.5,
-                        "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.2,
-                        "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.6
-                    },
-                    "Registros_Crudos": []
-                },
-                 {
-                    "Nombre_Curso": "Curso B",
-                    "Curso_Base": "Atención Primaria",
-                    "Edicion": "2024-02",
-                    "Total_Inscritos": 800,
-                    "Tasa_Finalizacion_%": 82,
-                    "Tasa_Abandono_%": 10,
-                    "Tasa_Inactividad_%": 8,
-                    "Tiempo_Promedio_Dias": 10,
-                    "Total_Encuestas": 250,
-                    "Salud_Curso_CHS": 92,
-                    "e_NPS": 80,
-                    "Demografia": {
-                         "Sexo": { "Femenino": 500, "Masculino": 280, "Otro": 20 },
-                        "Edad": { "Juventud": 300, "Adultez": 450, "Vejez": 50 },
-                        "Perfil": { "Enfermera": 350, "Médico": 250, "Auxiliar": 200 },
-                        "Escolaridad": { "Profesional": 300, "Técnico": 300, "Tecnólogo": 200 },
-                        "Comuna": { "Comuna 10": 100, "Comuna 3": 80, "Comuna 17": 70 }
-                    },
-                    "Detalle_Preguntas": {
-                        "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.8,
-                        "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.5,
-                        "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.7
-                    },
-                    "Registros_Crudos": []
-                }
-            ]
-        };
-
-        const mockGeoJsonData = {
-            "type": "FeatureCollection",
-            "features": [] // Simplified for demonstration to prevent massive code block. Map will be empty.
-        };
-
-        let dashboardData = mockDashboardData; 
-        let cursosPorBase = {}; let cursoActual = null; let datosFiltradosActuales = null; 
+        let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let datosFiltradosActuales = null; 
         let chartInstances = {}; let promediosGlobalesPreguntas = {}; let mapInstance = null; let geoJsonLayer = null; 
-        let geoJsonDataRaw = mockGeoJsonData; let añosDisponibles = new Set(); let añoActual = "ALL"; let filterDebounceTimer = null;
+        let geoJsonDataRaw = null; let añosDisponibles = new Set(); let añoActual = "ALL"; let filterDebounceTimer = null;
 
         const mapeoPreguntas = { 
             "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Obj. Cumplido", 
@@ -999,10 +919,12 @@
 
             contentDiv.classList.remove('d-none'); emptyDiv.classList.add('d-none');
             
+            // Operativo
             document.getElementById(`comp-mat-${slotIndex}`).innerText = (curso.Total_Inscritos || 0).toLocaleString();
             document.getElementById(`comp-fin-${slotIndex}`).innerText = (curso['Tasa_Finalizacion_%']||0) + "%";
             document.getElementById(`comp-fug-${slotIndex}`).innerText = ((curso['Tasa_Abandono_%']||0) + (curso['Tasa_Inactividad_%']||0)).toFixed(1) + "%";
             
+            // Calidad
             const qMet = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0;
             const qUx = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0;
             const qPrac = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0;
@@ -1011,13 +933,14 @@
             document.getElementById(`comp-ux-${slotIndex}`).innerHTML = generarEstrellas(qUx);
             document.getElementById(`comp-prac-${slotIndex}`).innerHTML = generarEstrellas(qPrac);
             
+            // Demografía (Moda)
             document.getElementById(`comp-prof-${slotIndex}`).innerText = curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A";
             let modaCom = curso.Demografia ? obtenerModa(curso.Demografia.Comuna) : "N/A";
             if(modaCom !== "N/A" && !isNaN(modaCom)) modaCom = "Comuna " + modaCom;
             document.getElementById(`comp-com-${slotIndex}`).innerText = modaCom;
         };
 
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", async () => {
             cambiarTema(localStorage.getItem('temaDashboard') || 'light');
             
             const triggerTabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
@@ -1030,8 +953,42 @@
 
             proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
             
-            // Replaced fetch logic with direct data initialization
+            try { 
+                const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); 
+                dashboardData = await res.json(); 
+            } catch (e) { 
+                console.warn("Entorno local detectado. Cargando datos de respaldo temporal (Fallback) para la vista previa.");
+                dashboardData = {
+                    "metadata": { "total_cursos_analizados": 5, "total_encuestas_historicas": 1250, "total_estudiantes_unicos": 3800 },
+                    "kpis_globales": { "chs_promedio_secretaria": 85.4, "nps_global": 72 },
+                    "demografia_global": {
+                        "Sexo": {"Femenino": 2500, "Masculino": 1300},
+                        "Curso de Vida": {"Juventud": 1000, "Adultez": 2500, "Vejez": 300},
+                        "Perfil": {"Médico": 800, "Enfermera": 1200, "Auxiliar": 1800},
+                        "Escolaridad": {"Profesional": 1500, "Técnico": 2000, "Bachiller": 300},
+                        "Comuna": {"2": 500, "17": 800, "19": 600, "22": 400}
+                    },
+                    "cursos": [
+                        {
+                            "Nombre_Curso": "Bioseguridad_2023", "Curso_Base": "Bioseguridad", "Edicion": "2023-01",
+                            "Total_Inscritos": 500, "Total_Encuestas": 300, "Salud_Curso_CHS": 88, "e_NPS": 75,
+                            "Tasa_Finalizacion_%": 80, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 5, "Tiempo_Promedio_Dias": 12,
+                            "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.8, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.2 },
+                            "Demografia": { "Sexo": {"Femenino": 350, "Masculino": 150}, "Edad": {"Juventud": 200, "Adultez": 300}, "Perfil": {"Enfermera": 250, "Auxiliar": 250}, "Escolaridad": {"Técnico": 300, "Profesional": 200}, "Comuna": {"17": 150, "19": 100} },
+                            "Registros_Crudos": []
+                        }
+                    ]
+                };
+            }
             window.poblarSelectoresComparador();
+
+            try {
+                const gRes = await fetch('mc_comunas.json'); let gd = await gRes.json(); 
+                if(gd && gd.features) { gd.features.forEach(f=>{if(f.geometry&&f.geometry.coordinates){if(f.geometry.type==="Polygon")f.geometry.coordinates=f.geometry.coordinates.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c)));else if(f.geometry.type==="MultiPolygon")f.geometry.coordinates=f.geometry.coordinates.map(p=>p.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c))));}}); geoJsonDataRaw = gd; }
+            } catch (e) { 
+                console.warn("No se pudo cargar el mapa geoJSON local. Usando mapa base."); 
+                geoJsonDataRaw = { "type": "FeatureCollection", "features": [] }; 
+            }
             
             Chart.defaults.font.family = 'Inter'; 
             inicializarMapa(); agruparCursos(); 
