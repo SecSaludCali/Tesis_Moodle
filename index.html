@@ -763,7 +763,12 @@
         function inicializarMapa() { 
             if (mapInstance) return; 
             mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); 
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO', maxZoom: 20 }).addTo(mapInstance); 
+            
+            // Usamos OpenStreetMap estándar que es 100% gratuito y no requiere API KEY
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', 
+                maxZoom: 20 
+            }).addTo(mapInstance); 
         }
         
         function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
@@ -785,7 +790,26 @@
                     let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
                     let p = mapNorm[id]||0; 
                     return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p>0?0.85:0.1 }; 
-                } 
+                },
+                onEachFeature: (feature, layer) => {
+                    let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
+                    let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
+                    let valor = mapNorm[id]||0;
+                    let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
+                    
+                    // Tooltip de información
+                    layer.bindTooltip(`<strong>${nombreDisplay}</strong><br>Participantes: ${valor}`, {sticky: true});
+                    
+                    // Efectos Hover
+                    layer.on({
+                        mouseover: (e) => {
+                            let l = e.target;
+                            l.setStyle({ weight: 3, color: '#1e293b', fillOpacity: 0.95 });
+                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) { l.bringToFront(); }
+                        },
+                        mouseout: (e) => { geoJsonLayer.resetStyle(e.target); }
+                    });
+                }
             }).addTo(mapInstance); 
             setTimeout(() => mapInstance.invalidateSize(), 200);
         }
