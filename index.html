@@ -758,16 +758,16 @@
             datosFiltradosActuales = { Total_Encuestas: cQ, e_NPS: cQ>0?Math.round(((p-d)/cQ)*100,1):0, Demografia: nD, Detalle_Preguntas: (()=>{let n={}; Object.keys(sumQ).forEach(q=>n[q]=cQ>0?(sumQ[q]/cQ):0); return n})(), isFiltered: true };
             actualizarPantallaCurso(datosFiltradosActuales);
         }
-        window.limpiarFiltros = function() { if(!cursoActual) return; ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
+        function limpiarFiltros() { if(!cursoActual) return; ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
 
         function inicializarMapa() { 
             if (mapInstance) return; 
             mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); 
             
-            // Usamos OpenStreetMap estándar que es 100% gratuito y no requiere API KEY
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', 
-                maxZoom: 20 
+            // Usamos Esri Light Gray Canvas: minimalista, tonos grises y 100% gratuito sin API KEY
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { 
+                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ', 
+                maxZoom: 16 
             }).addTo(mapInstance); 
         }
         
