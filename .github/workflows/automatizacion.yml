@@ -12,77 +12,80 @@ jobs:
     permissions:
       contents: write # 👈 CRÍTICO: Le da permiso al robot para modificar archivos del repositorio
     steps:
-    - name: Descargar Repositorio
-      uses: actions/checkout@v4
-      with:
-        ref: main # 👈 Asegura que se pare en la rama principal y no en una temporal
+      - name: Descargar Repositorio
+        uses: actions/checkout@v4
+        with:
+          ref: main # 👈 Asegura que se pare en la rama principal y no en una temporal
 
-    - name: Configurar Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Instalar Dependencias
-      run: |
-        python -m pip install --upgrade pip
-        pip install pandas numpy requests google-auth google-auth-oauthlib google-api-python-client selenium webdriver-manager
-        
-    - name: Reconstruir Credenciales de Google desde los Secrets
-      run: |
-        echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
-        echo '${{ secrets.GOOGLE_TOKEN }}' > token.json
+      - name: Instalar Dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas numpy requests google-auth google-auth-oauthlib google-api-python-client selenium webdriver-manager
+          
+      - name: Reconstruir Credenciales de Google desde los Secrets
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+          echo '${{ secrets.GOOGLE_TOKEN }}' > token.json
 
-    - name: Configurar VPN Gratuita (Cloudflare WARP)
-      run: |
-        # 1. Descargar e instalar Cloudflare WARP en el servidor de GitHub
-        curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
-        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
-        sudo apt-get update
-        sudo apt-get install -y cloudflare-warp
-        
-        # 2. Registrar el cliente y conectar la VPN
-        warp-cli --accept-tos registration new
-        warp-cli --accept-tos connect
-        
-        # 3. Esperar unos segundos a que la conexión se estabilice
-        sleep 5
-        
-        # 4. Imprimir la nueva IP en los logs para confirmar el cambio
-        echo "La nueva IP del bot es:"
-        curl ifconfig.me
-        echo ""
+      - name: Configurar VPN Gratuita (Cloudflare WARP)
+        run: |
+          # 1. Descargar e instalar Cloudflare WARP en el servidor de GitHub
+          curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
+          sudo apt-get update
+          sudo apt-get install -y cloudflare-warp
+          
+          # 2. Registrar el cliente y conectar la VPN
+          warp-cli --accept-tos registration new
+          warp-cli --accept-tos connect
+          
+          # 3. Esperar unos segundos a que la conexión se estabilice
+          sleep 5
+          
+          # 4. Imprimir la nueva IP en los logs para confirmar el cambio
+          echo "La nueva IP del bot es:"
+          curl ifconfig.me
+          echo ""
 
-    - name: Ejecutar Extractor y Procesamiento
-      run: |
-        python scraper.py
-        python scraper_forms.py
-        python procesamiento.py
-        python procesamiento_json.py
+      - name: Ejecutar Extractor y Procesamiento
+        env:
+          MOODLE_USERNAME: ${{ secrets.MOODLE_USER }}
+          MOODLE_PASSWORD: ${{ secrets.MOODLE_PASS }}
+        run: |
+          python scraper.py
+          python scraper_forms.py
+          python procesamiento.py
+          python procesamiento_json.py
 
-    - name: Subir captura de error (Si Moodle falla)
-      uses: actions/upload-artifact@v4
-      if: always() # 👈 Asegura que intente buscar la foto aunque el scraper haya fallado
-      with:
-        name: captura-error-moodle
-        path: error_login_moodle.png
-        retention-days: 5 # Borra la foto en 5 días para no llenar el espacio
+      - name: Subir captura de error (Si Moodle falla)
+        uses: actions/upload-artifact@v4
+        if: always() # 👈 Asegura que intente buscar la foto aunque el scraper haya fallado
+        with:
+          name: captura-error-moodle
+          path: error_login_moodle.png
+          retention-days: 5 # Borra la foto en 5 días para no llenar el espacio
 
-    - name: Autoguardar Cambios en GitHub
-      run: |
-        git config --global user.name 'Automated Scraper'
-        git config --global user.email 'actions@github.com'
-        
-        # 1. Asegurar que estamos en la rama correcta ANTES de añadir archivos
-        git checkout main
-        
-        # 2. Forzar la adición de archivos clave (por si están en el .gitignore) y de todo lo demás
-        git add -A
-        git add -f dashboard_data.json || true
-        git add -f descargas_moodle/*.csv || true
-        git add -f *.csv || true
-        
-        # 3. Imprimir el estado para que podamos verlo en los logs si algo falla
-        git status
-        
-        # 4. Hacer commit y push SOLO si hay archivos en la zona de preparación
-        git diff-index --quiet HEAD || (git commit -m "Bot: Datos actualizados automáticamente con Moodle y Forms" && git push origin main)
+      - name: Autoguardar Cambios en GitHub
+        run: |
+          git config --global user.name 'Automated Scraper'
+          git config --global user.email 'actions@github.com'
+          
+          # 1. Asegurar que estamos en la rama correcta ANTES de añadir archivos
+          git checkout main
+          
+          # 2. Forzar la adición de archivos clave (por si están en el .gitignore) y de todo lo demás
+          git add -A
+          git add -f dashboard_data.json || true
+          git add -f descargas_moodle/*.csv || true
+          git add -f *.csv || true
+          
+          # 3. Imprimir el estado para que podamos verlo en los logs si algo falla
+          git status
+          
+          # 4. Hacer commit y push SOLO si hay archivos en la zona de preparación
+          git diff-index --quiet HEAD || (git commit -m "Bot: Datos actualizados automáticamente con Moodle y Forms" && git push origin main)
