@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 47,
-        "total_encuestas_historicas": 3909,
+        "total_encuestas_historicas": 3912,
         "total_estudiantes_unicos": 5911
     },
     "kpis_globales": {
@@ -10,23 +10,23 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2866,
-            "Masculino": 1039,
+            "Femenino": 2868,
+            "Masculino": 1040,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2821,
+            "Área de la salud": 2823,
             "Estudiante": 702,
-            "Otro": 386
+            "Otro": 387
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2321,
+            "Adultez (29 - 59 años)": 2324,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 704,
             "Vejez (60 años o más)": 163
         },
         "Comuna": {
-            "COMUNA 17": 448,
+            "COMUNA 17": 449,
             "COMUNA 19": 235,
             "COMUNA 1": 223,
             "COMUNA 10": 201,
@@ -37,19 +37,19 @@
             "COMUNA 5": 152,
             "COMUNA 16": 138,
             "COMUNA 8": 123,
+            "COMUNA 12": 109,
             "COMUNA 7": 109,
             "COMUNA 13": 109,
-            "COMUNA 12": 109,
             "COMUNA 22": 107,
             "COMUNA 3": 106,
-            "COMUNA 4": 102,
+            "COMUNA 4": 103,
             "COMUNA 21": 100,
             "COMUNA 11": 95,
             "COMUNA 14": 90,
             "COMUNA 20": 85,
             "COMUNA 9": 66,
             "C. DE PANCE": 35,
-            "C. DE LA BUITRERA": 14,
+            "C. DE LA BUITRERA": 15,
             "C. DE EL HORMIGUERO": 12,
             "C. DE EL SALADITO": 10,
             "C. DE FELIDIA": 9,
@@ -67,7 +67,7 @@
         "Escolaridad": {
             "Pregrado": 1757,
             "Bachiller": 1091,
-            "Postgrado": 1005,
+            "Postgrado": 1008,
             "Ninguna": 56
         }
     },
@@ -9592,7 +9592,7 @@
             "ID_Moodle_Original": "sello_012025",
             "Total_Inscritos": 1250,
             "Tasa_Finalizacion_%": 79.0,
-            "Tasa_Abandono_%": 2.5,
+            "Tasa_Abandono_%": 2.4,
             "Tasa_Inactividad_%": 18.6,
             "Tiempo_Promedio_Dias": 2.4,
             "Total_Encuestas": 688.0,
@@ -41635,17 +41635,17 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2026 - 01",
             "ID_Moodle_Original": "sello_01_2026",
             "Total_Inscritos": 165,
-            "Tasa_Finalizacion_%": 17.0,
+            "Tasa_Finalizacion_%": 18.2,
             "Tasa_Abandono_%": 2.4,
-            "Tasa_Inactividad_%": 80.6,
-            "Tiempo_Promedio_Dias": 1.0,
+            "Tasa_Inactividad_%": 79.4,
+            "Tiempo_Promedio_Dias": 0.9,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
             "ICD_Promedio": 0.0,
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 17.0,
+            "Salud_Curso_CHS": 18.2,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -44535,33 +44535,33 @@
             "Nombre_Curso": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD - 2025 - 01",
             "ID_Moodle_Original": "pir_sspm_2025",
             "Total_Inscritos": 1250,
-            "Tasa_Finalizacion_%": 84.8,
-            "Tasa_Abandono_%": 2.3,
+            "Tasa_Finalizacion_%": 84.9,
+            "Tasa_Abandono_%": 2.2,
             "Tasa_Inactividad_%": 12.9,
             "Tiempo_Promedio_Dias": 3.2,
-            "Total_Encuestas": 631.0,
-            "ISG_Promedio": 4.570644886017311,
-            "ICD_Promedio": 4.4516640253565765,
-            "IUP_Promedio": 4.675911251980983,
-            "UX_Promedio": 4.583993660855785,
+            "Total_Encuestas": 632.0,
+            "ISG_Promedio": 4.571324245374878,
+            "ICD_Promedio": 4.4525316455696204,
+            "IUP_Promedio": 4.676424050632911,
+            "UX_Promedio": 4.584651898734177,
             "e_NPS": 62.0,
-            "Salud_Curso_CHS": 89.2,
+            "Salud_Curso_CHS": 89.3,
             "Curso_Base": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 395,
+                    "Femenino": 396,
                     "Intersexual": 0,
                     "Masculino": 236
                 },
                 "Perfil": {
                     "Estudiante": 11,
                     "Otro": 195,
-                    "Área de la salud": 425
+                    "Área de la salud": 426
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 1,
-                    "Adultez (29 - 59 años)": 497,
+                    "Adultez (29 - 59 años)": 498,
                     "Juventud (18 - 28 años)": 82,
                     "Vejez (60 años o más)": 51
                 },
@@ -44570,7 +44570,7 @@
                     "C. DE EL SALADITO": 2,
                     "C. DE FELIDIA": 4,
                     "C. DE GOLONDRINAS": 0,
-                    "C. DE LA BUITRERA": 3,
+                    "C. DE LA BUITRERA": 4,
                     "C. DE LA CASTILLA": 0,
                     "C. DE LA ELVIRA": 0,
                     "C. DE LA LEONERA": 1,
@@ -44607,24 +44607,24 @@
                 "Escolaridad": {
                     "Bachiller": 93,
                     "Ninguna": 3,
-                    "Postgrado": 237,
+                    "Postgrado": 238,
                     "Pregrado": 298
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.671949286846276,
-                "¿Se cumplió el objetivo de la capacitación?": 4.662440570522979,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.673534072900159,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.572107765451664,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.676703645007924,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.675118858954042,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.554675118858954,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.570522979397781,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.370839936608558,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.229793977812995,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.551505546751189,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.616481774960381,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.5927099841521395
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.6724683544303796,
+                "¿Se cumplió el objetivo de la capacitación?": 4.662974683544304,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.674050632911392,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.572784810126582,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.677215189873418,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.675632911392405,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.555379746835443,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.57120253164557,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.371835443037975,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.231012658227848,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.552215189873418,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.617088607594937,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.593354430379747
             },
             "Registros_Crudos": [
                 {
@@ -53766,6 +53766,26 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4,
                     "¿El material utilizado permitió el entendimiento del tema?": 4,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "C. DE LA BUITRERA",
+                    "Escolaridad": "Postgrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 },
                 {
                     "Sexo": "Femenino",
