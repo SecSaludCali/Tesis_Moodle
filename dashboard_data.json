@@ -1,28 +1,28 @@
 {
     "metadata": {
         "total_cursos_analizados": 47,
-        "total_encuestas_historicas": 3912,
-        "total_estudiantes_unicos": 5911
+        "total_encuestas_historicas": 3913,
+        "total_estudiantes_unicos": 5932
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 51.1,
-        "nps_global": 67.5
+        "chs_promedio_secretaria": 52.4,
+        "nps_global": 68.5
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2868,
+            "Femenino": 2869,
             "Masculino": 1040,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2823,
+            "Área de la salud": 2824,
             "Estudiante": 702,
             "Otro": 387
         },
         "Curso de Vida": {
             "Adultez (29 - 59 años)": 2324,
             "Adolescencia (12 - 17 años)": 721,
-            "Juventud (18 - 28 años)": 704,
+            "Juventud (18 - 28 años)": 705,
             "Vejez (60 años o más)": 163
         },
         "Comuna": {
@@ -37,11 +37,11 @@
             "COMUNA 5": 152,
             "COMUNA 16": 138,
             "COMUNA 8": 123,
-            "COMUNA 12": 109,
-            "COMUNA 7": 109,
             "COMUNA 13": 109,
+            "COMUNA 7": 109,
+            "COMUNA 12": 109,
             "COMUNA 22": 107,
-            "COMUNA 3": 106,
+            "COMUNA 3": 107,
             "COMUNA 4": 103,
             "COMUNA 21": 100,
             "COMUNA 11": 95,
@@ -67,7 +67,7 @@
         "Escolaridad": {
             "Pregrado": 1757,
             "Bachiller": 1091,
-            "Postgrado": 1008,
+            "Postgrado": 1009,
             "Ninguna": 56
         }
     },
@@ -44494,42 +44494,119 @@
             "Nombre_Curso": "RED PRESTADORA (SALUD MENTAL Y VIOLENCIAS) - 2026 - 01",
             "ID_Moodle_Original": "rp_012026",
             "Total_Inscritos": 90,
-            "Tasa_Finalizacion_%": 0.0,
-            "Tasa_Abandono_%": 0.0,
-            "Tasa_Inactividad_%": 100.0,
-            "Tiempo_Promedio_Dias": 0.0,
-            "Total_Encuestas": 0.0,
-            "ISG_Promedio": 0.0,
-            "ICD_Promedio": 0.0,
-            "IUP_Promedio": 0.0,
-            "UX_Promedio": 0.0,
-            "e_NPS": 0.0,
-            "Salud_Curso_CHS": 0.0,
+            "Tasa_Finalizacion_%": 1.1,
+            "Tasa_Abandono_%": 1.1,
+            "Tasa_Inactividad_%": 97.8,
+            "Tiempo_Promedio_Dias": 0.1,
+            "Total_Encuestas": 1.0,
+            "ISG_Promedio": 5.0,
+            "ICD_Promedio": 5.0,
+            "IUP_Promedio": 5.0,
+            "UX_Promedio": 5.0,
+            "e_NPS": 100.0,
+            "Salud_Curso_CHS": 60.4,
             "Curso_Base": "RED PRESTADORA (SALUD MENTAL Y VIOLENCIAS)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
-                "Sexo": {},
-                "Perfil": {},
-                "Edad": {},
-                "Comuna": {},
-                "Escolaridad": {}
+                "Sexo": {
+                    "Femenino": 1,
+                    "Intersexual": 0,
+                    "Masculino": 0
+                },
+                "Perfil": {
+                    "Estudiante": 0,
+                    "Otro": 0,
+                    "Área de la salud": 1
+                },
+                "Edad": {
+                    "Adolescencia (12 - 17 años)": 0,
+                    "Adultez (29 - 59 años)": 0,
+                    "Juventud (18 - 28 años)": 1,
+                    "Vejez (60 años o más)": 0
+                },
+                "Comuna": {
+                    "C. DE EL HORMIGUERO": 0,
+                    "C. DE EL SALADITO": 0,
+                    "C. DE FELIDIA": 0,
+                    "C. DE GOLONDRINAS": 0,
+                    "C. DE LA BUITRERA": 0,
+                    "C. DE LA CASTILLA": 0,
+                    "C. DE LA ELVIRA": 0,
+                    "C. DE LA LEONERA": 0,
+                    "C. DE LA PAZ": 0,
+                    "C. DE LOS ANDES": 0,
+                    "C. DE MONTEBELLO": 0,
+                    "C. DE NAVARRO": 0,
+                    "C. DE PANCE": 0,
+                    "C. DE PICHINDE": 0,
+                    "C. DE VILLACARMELO": 0,
+                    "COMUNA 1": 0,
+                    "COMUNA 10": 0,
+                    "COMUNA 11": 0,
+                    "COMUNA 12": 0,
+                    "COMUNA 13": 0,
+                    "COMUNA 14": 0,
+                    "COMUNA 15": 0,
+                    "COMUNA 16": 0,
+                    "COMUNA 17": 0,
+                    "COMUNA 18": 0,
+                    "COMUNA 19": 0,
+                    "COMUNA 2": 0,
+                    "COMUNA 20": 0,
+                    "COMUNA 21": 0,
+                    "COMUNA 22": 0,
+                    "COMUNA 3": 1,
+                    "COMUNA 4": 0,
+                    "COMUNA 5": 0,
+                    "COMUNA 6": 0,
+                    "COMUNA 7": 0,
+                    "COMUNA 8": 0,
+                    "COMUNA 9": 0
+                },
+                "Escolaridad": {
+                    "Bachiller": 0,
+                    "Ninguna": 0,
+                    "Postgrado": 1,
+                    "Pregrado": 0
+                }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
-                "¿Se cumplió el objetivo de la capacitación?": 0.0,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
-                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
-                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+                "¿Se dio a conocer el objetivo de la capacitación?": 5.0,
+                "¿Se cumplió el objetivo de la capacitación?": 5.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 5.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 5.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 5.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5.0
             },
-            "Registros_Crudos": []
+            "Registros_Crudos": [
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 3",
+                    "Escolaridad": "Postgrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                }
+            ]
         },
         {
             "Nombre_Curso": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD - 2025 - 01",
@@ -44538,7 +44615,7 @@
             "Tasa_Finalizacion_%": 84.9,
             "Tasa_Abandono_%": 2.2,
             "Tasa_Inactividad_%": 12.9,
-            "Tiempo_Promedio_Dias": 3.2,
+            "Tiempo_Promedio_Dias": 3.3,
             "Total_Encuestas": 632.0,
             "ISG_Promedio": 4.571324245374878,
             "ICD_Promedio": 4.4525316455696204,
@@ -59604,7 +59681,7 @@
         {
             "Nombre_Curso": "CENTRO DE ESCUCHA (CE) - 2026 - 01",
             "ID_Moodle_Original": "ce_012026",
-            "Total_Inscritos": 20,
+            "Total_Inscritos": 41,
             "Tasa_Finalizacion_%": 0.0,
             "Tasa_Abandono_%": 0.0,
             "Tasa_Inactividad_%": 100.0,
