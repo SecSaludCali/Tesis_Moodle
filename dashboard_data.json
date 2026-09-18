@@ -1,21 +1,21 @@
 {
     "metadata": {
-        "total_cursos_analizados": 47,
-        "total_encuestas_historicas": 3915,
-        "total_estudiantes_unicos": 5932
+        "total_cursos_analizados": 53,
+        "total_encuestas_historicas": 3916,
+        "total_estudiantes_unicos": 6873
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 52.4,
+        "chs_promedio_secretaria": 46.5,
         "nps_global": 67.5
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 2871,
+            "Femenino": 2872,
             "Masculino": 1040,
             "Intersexual": 4
         },
         "Perfil": {
-            "Área de la salud": 2825,
+            "Área de la salud": 2826,
             "Estudiante": 703,
             "Otro": 387
         },
@@ -23,14 +23,14 @@
             "Adultez (29 - 59 años)": 2325,
             "Adolescencia (12 - 17 años)": 721,
             "Juventud (18 - 28 años)": 706,
-            "Vejez (60 años o más)": 163
+            "Vejez (60 años o más)": 164
         },
         "Comuna": {
             "COMUNA 17": 449,
             "COMUNA 19": 235,
             "COMUNA 1": 223,
+            "COMUNA 10": 202,
             "COMUNA 2": 201,
-            "COMUNA 10": 201,
             "COMUNA 15": 168,
             "COMUNA 6": 166,
             "COMUNA 18": 157,
@@ -67,7 +67,7 @@
         "Escolaridad": {
             "Pregrado": 1759,
             "Bachiller": 1091,
-            "Postgrado": 1009,
+            "Postgrado": 1010,
             "Ninguna": 56
         }
     },
@@ -23446,6 +23446,47 @@
             ]
         },
         {
+            "Nombre_Curso": "FORTALECIMIENTO DE LAS UNIDADES FUNCIONALES EN SALUD MENTAL (NORTE) - 2026 - 01",
+            "ID_Moodle_Original": "ufn_012026",
+            "Total_Inscritos": 15,
+            "Tasa_Finalizacion_%": 0.0,
+            "Tasa_Abandono_%": 0.0,
+            "Tasa_Inactividad_%": 100.0,
+            "Tiempo_Promedio_Dias": 0.0,
+            "Total_Encuestas": 0.0,
+            "ISG_Promedio": 0.0,
+            "ICD_Promedio": 0.0,
+            "IUP_Promedio": 0.0,
+            "UX_Promedio": 0.0,
+            "e_NPS": 0.0,
+            "Salud_Curso_CHS": 0.0,
+            "Curso_Base": "FORTALECIMIENTO DE LAS UNIDADES FUNCIONALES EN SALUD MENTAL (NORTE)",
+            "Edicion": "2026 - Cohorte 1",
+            "Demografia": {
+                "Sexo": {},
+                "Perfil": {},
+                "Edad": {},
+                "Comuna": {},
+                "Escolaridad": {}
+            },
+            "Detalle_Preguntas": {
+                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
+                "¿Se cumplió el objetivo de la capacitación?": 0.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+            },
+            "Registros_Crudos": []
+        },
+        {
             "Nombre_Curso": "UNIDAD FUNCIONAL / CENTRO - 2025 - 01",
             "ID_Moodle_Original": "uf_centro_012025",
             "Total_Inscritos": 10,
@@ -27558,6 +27599,47 @@
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 }
             ]
+        },
+        {
+            "Nombre_Curso": "NUEVAS ADICCIONES - 2026 - 01",
+            "ID_Moodle_Original": "na_012026",
+            "Total_Inscritos": 126,
+            "Tasa_Finalizacion_%": 0.0,
+            "Tasa_Abandono_%": 0.0,
+            "Tasa_Inactividad_%": 100.0,
+            "Tiempo_Promedio_Dias": 0.0,
+            "Total_Encuestas": 0.0,
+            "ISG_Promedio": 0.0,
+            "ICD_Promedio": 0.0,
+            "IUP_Promedio": 0.0,
+            "UX_Promedio": 0.0,
+            "e_NPS": 0.0,
+            "Salud_Curso_CHS": 0.0,
+            "Curso_Base": "NUEVAS ADICCIONES",
+            "Edicion": "2026 - Cohorte 1",
+            "Demografia": {
+                "Sexo": {},
+                "Perfil": {},
+                "Edad": {},
+                "Comuna": {},
+                "Escolaridad": {}
+            },
+            "Detalle_Preguntas": {
+                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
+                "¿Se cumplió el objetivo de la capacitación?": 0.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+            },
+            "Registros_Crudos": []
         },
         {
             "Nombre_Curso": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE INFANCIA - 2025 - 01",
@@ -41635,9 +41717,9 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2026 - 01",
             "ID_Moodle_Original": "sello_01_2026",
             "Total_Inscritos": 165,
-            "Tasa_Finalizacion_%": 18.8,
+            "Tasa_Finalizacion_%": 19.4,
             "Tasa_Abandono_%": 2.4,
-            "Tasa_Inactividad_%": 78.8,
+            "Tasa_Inactividad_%": 78.2,
             "Tiempo_Promedio_Dias": 0.9,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
@@ -41645,7 +41727,7 @@
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 18.8,
+            "Salud_Curso_CHS": 19.4,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -44649,13 +44731,54 @@
             ]
         },
         {
+            "Nombre_Curso": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES) - 2026 - 01",
+            "ID_Moodle_Original": "pfsa_022026",
+            "Total_Inscritos": 796,
+            "Tasa_Finalizacion_%": 0.0,
+            "Tasa_Abandono_%": 0.0,
+            "Tasa_Inactividad_%": 100.0,
+            "Tiempo_Promedio_Dias": 0.0,
+            "Total_Encuestas": 0.0,
+            "ISG_Promedio": 0.0,
+            "ICD_Promedio": 0.0,
+            "IUP_Promedio": 0.0,
+            "UX_Promedio": 0.0,
+            "e_NPS": 0.0,
+            "Salud_Curso_CHS": 0.0,
+            "Curso_Base": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES)",
+            "Edicion": "2026 - Cohorte 1",
+            "Demografia": {
+                "Sexo": {},
+                "Perfil": {},
+                "Edad": {},
+                "Comuna": {},
+                "Escolaridad": {}
+            },
+            "Detalle_Preguntas": {
+                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
+                "¿Se cumplió el objetivo de la capacitación?": 0.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+            },
+            "Registros_Crudos": []
+        },
+        {
             "Nombre_Curso": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD - 2025 - 01",
             "ID_Moodle_Original": "pir_sspm_2025",
             "Total_Inscritos": 1250,
             "Tasa_Finalizacion_%": 84.9,
             "Tasa_Abandono_%": 2.2,
             "Tasa_Inactividad_%": 12.9,
-            "Tiempo_Promedio_Dias": 3.3,
+            "Tiempo_Promedio_Dias": 3.5,
             "Total_Encuestas": 632.0,
             "ISG_Promedio": 4.571324245374878,
             "ICD_Promedio": 4.4525316455696204,
@@ -59719,6 +59842,47 @@
             ]
         },
         {
+            "Nombre_Curso": "FORTALECIMIENTO DE LAS UNIDADES FUNCIONALES EN SALUD MENTAL (CENTRO) - 2026 - 01",
+            "ID_Moodle_Original": "ufsm_012026",
+            "Total_Inscritos": 15,
+            "Tasa_Finalizacion_%": 0.0,
+            "Tasa_Abandono_%": 0.0,
+            "Tasa_Inactividad_%": 100.0,
+            "Tiempo_Promedio_Dias": 0.0,
+            "Total_Encuestas": 0.0,
+            "ISG_Promedio": 0.0,
+            "ICD_Promedio": 0.0,
+            "IUP_Promedio": 0.0,
+            "UX_Promedio": 0.0,
+            "e_NPS": 0.0,
+            "Salud_Curso_CHS": 0.0,
+            "Curso_Base": "FORTALECIMIENTO DE LAS UNIDADES FUNCIONALES EN SALUD MENTAL (CENTRO)",
+            "Edicion": "2026 - Cohorte 1",
+            "Demografia": {
+                "Sexo": {},
+                "Perfil": {},
+                "Edad": {},
+                "Comuna": {},
+                "Escolaridad": {}
+            },
+            "Detalle_Preguntas": {
+                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
+                "¿Se cumplió el objetivo de la capacitación?": 0.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+            },
+            "Registros_Crudos": []
+        },
+        {
             "Nombre_Curso": "CENTRO DE ESCUCHA (CE) - 2026 - 01",
             "ID_Moodle_Original": "ce_012026",
             "Total_Inscritos": 41,
@@ -60814,6 +60978,47 @@
             "Salud_Curso_CHS": 0.6,
             "Curso_Base": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL",
             "Edicion": "2026 - Cohorte 1",
+            "Demografia": {
+                "Sexo": {},
+                "Perfil": {},
+                "Edad": {},
+                "Comuna": {},
+                "Escolaridad": {}
+            },
+            "Detalle_Preguntas": {
+                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
+                "¿Se cumplió el objetivo de la capacitación?": 0.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+            },
+            "Registros_Crudos": []
+        },
+        {
+            "Nombre_Curso": "SISTEMA DE RESPONSABILIDAD PENAL ADOLESCENTE (SRPA) EN ABORDAJE DEL CONSUMO DE SUSTANCIAS PSICOACTIVAS Y REDUCCIÓN DE RIESGOS Y DAÑOS",
+            "ID_Moodle_Original": "srpa_012026",
+            "Total_Inscritos": 14,
+            "Tasa_Finalizacion_%": 0.0,
+            "Tasa_Abandono_%": 0.0,
+            "Tasa_Inactividad_%": 100.0,
+            "Tiempo_Promedio_Dias": 0.0,
+            "Total_Encuestas": 0.0,
+            "ISG_Promedio": 0.0,
+            "ICD_Promedio": 0.0,
+            "IUP_Promedio": 0.0,
+            "UX_Promedio": 0.0,
+            "e_NPS": 0.0,
+            "Salud_Curso_CHS": 0.0,
+            "Curso_Base": "SISTEMA DE RESPONSABILIDAD PENAL ADOLESCENTE (SRPA) EN ABORDAJE DEL CONSUMO DE SUSTANCIAS PSICOACTIVAS Y REDUCCIÓN DE RIESGOS Y DAÑOS",
+            "Edicion": "General - Única",
             "Demografia": {
                 "Sexo": {},
                 "Perfil": {},
@@ -74599,6 +74804,47 @@
             "Salud_Curso_CHS": 11.1,
             "Curso_Base": "UNIDAD FUNCIONAL / NORTE",
             "Edicion": "2025 - Cohorte 1",
+            "Demografia": {
+                "Sexo": {},
+                "Perfil": {},
+                "Edad": {},
+                "Comuna": {},
+                "Escolaridad": {}
+            },
+            "Detalle_Preguntas": {
+                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
+                "¿Se cumplió el objetivo de la capacitación?": 0.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+            },
+            "Registros_Crudos": []
+        },
+        {
+            "Nombre_Curso": "ZONAS DE ORIENTACIÓN ESCOLAR (ZOE) - 2026 - 01",
+            "ID_Moodle_Original": "zoe_012026",
+            "Total_Inscritos": 10,
+            "Tasa_Finalizacion_%": 0.0,
+            "Tasa_Abandono_%": 0.0,
+            "Tasa_Inactividad_%": 100.0,
+            "Tiempo_Promedio_Dias": 0.0,
+            "Total_Encuestas": 0.0,
+            "ISG_Promedio": 0.0,
+            "ICD_Promedio": 0.0,
+            "IUP_Promedio": 0.0,
+            "UX_Promedio": 0.0,
+            "e_NPS": 0.0,
+            "Salud_Curso_CHS": 0.0,
+            "Curso_Base": "ZONAS DE ORIENTACIÓN ESCOLAR (ZOE)",
+            "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {},
                 "Perfil": {},
