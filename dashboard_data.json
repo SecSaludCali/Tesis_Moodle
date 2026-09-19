@@ -5,7 +5,7 @@
         "total_estudiantes_unicos": 6873
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 46.5,
+        "chs_promedio_secretaria": 46.7,
         "nps_global": 67.5
     },
     "demografia_global": {
@@ -41594,9 +41594,9 @@
             "Nombre_Curso": "ZONAS DE ORIENTACIÓN UNIVERSITARIA (ZOU, ESE ORIENTE) - 2026 - 01",
             "ID_Moodle_Original": "zou_oriente_012026",
             "Total_Inscritos": 20,
-            "Tasa_Finalizacion_%": 15.0,
+            "Tasa_Finalizacion_%": 25.0,
             "Tasa_Abandono_%": 0.0,
-            "Tasa_Inactividad_%": 85.0,
+            "Tasa_Inactividad_%": 75.0,
             "Tiempo_Promedio_Dias": 0.0,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
@@ -41604,7 +41604,7 @@
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 15.0,
+            "Salud_Curso_CHS": 25.0,
             "Curso_Base": "ZONAS DE ORIENTACIÓN UNIVERSITARIA (ZOU, ESE ORIENTE)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
