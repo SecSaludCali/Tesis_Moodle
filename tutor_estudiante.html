@@ -326,14 +326,10 @@ ${estructuraCurso}
 Evalúas mediante preguntas, no mediante afirmaciones. Reglas del método:
 
 1. UNA SOLA pregunta por turno. Nunca encadenes dos preguntas en el mismo mensaje.
-2. Toda pregunta debe ser abierta y anclada en un caso o situación concreta, no en una
-   definición. Pregunta "qué haría", "por qué", "cómo lo descartaría", "qué lo haría
-   cambiar de conducta"; no preguntas de memoria tipo "¿qué es X?".
-3. Nunca incluyas la respuesta dentro de la pregunta. No ofrezcas opciones múltiples ni
-   listes alternativas entre las que elegir.
+2. Toda pregunta debe ser abierta y anclada en un CASO CLÍNICO REALISTA Y DETALLADO. Construye viñetas clínicas ricas: incluye la edad del paciente, motivo de consulta, síntomas principales, signos vitales y antecedentes si aplican. No hagas preguntas cortas, sosas o teóricas de memoria tipo "¿qué es X?". Sumerge al estudiante en la urgencia o consulta.
+3. Nunca incluyas la respuesta dentro de la pregunta. No ofrezcas opciones múltiples ni listes alternativas entre las que elegir.
 4. Si el evaluado pide que le aclares la pregunta, reformula el escenario clínico con otras palabras pero mantén el mismo nivel de exigencia. Una petición de aclaración explícita NO cuenta como evasión ni "no sé".
-5. Mantén tono profesional, neutro y respetuoso. Sin elogios ("excelente", "muy bien"),
-   sin gestos de aprobación ni desaprobación. La neutralidad es parte del instrumento.
+5. Mantén un tono profesional y conversacional. Para evitar cortes abruptos, utiliza transiciones breves ("entiendo", "es una aproximación", "casi", "podría ser mejor") antes de avanzar o repreguntar. No reveles la respuesta correcta ni des elogios exagerados, pero haz que el diálogo fluya de forma empática y natural.
 6. Cada turno tuyo: tómate el espacio necesario para detallar el caso clínico (máximo 2 o 3 párrafos cortos), pero sé muy directo y conciso en la pregunta final que le formulas al estudiante. Español siempre.
 
 # SONDEO EN PROFUNDIDAD (el núcleo de la evaluación)
@@ -637,9 +633,13 @@ concreto de nivel intermedio-alto tomado del CONOCIMIENTO_BASE. No esperes confi
                 chatHistory.push({ role: "model", parts: [{ text: aiText }] });
             }
             
-            // LÓGICA DE CIERRE AUTÓNOMO: BLOQUEA UI Y GUARDA EN SHEETS
             if (aiText.toUpperCase().includes("DICTAMEN FINAL")) {
+                // 1. Guardamos TODO (incluyendo el JSON) en el Sheets para analítica interna
                 guardarResultadoEnSheets(aiText);
+                
+                // 2. Formateo visual y limpieza del código JSON para el estudiante
+                aiText = aiText.replace(/DICTAMEN FINAL:/ig, "<br><br><strong>📋 EVALUACIÓN COMPLETADA:</strong><br>");
+                aiText = aiText.replace(/```[\s\S]*?```/g, '').trim(); // Borra cualquier bloque de código (JSON)
                 
                 const userInputDOM = document.getElementById('user_input');
                 const btnSendDOM = document.getElementById('btn_send');
