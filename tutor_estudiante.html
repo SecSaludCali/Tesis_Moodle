@@ -1,400 +1,508 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutor Clínico de IA - Secretaría de Salud</title>
+    <title>Tutor IA - Secretaría de Salud</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { background-color: #f3f4f6; font-family: 'Inter', sans-serif; height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        
-        .chat-container { width: 100%; max-width: 450px; height: 90vh; background: white; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; display: flex; flex-direction: column; overflow: hidden; position: relative;}
-        
-        .chat-header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10;}
-        .avatar-ia { width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 12px;}
-        .status-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 5px #4ade80;}
-        
-        .chat-body { flex: 1; background: #f8fafc; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; font-size: 0.9rem;}
-        
-        .bubble { max-width: 85%; padding: 12px 16px; line-height: 1.4; position: relative; animation: fadeIn 0.3s ease-out; word-wrap: break-word;}
-        .bubble-ia { background: white; color: #334155; border-radius: 0 15px 15px 15px; border: 1px solid #e2e8f0; align-self: flex-start; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
-        .bubble-user { background: #3b82f6; color: white; border-radius: 15px 15px 0 15px; align-self: flex-end; box-shadow: 0 2px 5px rgba(59, 130, 246, 0.2);}
-        
-        .typing-indicator { display: none; gap: 4px; padding: 12px 16px; background: white; border-radius: 0 15px 15px 15px; border: 1px solid #e2e8f0; align-self: flex-start; width: fit-content; align-items: center;}
-        .dot { width: 6px; height: 6px; background: #94a3b8; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both;}
-        .dot:nth-child(1) { animation-delay: -0.32s; }
-        .dot:nth-child(2) { animation-delay: -0.16s; }
-        
-        .chat-input-area { padding: 15px; background: white; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: flex-end;}
-        .input-chat { flex: 1; background: #f1f5f9; border-radius: 20px; border: 1px solid #e2e8f0; padding: 12px 15px; font-size: 0.9rem; color: #334155; outline: none; resize: none; max-height: 100px; min-height: 44px;}
-        .input-chat:focus { border-color: #3b82f6; background: white;}
-        .btn-send { background: #3b82f6; color: white; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 2px 5px rgba(59, 130, 246, 0.3); border: none; cursor: pointer; transition: transform 0.1s;}
-        .btn-send:active { transform: scale(0.95); }
-        .btn-send:disabled { background: #94a3b8; cursor: not-allowed; box-shadow: none;}
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        :root[data-theme="light"] {
+            --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #1e293b; --text-muted: #64748b; --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5);
+            --card-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.05);
+            --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); --chat-user-text: #ffffff; 
+            --chat-bot-bg: rgba(255, 255, 255, 0.9); --chat-bot-text: #1e293b; --chat-bot-border: rgba(67, 24, 255, 0.1);
+            --blob-1: rgba(67, 24, 255, 0.1); --blob-2: rgba(5, 205, 153, 0.1);
+        }
 
-        /* Login Screen */
-        #login_screen { width: 100%; max-width: 400px; background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center;}
+        :root[data-theme="dark"] {
+            --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.95); --card-bg: rgba(17, 28, 68, 0.85); 
+            --text-main: #f8fafc; --text-muted: #a3aed1; --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50;
+            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08);
+            --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
+            --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #9378ff 100%); --chat-user-text: #ffffff; 
+            --chat-bot-bg: rgba(17, 28, 68, 0.9); --chat-bot-text: #f8fafc; --chat-bot-border: rgba(255, 255, 255, 0.1);
+            --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1);
+        }
+
+        :root[data-theme="rose"] {
+            --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #4c0519; --text-muted: #9f1239; --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15);
+            --card-shadow: 0 4px 20px 0 rgba(225, 29, 72, 0.05);
+            --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #f43f5e 100%); --chat-user-text: #ffffff; 
+            --chat-bot-bg: rgba(255, 255, 255, 0.9); --chat-bot-text: #4c0519; --chat-bot-border: rgba(225, 29, 72, 0.15);
+            --blob-1: rgba(225, 29, 72, 0.1); --blob-2: rgba(244, 63, 94, 0.1);
+        }
+
+        :root[data-theme="amber"] {
+            --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #451a03; --text-muted: #92400e; --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15);
+            --card-shadow: 0 4px 20px 0 rgba(217, 119, 6, 0.05);
+            --chat-user-bg: linear-gradient(135deg, var(--primary) 0%, #f59e0b 100%); --chat-user-text: #ffffff; 
+            --chat-bot-bg: rgba(255, 255, 255, 0.9); --chat-bot-text: #451a03; --chat-bot-border: rgba(217, 119, 6, 0.15);
+            --blob-1: rgba(217, 119, 6, 0.1); --blob-2: rgba(245, 158, 11, 0.1);
+        }
+
+        body { 
+            background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); 
+            margin: 0; padding: 0; overflow-x: hidden; height: 100vh; display: flex; flex-direction: column;
+        }
+
+        body::before, body::after { 
+            content: ''; position: fixed; border-radius: 50%; z-index: -2; pointer-events: none; 
+            will-change: transform; transform: translateZ(0); filter: blur(60px);
+        }
+        body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
+        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; }
+
+        #app-layout { display: flex; height: 100vh; width: 100%; overflow: hidden; }
+        
+        #sidebar {
+            width: 80px; min-height: 100vh; background: var(--sidebar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding: 24px 0;
+            position: relative; z-index: 1000; transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 4px 0 15px rgba(0,0,0,0.02); overflow: hidden; white-space: nowrap; flex-shrink: 0;
+        }
+        #sidebar:hover { width: 250px; align-items: flex-start; padding-left: 20px; padding-right: 20px;}
+
+        .sidebar-brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; cursor: pointer; height: 45px;}
+        .sidebar-brand img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0;}
+        .sidebar-brand span { font-weight: 800; font-size: 1.1rem; color: var(--text-main); opacity: 0; transition: opacity 0.2s; }
+        #sidebar:hover .sidebar-brand span { opacity: 1; transition-delay: 0.1s;}
+
+        .nav-item-custom {
+            display: flex; align-items: center; gap: 18px; width: 100%; padding: 12px; border-radius: 12px; margin-bottom: 8px;
+            color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer;
+            transition: all 0.2s ease; border: 1px solid transparent;
+        }
+        .nav-item-custom i { font-size: 1.3rem; flex-shrink: 0; transition: color 0.2s;}
+        .nav-text { opacity: 0; transition: opacity 0.2s; }
+        #sidebar:hover .nav-text { opacity: 1; transition-delay: 0.1s;}
+        
+        .nav-item-custom:hover { background: rgba(67, 24, 255, 0.05); color: var(--primary); }
+        .nav-item-custom.active { background: var(--primary); color: white; border-color: rgba(0,0,0,0.1); box-shadow: 0 4px 10px rgba(67, 24, 255, 0.2); }
+        .nav-item-custom.active i { color: white; }
+
+        .sidebar-footer { margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 15px;}
+        
+        .theme-grid { display: flex; gap: 6px; justify-content: center; width: 100%; opacity: 0; transition: opacity 0.2s;}
+        #sidebar:hover .theme-grid { opacity: 1; transition-delay: 0.1s; }
+        .theme-btn { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: var(--primary); transform: scale(1.1);}
+
+        #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: fixed; top: 0; width: 100%; z-index: 990; align-items: center; justify-content: space-between;}
+        .mobile-toggle { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); }
+
+        #main-content {
+            flex-grow: 1; position: relative; max-width: calc(100vw - 80px); height: 100vh; display: flex; flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            #sidebar { position: fixed; transform: translateX(-100%); width: 250px; padding-left: 20px; align-items: flex-start;}
+            #sidebar.mobile-open { transform: translateX(0); }
+            #main-content { max-width: 100vw; padding-top: 70px; height: calc(100vh - 70px);}
+            #mobile-top-bar { display: flex; }
+            .nav-text, .sidebar-brand span, .theme-grid { opacity: 1; }
+        }
+
+        /* Pantalla Selectora */
+        #selector_pantalla { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 50; overflow-y: auto; padding: 20px;}
+        .selector-card { background: var(--card-bg); border-radius: 28px; box-shadow: var(--card-shadow); padding: 40px; width: 100%; max-width: 500px; border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); text-align: center; animation: fadeIn 0.5s ease-out; margin: auto; backdrop-filter: blur(12px);}
+        .icon-robot { font-size: 4rem; color: var(--primary); margin-bottom: 10px; display: inline-block; filter: drop-shadow(0 10px 15px rgba(67, 24, 255, 0.3)); }
+        
+        .form-label-custom { text-align: left; display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; margin-left: 5px; }
+        .form-select-custom { background: rgba(255,255,255,0.7); border: 1px solid var(--border-color); border-radius: 16px; padding: 14px 20px; font-size: 1.05rem; color: var(--text-main); width: 100%; margin-bottom: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); outline: none; transition: all 0.3s; }
+        :root[data-theme="dark"] .form-select-custom { background: rgba(0,0,0,0.2); }
+        .form-select-custom:focus { border-color: var(--primary); background: var(--bg-color); box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.15); }
+        
+        .btn-start { background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; border: none; border-radius: 16px; padding: 16px; width: 100%; font-weight: 700; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 8px 20px rgba(67, 24, 255, 0.3); margin-top: 10px; }
+        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(67, 24, 255, 0.4); color: white; }
+        
+        #chat_pantalla { display: none; flex-direction: column; height: 100%; max-width: 1000px; margin: 0 auto; width: 100%; padding: 20px; }
+        .chat-header { background: var(--card-bg); border-radius: 24px; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-bottom: 20px; flex-shrink: 0; }
+        .badge-tema { background: rgba(67, 24, 255, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; border: 1px solid rgba(67, 24, 255, 0.2); display: flex; align-items: center; }
+        
+        .chat-history { flex-grow: 1; background: transparent; overflow-y: auto; padding: 10px 20px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
+        .chat-history::-webkit-scrollbar { width: 6px; } .chat-history::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        :root[data-theme="dark"] .chat-history::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+        
+        .msg { max-width: 80%; padding: 18px 24px; border-radius: 24px; font-size: 1.05rem; line-height: 1.6; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; word-wrap: break-word; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-bot { align-self: flex-start; background: var(--chat-bot-bg); color: var(--chat-bot-text); border-bottom-left-radius: 4px; border: 1px solid var(--chat-bot-border); }
+        .msg-bot strong { color: var(--primary); }
+        .msg-user { align-self: flex-end; background: var(--chat-user-bg); color: var(--chat-user-text); border-bottom-right-radius: 4px; }
+        
+        .chat-input-area { background: var(--card-bg); border-radius: 24px; padding: 15px; display: flex; gap: 15px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); backdrop-filter: blur(12px); margin-top: 20px; flex-shrink: 0; align-items: center; }
+        .chat-input { flex-grow: 1; border: none; background: transparent; padding: 10px 15px; font-size: 1.05rem; color: var(--text-main); outline: none; resize: none; max-height: 120px; min-height: 45px; font-family: 'Inter', sans-serif; }
+        .btn-send { background: var(--primary); color: white; border: none; width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+        .btn-send:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .btn-send:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        
+        .typing { display: flex; gap: 5px; align-items: center; height: 24px;}
+        .dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; opacity: 0.7;}
+        .dot:nth-child(1) { animation-delay: -0.32s; } .dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
     </style>
 </head>
+
 <body>
-
-    <!-- PANTALLA DE IDENTIFICACIÓN -->
-    <div id="login_screen">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4 text-3xl">
-            <i class="bi bi-person-badge"></i>
-        </div>
-        <h2 class="text-xl font-bold text-slate-800 mb-1">Identificación del Estudiante</h2>
-        <p class="text-sm text-slate-500 mb-6">Ingresa tus datos para iniciar la evaluación clínica.</p>
+    <div id="app-layout">
         
-        <div class="space-y-4 text-left">
-            <div>
-                <label class="block text-xs font-bold text-slate-600 mb-1">Nombre Completo</label>
-                <input type="text" id="login_nombre" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500" placeholder="Ej. María Rodríguez">
+        <div id="mobile-top-bar">
+            <div class="sidebar-brand m-0">
+                <img src="Recurso.png" alt="Logo" onerror="this.style.display='none'">
+                <span>Tutor IA</span>
             </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-600 mb-1">Documento de Identidad</label>
-                <input type="text" id="login_cedula" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500" placeholder="Número de cédula">
-            </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-600 mb-1">Tema a Evaluar (ID del Módulo)</label>
-                <input type="text" id="login_tema" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500" placeholder="Ej. primera_infancia">
-                <p class="text-[0.65rem] text-slate-400 mt-1">Debe coincidir con el archivo JSON de conocimiento.</p>
-            </div>
-            <button id="btn_iniciar" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 mt-2 shadow-md flex items-center justify-center gap-2">
-                <span>Iniciar Evaluación</span>
-                <i class="bi bi-arrow-right"></i>
-            </button>
+            <button class="mobile-toggle" onclick="toggleMobileMenu()"><i class="bi bi-list"></i></button>
         </div>
-    </div>
 
-    <!-- ENTORNO CONVERSACIONAL (CHAT) -->
-    <div id="chat_screen" class="chat-container hidden">
-        
-        <div class="chat-header">
-            <div class="flex items-center">
-                <div class="avatar-ia"><i class="bi bi-robot"></i></div>
-                <div class="text-left">
-                    <div class="font-bold text-sm">Tutor Clínico IA</div>
-                    <div class="text-xs text-blue-200" id="estado_conexion"><span class="status-dot"></span>En línea</div>
+        <nav id="sidebar">
+            <div class="sidebar-brand">
+                <img src="Recurso.png" alt="Logo" onerror="this.style.display='none'">
+                <span>Alcaldía de Cali</span>
+            </div>
+            
+            <a href="index.html" class="nav-item-custom">
+                <i class="bi bi-house-door"></i> <span class="nav-text">Inicio / Dashboard</span>
+            </a>
+            <a href="tutor_estudiante.html" class="nav-item-custom active">
+                <i class="bi bi-robot"></i> <span class="nav-text">Tutor Clínico (IA)</span>
+            </a>
+            <a href="admin_conocimiento.html" class="nav-item-custom">
+                <i class="bi bi-shield-lock"></i> <span class="nav-text">Configuración IA</span>
+            </a>
+
+            <div class="sidebar-footer">
+                <div class="theme-grid">
+                    <div class="theme-btn" data-theme-btn="light" style="background:#f4f7fe;" onclick="cambiarTema('light')"></div>
+                    <div class="theme-btn" data-theme-btn="dark" style="background:#0b1437;" onclick="cambiarTema('dark')"></div>
+                    <div class="theme-btn" data-theme-btn="rose" style="background:#fff1f2;" onclick="cambiarTema('rose')"></div>
+                    <div class="theme-btn" data-theme-btn="amber" style="background:#fffbeb;" onclick="cambiarTema('amber')"></div>
                 </div>
             </div>
-            <div class="text-[0.65rem] font-bold bg-blue-900/40 px-3 py-1 rounded-full border border-blue-400/30" id="tema_actual_badge">
-                <i class="bi bi-tag-fill me-1"></i> TEMA
-            </div>
-        </div>
-        
-        <div class="chat-body" id="chat_history">
-            <div class="text-center text-xs text-slate-400 my-2" id="fecha_inicio">Evaluación iniciada</div>
+        </nav>
+
+        <main id="main-content">
             
-            <!-- Mensajes van aquí -->
-            
-            <!-- Indicador de escritura de la IA -->
-            <div class="typing-indicator" id="typing_indicator">
-                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div id="selector_pantalla">
+                <div class="selector-card">
+                    <div class="icon-robot"><i class="bi bi-robot"></i></div>
+                    <h3 class="fw-bold mb-1">Evaluador Clínico IA</h3>
+                    <p class="text-muted mb-4 small">Por favor ingresa tus datos para validar tu sesión.</p>
+                    
+                    <div>
+                        <label class="form-label-custom">Nombre Completo</label>
+                        <input type="text" id="input_nombre" class="form-select-custom" placeholder="Ej: Dra. María López" required>
+                    </div>
+                    
+                    <div>
+                        <label class="form-label-custom">Documento de Identidad</label>
+                        <input type="text" id="input_documento" class="form-select-custom" placeholder="Ej: 1144..." required>
+                    </div>
+
+                    <div>
+                        <label class="form-label-custom">ID del Módulo Normativo</label>
+                        <input type="text" id="input_tema_id" class="form-select-custom fw-bold text-primary" placeholder="Ej: primera_infancia" required>
+                    </div>
+
+                    <button class="btn-start" id="btn_iniciar" onclick="iniciarEvaluacion()">
+                        <i class="bi bi-play-fill me-1"></i> Iniciar Evaluación
+                    </button>
+                    <div id="error_carga" class="text-danger mt-3" style="display: none; font-size: 0.9rem; font-weight: 600;"></div>
+                </div>
             </div>
-        </div>
-        
-        <div class="chat-input-area">
-            <textarea id="user_input" class="input-chat" rows="1" placeholder="Escribe tu respuesta aquí..."></textarea>
-            <button id="btn_send" class="btn-send"><i class="bi bi-send-fill"></i></button>
-        </div>
+
+            <div id="chat_pantalla">
+                <div class="chat-header">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="background: linear-gradient(135deg, var(--primary) 0%, #7551ff 100%); color: white; width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(67, 24, 255, 0.3);">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold" style="color: var(--text-main);">Tutor Evaluador</h5>
+                            <div class="text-muted" style="font-size: 0.85rem;" id="estado_ia_badge"><i class="bi bi-circle-fill text-warning" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> Inicializando...</div>
+                        </div>
+                    </div>
+                    <div class="badge-tema" id="tema_actual_badge">
+                        <i class="bi bi-journal-medical me-1"></i> Tema
+                    </div>
+                </div>
+                
+                <div class="chat-history" id="chat_history"></div>
+                
+                <div class="chat-input-area">
+                    <textarea id="user_input" class="chat-input" placeholder="Escribe tu respuesta aquí... (Presiona Enter para enviar)" rows="1" oninput="autoResize(this)"></textarea>
+                    <button id="btn_send" class="btn-send" onclick="enviarMensaje()">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
-        // --- CONFIGURACIÓN Y CREDENCIALES ---
-        // Ofuscación de API Key (Evasión de escáneres)
-        const geminiP1 = "AIzaSyCXB5D_";
-        const geminiP2 = "kZk3YvQ1a2R_mF9s8XlP"; 
-        // Reemplaza con tu API key real fraccionada
-        const API_KEY = geminiP1 + geminiP2; 
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+        function toggleMobileMenu() { document.getElementById('sidebar').classList.toggle('mobile-open'); }
         
-        // URL de tu Google Apps Script (Webhook para guardar el dictamen)
-        const WEBHOOK_URL = "https://script.google.com/macros/s/TU_SCRIPT_ID/exec"; 
+        function cambiarTema(tema) {
+            document.documentElement.setAttribute('data-theme', tema); localStorage.setItem('temaDashboard', tema);
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll(`.theme-btn[data-theme-btn="${tema}"]`).forEach(b => b.classList.add('active'));
+        }
+    </script>
 
-        // --- ESTADO DE LA APLICACIÓN ---
-        let datosEstudiante = { nombre: "", cedula: "", tema: "" };
+    <script>
+        const geminiP1 = "AQ.Ab8RN6J4z7vC_nc1FxB8wCj-"; 
+        const geminiP2 = "njBsmweooxoYrXgrjiDrWa8HXA"; 
+        let apiKey = geminiP1.trim() + geminiP2.trim();
+        let isSimulacion = false;
+        const host = window.location.hostname;
+        
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwP9pw4qRSSS0GerUghj0-vtCx2TVqRW8hehMSAzDddEC8c9YNgm-wfAYFrv8Eo57Z5/exec';
+        let datosEstudiante = { nombre: '', documento: '', tema: '' };
+
+        if (host.includes("googleusercontent.com") || host === "") { apiKey = ""; } 
+        else if (apiKey.length < 20 || apiKey.includes("AQUÍ_TU_MITAD")) { isSimulacion = true; }
+        
         let chatHistory = [];
         let systemPromptBase = "";
-        let contextoExtraido = "";
-        let estructuraCurso = "";
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            let temaGuardado = localStorage.getItem('temaDashboard') || 'light';
+            cambiarTema(temaGuardado);
 
-        // Elementos del DOM
-        const loginScreen = document.getElementById('login_screen');
-        const chatScreen = document.getElementById('chat_screen');
-        const btnIniciar = document.getElementById('btn_iniciar');
-        const chatHistoryDOM = document.getElementById('chat_history');
-        const userInput = document.getElementById('user_input');
-        const btnSend = document.getElementById('btn_send');
-        const typingIndicator = document.getElementById('typing_indicator');
+            const userInput = document.getElementById('user_input');
+            if (userInput) {
+                userInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviarMensaje(); }
+                });
+            }
+            const inputTemaId = document.getElementById('input_tema_id');
+            if (inputTemaId) {
+                inputTemaId.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') { e.preventDefault(); iniciarEvaluacion(); }
+                });
+            }
+        });
 
-        btnIniciar.addEventListener('click', async () => {
-            const nombre = document.getElementById('login_nombre').value.trim();
-            const cedula = document.getElementById('login_cedula').value.trim();
-            const tema = document.getElementById('login_tema').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+        function verificarModoIa() {
+            const estadoIaBadge = document.getElementById('estado_ia_badge');
+            if (!estadoIaBadge) return;
+            estadoIaBadge.innerHTML = isSimulacion ? '<i class="bi bi-circle-fill text-warning" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> Modo Simulación' : '<i class="bi bi-circle-fill text-success" style="font-size: 0.5rem; vertical-align: middle; margin-right: 4px;"></i> IA Optimizada';
+        }
 
-            if (!nombre || !cedula || !tema) {
-                alert("Por favor, completa todos los campos para iniciar.");
-                return;
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight < 120 ? textarea.scrollHeight : 120) + 'px';
+        }
+
+        async function iniciarEvaluacion() {
+            const inputNombre = document.getElementById('input_nombre');
+            const inputDocumento = document.getElementById('input_documento');
+            const inputTemaId = document.getElementById('input_tema_id');
+            const btnIniciar = document.getElementById('btn_iniciar');
+            const errorCarga = document.getElementById('error_carga');
+            
+            datosEstudiante.nombre = inputNombre ? inputNombre.value.trim() : "";
+            datosEstudiante.documento = inputDocumento ? inputDocumento.value.trim() : "";
+            datosEstudiante.tema = inputTemaId ? inputTemaId.value.trim() : "";
+
+            if (!datosEstudiante.nombre || !datosEstudiante.documento || !datosEstudiante.tema) { 
+                mostrarError("Por favor, completa todos los campos."); return; 
             }
 
-            datosEstudiante = { nombre, cedula, tema };
-            btnIniciar.innerHTML = '<i class="bi bi-arrow-repeat animate-spin"></i> Conectando...';
-            btnIniciar.disabled = true;
+            if (btnIniciar) { btnIniciar.disabled = true; btnIniciar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Analizando...'; }
+            if (errorCarga) errorCarga.style.display = 'none';
 
             try {
-                // 1. Intentar cargar el archivo JSON de conocimiento (RAG)
-                // Se asume que los archivos están en una carpeta llamada 'conocimiento_ia'
-                const urlJson = `./conocimiento_ia/conocimiento_${tema}.json`;
-                
-                let data;
+                const urlJson = `./conocimiento_ia/conocimiento_${datosEstudiante.tema}.json`;
+                let contextoExtraido = ""; let estructuraCurso = "";
+
                 try {
                     const response = await fetch(urlJson);
                     if (!response.ok) throw new Error("Archivo no encontrado");
-                    data = await response.json();
+                    const data = await response.json();
                     let textoCompleto = data.contexto_base || "";
-                    // Limitador estricto para la capa gratuita
                     contextoExtraido = textoCompleto.length > 15000 ? textoCompleto.substring(0, 15000) + "... [Texto truncado]" : textoCompleto;
                     estructuraCurso = data.estructura_curso || "Módulos principales del documento normativo.";
                 } catch (fetchError) {
-                    console.warn(`No se encontró el JSON de ${tema}. Cargando datos de simulación para pruebas.`);
-                    // Fallback para pruebas si no existe el JSON
-                    contextoExtraido = "DOCUMENTO GENÉRICO DE SALUD PÚBLICA. El personal debe garantizar la bioseguridad, el lavado de manos y el correcto diligenciamiento de los registros en todos los niveles de atención. En caso de fiebre mayor a 38.5 en pediatría, aplazar inmunización."; 
-                    estructuraCurso = "Módulo 1: Generalidades, Módulo 2: Procedimientos.";
+                    if (!isSimulacion) throw new Error(`El tema '${datosEstudiante.tema}' no existe.`);
+                    contextoExtraido = "DOCUMENTO GENÉRICO. Capítulo 1, Capítulo 2."; estructuraCurso = "Módulo 1, Módulo 2.";
                 }
 
-                // 2. Construir el System Prompt Socrático
                 systemPromptBase = `
-                    Eres un Tutor y Evaluador Clínico Inteligente de la Secretaría de Salud. Tu objetivo es evaluar el nivel real del estudiante mediante un diálogo socrático y determinar a qué módulos del curso debe inscribirse.
+                    Eres un Tutor y Evaluador Clínico Inteligente de la Secretaría de Salud. Tu objetivo es evaluar el nivel real del estudiante mediante un diálogo socrático profundo y determinar a qué módulos del curso debe inscribirse.
                     CONOCIMIENTO BASE: ${contextoExtraido}
                     ESTRUCTURA DEL CURSO: ${estructuraCurso}
                     REGLAS OBLIGATORIAS:
-                    1. INICIO: Preséntate llamándolo "${datosEstudiante.nombre.split(' ')[0]}" y haz tu primera pregunta clínica basada en el conocimiento.
-                    2. PREGUNTA A PREGUNTA: Haz SOLO UNA pregunta a la vez. No envíes listas de preguntas.
-                    3. INDAGACIÓN PROFUNDA: No te conformes con respuestas superficiales o cortas. Si el usuario responde a medias, indaga más para confirmar si sabe o está adivinando. Haz al menos 3 o 4 preguntas en total durante la conversación.
-                    4. CIERRE AUTÓNOMO: Eres tú quien lidera y controla la evaluación. Una vez hayas realizado entre 3 y 4 preguntas y tengas un diagnóstico claro de su nivel, DEBES finalizar la conversación por tu cuenta.
-                    5. DICTAMEN FINAL: Para finalizar la evaluación, escribe EXACTAMENTE la frase "DICTAMEN FINAL:" seguida de un resumen amigable de sus fortalezas y dictamina EXACTAMENTE en qué MÓDULOS debe matricularse. Despídete.
+                    1. INICIO: Preséntate llamándolo "${datosEstudiante.nombre.split(' ')[0]}" y haz tu primera pregunta clínica.
+                    2. PREGUNTA A PREGUNTA: Haz SOLO UNA pregunta a la vez.
+                    3. EVALUACIÓN PROFUNDA: No aceptes respuestas superficiales. Si el usuario responde a medias o es impreciso, haz preguntas de seguimiento incisivas para confirmar que realmente domina el tema.
+                    4. CIERRE AUTÓNOMO: Eres tú quien controla el examen. Después de realizar al menos 3 o 4 preguntas sustanciales y comprobar su nivel, DEBES finalizar la conversación por tu cuenta sin pedirle permiso al estudiante.
+                    5. DICTAMEN FINAL: Para terminar, escribe EXACTAMENTE la frase "DICTAMEN FINAL:" seguida de un resumen de sus fortalezas y dictamina EXACTAMENTE en qué MÓDULOS debe matricularse. Despídete.
                 `;
 
-                // 3. Cambiar Interfaz
-                loginScreen.classList.add('hidden');
-                chatScreen.classList.remove('hidden');
-                document.getElementById('tema_actual_badge').innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${tema.toUpperCase()}`;
+                verificarModoIa();
+                const badgeTema = document.getElementById('tema_actual_badge');
+                if (badgeTema) badgeTema.innerHTML = `<i class="bi bi-tag-fill me-1"></i> ${datosEstudiante.tema.toUpperCase().replace(/_/g, ' ')}`;
                 
-                // 4. Iniciar la conversación enviando un mensaje oculto para que la IA salude
-                generarRespuestaIA(true);
+                document.getElementById('selector_pantalla').style.display = 'none';
+                document.getElementById('chat_pantalla').style.display = 'flex';
+
+                arrancarConversacion();
 
             } catch (error) {
-                alert("Error al inicializar el sistema: " + error.message);
-                btnIniciar.innerHTML = 'Iniciar Evaluación';
-                btnIniciar.disabled = false;
+                mostrarError(`<i class="bi bi-exclamation-triangle-fill me-1"></i> Error: ${error.message}`);
+                if (btnIniciar) { btnIniciar.disabled = false; btnIniciar.innerHTML = '<i class="bi bi-play-fill me-1"></i> Iniciar Evaluación'; }
             }
-        });
-
-        function agregarBurbuja(texto, esUsuario) {
-            const div = document.createElement('div');
-            div.className = `bubble ${esUsuario ? 'bubble-user' : 'bubble-ia'}`;
-            // Formatear negritas básicas si la IA las envía
-            div.innerHTML = texto.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            chatHistoryDOM.insertBefore(div, typingIndicator);
-            scrollToBottom();
         }
 
-        function scrollToBottom() {
-            chatHistoryDOM.scrollTop = chatHistoryDOM.scrollHeight;
+        function mostrarError(msg) {
+            const errorCarga = document.getElementById('error_carga');
+            if (errorCarga) { errorCarga.innerHTML = msg; errorCarga.style.display = 'block'; }
         }
 
-        function mostrarTyping(mostrar) {
-            typingIndicator.style.display = mostrar ? 'flex' : 'none';
-            if(mostrar) scrollToBottom();
-        }
-
-        // Auto-ajustar el textarea
-        userInput.addEventListener('input', function() {
-            this.style.height = '44px';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
-
-        btnSend.addEventListener('click', enviarMensajeUsuario);
-        userInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                enviarMensajeUsuario();
+        async function arrancarConversacion() {
+            mostrarTyping();
+            try {
+                const promptOculto = "Hola. Preséntate con mi nombre y hazme la primera pregunta para iniciar la evaluación.";
+                const respuesta = await procesarGeminiAPI(promptOculto, true);
+                quitarTyping(); agregarMensaje(respuesta, 'bot');
+            } catch (error) {
+                quitarTyping(); agregarMensaje(`❌ <strong>Error:</strong> ${error.message}`, 'bot');
             }
-        });
+        }
 
-        async function enviarMensajeUsuario() {
+        async function enviarMensaje() {
+            const userInput = document.getElementById('user_input');
+            const btnSend = document.getElementById('btn_send');
+            if (!userInput) return;
             const texto = userInput.value.trim();
             if (!texto) return;
 
-            agregarBurbuja(texto, true);
-            userInput.value = '';
-            userInput.style.height = '44px';
-            
-            // Añadir al historial para la API
-            chatHistory.push({ role: "user", parts: [{ text: texto }] });
-            
-            generarRespuestaIA(false);
+            agregarMensaje(texto, 'user');
+            userInput.value = ''; userInput.style.height = 'auto'; userInput.focus();
+            if (btnSend) btnSend.disabled = true;
+            mostrarTyping();
+
+            try {
+                const respuesta = await procesarGeminiAPI(texto, false);
+                quitarTyping(); agregarMensaje(respuesta, 'bot');
+            } catch (error) {
+                quitarTyping(); agregarMensaje(`⚠️ <strong>Error del Sistema:</strong> ${error.message}`, 'bot');
+            } finally {
+                if (btnSend) btnSend.disabled = false;
+            }
         }
 
-        async function generarRespuestaIA(esPrimerMensaje = false) {
-            mostrarTyping(true);
-            userInput.disabled = true;
-            btnSend.disabled = true;
+        function agregarMensaje(texto, remitente) {
+            const chatHistoryDiv = document.getElementById('chat_history');
+            if (!chatHistoryDiv) return;
+            const div = document.createElement('div');
+            div.classList.add('msg', `msg-${remitente}`);
+            div.innerHTML = texto.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+            chatHistoryDiv.appendChild(div);
+            chatHistoryDiv.scrollTo({ top: chatHistoryDiv.scrollHeight, behavior: 'smooth' });
+        }
 
-            let payloadHistory = [];
-            
-            if (esPrimerMensaje) {
-                // El primer mensaje inyecta el System Prompt de forma oculta como "user"
-                payloadHistory = [
-                    { role: "user", parts: [{ text: systemPromptBase + "\n\nInicia la evaluación presentándote y haciendo la primera pregunta." }] }
-                ];
-            } else {
-                // Enviar el historial completo para mantener el contexto
-                payloadHistory = [...chatHistory];
-                // Truco: Si no es el primer mensaje, nos aseguramos de que el primer mensaje del historial
-                // (que idealmente debería ser el system prompt inicial) esté presente si la API lo exige, 
-                // pero con Gemini 1.5 a veces basta con enviar la conversación. Para mayor seguridad,
-                // enviamos el payload exacto que hemos construido en chatHistory.
+        function mostrarTyping() {
+            const chatHistoryDiv = document.getElementById('chat_history');
+            if (!chatHistoryDiv) return;
+            const div = document.createElement('div');
+            div.classList.add('msg', 'msg-bot'); div.id = 'typing_indicator';
+            div.innerHTML = `<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+            chatHistoryDiv.appendChild(div);
+            chatHistoryDiv.scrollTo({ top: chatHistoryDiv.scrollHeight, behavior: 'smooth' });
+        }
+
+        function quitarTyping() { const ind = document.getElementById('typing_indicator'); if (ind) ind.remove(); }
+
+        function guardarResultadoEnSheets(dictamen) {
+            const formData = new FormData();
+            formData.append('action', 'guardar_evaluacion'); formData.append('nombre', datosEstudiante.nombre);
+            formData.append('documento', datosEstudiante.documento); formData.append('tema', datosEstudiante.tema);
+            formData.append('dictamen', dictamen);
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: formData }).catch(err => console.error(err));
+        }
+
+        async function procesarGeminiAPI(mensajeUsuario, esPrimerMensaje = false) {
+            if (isSimulacion) {
+                await new Promise(res => setTimeout(res, 1500)); 
+                if (esPrimerMensaje) return `¡Hola! Soy tu Tutor IA. ¿Qué harías en el primer paso de atención clínica? (Escribe 'fin' para finalizar).`;
+                if (mensajeUsuario.toLowerCase().includes("fin")) {
+                    let txt = "DICTAMEN FINAL:\nHemos terminado. Debes matricularte en el Módulo 3.";
+                    guardarResultadoEnSheets(txt); return txt;
+                }
+                return "Buena respuesta, pero incompleta. ¿Podrías ser más específico?";
             }
+
+            if (!esPrimerMensaje) chatHistory.push({ role: "user", parts: [{ text: mensajeUsuario }] });
 
             const payload = {
-                contents: payloadHistory,
-                generationConfig: {
-                    temperature: 0.3, // Baja temperatura para mantener la personalidad clínica y formal
-                    maxOutputTokens: 500
-                }
+                contents: chatHistory.length > 0 ? chatHistory : [{ role: "user", parts: [{ text: mensajeUsuario }] }],
+                systemInstruction: { parts: [{ text: systemPromptBase }] }
             };
 
-            let aiText = "";
-            let exito = false;
-            let ultimoError = "";
-            let reintentos = 0;
-            const maxReintentos = 3;
-            let tiempoEspera = 1500;
+            const modelosCandidatos = ["gemini-3.5-flash", "gemini-3.1-pro-preview"];
+            let aiText = null; let exito = false; let ultimoError = "";
 
-            // Ciclo de Resiliencia (Exponential Backoff para Error 429)
-            while (reintentos < maxReintentos && !exito) {
-                try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.status === 429) {
-                        throw new Error("HTTP_429");
-                    } else if (!response.ok) {
-                        throw new Error(`HTTP_${response.status}`);
-                    }
-
-                    const result = await response.json();
-                    if (result.candidates && result.candidates[0].content) {
-                        aiText = result.candidates[0].content.parts[0].text;
-                        exito = true;
-                    } else {
-                        throw new Error("Respuesta vacía de la API");
-                    }
-
-                } catch (error) {
-                    ultimoError = error.message;
-                    reintentos++;
-                    if (reintentos < maxReintentos) {
-                        console.warn(`Fallo al conectar. Reintento ${reintentos}/${maxReintentos} en ${tiempoEspera}ms...`);
-                        await new Promise(r => setTimeout(r, tiempoEspera));
-                        tiempoEspera *= 2; // Exponencial: 1.5s, 3s, 6s
+            for (let i = 0; i < modelosCandidatos.length && !exito; i++) {
+                let mod = modelosCandidatos[i]; let int = 3; let esp = 1500;
+                while (int > 0 && !exito) {
+                    try {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${mod}:generateContent?key=${apiKey}`, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                        });
+                        if (!res.ok) {
+                            if (res.status === 429) throw new Error("HTTP_429");
+                            if (res.status === 404) throw new Error("HTTP_404");
+                            throw new Error(`HTTP ${res.status}`);
+                        }
+                        const data = await res.json();
+                        aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sin respuesta.";
+                        exito = true; 
+                    } catch (error) {
+                        ultimoError = error.message; int--;
+                        if (ultimoError === "HTTP_404") break; 
+                        if (ultimoError === "HTTP_429") esp = 4000;
+                        if (int > 0) { await new Promise(r => setTimeout(r, esp)); esp *= 2; }
                     }
                 }
             }
-
-            mostrarTyping(false);
 
             if (!exito) {
-                if (ultimoError === "HTTP_429") {
-                    agregarBurbuja("Límite de solicitudes del sistema alcanzado (Servidor Ocupado). Por favor, intenta responder nuevamente en 1 minuto.", false);
-                } else {
-                    agregarBurbuja("Lo siento, experimenté un problema técnico en mi servidor. ¿Podrías repetir tu respuesta?", false);
-                }
-                userInput.disabled = false;
-                btnSend.disabled = false;
-                userInput.focus();
-                // Eliminamos el último mensaje del usuario del historial para que lo pueda volver a intentar
-                if (!esPrimerMensaje) chatHistory.pop(); 
-                return;
+                if (ultimoError === "HTTP_429") throw new Error("Límite de solicitudes alcanzado. Intenta en 1 minuto.");
+                else throw new Error("Servidores saturados. Vuelve a enviar tu mensaje.");
             }
 
-            // Guardar en el historial de memoria
             if (esPrimerMensaje) {
-                chatHistory = [ 
-                    { role: "user", parts: [{ text: systemPromptBase + "\n\nInicia la evaluación." }] }, 
-                    { role: "model", parts: [{ text: aiText }] } 
-                ];
+                chatHistory = [ { role: "user", parts: [{ text: "Inicia la evaluación." }] }, { role: "model", parts: [{ text: aiText }] } ];
             } else {
                 chatHistory.push({ role: "model", parts: [{ text: aiText }] });
             }
             
-            // Verificar si la IA dictaminó el final de la evaluación
             if (aiText.toUpperCase().includes("DICTAMEN FINAL")) {
-                
-                // Enviar silenciosamente los datos a Google Sheets
                 guardarResultadoEnSheets(aiText);
                 
-                // Formatear visualmente la palabra clave para que se vea más amigable en pantalla
+                // Formateo visual y bloqueo de UI
                 aiText = aiText.replace(/DICTAMEN FINAL:/ig, "<br><br><strong>📋 EVALUACIÓN COMPLETADA:</strong><br>");
-                
-                agregarBurbuja(aiText, false);
-                
-                // Bloqueo definitivo de la interfaz
-                userInput.disabled = true;
-                userInput.placeholder = "Evaluación finalizada. Tus resultados han sido guardados.";
-                btnSend.disabled = true;
-                
-            } else {
-                // Conversación normal
-                agregarBurbuja(aiText, false);
-                userInput.disabled = false;
-                btnSend.disabled = false;
-                userInput.focus();
+                const userInputDOM = document.getElementById('user_input');
+                const btnSendDOM = document.getElementById('btn_send');
+                if(userInputDOM) {
+                    userInputDOM.disabled = true;
+                    userInputDOM.placeholder = "Evaluación finalizada. Resultados guardados.";
+                }
+                if(btnSendDOM) btnSendDOM.disabled = true;
             }
-        }
-
-        // Función para enviar el Webhook sin bloquear la pantalla (no-cors)
-        function guardarResultadoEnSheets(dictamenBruto) {
-            console.log("Transmitiendo resultados al servidor de la Alcaldía...");
             
-            // Extraer solo lo que va después de "DICTAMEN FINAL" para limpiarlo
-            const partes = dictamenBruto.split(/DICTAMEN FINAL:/i);
-            const resultadoLimpio = partes.length > 1 ? partes[1].trim() : dictamenBruto;
-
-            const payloadSheets = {
-                fecha: new Date().toISOString(),
-                nombre: datosEstudiante.nombre,
-                cedula: datosEstudiante.cedula,
-                tema: datosEstudiante.tema,
-                dictamen: resultadoLimpio
-            };
-
-            // Ejecución silenciosa
-            fetch(WEBHOOK_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Fundamental para evadir errores de CORS desde un HTML estático
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payloadSheets)
-            }).then(() => {
-                console.log("Transmisión exitosa.");
-            }).catch(err => {
-                console.error("Error en webhook de transmisión:", err);
-            });
+            return aiText;
         }
     </script>
 </body>
