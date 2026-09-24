@@ -1,27 +1,27 @@
 {
     "metadata": {
         "total_cursos_analizados": 53,
-        "total_encuestas_historicas": 3930,
+        "total_encuestas_historicas": 3931,
         "total_estudiantes_unicos": 7071
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 47.2,
-        "nps_global": 67.8
+        "chs_promedio_secretaria": 47.4,
+        "nps_global": 67.7
     },
     "demografia_global": {
         "Sexo": {
             "Femenino": 2881,
-            "Masculino": 1045,
+            "Masculino": 1046,
             "Intersexual": 4
         },
         "Perfil": {
             "Área de la salud": 2827,
-            "Estudiante": 716,
+            "Estudiante": 717,
             "Otro": 387
         },
         "Curso de Vida": {
             "Adultez (29 - 59 años)": 2326,
-            "Adolescencia (12 - 17 años)": 733,
+            "Adolescencia (12 - 17 años)": 734,
             "Juventud (18 - 28 años)": 707,
             "Vejez (60 años o más)": 164
         },
@@ -35,7 +35,7 @@
             "COMUNA 6": 166,
             "COMUNA 18": 157,
             "COMUNA 5": 152,
-            "COMUNA 16": 138,
+            "COMUNA 16": 139,
             "COMUNA 8": 123,
             "COMUNA 21": 111,
             "COMUNA 13": 109,
@@ -66,7 +66,7 @@
         },
         "Escolaridad": {
             "Pregrado": 1760,
-            "Bachiller": 1102,
+            "Bachiller": 1103,
             "Postgrado": 1011,
             "Ninguna": 57
         }
@@ -27604,9 +27604,9 @@
             "Nombre_Curso": "NUEVAS ADICCIONES - 2026 - 01",
             "ID_Moodle_Original": "na_012026",
             "Total_Inscritos": 126,
-            "Tasa_Finalizacion_%": 0.8,
+            "Tasa_Finalizacion_%": 2.4,
             "Tasa_Abandono_%": 0.0,
-            "Tasa_Inactividad_%": 99.2,
+            "Tasa_Inactividad_%": 97.6,
             "Tiempo_Promedio_Dias": 0.0,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
@@ -27614,7 +27614,7 @@
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 0.8,
+            "Salud_Curso_CHS": 2.4,
             "Curso_Base": "NUEVAS ADICCIONES",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -37134,15 +37134,15 @@
                 "Sexo": {
                     "Femenino": 212,
                     "Intersexual": 1,
-                    "Masculino": 120
+                    "Masculino": 121
                 },
                 "Perfil": {
-                    "Estudiante": 329,
+                    "Estudiante": 330,
                     "Otro": 0,
                     "Área de la salud": 4
                 },
                 "Edad": {
-                    "Adolescencia (12 - 17 años)": 321,
+                    "Adolescencia (12 - 17 años)": 322,
                     "Adultez (29 - 59 años)": 1,
                     "Juventud (18 - 28 años)": 11,
                     "Vejez (60 años o más)": 0
@@ -37170,7 +37170,7 @@
                     "COMUNA 13": 6,
                     "COMUNA 14": 11,
                     "COMUNA 15": 53,
-                    "COMUNA 16": 32,
+                    "COMUNA 16": 33,
                     "COMUNA 17": 2,
                     "COMUNA 18": 50,
                     "COMUNA 19": 2,
@@ -37187,7 +37187,7 @@
                     "COMUNA 9": 7
                 },
                 "Escolaridad": {
-                    "Bachiller": 303,
+                    "Bachiller": 304,
                     "Ninguna": 18,
                     "Postgrado": 3,
                     "Pregrado": 9
@@ -41734,9 +41734,9 @@
             "Nombre_Curso": "ZONAS DE ORIENTACIÓN UNIVERSITARIA (ZOU, ESE ORIENTE) - 2026 - 01",
             "ID_Moodle_Original": "zou_oriente_012026",
             "Total_Inscritos": 20,
-            "Tasa_Finalizacion_%": 35.0,
-            "Tasa_Abandono_%": 15.0,
-            "Tasa_Inactividad_%": 50.0,
+            "Tasa_Finalizacion_%": 40.0,
+            "Tasa_Abandono_%": 25.0,
+            "Tasa_Inactividad_%": 35.0,
             "Tiempo_Promedio_Dias": 0.1,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
@@ -41744,7 +41744,7 @@
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 35.0,
+            "Salud_Curso_CHS": 40.0,
             "Curso_Base": "ZONAS DE ORIENTACIÓN UNIVERSITARIA (ZOU, ESE ORIENTE)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -44894,17 +44894,17 @@
             "Nombre_Curso": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES) - 2026 - 01",
             "ID_Moodle_Original": "pfsa_022026",
             "Total_Inscritos": 996,
-            "Tasa_Finalizacion_%": 1.9,
-            "Tasa_Abandono_%": 4.0,
-            "Tasa_Inactividad_%": 94.1,
-            "Tiempo_Promedio_Dias": 1071.8,
+            "Tasa_Finalizacion_%": 2.4,
+            "Tasa_Abandono_%": 5.2,
+            "Tasa_Inactividad_%": 92.4,
+            "Tiempo_Promedio_Dias": 840.2,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
             "ICD_Promedio": 0.0,
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 1.9,
+            "Salud_Curso_CHS": 2.4,
             "Curso_Base": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -62749,28 +62749,28 @@
             "Tasa_Abandono_%": 0.6,
             "Tasa_Inactividad_%": 1.3,
             "Tiempo_Promedio_Dias": 81.6,
-            "Total_Encuestas": 166.0,
-            "ISG_Promedio": 4.5393883225208524,
-            "ICD_Promedio": 4.5582329317269075,
-            "IUP_Promedio": 4.542168674698795,
-            "UX_Promedio": 4.548192771084337,
-            "e_NPS": 64.5,
-            "Salud_Curso_CHS": 93.7,
+            "Total_Encuestas": 167.0,
+            "ISG_Promedio": 4.52464302164901,
+            "ICD_Promedio": 4.542914171656687,
+            "IUP_Promedio": 4.526946107784431,
+            "UX_Promedio": 4.532934131736527,
+            "e_NPS": 63.5,
+            "Salud_Curso_CHS": 93.6,
             "Curso_Base": "PROCESO FORMATIVO / SA (GENERAL)",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
                     "Femenino": 212,
                     "Intersexual": 1,
-                    "Masculino": 120
+                    "Masculino": 121
                 },
                 "Perfil": {
-                    "Estudiante": 329,
+                    "Estudiante": 330,
                     "Otro": 0,
                     "Área de la salud": 4
                 },
                 "Edad": {
-                    "Adolescencia (12 - 17 años)": 321,
+                    "Adolescencia (12 - 17 años)": 322,
                     "Adultez (29 - 59 años)": 1,
                     "Juventud (18 - 28 años)": 11,
                     "Vejez (60 años o más)": 0
@@ -62798,7 +62798,7 @@
                     "COMUNA 13": 6,
                     "COMUNA 14": 11,
                     "COMUNA 15": 53,
-                    "COMUNA 16": 32,
+                    "COMUNA 16": 33,
                     "COMUNA 17": 2,
                     "COMUNA 18": 50,
                     "COMUNA 19": 2,
@@ -62815,26 +62815,26 @@
                     "COMUNA 9": 7
                 },
                 "Escolaridad": {
-                    "Bachiller": 303,
+                    "Bachiller": 304,
                     "Ninguna": 18,
                     "Postgrado": 3,
                     "Pregrado": 9
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.475903614457831,
-                "¿Se cumplió el objetivo de la capacitación?": 4.566265060240964,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.5602409638554215,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.427710843373494,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.578313253012048,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.506024096385542,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.475903614457831,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.5602409638554215,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.518072289156627,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.63855421686747,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.5120481927710845,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.5843373493975905,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.608433734939759
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.461077844311378,
+                "¿Se cumplió el objetivo de la capacitación?": 4.550898203592815,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.544910179640719,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.419161676646707,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.562874251497006,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.491017964071856,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.461077844311378,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.544910179640719,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.502994011976048,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.622754491017964,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.497005988023952,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.568862275449102,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.592814371257485
             },
             "Registros_Crudos": [
                 {
@@ -63316,6 +63316,26 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
                     "¿El material utilizado permitió el entendimiento del tema?": 5,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Masculino",
+                    "Curso de vida": "Adolescencia (12 - 17 años)",
+                    "Perfil": "Estudiante",
+                    "Comuna_Unificada": "COMUNA 16",
+                    "Escolaridad": "Bachiller",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 2,
+                    "¿Se cumplió el objetivo de la capacitación?": 2,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 2,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 3,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 2,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 2,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 2,
+                    "¿El facilitador demostró el dominio del tema brindado?": 2,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 2,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 2,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 2,
+                    "¿El material utilizado permitió el entendimiento del tema?": 2,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 2
                 },
                 {
                     "Sexo": "Masculino",
