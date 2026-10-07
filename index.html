@@ -1,629 +1,461 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecosistema IA - Secretaría de Salud</title>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Librerías de Visualización -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' },
+                        kpi: { success: '#10b981', warning: '#f59e0b', danger: '#ef4444', info: '#3b82f6' }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root[data-theme="light"] {
-            --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
-            --text-main: #1e293b; --text-muted: #64748b; --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5);
-            --card-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.05);
-            --blob-1: rgba(67, 24, 255, 0.1); --blob-2: rgba(5, 205, 153, 0.1);
-        }
-
-        :root[data-theme="dark"] {
-            --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.95); --card-bg: rgba(17, 28, 68, 0.85); 
-            --text-main: #f8fafc; --text-muted: #a3aed1; --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08);
-            --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
-            --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1);
-        }
-
-        :root[data-theme="rose"] {
-            --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
-            --text-main: #4c0519; --text-muted: #9f1239; --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15);
-            --card-shadow: 0 4px 20px 0 rgba(225, 29, 72, 0.05);
-            --blob-1: rgba(225, 29, 72, 0.1); --blob-2: rgba(244, 63, 94, 0.1);
-        }
-
-        :root[data-theme="amber"] {
-            --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
-            --text-main: #451a03; --text-muted: #92400e; --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15);
-            --card-shadow: 0 4px 20px 0 rgba(217, 119, 6, 0.05);
-            --blob-1: rgba(217, 119, 6, 0.1); --blob-2: rgba(245, 158, 11, 0.1);
-        }
-
-        body { 
-            background-color: var(--bg-color); font-family: 'Inter', sans-serif; color: var(--text-main); 
-            margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh;
-        }
-
-        body::before, body::after { 
-            content: ''; position: fixed; border-radius: 50%; z-index: -2; pointer-events: none; 
-            will-change: transform; transform: translateZ(0); filter: blur(60px);
-        }
-        body::before { width: 45vw; height: 45vw; background: var(--blob-1); top: -10%; left: -10%; }
-        body::after { width: 35vw; height: 35vw; background: var(--blob-2); bottom: -10%; right: -5%; }
-
-        #app-layout { display: flex; min-height: 100vh; width: 100%; overflow-x: hidden; }
+        body { background-color: #f1f5f9; } 
         
-        #sidebar {
-            width: 80px; min-height: 100vh; background: var(--sidebar-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border-right: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; padding: 24px 0;
-            position: fixed; top: 0; left: 0; z-index: 1000; transition: transform 0.3s ease, width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 4px 0 15px rgba(0,0,0,0.02); overflow: hidden; white-space: nowrap;
-        }
-        #sidebar:hover { width: 250px; align-items: flex-start; padding-left: 20px; padding-right: 20px;}
+        /* Scrollbars estilo ESE */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
 
-        .sidebar-brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; cursor: pointer; height: 45px;}
-        .sidebar-brand img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0;}
-        .sidebar-brand span { font-weight: 800; font-size: 1.1rem; color: var(--text-main); opacity: 0; transition: opacity 0.2s; }
-        #sidebar:hover .sidebar-brand span { opacity: 1; transition-delay: 0.1s;}
-
-        .nav-item-custom {
-            display: flex; align-items: center; gap: 18px; width: 100%; padding: 12px; border-radius: 12px; margin-bottom: 8px;
-            color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer;
-            transition: all 0.2s ease; border: 1px solid transparent;
-        }
-        .nav-item-custom i { font-size: 1.3rem; flex-shrink: 0; transition: color 0.2s;}
-        .nav-text { opacity: 0; transition: opacity 0.2s; }
-        #sidebar:hover .nav-text { opacity: 1; transition-delay: 0.1s;}
+        /* Animaciones */
+        .fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(15px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
         
-        .nav-item-custom:hover { background: rgba(67, 24, 255, 0.05); color: var(--primary); }
-        .nav-item-custom.active { background: var(--primary); color: white; border-color: rgba(0,0,0,0.1); box-shadow: 0 4px 10px rgba(67, 24, 255, 0.2); }
-        .nav-item-custom.active i { color: white; }
+        .card-hover-effect { transition: all 0.3s ease; }
+        .card-hover-effect:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
 
-        .sidebar-footer { margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 15px;}
-        
-        .theme-grid { display: flex; gap: 6px; justify-content: center; width: 100%; opacity: 0; transition: opacity 0.2s;}
-        #sidebar:hover .theme-grid { opacity: 1; transition-delay: 0.1s; }
-        .theme-btn { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
-        .theme-btn:hover { transform: scale(1.1); }
-        .theme-btn.active { border-color: var(--primary); transform: scale(1.1);}
-
-        #main-content {
-            flex-grow: 1; margin-left: 80px; min-height: 100vh; transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative; max-width: calc(100vw - 80px); overflow-x: hidden;
-        }
-
-        .view-section { display: none; padding: 0; opacity: 0; transition: opacity 0.3s ease; width: 100%; box-sizing: border-box;}
-        .view-section.active-view { display: block; opacity: 1; }
-
-        #mobile-top-bar { display: none; background: var(--sidebar-bg); backdrop-filter: blur(10px); padding: 12px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 990; align-items: center; justify-content: space-between;}
-        .mobile-toggle { background: transparent; border: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer; padding: 0;}
-
-        .glass-card { 
-            background: var(--card-bg); border-radius: 20px; box-shadow: var(--card-shadow); padding: 24px; height: 100%; 
-            border: 1px solid var(--border-color); border-top: 1px solid var(--border-light); 
-            will-change: transform, opacity; transform: translateZ(0); transition: transform 0.2s ease, border-color 0.2s ease, padding 0.3s ease;
-        }
-        .glass-card:hover { transform: translateY(-3px) translateZ(0); }
-
-        .home-header { margin-bottom: 40px; text-align: center; }
-        /* Fluid Typography for responsiveness */
-        .home-title { font-size: clamp(1.7rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 8px;}
-        .home-subtitle { color: var(--text-muted); font-size: clamp(0.9rem, 2vw, 1.05rem); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
-
-        .bento-kpi { display: flex; align-items: center; gap: 20px; flex-wrap: wrap;}
-        .kpi-icon-lg { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; transition: all 0.3s ease;}
-        .bento-kpi .kpi-val { font-size: clamp(1.8rem, 4vw, 2.2rem); font-weight: 800; line-height: 1; color: var(--text-main); margin-bottom: 4px; font-variant-numeric: tabular-nums; letter-spacing: -0.04em;}
-        .bento-kpi .kpi-lbl { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
-        
-        .hub-link { text-decoration: none; color: inherit; display: block; height: 100%;}
-        .hub-card { text-align: left; padding: 30px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; cursor: pointer; background: var(--card-bg);}
-        .hub-card .kpi-icon-lg { margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);}
-        .hub-card h4 { font-weight: 800; font-size: clamp(1.1rem, 2vw, 1.3rem); margin-bottom: 10px;}
-        .hub-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;}
-        .hub-card:hover { border-color: var(--primary); }
-
-        .dashboard-top-bar { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .pill-selectors { 
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; 
-            padding: 12px 18px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; 
-            box-shadow: var(--card-shadow); backdrop-filter: blur(8px); width: 100%;
-        }
-        .macro-select { background: transparent; color: var(--text-main); border: 1px solid transparent; padding: 8px 16px; font-weight: 600; font-size: 0.9rem; cursor: pointer; outline: none; border-radius: 12px; transition: all 0.2s; flex-grow: 1; min-width: 150px;}
-        .macro-select:hover, .macro-select:focus { background: rgba(67, 24, 255, 0.05); color: var(--primary); border-color: rgba(67, 24, 255, 0.2); }
-        .macro-select option { background: var(--bg-color); color: var(--text-main); }
-        .pill-divider { width: 1px; height: 25px; background: var(--border-color); margin: 0 5px; }
-
-        .olap-container { display: none; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; animation: fadeIn 0.3s ease-out; background: var(--card-bg); padding: 16px 24px; border-radius: 16px; border: 1px solid var(--border-color); width: 100%;}
-        .olap-title { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 10px; width: auto;}
-        .olap-chip { background: rgba(255,255,255,0.5); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 12px; font-size: 0.85rem; font-weight: 600; padding: 8px 16px 8px 32px; appearance: none; -webkit-appearance: none; cursor: pointer; outline: none; transition: all 0.2s; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='currentColor' class='bi bi-funnel-fill' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 12px center; flex: 1 1 auto; min-width: 120px;}
-        :root[data-theme="dark"] .olap-chip { background-color: rgba(0,0,0,0.3); }
-        .olap-chip:hover { border-color: var(--primary); color: var(--primary); }
-        .olap-chip.active-chip { background-color: var(--primary); color: white; border-color: var(--primary); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' class='bi bi-funnel-fill' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z'/%3E%3C/svg%3E"); }
-        .btn-limpiar { background: transparent; border: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: color 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; padding: 6px 12px; border-radius: 8px; white-space: nowrap;}
-        .btn-limpiar:hover { color: var(--danger); background: rgba(238, 93, 80, 0.1);}
+        /* Mapa y Utilidades */
+        #map-container { border-radius: 1rem; width: 100%; min-height: 350px; z-index: 10; }
         .filtro-lock { opacity: 0.4; filter: grayscale(100%); pointer-events: none; transition: all 0.3s; }
-
-        .kpi-mini { display: flex; flex-direction: column; justify-content: center; padding: 20px;}
-        .kpi-mini-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;}
-        .kpi-mini-icon { width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-        .kpi-mini-val { font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 800; line-height: 1; color: var(--text-main); font-variant-numeric: tabular-nums;}
-        .kpi-mini-lbl { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-top: 5px;}
-        .badge-kpi { font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 12px; }
-
-        .chart-wrapper { position: relative; height: 260px; width: 100%; margin-top: 10px; transition: height 0.3s ease;}
-        .radar-wrapper { position: relative; height: 360px; width: 100%; display: flex; justify-content: center; transition: height 0.3s ease;}
-        #map-container { border-radius: 16px; border: 1px solid var(--border-color); transform: translateZ(0); width: 100%; flex-grow: 1; min-height: 350px;}
+        .tab-locked { opacity: 0.5; cursor: not-allowed !important; }
         
-        .progress-label { display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.8rem; margin-bottom: 6px; color: var(--text-main); font-weight: 500;}
-        .progress-bg { height: 8px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden; transform: translateZ(0); }
-        :root[data-theme="dark"] .progress-bg { background: rgba(255,255,255,0.05); }
-        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease-out; }
+        .nav-tabs-container { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .nav-tabs-container::-webkit-scrollbar { display: none; }
 
-        .btn-download-img { background: rgba(0,0,0,0.03); color: var(--text-muted); border: none; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; opacity: 0.7;}
-        .glass-card:hover .btn-download-img { opacity: 1; color: var(--primary); background: rgba(67, 24, 255, 0.1); }
-
-        .nav-tabs-clean { display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; padding-bottom: 5px; -webkit-overflow-scrolling: touch; scrollbar-width: none;}
-        .nav-tabs-clean::-webkit-scrollbar { display: none; }
-        .tab-clean { background: transparent; border: none; color: var(--text-muted); font-weight: 600; padding: 10px 16px; border-radius: 12px; transition: all 0.2s; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 8px; flex-shrink: 0;}
-        .tab-clean:hover { background: rgba(67, 24, 255, 0.05); color: var(--text-main); }
-        .tab-clean.active { background: var(--primary); color: white; }
-        .tab-clean.locked { color: var(--text-muted); opacity: 0.6; cursor: not-allowed;}
-
-        #panel-lobby-curso { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .select-comparador { background: rgba(255,255,255,0.5); border: 1px solid transparent; color: var(--text-main); outline: none; cursor: pointer; transition: all 0.2s; font-size: 0.85rem; padding: 8px; border-radius: 8px;}
-        :root[data-theme="dark"] .select-comparador { background: rgba(0,0,0,0.3); }
-        .select-comparador:focus, .select-comparador:hover { border-color: var(--primary); background: transparent; }
-        
-        .comp-metric-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.85rem;}
-        .comp-metric-row:last-child { border-bottom: none; }
-        .comp-label { color: var(--text-muted); font-weight: 600; }
-        .comp-val { font-weight: 800; color: var(--text-main); text-align: right;}
-
-        .text-indigo { color: var(--primary); } .bg-indigo-soft { background: rgba(67, 24, 255, 0.1); color: var(--primary); }
-        .text-emerald { color: var(--success); } .bg-emerald-soft { background: rgba(5, 205, 153, 0.1); color: var(--success); }
-        .text-amber { color: var(--warning); } .bg-amber-soft { background: rgba(255, 181, 71, 0.1); color: var(--warning); }
-        .text-rose { color: var(--danger); } .bg-rose-soft { background: rgba(238, 93, 80, 0.1); color: var(--danger); }
-
-        /* Media Queries Adaptativas */
-        @media (max-width: 992px) {
-            .glass-card { padding: 20px; }
-            .kpi-mini { padding: 16px; }
-            .olap-container { padding: 12px 16px; }
-        }
-
-        @media (max-width: 768px) {
-            #sidebar { transform: translateX(-100%); width: 260px; padding-left: 20px; align-items: flex-start; z-index: 1050; box-shadow: 10px 0 30px rgba(0,0,0,0.1);}
-            #sidebar.mobile-open { transform: translateX(0); }
-            
-            /* Sombra/overlay de fondo al abrir menú en celular */
-            body.menu-open::after { content: ''; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index: 1040; backdrop-filter: blur(2px); pointer-events: auto;}
-            
-            #main-content { margin-left: 0; max-width: 100vw; width: 100vw; }
-            #mobile-top-bar { display: flex; }
-            .nav-text, .sidebar-brand span, .theme-grid { opacity: 1; }
-            
-            .glass-card { padding: 16px; }
-            .bento-kpi { padding: 16px; gap: 15px; }
-            .kpi-icon-lg { width: 50px; height: 50px; font-size: 1.5rem; }
-            
-            .pill-selectors { flex-direction: column; align-items: stretch; padding: 16px; }
-            .pill-divider { width: 100%; height: 1px; margin: 8px 0; }
-            .macro-select { margin-left: 0 !important; width: 100%; text-align: center; }
-            
-            .olap-title { width: 100%; margin-bottom: 5px;}
-            .btn-limpiar { width: 100%; margin-left: 0 !important; margin-top: 10px; background: rgba(238, 93, 80, 0.05); border: 1px solid rgba(238, 93, 80, 0.2);}
-            
-            .chart-wrapper { height: 220px; }
-            .radar-wrapper { height: 300px; }
-            #map-container { min-height: 250px; }
-
-            .dashboard-top-bar { margin-bottom: 15px; }
-            .home-header { margin-bottom: 25px; }
-        }
-
-        @media (max-width: 480px) {
-            .bento-kpi { justify-content: flex-start; }
-            .kpi-mini-val { font-size: 1.5rem; }
-            .nav-tabs-clean { padding-bottom: 10px; }
-            .olap-chip { min-width: 45%; }
+        .select-olap {
+            appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1em;
         }
     </style>
 </head>
 
-<body>
-    <div id="app-layout">
+<body class="text-slate-800 font-sans antialiased min-h-screen flex flex-col selection:bg-brand-100 selection:text-brand-900">
 
-        <nav id="sidebar">
-            <div class="sidebar-brand">
-                <img src="Recurso.png" alt="Logo" onerror="this.src='https://placehold.co/40x40/4318ff/ffffff?text=SS'">
-                <span>Alcaldía de Cali</span>
+    <header class="bg-white border-b border-slate-200 shadow-sm relative z-40 flex-shrink-0">
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between py-4 gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-xl bg-brand-50 text-brand-600 shadow-inner">
+                        <i class="fa-solid fa-microchip text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-black text-slate-900 leading-tight tracking-tight">Ecosistema IA</h1>
+                        <p class="text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-widest">Secretaría de Salud - Santiago de Cali</p>
+                    </div>
+                </div>
+                <nav class="flex overflow-x-auto nav-tabs-container gap-2 pb-1 md:pb-0">
+                    <button onclick="switchView('home_view', this)" class="nav-main-btn active flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold bg-brand-500 text-white shadow-sm transition-all whitespace-nowrap">
+                        <i class="fa-solid fa-house"></i> Inicio
+                    </button>
+                    <button onclick="switchView('dashboard_view', this)" class="nav-main-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 hover:text-slate-700 transition-all whitespace-nowrap border border-slate-200">
+                        <i class="fa-solid fa-chart-column"></i> Panel Analítico
+                    </button>
+                    <a href="tutor_estudiante.html" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 hover:text-slate-700 transition-all whitespace-nowrap border border-slate-200">
+                        <i class="fa-solid fa-robot"></i> Tutor IA
+                    </a>
+                    <a href="admin_conocimiento.html" class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 hover:text-slate-700 transition-all whitespace-nowrap border border-slate-200">
+                        <i class="fa-solid fa-shield-halved"></i> Configuración
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+        
+        <!-- ========================================== -->
+        <!-- VISTA: INICIO (LOBBY) -->
+        <!-- ========================================== -->
+        <section id="home_view" class="view-section block fade-in-up">
+            <div class="mb-10 mt-4 max-w-2xl">
+                <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-3">Ecosistema Educativo en Salud</h2>
+                <p class="text-slate-500 font-medium text-sm md:text-base">Plataforma central de monitoreo, entrenamiento y simulación clínica potenciada por Inteligencia Artificial.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 relative overflow-hidden group hover:border-brand-300 card-hover-effect">
+                    <div class="absolute top-0 right-0 p-5 opacity-[0.04] group-hover:opacity-10 transition-opacity"><i class="fa-solid fa-book-open text-6xl text-brand-600"></i></div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Cursos Auditados</p>
+                    <p class="text-3xl font-black text-slate-800" id="bento-cursos">-</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 relative overflow-hidden group hover:border-blue-300 card-hover-effect">
+                    <div class="absolute top-0 right-0 p-5 opacity-[0.04] group-hover:opacity-10 transition-opacity"><i class="fa-solid fa-users text-6xl text-blue-600"></i></div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Matrículas Totales</p>
+                    <p class="text-3xl font-black text-slate-800" id="bento-matriculas">-</p>
+                    <div class="mt-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100">
+                        <i class="fa-solid fa-user-check"></i> <span id="bento-unicos">-</span>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 relative overflow-hidden group hover:border-emerald-300 card-hover-effect">
+                    <div class="absolute top-0 right-0 p-5 opacity-[0.04] group-hover:opacity-10 transition-opacity"><i class="fa-solid fa-graduation-cap text-6xl text-emerald-600"></i></div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Aprobados</p>
+                    <p class="text-3xl font-black text-emerald-600" id="bento-certificados">-</p>
+                    <div class="mt-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-100">
+                        <i class="fa-solid fa-list-check"></i> <span id="bento-encuestas">-</span>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 relative overflow-hidden group hover:border-rose-300 card-hover-effect">
+                    <div class="absolute top-0 right-0 p-5 opacity-[0.04] group-hover:opacity-10 transition-opacity"><i class="fa-solid fa-heart-pulse text-6xl text-rose-600"></i></div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Score CHS Institucional</p>
+                    <p class="text-3xl font-black text-rose-600" id="bento-chs">-</p>
+                </div>
+            </div>
+
+            <div class="flex items-center mb-4">
+                <h3 class="text-base font-bold text-slate-800"><i class="fa-solid fa-layer-group mr-2 text-brand-500"></i> Módulos del Sistema</h3>
             </div>
             
-            <a href="#" class="nav-item-custom active" onclick="switchView('home_view', this); toggleMobileMenu();">
-                <i class="bi bi-house-door"></i> <span class="nav-text">Inicio</span>
-            </a>
-            <a href="#" class="nav-item-custom" onclick="switchView('dashboard_view', this); toggleMobileMenu();">
-                <i class="bi bi-bar-chart-line"></i> <span class="nav-text">Panel Analítico</span>
-            </a>
-            <a href="tutor_estudiante.html" class="nav-item-custom">
-                <i class="bi bi-robot"></i> <span class="nav-text">Tutor Clínico (IA)</span>
-            </a>
-            <a href="admin_conocimiento.html" class="nav-item-custom">
-                <i class="bi bi-shield-lock"></i> <span class="nav-text">Configuración IA</span>
-            </a>
-
-            <div class="sidebar-footer">
-                <div class="theme-grid">
-                    <div class="theme-btn" data-theme-btn="light" style="background:#f4f7fe;" onclick="cambiarTema('light')"></div>
-                    <div class="theme-btn" data-theme-btn="dark" style="background:#0b1437;" onclick="cambiarTema('dark')"></div>
-                    <div class="theme-btn" data-theme-btn="rose" style="background:#fff1f2;" onclick="cambiarTema('rose')"></div>
-                    <div class="theme-btn" data-theme-btn="amber" style="background:#fffbeb;" onclick="cambiarTema('amber')"></div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button onclick="document.querySelectorAll('.nav-main-btn')[1].click()" class="card-hover-effect text-left bg-white rounded-2xl shadow-sm border border-slate-200 hover:border-brand-300 p-6 flex flex-col group">
+                    <div class="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center mb-4 border border-brand-100 group-hover:bg-brand-500 group-hover:text-white text-brand-600 transition-colors">
+                        <i class="fa-solid fa-chart-pie text-xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-2">Dashboard Analítico</h4>
+                    <p class="text-xs text-slate-500 font-medium leading-relaxed">Ingresa para filtrar por cohorte, analizar datos demográficos y cruzar encuestas de percepción.</p>
+                </button>
+                <a href="tutor_estudiante.html" class="card-hover-effect block text-left bg-white rounded-2xl shadow-sm border border-slate-200 hover:border-emerald-300 p-6 flex flex-col group">
+                    <div class="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-4 border border-emerald-100 group-hover:bg-emerald-500 group-hover:text-white text-emerald-600 transition-colors">
+                        <i class="fa-solid fa-robot text-xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-2">Tutor IA (Estudiante)</h4>
+                    <p class="text-xs text-slate-500 font-medium leading-relaxed">Simulador Socrático para evaluar conocimientos del personal y recomendar su ruta de estudio.</p>
+                </a>
+                <a href="admin_conocimiento.html" class="card-hover-effect block text-left bg-white rounded-2xl shadow-sm border border-slate-200 hover:border-rose-300 p-6 flex flex-col group">
+                    <div class="h-12 w-12 rounded-xl bg-rose-50 flex items-center justify-center mb-4 border border-rose-100 group-hover:bg-rose-500 group-hover:text-white text-rose-600 transition-colors">
+                        <i class="fa-solid fa-shield-virus text-xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-800 mb-2">Configuración IA</h4>
+                    <p class="text-xs text-slate-500 font-medium leading-relaxed">Acceso curador. Sube documentos normativos en PDF para entrenar la IA.</p>
+                </a>
             </div>
-        </nav>
+        </section>
 
-        <main id="main-content">
+        <!-- ========================================== -->
+        <!-- VISTA: DASHBOARD ANALÍTICO -->
+        <!-- ========================================== -->
+        <section id="dashboard_view" class="view-section hidden fade-in-up">
             
-            <div id="mobile-top-bar">
-                <div class="sidebar-brand m-0">
-                    <img src="Recurso.png" alt="Logo" onerror="this.src='https://placehold.co/40x40/4318ff/ffffff?text=SS'">
-                    <span>Inteligencia Analítica</span>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 relative z-30 flex flex-wrap gap-4 items-center">
+                <div class="flex items-center w-full md:w-auto flex-1">
+                    <i class="fa-regular fa-calendar text-brand-500 mr-3 hidden md:block"></i>
+                    <select id="selector-anio" class="select-olap w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-brand-500 focus:border-brand-500 block p-2.5 outline-none font-bold">
+                        <option value="ALL">Todos los Años</option>
+                    </select>
                 </div>
-                <button class="mobile-toggle" onclick="toggleMobileMenu()"><i class="bi bi-list"></i></button>
+                <div class="hidden md:block w-px h-8 bg-slate-200"></div>
+                <div class="flex items-center w-full md:w-auto flex-1">
+                    <i class="fa-solid fa-bookmark text-slate-400 mr-3 hidden md:block"></i>
+                    <select id="selector-curso-base" class="select-olap w-full bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl focus:ring-brand-500 focus:border-brand-500 block p-2.5 outline-none font-bold">
+                        <option value="ALL">Consolidado Global</option>
+                    </select>
+                </div>
+                <div class="hidden md:block w-px h-8 bg-slate-200 hidden" id="div-cohorte"></div>
+                <div class="flex items-center w-full md:w-auto flex-1 hidden" id="wrap-cohorte">
+                    <i class="fa-solid fa-tags text-emerald-500 mr-3 hidden md:block"></i>
+                    <select id="selector-cohorte" class="select-olap w-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm rounded-xl focus:ring-emerald-500 focus:border-emerald-500 block p-2.5 outline-none font-bold">
+                    </select>
+                </div>
             </div>
 
-            <section id="home_view" class="view-section active-view">
-                <div class="container-fluid px-3 px-md-4 py-4">
-                    <div class="home-header pt-2 pb-3">
-                        <img src="Recurso.png" alt="Logo Institucional" style="max-height: 85px; object-fit: contain; margin-bottom: 30px;" onerror="this.style.display='none'">
-                        <h1 class="home-title">Ecosistema Educativo en Salud</h1>
-                        <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
-                    </div>
+            <div id="filtros-cruzados-bar" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-6 items-center flex-wrap gap-3">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-2 w-full md:w-auto"><i class="fa-solid fa-filter text-brand-500 mr-1"></i> Filtros OLAP</div>
+                <select id="f-sexo" class="select-olap flex-1 min-w-[120px] bg-slate-50 border border-slate-200 text-slate-600 text-xs font-semibold rounded-lg p-2 outline-none transition-colors" onchange="aplicarFiltrosDebounced()"><option value="ALL">Sexo</option></select>
+                <select id="f-edad" class="select-olap flex-1 min-w-[120px] bg-slate-50 border border-slate-200 text-slate-600 text-xs font-semibold rounded-lg p-2 outline-none transition-colors" onchange="aplicarFiltrosDebounced()"><option value="ALL">Edad</option></select>
+                <select id="f-perfil" class="select-olap flex-1 min-w-[120px] bg-slate-50 border border-slate-200 text-slate-600 text-xs font-semibold rounded-lg p-2 outline-none transition-colors" onchange="aplicarFiltrosDebounced()"><option value="ALL">Perfil</option></select>
+                <select id="f-comuna" class="select-olap flex-1 min-w-[120px] bg-slate-50 border border-slate-200 text-slate-600 text-xs font-semibold rounded-lg p-2 outline-none transition-colors" onchange="aplicarFiltrosDebounced()"><option value="ALL">Comuna</option></select>
+                <button class="w-full md:w-auto mt-2 md:mt-0 px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-bold border border-red-100 hover:bg-red-100 transition-all flex items-center justify-center" onclick="limpiarFiltros()" title="Borrar filtros">
+                    <i class="fa-solid fa-circle-xmark mr-1.5"></i> Limpiar
+                </button>
+            </div>
 
-                    <!-- 4 Tarjetas de Bento con Datos Integrados -->
-                    <div class="row g-3 g-md-4 mb-5">
-                        <div class="col-12 col-md-6 col-xl-3">
-                            <div class="glass-card bento-kpi">
-                                <div class="kpi-icon-lg bg-indigo-soft"><i class="bi bi-journal-check"></i></div>
-                                <div>
-                                    <div class="kpi-val" id="bento-cursos">-</div>
-                                    <div class="kpi-lbl">Cursos Auditados</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-xl-3">
-                            <div class="glass-card bento-kpi">
-                                <div class="kpi-icon-lg bg-emerald-soft"><i class="bi bi-people"></i></div>
-                                <div>
-                                    <div class="kpi-val" id="bento-matriculas">-</div>
-                                    <div class="kpi-lbl">Matrículas Totales</div>
-                                    <div class="mt-2 badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 border border-success border-opacity-25" style="font-size: 0.75rem;">
-                                        <i class="bi bi-person-check-fill"></i> <span id="bento-unicos">-</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-xl-3">
-                            <div class="glass-card bento-kpi">
-                                <div class="kpi-icon-lg bg-amber-soft"><i class="bi bi-mortarboard"></i></div>
-                                <div>
-                                    <div class="kpi-val text-warning" id="bento-certificados">-</div>
-                                    <div class="kpi-lbl">Aprobados</div>
-                                    <div class="mt-2 badge bg-warning bg-opacity-10 text-warning rounded-pill px-2 py-1 border border-warning border-opacity-25" style="font-size: 0.75rem;">
-                                        <i class="bi bi-ui-radios"></i> <span id="bento-encuestas">-</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-xl-3">
-                            <div class="glass-card bento-kpi">
-                                <div class="kpi-icon-lg bg-rose-soft"><i class="bi bi-heart-pulse"></i></div>
-                                <div>
-                                    <div class="kpi-val text-rose" id="bento-chs">-</div>
-                                    <div class="kpi-lbl">Score CHS Institucional</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div id="panel-lobby-curso" class="hidden mb-8 min-h-[40vh]"></div>
 
-                    <h4 class="fw-bold mb-3 fs-5">Módulos del Sistema</h4>
-                    <div class="row g-3 g-md-4 pb-4">
-                        <div class="col-12 col-lg-4">
-                            <a href="#" class="hub-link" onclick="document.querySelectorAll('.nav-item-custom')[1].click()">
-                                <div class="glass-card hub-card" style="border-top-color: var(--primary);">
-                                    <div class="kpi-icon-lg bg-primary text-white"><i class="bi bi-bar-chart-fill"></i></div>
-                                    <h4>Dashboard Analítico</h4>
-                                    <p>Ingresa para filtrar por cohorte, analizar datos demográficos y cruzar encuestas de percepción.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <a href="tutor_estudiante.html" class="hub-link">
-                                <div class="glass-card hub-card" style="border-top-color: var(--success);">
-                                    <div class="kpi-icon-lg bg-success text-white"><i class="bi bi-robot"></i></div>
-                                    <h4>Tutor IA (Estudiante)</h4>
-                                    <p>Simulador Socrático para evaluar los conocimientos del personal y recomendar su ruta de estudio.</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-12 col-lg-4">
-                            <a href="admin_conocimiento.html" class="hub-link">
-                                <div class="glass-card hub-card" style="border-top-color: var(--danger);">
-                                    <div class="kpi-icon-lg bg-danger text-white"><i class="bi bi-shield-lock-fill"></i></div>
-                                    <h4>Configuración IA</h4>
-                                    <p>Acceso curador. Sube documentos normativos en PDF para entrenar nuevos cerebros JSON para el Tutor.</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+            <div id="contenedor-tabs" class="block">
+                
+                <div class="flex overflow-x-auto nav-tabs-container gap-2 border-b-2 border-slate-200 mb-6 pb-2">
+                    <button onclick="switchDashboardTab('panel-global', this)" class="dash-tab-btn px-4 py-2.5 rounded-t-lg text-sm font-bold bg-brand-500 text-white whitespace-nowrap transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie"></i> Demografía
+                    </button>
+                    <button onclick="switchDashboardTab('panel-moodle', this)" id="moodle-tab" class="dash-tab-btn px-4 py-2.5 rounded-t-lg text-sm font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-gauge-high"></i> Operativo 
+                        <i class="fa-solid fa-lock text-red-500 hidden ml-1 text-xs" id="lock-icon" title="Bloqueado por filtros"></i>
+                    </button>
+                    <button onclick="switchDashboardTab('panel-radar', this)" id="radar-tab" class="dash-tab-btn px-4 py-2.5 rounded-t-lg text-sm font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-star"></i> Calidad Percibida
+                    </button>
+                    <button onclick="switchDashboardTab('panel-comparador', this)" class="dash-tab-btn px-4 py-2.5 rounded-t-lg text-sm font-bold text-slate-500 bg-slate-50 hover:bg-slate-100 whitespace-nowrap transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-table-columns"></i> Laboratorio A/B
+                    </button>
                 </div>
-            </section>
 
-            <section id="dashboard_view" class="view-section">
-                <div class="container-fluid px-3 px-md-4 py-4">
+                <div id="tab-contents">
                     
-                    <div class="dashboard-top-bar">
-                        <div class="pill-selectors">
-                            <i class="bi bi-calendar3 text-primary d-none d-md-inline ms-2"></i>
-                            <select id="selector-anio" class="macro-select text-primary"><option value="ALL">Todos los Años</option></select>
-                            
-                            <div class="pill-divider d-none d-md-block"></div>
-                            
-                            <i class="bi bi-journal-bookmark-fill text-muted d-none d-md-inline"></i>
-                            <select id="selector-curso-base" class="macro-select"><option value="ALL">Consolidado Global</option></select>
-                            
-                            <div class="pill-divider d-none d-md-block" id="div-cohorte" style="display: none;"></div>
-                            
-                            <i class="bi bi-tags-fill text-success d-none d-md-inline" id="icon-cohorte" style="display: none;"></i>
-                            <select id="selector-cohorte" class="macro-select text-success" style="display: none;"></select>
-                        </div>
-                    </div>
-
-                    <div id="filtros-cruzados-bar" class="olap-container">
-                        <div class="olap-title"><i class="bi bi-funnel-fill text-primary"></i> Filtros</div>
-                        <select id="f-sexo" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Sexo</option></select>
-                        <select id="f-edad" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Edad</option></select>
-                        <select id="f-perfil" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Perfil</option></select>
-                        <select id="f-comuna" class="olap-chip" onchange="aplicarFiltrosDebounced()"><option value="ALL">Comuna</option></select>
-                        <button class="btn-limpiar ms-md-auto" onclick="limpiarFiltros()" title="Borrar filtros"><i class="bi bi-x-circle-fill"></i> Limpiar</button>
-                    </div>
-
-                    <div id="panel-lobby-curso" style="display: none; min-height: 40vh;" class="mb-4"></div>
-
-                    <div id="contenedor-tabs" style="display: block;">
+                    <div id="panel-global" class="dashboard-tab-panel block fade-in-up">
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="kpi-global-row"></div>
                         
-                        <div class="nav-tabs-clean" role="tablist">
-                            <button class="tab-clean active" id="global-tab" data-bs-toggle="tab" data-bs-target="#panel-global" type="button" role="tab"><i class="bi bi-pie-chart-fill"></i> Demografía</button>
-                            <button class="tab-clean" id="moodle-tab" data-bs-toggle="tab" data-bs-target="#panel-moodle" type="button" role="tab">
-                                <i class="bi bi-speedometer2"></i> Operativo <i class="bi bi-lock-fill text-danger ms-1 d-none" id="lock-icon" title="Bloqueado por filtros"></i>
-                            </button>
-                            <button class="tab-clean" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill"></i> Calidad Percibida</button>
-                            <button class="tab-clean" id="comparador-tab" data-bs-toggle="tab" data-bs-target="#panel-comparador" type="button" role="tab"><i class="bi bi-layout-three-columns"></i> Laboratorio A/B</button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
+                            <!-- 1. Tarjeta Sexo -->
+                            <div id="card-sexo" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col hover:border-pink-300 transition-colors relative group">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div><h3 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-venus-mars mr-2 text-pink-500"></i> Sexo Asignado</h3></div>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleExpand('card-sexo', 'chartSexo')" class="text-slate-400 hover:text-pink-600 bg-slate-50 hover:bg-pink-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-expand"></i></button>
+                                        <button onclick="descargarGrafico('chartSexo', 'Sexo')" class="text-slate-400 hover:text-pink-600 bg-slate-50 hover:bg-pink-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-download"></i></button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center flex-1 w-full gap-4 relative mt-2">
+                                    <div class="relative h-32 w-32 flex-shrink-0 flex items-center justify-center transition-all duration-300">
+                                        <canvas id="chartSexo" class="relative z-20"></canvas>
+                                        <div id="total-chartSexo" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10"></div>
+                                    </div>
+                                    <div id="legend-chartSexo" class="w-full flex flex-col gap-1.5 custom-scrollbar max-h-36 overflow-y-auto pr-1 transition-all duration-300 mt-2"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- 2. Tarjeta Curso de Vida (Edad) -->
+                            <div id="card-edad" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col hover:border-amber-300 transition-colors relative group">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div><h3 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-child-reaching mr-2 text-amber-500"></i> Curso de Vida</h3></div>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleExpand('card-edad', 'chartEdad')" class="text-slate-400 hover:text-amber-600 bg-slate-50 hover:bg-amber-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-expand"></i></button>
+                                        <button onclick="descargarGrafico('chartEdad', 'Edad')" class="text-slate-400 hover:text-amber-600 bg-slate-50 hover:bg-amber-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-download"></i></button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center flex-1 w-full gap-4 relative mt-2">
+                                    <div class="relative h-32 w-32 flex-shrink-0 flex items-center justify-center transition-all duration-300">
+                                        <canvas id="chartEdad" class="relative z-20"></canvas>
+                                        <div id="total-chartEdad" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10"></div>
+                                    </div>
+                                    <div id="legend-chartEdad" class="w-full flex flex-col gap-1.5 custom-scrollbar max-h-36 overflow-y-auto pr-1 transition-all duration-300 mt-2"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- 3. Tarjeta Perfil -->
+                            <div id="card-perfil" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col hover:border-brand-300 transition-colors relative group">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div><h3 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-user-doctor mr-2 text-brand-500"></i> Perfil Profesional</h3></div>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleExpand('card-perfil', 'chartPerfil')" class="text-slate-400 hover:text-brand-600 bg-slate-50 hover:bg-brand-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-expand"></i></button>
+                                        <button onclick="descargarGrafico('chartPerfil', 'Perfil')" class="text-slate-400 hover:text-brand-600 bg-slate-50 hover:bg-brand-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-download"></i></button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center flex-1 w-full gap-4 relative mt-2">
+                                    <div class="relative h-32 w-32 flex-shrink-0 flex items-center justify-center transition-all duration-300">
+                                        <canvas id="chartPerfil" class="relative z-20"></canvas>
+                                        <div id="total-chartPerfil" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10"></div>
+                                    </div>
+                                    <div id="legend-chartPerfil" class="w-full flex flex-col gap-1.5 custom-scrollbar max-h-36 overflow-y-auto pr-1 transition-all duration-300 mt-2"></div>
+                                </div>
+                            </div>
+
+                            <!-- 4. Tarjeta Escolaridad -->
+                            <div id="card-escolaridad" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col hover:border-emerald-300 transition-colors relative group">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div><h3 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-graduation-cap mr-2 text-emerald-500"></i> Escolaridad</h3></div>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleExpand('card-escolaridad', 'chartEscolaridad')" class="text-slate-400 hover:text-emerald-600 bg-slate-50 hover:bg-emerald-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-expand"></i></button>
+                                        <button onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')" class="text-slate-400 hover:text-emerald-600 bg-slate-50 hover:bg-emerald-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-download"></i></button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center flex-1 w-full gap-4 relative mt-2">
+                                    <div class="relative h-32 w-32 flex-shrink-0 flex items-center justify-center transition-all duration-300">
+                                        <canvas id="chartEscolaridad" class="relative z-20"></canvas>
+                                        <div id="total-chartEscolaridad" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10"></div>
+                                    </div>
+                                    <div id="legend-chartEscolaridad" class="w-full flex flex-col gap-1.5 custom-scrollbar max-h-36 overflow-y-auto pr-1 transition-all duration-300 mt-2"></div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="tab-content pb-4" id="myTabContent">
-                            
-                            <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
-                                <div class="row g-2 g-md-3 mb-4" id="kpi-global-row"></div>
-                                
-                                <div class="row g-3 mb-4">
-                                    <div class="col-12 col-md-6 col-xl-3" id="col-sexo"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Sexo</h6><button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartSexo"></canvas></div></div></div>
-                                    <div class="col-12 col-md-6 col-xl-3" id="col-edad"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6><button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Edad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartEdad"></canvas></div></div></div>
-                                    <div class="col-12 col-md-6 col-xl-3" id="col-perfil"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6><button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Perfil')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div></div></div>
-                                    <div class="col-12 col-md-6 col-xl-3" id="col-escolaridad"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Escolaridad</h6><button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div></div></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                            <div class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col relative group" id="col-mapa">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div><h3 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-map mr-2 text-slate-500"></i> Mapa de Calor Territorial</h3></div>
                                 </div>
-
-                                <div class="row g-3 mb-4">
-                                    <div class="col-12 col-lg-5 d-flex" id="col-mapa">
-                                        <div class="glass-card p-3 d-flex flex-column w-100">
-                                            <h6 class="mb-2 fw-bold fs-6">Mapa de Participación</h6>
-                                            <div id="map-container"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-7" id="col-comunas">
-                                        <div class="glass-card p-3">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <h6 class="mb-0 fw-bold fs-6">Distribución por Ubicación</h6>
-                                                <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Comunas')"><i class="bi bi-download"></i></button>
-                                            </div>
-                                            <div class="chart-wrapper" style="height: 350px; margin-top: 0;"><canvas id="chartComunas"></canvas></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div id="map-container" class="flex-1 border border-slate-200 overflow-hidden relative z-0 mt-2"></div>
                             </div>
-
-                            <div class="tab-pane fade" id="panel-moodle" role="tabpanel">
-                                <div class="row g-2 g-md-3 mb-4" id="kpi-moodle-row"></div>
-                                <div class="row g-3 mb-4" id="moodle-charts-wrapper">
-                                    <div class="col-12 col-md-8">
-                                        <div class="glass-card p-3">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h6 class="mb-0 fw-bold fs-6">Embudo de Capacitación</h6>
-                                                <button class="btn-download-img" onclick="descargarGrafico('chartMoodleBar', 'Operativo')"><i class="bi bi-download"></i></button>
-                                            </div>
-                                            <div class="chart-wrapper"><canvas id="chartMoodleBar"></canvas></div>
-                                        </div>
+                            <div class="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col hover:border-slate-300 transition-colors relative group" id="col-comunas">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div>
+                                        <h3 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-map-location-dot mr-2 text-slate-500"></i> Distribución de Comunas</h3>
                                     </div>
-                                    <div class="col-12 col-md-4">
-                                        <div class="glass-card p-4 text-center d-flex flex-column justify-content-center align-items-center">
-                                            <div class="kpi-mini-icon bg-indigo-soft mb-2"><i class="bi bi-stopwatch-fill"></i></div>
-                                            <h6 class="fw-bold fs-6 mb-3">Ritmo de Aprendizaje</h6>
-                                            <div class="kpi-mini-val text-primary" style="font-size: clamp(2.5rem, 5vw, 3rem);" id="tiempo-consumo-dias">0</div>
-                                            <div class="kpi-mini-lbl mt-2">Días Promedio para Finalizar</div>
-                                        </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleExpand('col-comunas', 'chartComunas')" class="text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-expand"></i></button>
+                                        <button onclick="descargarGrafico('chartComunas', 'Comunas')" class="text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-download"></i></button>
                                     </div>
                                 </div>
+                                <div class="chart-container relative w-full h-72 flex-1 mt-2 transition-all duration-300"><canvas id="chartComunas"></canvas></div>
                             </div>
-
-                            <div class="tab-pane fade" id="panel-radar" role="tabpanel">
-                                <div class="row g-3 mb-4">
-                                    <div class="col-12 col-lg-6">
-                                        <div class="glass-card p-3">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h6 class="mb-0 fw-bold fs-6" id="titulo-radar">Radar vs Benchmark</h6>
-                                                <button class="btn-download-img" onclick="descargarGrafico('chartRadar', 'Radar')"><i class="bi bi-download"></i></button>
-                                            </div>
-                                            <div class="radar-wrapper"><canvas id="chartRadar"></canvas></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <div class="glass-card p-3 p-md-4">
-                                            <h6 class="fw-bold fs-6 mb-3 text-primary" id="titulo-desglose">Desglose Detallado (0 - 5.0)</h6>
-                                            <div id="diagnostico-detalles" style="max-height: 330px; overflow-y: auto; padding-right: 10px;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
-                                <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente. (Desliza horizontalmente si estás en móvil).</div>
-                                
-                                <!-- Wrapper para permitir scroll horizontal nativo si son 4 columnas y no caben en tablet -->
-                                <div style="overflow-x: auto; padding-bottom: 10px;">
-                                    <div class="row g-3 mb-4 flex-nowrap flex-md-wrap" id="comparador-row" style="min-width: 900px;">
-                                        
-                                        <!-- COLUMNA ESTATICA 1 -->
-                                        <div class="col-10 col-md-6 col-xl-3">
-                                            <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                                                <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                                                    <select id="select-comp-1" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(1, this.value)">
-                                                        <option value="">+ Seleccionar Curso</option>
-                                                    </select>
-                                                </div>
-                                                <div id="comp-content-1" class="p-3 d-none flex-grow-1">
-                                                    <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-1">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-1">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-1">-</span></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-1">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-1">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-1">-</div></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-1">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-1">-</span></div>
-                                                </div>
-                                                <div id="comp-empty-1" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                                                    <p class="small">Elige una edición para analizar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- COLUMNA ESTATICA 2 -->
-                                        <div class="col-10 col-md-6 col-xl-3">
-                                            <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                                                <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                                                    <select id="select-comp-2" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(2, this.value)">
-                                                        <option value="">+ Seleccionar Curso</option>
-                                                    </select>
-                                                </div>
-                                                <div id="comp-content-2" class="p-3 d-none flex-grow-1">
-                                                    <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-2">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-2">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-2">-</span></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-2">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-2">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-2">-</div></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-2">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-2">-</span></div>
-                                                </div>
-                                                <div id="comp-empty-2" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                                                    <p class="small">Elige una edición para analizar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- COLUMNA ESTATICA 3 -->
-                                        <div class="col-10 col-md-6 col-xl-3">
-                                            <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                                                <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                                                    <select id="select-comp-3" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(3, this.value)">
-                                                        <option value="">+ Seleccionar Curso</option>
-                                                    </select>
-                                                </div>
-                                                <div id="comp-content-3" class="p-3 d-none flex-grow-1">
-                                                    <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-3">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-3">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-3">-</span></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-3">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-3">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-3">-</div></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-3">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-3">-</span></div>
-                                                </div>
-                                                <div id="comp-empty-3" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                                                    <p class="small">Elige una edición para analizar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- COLUMNA ESTATICA 4 -->
-                                        <div class="col-10 col-md-6 col-xl-3">
-                                            <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                                                <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                                                    <select id="select-comp-4" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(4, this.value)">
-                                                        <option value="">+ Seleccionar Curso</option>
-                                                    </select>
-                                                </div>
-                                                <div id="comp-content-4" class="p-3 d-none flex-grow-1">
-                                                    <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-4">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-4">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-4">-</span></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-4">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-4">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-4">-</div></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-4">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-4">-</span></div>
-                                                </div>
-                                                <div id="comp-empty-4" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                                                    <p class="small">Elige una edición para analizar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
-                </div>
-            </section>
-        </main>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                    <div id="panel-moodle" class="dashboard-tab-panel hidden fade-in-up">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6" id="kpi-moodle-row"></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="moodle-charts-wrapper">
+                            <div id="card-moodle" class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col hover:border-brand-300 transition-colors relative group">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div><h3 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-filter mr-2 text-brand-500"></i> Embudo de Capacitación</h3></div>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleExpand('card-moodle', 'chartMoodleBar')" class="text-slate-400 hover:text-brand-600 bg-slate-50 hover:bg-brand-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-expand"></i></button>
+                                        <button onclick="descargarGrafico('chartMoodleBar', 'Operativo')" class="text-slate-400 hover:text-brand-600 bg-slate-50 hover:bg-brand-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-download"></i></button>
+                                    </div>
+                                </div>
+                                <div class="chart-container relative h-64 w-full flex-1"><canvas id="chartMoodleBar"></canvas></div>
+                            </div>
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center text-center group card-hover-effect hover:border-emerald-300">
+                                <div class="h-16 w-16 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-3xl mb-4 border border-emerald-100 group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                </div>
+                                <h6 class="text-sm font-bold text-slate-800 mb-2">Ritmo de Aprendizaje</h6>
+                                <div class="text-6xl font-black text-emerald-500 leading-none" id="tiempo-consumo-dias">0</div>
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-3">Días Promedio para Finalizar</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="panel-radar" class="dashboard-tab-panel hidden fade-in-up">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div id="card-radar" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col hover:border-brand-300 transition-colors relative group">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div><h3 class="text-sm font-bold text-slate-800" id="titulo-radar"><i class="fa-solid fa-spider mr-2 text-brand-500"></i> Radar vs Benchmark</h3></div>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleExpand('card-radar', 'chartRadar')" class="text-slate-400 hover:text-brand-600 bg-slate-50 hover:bg-brand-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-expand"></i></button>
+                                        <button onclick="descargarGrafico('chartRadar', 'Radar')" class="text-slate-400 hover:text-brand-600 bg-slate-50 hover:bg-brand-50 h-7 w-7 rounded-lg flex items-center justify-center transition-all shadow-sm border border-slate-100"><i class="fa-solid fa-download"></i></button>
+                                    </div>
+                                </div>
+                                <div class="chart-container relative h-[360px] w-full flex justify-center flex-1"><canvas id="chartRadar"></canvas></div>
+                            </div>
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col">
+                                <h3 class="text-sm font-black text-brand-600 uppercase tracking-widest mb-4" id="titulo-desglose"><i class="fa-solid fa-star-half-stroke mr-2"></i> Desglose Detallado (0 - 5.0)</h3>
+                                <div id="diagnostico-detalles" class="overflow-y-auto max-h-[360px] pr-3 custom-scrollbar flex-1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="panel-comparador" class="dashboard-tab-panel hidden fade-in-up">
+                        <div class="mb-4 text-xs font-semibold text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-start gap-2">
+                            <i class="fa-solid fa-circle-info text-brand-500 mt-0.5"></i>
+                            Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente. Desliza horizontalmente en móviles.
+                        </div>
+                        
+                        <div class="overflow-x-auto pb-4 custom-scrollbar">
+                            <div class="grid grid-cols-4 gap-4 min-w-[1000px]" id="comparador-row">
+                                <!-- Columna 1 -->
+                                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                                    <div class="p-3 bg-brand-50 border-b border-brand-100">
+                                        <select id="select-comp-1" class="w-full bg-white border border-brand-200 text-brand-700 text-xs font-bold rounded-lg p-2 outline-none cursor-pointer hover:border-brand-400 transition-colors" onchange="actualizarComparador(1, this.value)">
+                                            <option value="">+ Seleccionar Curso</option>
+                                        </select>
+                                    </div>
+                                    <div id="comp-content-1" class="p-4 hidden flex-col flex-1"></div>
+                                    <div id="comp-empty-1" class="p-6 text-center text-slate-400 flex flex-col justify-center items-center flex-1">
+                                        <i class="fa-solid fa-table-columns text-4xl mb-3 opacity-30"></i>
+                                        <p class="text-xs font-medium">Elige una edición para analizar.</p>
+                                    </div>
+                                </div>
+                                <!-- Columna 2 -->
+                                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                                    <div class="p-3 bg-brand-50 border-b border-brand-100">
+                                        <select id="select-comp-2" class="w-full bg-white border border-brand-200 text-brand-700 text-xs font-bold rounded-lg p-2 outline-none cursor-pointer hover:border-brand-400 transition-colors" onchange="actualizarComparador(2, this.value)">
+                                            <option value="">+ Seleccionar Curso</option>
+                                        </select>
+                                    </div>
+                                    <div id="comp-content-2" class="p-4 hidden flex-col flex-1"></div>
+                                    <div id="comp-empty-2" class="p-6 text-center text-slate-400 flex flex-col justify-center items-center flex-1">
+                                        <i class="fa-solid fa-table-columns text-4xl mb-3 opacity-30"></i>
+                                        <p class="text-xs font-medium">Elige una edición para analizar.</p>
+                                    </div>
+                                </div>
+                                <!-- Columna 3 -->
+                                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                                    <div class="p-3 bg-brand-50 border-b border-brand-100">
+                                        <select id="select-comp-3" class="w-full bg-white border border-brand-200 text-brand-700 text-xs font-bold rounded-lg p-2 outline-none cursor-pointer hover:border-brand-400 transition-colors" onchange="actualizarComparador(3, this.value)">
+                                            <option value="">+ Seleccionar Curso</option>
+                                        </select>
+                                    </div>
+                                    <div id="comp-content-3" class="p-4 hidden flex-col flex-1"></div>
+                                    <div id="comp-empty-3" class="p-6 text-center text-slate-400 flex flex-col justify-center items-center flex-1">
+                                        <i class="fa-solid fa-table-columns text-4xl mb-3 opacity-30"></i>
+                                        <p class="text-xs font-medium">Elige una edición para analizar.</p>
+                                    </div>
+                                </div>
+                                <!-- Columna 4 -->
+                                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 flex flex-col overflow-hidden">
+                                    <div class="p-3 bg-brand-50 border-b border-brand-100">
+                                        <select id="select-comp-4" class="w-full bg-white border border-brand-200 text-brand-700 text-xs font-bold rounded-lg p-2 outline-none cursor-pointer hover:border-brand-400 transition-colors" onchange="actualizarComparador(4, this.value)">
+                                            <option value="">+ Seleccionar Curso</option>
+                                        </select>
+                                    </div>
+                                    <div id="comp-content-4" class="p-4 hidden flex-col flex-1"></div>
+                                    <div id="comp-empty-4" class="p-6 text-center text-slate-400 flex flex-col justify-center items-center flex-1">
+                                        <i class="fa-solid fa-table-columns text-4xl mb-3 opacity-30"></i>
+                                        <p class="text-xs font-medium">Elige una edición para analizar.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
     <script>
+        function switchView(viewId, element) {
+            document.querySelectorAll('.view-section').forEach(el => { el.classList.remove('block'); el.classList.add('hidden'); });
+            document.getElementById(viewId).classList.remove('hidden'); document.getElementById(viewId).classList.add('block');
+            document.querySelectorAll('.nav-main-btn').forEach(el => { el.classList.remove('bg-brand-500', 'text-white'); el.classList.add('text-slate-500', 'bg-slate-50'); });
+            if(element) { element.classList.remove('text-slate-500', 'bg-slate-50'); element.classList.add('bg-brand-500', 'text-white'); }
+            if(viewId === 'dashboard_view') { setTimeout(() => { if(mapInstance) mapInstance.invalidateSize(); for(let id in chartInstances) { if(chartInstances[id]) chartInstances[id].resize(); } }, 100); }
+        }
+
+        function switchDashboardTab(tabId, btnElement) {
+            if(btnElement.classList.contains('tab-locked')) return;
+            document.querySelectorAll('.dashboard-tab-panel').forEach(el => { el.classList.remove('block'); el.classList.add('hidden'); });
+            document.getElementById(tabId).classList.remove('hidden'); document.getElementById(tabId).classList.add('block');
+            document.querySelectorAll('.dash-tab-btn').forEach(btn => { btn.classList.remove('bg-brand-500', 'text-white'); btn.classList.add('text-slate-500', 'bg-slate-50'); });
+            btnElement.classList.remove('text-slate-500', 'bg-slate-50'); btnElement.classList.add('bg-brand-500', 'text-white');
+            for (let id in chartInstances) { if (chartInstances[id]) chartInstances[id].resize(); }
+            if (tabId === 'panel-global' && mapInstance) { setTimeout(() => mapInstance.invalidateSize(), 50); }
+        }
+
         let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let datosFiltradosActuales = null; 
         let chartInstances = {}; let promediosGlobalesPreguntas = {}; let mapInstance = null; let geoJsonLayer = null; 
         let geoJsonDataRaw = null; let añosDisponibles = new Set(); let añoActual = "ALL"; let filterDebounceTimer = null;
@@ -638,55 +470,51 @@
             "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": "Satisfacción (eNPS)" 
         };
 
-        const mapeoColores = {
-            "Femenino": "#e11d48", "Masculino": "#0ea5e9", "N/A": "#94a3b8", "Otro": "#8b5cf6",
-            "Primera infancia": "#f43f5e", "Infancia": "#f97316", "Adolescencia": "#eab308", "Juventud": "#84cc16", "Adultez": "#06b6d4", "Vejez": "#6366f1",
-            "Médico": "#05cd99", "Enfermera": "#4318ff", "Auxiliar": "#ffb547", "Estudiante": "#ee5d50", "Área de la salud": "#05cd99",
-            "Profesional": "#3b82f6", "Técnico": "#10b981", "Tecnólogo": "#14b8a6", "Especialización": "#8b5cf6", "Maestría": "#6366f1", "Postgrado": "#8b5cf6", "Pregrado": "#3b82f6", "Bachiller": "#f59e0b", "Ninguna": "#94a3b8"
+        // Iconos estandarizados estilo ESE (con colores de Tailwind aproximados)
+        const iconsSexo = {
+            'Femenino': { icon: 'fa-venus', color: '#ec4899' }, // pink-500
+            'Masculino': { icon: 'fa-mars', color: '#3b82f6' }, // blue-500
+            'Intersexual': { icon: 'fa-venus-mars', color: '#8b5cf6' }, // violet-500
+            'Otro': { icon: 'fa-genderless', color: '#a855f7' }, // purple-500
+            'N/A': { icon: 'fa-circle-question', color: '#94a3b8' } // slate-400
         };
-        const coloresRespaldo = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6', '#f43f5e', '#f97316'];
 
-        function switchView(viewId, element) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
-            document.getElementById(viewId).classList.add('active-view');
-            document.querySelectorAll('.nav-item-custom').forEach(el => el.classList.remove('active'));
-            if(element) element.classList.add('active');
-            
-            if(viewId === 'dashboard_view') {
-                setTimeout(() => {
-                    if(mapInstance) mapInstance.invalidateSize();
-                    for(let id in chartInstances) { if(chartInstances[id]) chartInstances[id].resize(); }
-                }, 100);
-            }
-        }
+        const iconsCurso = {
+            'Primera infancia': { icon: 'fa-baby', color: '#f87171' }, // red-400
+            'Infancia': { icon: 'fa-child', color: '#fb923c' }, // orange-400
+            'Adolescencia': { icon: 'fa-person-skating', color: '#fbbf24' }, // amber-400
+            'Juventud': { icon: 'fa-user-graduate', color: '#34d399' }, // emerald-400
+            'Adultez': { icon: 'fa-user-tie', color: '#38bdf8' }, // sky-400
+            'Vejez': { icon: 'fa-person-cane', color: '#a78bfa' }, // violet-400
+            'N/A': { icon: 'fa-circle-question', color: '#94a3b8' }
+        };
 
-        function toggleMobileMenu() { 
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('mobile-open'); 
-            if(sidebar.classList.contains('mobile-open')){
-                document.body.classList.add('menu-open');
-            } else {
-                document.body.classList.remove('menu-open');
-            }
-        }
-        
-        // Cerrar menu si tocas fuera de el
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.mobile-toggle');
-            if (sidebar.classList.contains('mobile-open') && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
-                toggleMobileMenu();
-            }
-        });
+        const iconsPerfil = {
+            'Médico': { icon: 'fa-user-doctor', color: '#10b981' }, // emerald-500
+            'Enfermera': { icon: 'fa-user-nurse', color: '#6366f1' }, // indigo-500
+            'Auxiliar': { icon: 'fa-briefcase-medical', color: '#f59e0b' }, // amber-500
+            'Estudiante': { icon: 'fa-book-open-reader', color: '#ef4444' }, // red-500
+            'Área de la salud': { icon: 'fa-staff-snake', color: '#0ea5e9' }, // sky-500
+            'N/A': { icon: 'fa-circle-question', color: '#94a3b8' }
+        };
 
-        function cambiarTema(tema) {
-            document.documentElement.setAttribute('data-theme', tema); localStorage.setItem('temaDashboard', tema);
-            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll(`.theme-btn[data-theme-btn="${tema}"]`).forEach(b => b.classList.add('active'));
-            Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main');
-            for (let id in chartInstances) { if (chartInstances[id]) { chartInstances[id].options.color = Chart.defaults.color; chartInstances[id].update('none'); } }
-            if (mapInstance && geoJsonDataRaw) setTimeout(() => mapInstance.invalidateSize(), 100);
-        }
+        const iconsEscolaridad = {
+            'Profesional': { icon: 'fa-user-tie', color: '#3b82f6' }, // blue-500
+            'Técnico': { icon: 'fa-wrench', color: '#10b981' }, // emerald-500
+            'Tecnólogo': { icon: 'fa-microchip', color: '#14b8a6' }, // teal-500
+            'Especialización': { icon: 'fa-award', color: '#8b5cf6' }, // violet-500
+            'Maestría': { icon: 'fa-graduation-cap', color: '#6366f1' }, // indigo-500
+            'Postgrado': { icon: 'fa-user-graduate', color: '#a855f7' }, // purple-500
+            'Pregrado': { icon: 'fa-book', color: '#0ea5e9' }, // sky-500
+            'Bachiller': { icon: 'fa-school', color: '#f59e0b' }, // amber-500
+            'Ninguna': { icon: 'fa-xmark', color: '#ef4444' }, // red-500
+            'N/A': { icon: 'fa-circle-question', color: '#94a3b8' }
+        };
+        const defaultColorPalette = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#0ea5e9', '#8b5cf6', '#14b8a6', '#f43f5e', '#f97316'];
+
+        Chart.defaults.font.family = 'Inter'; Chart.defaults.color = '#64748b'; Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)'; Chart.defaults.plugins.tooltip.titleFont = { size: 12, family: 'Inter', weight: 'bold' };
+
+        const fmt = (num) => new Intl.NumberFormat('es-CO').format(Math.round(num));
 
         window.descargarGrafico = function(canvasId, nombre) {
             const canvasOriginal = document.getElementById(canvasId);
@@ -694,42 +522,269 @@
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = canvasOriginal.width; tempCanvas.height = canvasOriginal.height;
             const ctx = tempCanvas.getContext('2d');
-            
-            const temaActual = document.documentElement.getAttribute('data-theme') || 'light';
-            let bgColor = '#ffffff';
-            if(temaActual === 'dark') bgColor = '#0b1437';
-            else if(temaActual === 'rose') bgColor = '#fff1f2';
-            else if(temaActual === 'amber') bgColor = '#fffbeb';
-            else bgColor = '#f4f7fe';
-            
-            ctx.fillStyle = bgColor; ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
             ctx.drawImage(canvasOriginal, 0, 0);
-            
             const link = document.createElement('a');
             let sufijo = cursoActual ? `_${cursoActual.Nombre_Curso.substring(0,10)}` : '_Global';
-            link.download = `${nombre}${sufijo}.png`;
-            link.href = tempCanvas.toDataURL('image/png'); link.click();
+            link.download = `${nombre}${sufijo}.png`; link.href = tempCanvas.toDataURL('image/png'); link.click();
         };
 
+        // --- STREAMING_CHUNK:Controlador de Pantalla Completa (Fullscreen)... ---
+        window.toggleExpand = function(cardId, chartKey) {
+            const card = document.getElementById(cardId);
+            const btnIcon = card.querySelector('.fa-expand, .fa-compress');
+            const isExpanded = card.classList.contains('card-is-expanded');
+
+            let backdrop = document.getElementById('chart-backdrop');
+            if (!backdrop) {
+                backdrop = document.createElement('div'); backdrop.id = 'chart-backdrop';
+                backdrop.className = 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0 cursor-pointer';
+                document.body.appendChild(backdrop);
+                backdrop.addEventListener('click', () => { const exp = document.querySelector('.card-is-expanded'); if(exp) toggleExpand(exp.id, exp.id.replace('card-','chart').replace('col-','chart')); });
+            }
+
+            const canvasContainer = card.querySelector('.relative.flex-shrink-0');
+            const legendContainer = card.querySelector('.custom-scrollbar');
+            const barContainer = card.querySelector('.chart-container');
+            const radarContainer = card.querySelector('.radar-wrapper');
+            const totalTitle = card.querySelector('[id^="total-"] span:first-child');
+            const totalNumber = card.querySelector('[id^="total-"] span:last-child');
+
+            if (!isExpanded) {
+                backdrop.classList.remove('hidden'); setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+                card.classList.add('card-is-expanded', 'fixed', 'top-4', 'bottom-4', 'left-4', 'right-4', 'md:top-10', 'md:bottom-10', 'md:left-10', 'md:right-10', 'z-50', 'shadow-2xl');
+                card.classList.remove('relative', 'group');
+                if(btnIcon) { btnIcon.classList.remove('fa-expand'); btnIcon.classList.add('fa-compress'); }
+                
+                if (canvasContainer && legendContainer) {
+                    canvasContainer.classList.remove('h-32', 'w-32'); canvasContainer.classList.add('w-1/2', 'h-full', 'min-h-[250px]'); 
+                    legendContainer.classList.remove('max-h-36'); legendContainer.classList.add('max-h-full');
+                    if (totalNumber) { totalNumber.classList.remove('text-[15px]'); totalNumber.classList.add('text-4xl', 'md:text-6xl'); }
+                    if (totalTitle) { totalTitle.classList.remove('text-[9px]'); totalTitle.classList.add('text-sm', 'md:text-lg'); }
+                }
+                if (barContainer) { barContainer.classList.remove('h-64', 'h-[360px]', 'h-72'); barContainer.classList.add('h-full', 'min-h-[300px]'); }
+                if (radarContainer) { radarContainer.classList.remove('h-[360px]'); radarContainer.classList.add('h-full', 'min-h-[300px]'); }
+                setTimeout(() => { if (chartInstances[chartKey]) chartInstances[chartKey].resize(); }, 50);
+            } else {
+                backdrop.classList.add('opacity-0'); setTimeout(() => backdrop.classList.add('hidden'), 300);
+                card.classList.remove('card-is-expanded', 'fixed', 'top-4', 'bottom-4', 'left-4', 'right-4', 'md:top-10', 'md:bottom-10', 'md:left-10', 'md:right-10', 'z-50', 'shadow-2xl');
+                card.classList.add('relative', 'group');
+                if(btnIcon) { btnIcon.classList.remove('fa-compress'); btnIcon.classList.add('fa-expand'); }
+                
+                if (canvasContainer && legendContainer) {
+                    canvasContainer.classList.add('h-32', 'w-32'); canvasContainer.classList.remove('w-1/2', 'h-full', 'min-h-[250px]');
+                    legendContainer.classList.add('max-h-36'); legendContainer.classList.remove('max-h-full');
+                    if (totalNumber) { totalNumber.classList.add('text-[15px]'); totalNumber.classList.remove('text-4xl', 'md:text-6xl'); }
+                    if (totalTitle) { totalTitle.classList.add('text-[9px]'); totalTitle.classList.remove('text-sm', 'md:text-lg'); }
+                }
+                if (barContainer) {
+                    if(cardId==='card-moodle') barContainer.classList.add('h-64'); else if(cardId==='col-comunas') barContainer.classList.add('h-72'); else barContainer.classList.add('h-[360px]');
+                    barContainer.classList.remove('h-full', 'min-h-[300px]');
+                }
+                if (radarContainer) { radarContainer.classList.add('h-[360px]'); radarContainer.classList.remove('h-full', 'min-h-[300px]'); }
+                
+                if (chartInstances[chartKey]) {
+                    const canvasEl = chartInstances[chartKey].canvas; canvasEl.style.display = 'none'; 
+                    setTimeout(() => { canvasEl.style.display = 'block'; canvasEl.style.width = '100%'; canvasEl.style.height = '100%'; chartInstances[chartKey].resize(); }, 20);
+                    setTimeout(() => { if (chartInstances[chartKey]) chartInstances[chartKey].resize(); }, 350); 
+                }
+            }
+        }
+
+        function inicializarMapa() { 
+            if (mapInstance) return; 
+            mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); 
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri', maxZoom: 16 }).addTo(mapInstance); 
+        }
+
+        function getColorMapa(v, max) { 
+            if(v===0) return 'transparent'; let c = ['#e0e7ff', '#c7d2fe', '#818cf8', '#6366f1', '#4f46e5'];
+            if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; 
+        }
+
+        function dibujarMapaCoropletico(dataComunas) { 
+            if (!mapInstance || !geoJsonDataRaw) return; 
+            let mapNorm = {}; let maxP = 0; 
+            for (let n in dataComunas) { 
+                let id = String(n||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(n).trim() : String(parseInt(id,10)); 
+                mapNorm[id] = (mapNorm[id]||0) + (dataComunas[n]||0); if(mapNorm[id] > maxP && !isNaN(id)) maxP = mapNorm[id]; 
+            } 
+            if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
+            geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
+                style: (f) => { 
+                    let propComuna = f.properties.comuna || f.properties.COMUNA || f.properties.nombre || f.properties.id || "N/A";
+                    let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
+                    let p = mapNorm[id]||0; return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p>0?0.85:0.1 }; 
+                },
+                onEachFeature: (feature, layer) => {
+                    let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
+                    let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
+                    let valor = mapNorm[id]||0; let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
+                    layer.bindTooltip(`<div class="font-sans"><strong>${nombreDisplay}</strong><br>Participantes: ${valor}</div>`, {sticky: true});
+                    layer.on({ mouseover: (e) => { let l = e.target; l.setStyle({ weight: 3, color: '#1e293b', fillOpacity: 0.95 }); if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) { l.bringToFront(); } }, mouseout: (e) => { geoJsonLayer.resetStyle(e.target); } });
+                }
+            }).addTo(mapInstance); 
+            setTimeout(() => mapInstance.invalidateSize(), 200);
+        }
+
+        // --- STREAMING_CHUNK:Lógica Estilo ESE para Donas con Totales e Iconos... ---
+        function dibujarGraficoDona(chartKey, canvasId, legendId, dataObj, iconConfig) { 
+            const activeEntries = Object.entries(dataObj).filter(([k, v]) => v > 0);
+            const labels = activeEntries.map(e => e[0]);
+            const data = activeEntries.map(e => Math.round(e[1]));
+            
+            const bgColors = labels.map((l, i) => {
+                // Check if label exists in iconConfig precisely or case-insensitive
+                let matchedKey = Object.keys(iconConfig).find(k => k.toLowerCase() === l.toLowerCase());
+                if (matchedKey && iconConfig[matchedKey]) return iconConfig[matchedKey].color;
+                return defaultColorPalette[i % defaultColorPalette.length];
+            });
+
+            const totalSuma = data.reduce((a,b)=>a+b, 0);
+
+            if (chartInstances[chartKey]) { chartInstances[chartKey].destroy(); chartInstances[chartKey] = null; } 
+
+            const totalContainer = document.getElementById(`total-${canvasId}`);
+            const legendContainer = document.getElementById(legendId);
+
+            if (activeEntries.length === 0 || totalSuma === 0) {
+                if (totalContainer) totalContainer.innerHTML = '';
+                if (legendContainer) legendContainer.innerHTML = '<p class="text-xs text-slate-400 text-center w-full mt-4">Sin datos</p>';
+                return;
+            }
+
+            chartInstances[chartKey] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
+                type: 'doughnut', 
+                data: { labels: labels, datasets: [{ data: data, backgroundColor: bgColors, borderWidth: 2, borderColor: '#fff' }] }, 
+                options: { 
+                    responsive: true, maintainAspectRatio: false, cutout: '70%', 
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => ` ${c.label}: ${fmt(c.raw)}` } } }, animation: false 
+                } 
+            }); 
+
+            if (totalContainer) {
+                totalContainer.innerHTML = `<span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none">Total</span><span class="text-[15px] font-black text-slate-700 mt-1 leading-none">${fmt(totalSuma)}</span>`;
+            }
+
+            if (legendContainer) {
+                legendContainer.innerHTML = '';
+                // Ordenar leyenda por valor
+                activeEntries.sort((a,b)=>b[1]-a[1]).forEach((entry) => {
+                    const label = entry[0];
+                    const val = Math.round(entry[1]);
+                    
+                    let matchedKey = Object.keys(iconConfig).find(k => k.toLowerCase() === label.toLowerCase());
+                    const conf = matchedKey ? iconConfig[matchedKey] : { icon: 'fa-circle-dot', color: bgColors[labels.indexOf(label)] };
+                    
+                    const pct = (val / totalSuma * 100).toFixed(1);
+
+                    const item = document.createElement('div');
+                    item.className = 'flex items-center p-1.5 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200 w-full';
+                    item.innerHTML = `
+                        <div class="h-6 w-6 rounded-full text-white mr-2 shadow-sm flex-shrink-0 flex items-center justify-center" style="background-color: ${conf.color};">
+                            <i class="fa-solid ${conf.icon} text-[10px]"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[10px] font-bold text-slate-600 uppercase leading-none mb-1 truncate" title="${label}">${label}</p>
+                            <div class="flex items-end justify-between">
+                                <span class="text-xs font-extrabold text-slate-900 leading-none">${fmt(val)}</span>
+                                <span class="text-[9px] font-bold text-slate-400 leading-none">${pct}%</span>
+                            </div>
+                        </div>
+                    `;
+                    legendContainer.appendChild(item);
+                });
+            }
+        }
+
+        function dibujarGraficoComunas(canvasId, dataObject) { 
+            let ag = {}; for (let k in dataObject) { let id = String(k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?String(k).trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
+            let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
+            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); } 
+            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#6366f1', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: {display:false} }, y: { grid:{display:false}, ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false } }); }
+        }
+
+        function dibujarBarraMoodle(canvasId, c) { 
+            let d = [c['Tasa_Finalizacion_%']||0, c['Tasa_Abandono_%']||0, c['Tasa_Inactividad_%']||0];
+            if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data=[d[0]]; chartInstances[canvasId].data.datasets[1].data=[d[1]]; chartInstances[canvasId].data.datasets[2].data=[d[2]]; chartInstances[canvasId].update('none'); } 
+            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#10b981', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#f59e0b' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ef4444', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: false } }); }
+        }
+
+        function dibujarRadar(pC, isG = false) { 
+            const lbl = Object.keys(pC).map(q => mapeoPreguntas[q] || "Pregunta"); let d1 = Object.values(pC); let d2 = Object.keys(pC).map(q => promediosGlobalesPreguntas[q] || 0);
+            if (chartInstances['chartRadar']) { chartInstances['chartRadar'].data.labels = lbl; chartInstances['chartRadar'].data.datasets[0].data = d1; chartInstances['chartRadar'].data.datasets[0].label = isG ? 'Promedio' : 'Cohorte'; if(!isG) { if(!chartInstances['chartRadar'].data.datasets[1]) chartInstances['chartRadar'].data.datasets.push({ label: 'Benchmark', backgroundColor: 'transparent', borderColor: '#94a3b8', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'].data.datasets[1].data = d2; } else if (chartInstances['chartRadar'].data.datasets.length > 1) { chartInstances['chartRadar'].data.datasets.pop(); } chartInstances['chartRadar'].update('none'); } 
+            else { let arr = [{ label: isG ? 'Promedio' : 'Cohorte', data: d1, backgroundColor: 'rgba(99, 102, 241, 0.15)', borderColor: '#4f46e5', pointBackgroundColor: '#4f46e5', borderWidth: 2, pointRadius: 3 }]; if (!isG) arr.push({ label: 'Benchmark', data: d2, backgroundColor: 'transparent', borderColor: '#94a3b8', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: lbl, datasets: arr }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 9, family: 'Inter', weight: '600' } } } }, animation: false } }); }
+        }
+
+        function getTailwindColor(c) { const map = {'primary':'blue-600', 'success':'emerald-600', 'warning':'amber-500', 'danger':'rose-600', 'info':'sky-500'}; return map[c] || 'slate-600'; }
+        function getTailwindBgSoft(c) { const map = {'primary':'bg-blue-50 text-blue-600 border-blue-100', 'success':'bg-emerald-50 text-emerald-600 border-emerald-100', 'warning':'bg-amber-50 text-amber-600 border-amber-100', 'danger':'bg-rose-50 text-rose-600 border-rose-100', 'info':'bg-sky-50 text-sky-600 border-sky-100'}; return map[c] || 'bg-slate-50 text-slate-600'; }
+
+        // Tarjetas KPI Bento adaptadas a Tailwind (Layout igual a ESE)
+        function crearTarjetaKPI(l, v, pct = null, i = "fa-chart-simple", c="primary") { 
+            let twColor = getTailwindColor(c);
+            let twBg = getTailwindBgSoft(c);
+            let bp = pct ? `<span class="mb-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${twBg}">${pct}</span>` : ''; 
+            return `
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 relative overflow-hidden group col-span-1 card-hover-effect">
+                <div class="absolute top-0 right-0 p-5 opacity-[0.04] group-hover:opacity-10 transition-opacity z-0"><i class="fa-solid ${i} text-6xl text-${twColor.replace('text-', '')}"></i></div>
+                <div class="flex justify-between items-start mb-2 z-10 relative">
+                    <div class="h-10 w-10 rounded-xl ${twBg} flex items-center justify-center text-lg"><i class="fa-solid ${i}"></i></div>
+                </div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 z-10 relative mt-3">${l}</p>
+                <div class="flex items-end gap-2 z-10 relative">
+                    <p class="text-3xl font-black text-slate-800 leading-none">${v}</p>
+                    ${bp}
+                </div>
+            </div>`; 
+        }
+
+        function generarBarrasCalidad(d) { 
+            let h = ''; 
+            for (let q in d) { 
+                let v = parseFloat(d[q]) || 0; let c = v >= 4.5 ? 'emerald-500' : (v >= 4.0 ? 'sky-500' : 'rose-500'); 
+                h += `<div class="mb-3"><div class="flex justify-between items-end text-[11px] mb-1 font-semibold text-slate-600"><span class="truncate pr-2">${q}</span><span class="font-black text-${c}">${v.toFixed(1)}</span></div><div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-${c} rounded-full" style="width: ${(v/5)*100}%"></div></div></div>`; 
+            } return h; 
+        }
+
+        // Lógica de Filtros (Sin Bootstrap)
+        function agruparCursos() { const sA = document.getElementById('selector-anio'); const sB = document.getElementById('selector-curso-base'); dashboardData.cursos.forEach(c => { let m = (c.Edicion||"").match(/\b(20\d{2})\b/); if(m) añosDisponibles.add(m[1]); const b = c.Curso_Base || c.Nombre_Curso; if (!cursosPorBase[b]) cursosPorBase[b] = []; cursosPorBase[b].push(c); }); Array.from(añosDisponibles).sort().reverse().forEach(a => sA.appendChild(new Option(a, a))); Object.keys(cursosPorBase).sort().forEach(b => sB.appendChild(new Option(b, b))); }
+        function manejarCambioAnio() { añoActual = this.value; const b = document.getElementById('selector-curso-base').value; if (b === "ALL") actualizarPantallaGlobal(); else document.getElementById('selector-curso-base').dispatchEvent(new Event('change')); }
+        function manejarCambioBase() { 
+            const s = this.value; const sC = document.getElementById('selector-cohorte'); const dc = document.getElementById('div-cohorte'); const wrap = document.getElementById('wrap-cohorte'); const lob = document.getElementById('panel-lobby-curso'); const tab = document.getElementById('contenedor-tabs'); 
+            if (s === "ALL") { wrap.classList.add('hidden'); dc.classList.add('hidden'); cursoActual=null; lob.classList.add('hidden'); tab.classList.remove('hidden'); actualizarPantallaGlobal(); } 
+            else { 
+                let cohs = cursosPorBase[s]; if(añoActual!=="ALL") cohs = cohs.filter(c => (c.Edicion||"").includes(añoActual)); cohs = cohs.sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
+                sC.innerHTML = '<option value="">⬅ Seleccione Edición</option>'; cohs.forEach(c => sC.appendChild(new Option(c.Edicion, c.Nombre_Curso))); 
+                wrap.classList.remove('hidden'); dc.classList.remove('hidden'); sC.value=""; tab.classList.add('hidden'); lob.classList.remove('hidden'); document.getElementById('filtros-cruzados-bar').classList.add('hidden');
+                let hL = `<div class="mb-4 text-start"><h5 class="font-black text-xl text-brand-600">${s}</h5><p class="text-slate-500 text-xs font-semibold uppercase tracking-widest mt-1">Seleccione una edición para analizar</p></div><div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">`; 
+                if(cohs.length===0) hL += `<div class="col-span-full text-slate-400 py-6 text-center font-bold text-sm border-2 border-dashed border-slate-200 rounded-xl"><i class="fa-solid fa-folder-open text-3xl mb-2"></i><br>No hay cohortes este año.</div>`; 
+                else cohs.forEach(c => { hL += `<div class="bg-white rounded-xl shadow-sm border border-slate-200 hover:border-brand-300 p-4 cursor-pointer card-hover-effect flex items-center gap-4" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="h-10 w-10 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center text-xl flex-shrink-0"><i class="fa-solid fa-graduation-cap"></i></div><div><h6 class="font-black text-slate-800 leading-tight">${c.Edicion}</h6><p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5">${c.Total_Inscritos} Estudiantes</p></div></div>`; }); 
+                lob.innerHTML = hL + `</div>`; 
+            } 
+        }
+
+        window.seleccionarCohorteDesdeLobby = function(n) { document.getElementById('selector-cohorte').value = n; document.getElementById('panel-lobby-curso').classList.add('hidden'); document.getElementById('contenedor-tabs').classList.remove('hidden'); cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === n); actualizarPantallaCurso(); };
+        function manejarCambioCohorte() { if (!this.value) { document.getElementById('panel-lobby-curso').classList.remove('hidden'); document.getElementById('contenedor-tabs').classList.add('hidden'); return; } document.getElementById('panel-lobby-curso').classList.add('hidden'); document.getElementById('contenedor-tabs').classList.remove('hidden'); cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); actualizarPantallaCurso(); }
+
         function cargarFiltrosOLAP() {
-            if(!cursoActual || !cursoActual.Registros_Crudos || cursoActual.Registros_Crudos.length === 0) { document.getElementById('filtros-cruzados-bar').style.display = 'none'; return; }
-            document.getElementById('filtros-cruzados-bar').style.display = 'flex';
+            const bar = document.getElementById('filtros-cruzados-bar');
+            if(!cursoActual || !cursoActual.Registros_Crudos || cursoActual.Registros_Crudos.length === 0) { bar.classList.remove('flex'); bar.classList.add('hidden'); return; }
+            bar.classList.remove('hidden'); bar.classList.add('flex');
             const fSexo = new Set(), fEdad = new Set(), fPerf = new Set(), fCom = new Set();
             cursoActual.Registros_Crudos.forEach(r => { fSexo.add(r['Sexo']); fEdad.add(r['Curso de vida']); fPerf.add(r['Perfil']); fCom.add(r['Comuna_Unificada']); });
-            const setOpts = (id, set, lbl) => { const el = document.getElementById(id); el.innerHTML = `<option value="ALL">${lbl}</option>`; Array.from(set).sort().forEach(v => { if(v && v!=="N/A") el.appendChild(new Option(v, v)); }); el.classList.remove('active-chip'); };
+            const setOpts = (id, set, lbl) => { const el = document.getElementById(id); el.innerHTML = `<option value="ALL">${lbl}</option>`; Array.from(set).sort().forEach(v => { if(v && v!=="N/A") el.appendChild(new Option(v, v)); }); el.classList.remove('bg-brand-500', 'text-white', 'border-brand-500'); };
             setOpts('f-sexo', fSexo, 'Sexo'); setOpts('f-edad', fEdad, 'Edad'); setOpts('f-perfil', fPerf, 'Perfil'); setOpts('f-comuna', fCom, 'Comuna');
         }
 
         function aplicarFiltrosDebounced() {
-            ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { const el = document.getElementById(id); if(el.value !== "ALL") el.classList.add('active-chip'); else el.classList.remove('active-chip'); });
+            ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { const el = document.getElementById(id); if(el.value !== "ALL") { el.classList.add('bg-brand-500', 'text-white', 'border-brand-500'); } else { el.classList.remove('bg-brand-500', 'text-white', 'border-brand-500'); } });
             clearTimeout(filterDebounceTimer); filterDebounceTimer = setTimeout(aplicarFiltrosReal, 200);
         }
 
         function toggleVisibilidad(id, dataObj) {
-            let el = document.getElementById(id);
-            if(!el) return;
+            let el = document.getElementById(id); if(!el) return;
             let tieneDatos = dataObj && Object.values(dataObj).reduce((a,b) => a + parseFloat(b||0), 0) > 0;
-            if(tieneDatos) el.style.display = ''; else el.style.display = 'none';
+            if(tieneDatos) el.classList.remove('hidden'); else el.classList.add('hidden');
         }
 
         function aplicarFiltrosReal() {
@@ -737,16 +792,16 @@
             const vS = document.getElementById('f-sexo').value, vE = document.getElementById('f-edad').value, vP = document.getElementById('f-perfil').value, vC = document.getElementById('f-comuna').value;
             const esFiltrado = (vS!=="ALL" || vE!=="ALL" || vP!=="ALL" || vC!=="ALL");
 
-            const moodleTab = document.getElementById('moodle-tab'); const radarTab = document.getElementById('radar-tab'); const lockIcon = document.getElementById('lock-icon');
+            const moodleTab = document.getElementById('moodle-tab'); const lockIcon = document.getElementById('lock-icon');
 
             if(!esFiltrado) {
                 datosFiltradosActuales = null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock');
-                moodleTab.classList.remove('locked'); moodleTab.setAttribute('data-bs-toggle', 'tab'); lockIcon.classList.add('d-none'); actualizarPantallaCurso(null); return;
+                moodleTab.classList.remove('tab-locked'); lockIcon.classList.add('hidden'); actualizarPantallaCurso(null); return;
             }
 
             document.getElementById('kpi-moodle-row').classList.add('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.add('filtro-lock');
-            moodleTab.classList.add('locked'); moodleTab.removeAttribute('data-bs-toggle'); lockIcon.classList.remove('d-none');
-            if(moodleTab.classList.contains('active')) { let tab = new bootstrap.Tab(radarTab); tab.show(); document.querySelectorAll('.tab-clean').forEach(t => t.classList.remove('active')); radarTab.classList.add('active'); }
+            moodleTab.classList.add('tab-locked'); lockIcon.classList.remove('hidden');
+            if(moodleTab.classList.contains('bg-brand-500')) { switchDashboardTab('panel-radar', document.getElementById('radar-tab')); }
 
             let arrF = cursoActual.Registros_Crudos.filter(r => (vS==="ALL" || r['Sexo']===vS) && (vE==="ALL" || r['Curso de vida']===vE) && (vP==="ALL" || r['Perfil']===vP) && (vC==="ALL" || r['Comuna_Unificada']===vC));
             let nD = { 'Sexo':{}, 'Edad':{}, 'Perfil':{}, 'Comuna':{}, 'Escolaridad':{} }; let sumQ = {}; let cQ = arrF.length; let p = 0, d = 0;
@@ -758,148 +813,66 @@
             datosFiltradosActuales = { Total_Encuestas: cQ, e_NPS: cQ>0?Math.round(((p-d)/cQ)*100,1):0, Demografia: nD, Detalle_Preguntas: (()=>{let n={}; Object.keys(sumQ).forEach(q=>n[q]=cQ>0?(sumQ[q]/cQ):0); return n})(), isFiltered: true };
             actualizarPantallaCurso(datosFiltradosActuales);
         }
-        function limpiarFiltros() { if(!cursoActual) return; ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
+        function limpiarFiltros() { if(!cursoActual) return; ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('bg-brand-500', 'text-white', 'border-brand-500');}); aplicarFiltrosReal(); };
 
-        function inicializarMapa() { 
-            if (mapInstance) return; 
-            mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); 
-            
-            // Usamos Esri Light Gray Canvas: minimalista, tonos grises y 100% gratuito sin API KEY
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { 
-                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ', 
-                maxZoom: 16 
-            }).addTo(mapInstance); 
-        }
-        
-        function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
-        
-        function dibujarMapaCoropletico(dataComunas) { 
-            if (!mapInstance || !geoJsonDataRaw) return; 
-            let mapNorm = {}; let maxP = 0; 
-            for (let n in dataComunas) { 
-                let id = String(n||"N/A").replace(/\D/g, ''); 
-                id = isNaN(parseInt(id,10)) ? String(n).trim() : String(parseInt(id,10)); 
-                mapNorm[id] = (mapNorm[id]||0) + (dataComunas[n]||0); 
-                if(mapNorm[id] > maxP && !isNaN(id)) maxP = mapNorm[id]; 
-            } 
-            if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
-            
-            geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
-                style: (f) => { 
-                    let propComuna = f.properties.comuna || f.properties.COMUNA || f.properties.nombre || f.properties.id || "N/A";
-                    let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
-                    let p = mapNorm[id]||0; 
-                    return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p>0?0.85:0.1 }; 
-                },
-                onEachFeature: (feature, layer) => {
-                    let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
-                    let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
-                    let valor = mapNorm[id]||0;
-                    let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
-                    
-                    // Tooltip de información
-                    layer.bindTooltip(`<strong>${nombreDisplay}</strong><br>Participantes: ${valor}`, {sticky: true});
-                    
-                    // Efectos Hover
-                    layer.on({
-                        mouseover: (e) => {
-                            let l = e.target;
-                            l.setStyle({ weight: 3, color: '#1e293b', fillOpacity: 0.95 });
-                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) { l.bringToFront(); }
-                        },
-                        mouseout: (e) => { geoJsonLayer.resetStyle(e.target); }
-                    });
-                }
-            }).addTo(mapInstance); 
-            setTimeout(() => mapInstance.invalidateSize(), 200);
-        }
-
-        function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
-            let labels = Object.keys(dataObject); let datos = Object.values(dataObject); let cols = labels.map((l, i) => mapeoColores[l] || coloresRespaldo[i % coloresRespaldo.length]); 
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update('none'); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'doughnut', data: { labels: labels, datasets: [{ data: datos, backgroundColor: cols, borderWidth: 0, hoverOffset: 4 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 10, family: 'Inter' } } } }, animation: false } }); }
-        }
-        
-        function dibujarGraficoComunas(canvasId, dataObject) { 
-            let ag = {}; for (let k in dataObject) { let id = String(k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?String(k).trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
-            let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false } }); }
-        }
-        
-        function dibujarBarraMoodle(canvasId, c) { 
-            let d = [c['Tasa_Finalizacion_%']||0, c['Tasa_Abandono_%']||0, c['Tasa_Inactividad_%']||0];
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data=[d[0]]; chartInstances[canvasId].data.datasets[1].data=[d[1]]; chartInstances[canvasId].data.datasets[2].data=[d[2]]; chartInstances[canvasId].update('none'); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#ffb547' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: false } }); }
-        }
-        
-        function dibujarRadar(pC, isG = false) { 
-            const lbl = Object.keys(pC).map(q => mapeoPreguntas[q] || "Pregunta"); let d1 = Object.values(pC); let d2 = Object.keys(pC).map(q => promediosGlobalesPreguntas[q] || 0);
-            if (chartInstances['chartRadar']) { chartInstances['chartRadar'].data.labels = lbl; chartInstances['chartRadar'].data.datasets[0].data = d1; chartInstances['chartRadar'].data.datasets[0].label = isG ? 'Promedio' : 'Cohorte'; if(!isG) { if(!chartInstances['chartRadar'].data.datasets[1]) chartInstances['chartRadar'].data.datasets.push({ label: 'Benchmark', backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'].data.datasets[1].data = d2; } else if (chartInstances['chartRadar'].data.datasets.length > 1) { chartInstances['chartRadar'].data.datasets.pop(); } chartInstances['chartRadar'].update('none'); } 
-            else { let arr = [{ label: isG ? 'Promedio' : 'Cohorte', data: d1, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 3 }]; if (!isG) arr.push({ label: 'Benchmark', data: d2, backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: lbl, datasets: arr }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 9, family: 'Inter', weight: '600' } } } }, animation: false } }); }
-        }
-
-        function crearTarjetaKPI(l, v, pct = null, i = "bi-bar-chart", c="primary") { let bp = pct ? `<span class="badge-kpi bg-${c} bg-opacity-10 text-${c}">${pct}</span>` : ''; return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-mini"><div class="kpi-mini-header"><div class="kpi-mini-icon bg-${c}-soft"><i class="bi ${i}"></i></div>${bp}</div><div class="kpi-mini-val">${v}</div><div class="kpi-mini-lbl">${l}</div></div></div>`; }
-        function generarBarrasCalidad(d) { let h = ''; for (let q in d) { let v = parseFloat(d[q]) || 0; let c = v >= 4.5 ? 'success' : (v >= 4.0 ? 'info' : 'danger'); h += `<div class="progress-bar-container mb-3"><div class="progress-label"><span>${q}</span><span class="fw-bold text-${c}">${v.toFixed(1)}</span></div><div class="progress-bg"><div class="progress-fill bg-${c}" style="width: ${(v/5)*100}%"></div></div></div>`; } return h; }
-
-        function agruparCursos() { const sA = document.getElementById('selector-anio'); const sB = document.getElementById('selector-curso-base'); dashboardData.cursos.forEach(c => { let m = (c.Edicion||"").match(/\b(20\d{2})\b/); if(m) añosDisponibles.add(m[1]); const b = c.Curso_Base || c.Nombre_Curso; if (!cursosPorBase[b]) cursosPorBase[b] = []; cursosPorBase[b].push(c); }); Array.from(añosDisponibles).sort().reverse().forEach(a => sA.appendChild(new Option(a, a))); Object.keys(cursosPorBase).sort().forEach(b => sB.appendChild(new Option(b, b))); }
-        function manejarCambioAnio() { añoActual = this.value; const b = document.getElementById('selector-curso-base').value; if (b === "ALL") actualizarPantallaGlobal(); else document.getElementById('selector-curso-base').dispatchEvent(new Event('change')); }
-        function manejarCambioBase() { 
-            const s = this.value; const sC = document.getElementById('selector-cohorte'); const ic = document.getElementById('icon-cohorte'); const dc = document.getElementById('div-cohorte'); const lob = document.getElementById('panel-lobby-curso'); const tab = document.getElementById('contenedor-tabs'); 
-            if (s === "ALL") { sC.style.display="none"; ic.style.display="none"; dc.style.display="none"; cursoActual=null; lob.style.display="none"; tab.style.display="block"; actualizarPantallaGlobal(); } 
-            else { 
-                let cohs = cursosPorBase[s]; if(añoActual!=="ALL") cohs = cohs.filter(c => (c.Edicion||"").includes(añoActual)); cohs = cohs.sort((a, b) => b.Edicion.localeCompare(a.Edicion)); 
-                sC.innerHTML = '<option value="">⬅ Seleccione Edición</option>'; cohs.forEach(c => sC.appendChild(new Option(c.Edicion, c.Nombre_Curso))); 
-                sC.style.display="block"; ic.style.display="inline"; dc.style.display="block"; sC.value=""; tab.style.display="none"; lob.style.display="block"; document.getElementById('filtros-cruzados-bar').style.display='none';
-                let hL = `<div class="mb-4 text-start"><h5 class="fw-bold text-primary">${s}</h5><p class="text-muted small">Seleccione una edición</p></div><div class="row g-3">`; 
-                if(cohs.length===0) hL += `<div class="col-12 text-muted py-4"><i class="bi bi-folder-x fs-2"></i> No hay cohortes este año.</div>`; 
-                else cohs.forEach(c => { hL += `<div class="col-12 col-md-4 col-xl-3"><div class="glass-card text-start py-3 px-4" style="cursor:pointer;" onclick="seleccionarCohorteDesdeLobby('${c.Nombre_Curso}')"><div class="d-flex align-items-center gap-3"><i class="bi bi-mortarboard-fill fs-3 text-primary"></i><div><h6 class="fw-bold m-0">${c.Edicion}</h6><small class="text-muted">${c.Total_Inscritos} Estudiantes</small></div></div></div></div>`; }); 
-                lob.innerHTML = hL + `</div>`; 
-            } 
-        }
-        window.seleccionarCohorteDesdeLobby = function(n) { document.getElementById('selector-cohorte').value = n; document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block'; cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === n); actualizarPantallaCurso(); };
-        function manejarCambioCohorte() { if (!this.value) { document.getElementById('panel-lobby-curso').style.display='block'; document.getElementById('contenedor-tabs').style.display='none'; return; } document.getElementById('panel-lobby-curso').style.display='none'; document.getElementById('contenedor-tabs').style.display='block'; cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); actualizarPantallaCurso(); }
-
+        // --- STREAMING_CHUNK:Actualizadores Principales con Inyección ESE... ---
         function actualizarPantallaGlobal() { 
-            document.getElementById('filtros-cruzados-bar').style.display='none'; datosFiltradosActuales=null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock'); document.getElementById('moodle-tab').classList.remove('locked'); document.getElementById('moodle-tab').setAttribute('data-bs-toggle', 'tab'); document.getElementById('lock-icon').classList.add('d-none');
+            document.getElementById('filtros-cruzados-bar').classList.remove('flex'); document.getElementById('filtros-cruzados-bar').classList.add('hidden'); datosFiltradosActuales=null; 
+            document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock'); 
+            document.getElementById('moodle-tab').classList.remove('tab-locked'); document.getElementById('lock-icon').classList.add('hidden');
+            
             let cF = dashboardData.cursos; if(añoActual!=="ALL") cF = cF.filter(c => (c.Edicion||"").includes(añoActual));
             const tC = cF.length; const tI = cF.reduce((s, c) => s+(c.Total_Inscritos||0), 0); let tCert = 0, tE = 0, npsP = 0, npsD = 0, chsS = 0; let dG = { 'Sexo':{}, 'Curso de Vida':{}, 'Perfil':{}, 'Escolaridad':{}, 'Comuna':{} };
+            
             if (añoActual==="ALL") { dG = dashboardData.demografia_global; tE = dashboardData.metadata.total_encuestas_historicas; dashboardData.cursos.forEach(c => tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100)); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; dashboardData.cursos.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; } 
             else { cF.forEach(c => { tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); tE+=(c.Total_Encuestas||0); chsS+=(c.Salud_Curso_CHS||0); if(c.Demografia){ for(let k in c.Demografia.Sexo) dG.Sexo[k]=(dG.Sexo[k]||0)+c.Demografia.Sexo[k]; let kE=c.Demografia.Edad?'Edad':'Curso de Vida'; for(let k in c.Demografia[kE]) dG['Curso de Vida'][k]=(dG['Curso de Vida'][k]||0)+c.Demografia[kE][k]; for(let k in c.Demografia.Perfil) dG.Perfil[k]=(dG.Perfil[k]||0)+c.Demografia.Perfil[k]; for(let k in c.Demografia.Comuna) dG.Comuna[k]=(dG.Comuna[k]||0)+c.Demografia.Comuna[k]; for(let k in c.Demografia.Escolaridad) dG.Escolaridad[k]=(dG.Escolaridad[k]||0)+c.Demografia.Escolaridad[k]; } if(c.Total_Encuestas>0){let p=Math.round((c.e_NPS+100)/2); npsP+=(p*c.Total_Encuestas)/100; npsD+=((100-p)*c.Total_Encuestas)/100;} }); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; cF.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; }
-            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Activos", tC, null, "bi-journal-bookmark", "primary")} ${crearTarjetaKPI("Matrículas", tI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", tCert.toLocaleString(), tI?Math.round((tCert/tI)*100)+"%":"0%", "bi-check-circle", "success")} ${crearTarjetaKPI("Encuestas", tE.toLocaleString(), null, "bi-ui-radios", "warning")} ${crearTarjetaKPI("CHS", añoActual==="ALL"?dashboardData.kpis_globales.chs_promedio_secretaria:(tC?(chsS/tC).toFixed(1):0), null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", añoActual==="ALL"?dashboardData.kpis_globales.nps_global:(tE?Math.round(((npsP-npsD)/tE)*100):0), null, "bi-emoji-smile", "primary")}`; 
             
-            dibujarGraficoDona('chartSexo', dG['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dG['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dG['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dG['Escolaridad'], 'right'); 
+            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Cursos Activos", tC, null, "fa-book-open", "primary")} ${crearTarjetaKPI("Matrículas", tI.toLocaleString(), null, "fa-users", "info")} ${crearTarjetaKPI("Aprobados", tCert.toLocaleString(), tI?Math.round((tCert/tI)*100)+"%":"0%", "fa-circle-check", "success")} ${crearTarjetaKPI("Encuestas", tE.toLocaleString(), null, "fa-list-check", "warning")} ${crearTarjetaKPI("CHS Institucional", añoActual==="ALL"?dashboardData.kpis_globales.chs_promedio_secretaria:(tC?(chsS/tC).toFixed(1):0), null, "fa-heart-pulse", "danger")} ${crearTarjetaKPI("Satisfacción e-NPS", añoActual==="ALL"?dashboardData.kpis_globales.nps_global:(tE?Math.round(((npsP-npsD)/tE)*100):0), null, "fa-face-smile", "primary")}`; 
+            
+            // Inyección en el DOM ESE
+            dibujarGraficoDona('chartSexo', 'chartSexo', 'legend-chartSexo', dG['Sexo'], iconsSexo);
+            dibujarGraficoDona('chartEdad', 'chartEdad', 'legend-chartEdad', dG['Curso de Vida'], iconsCurso);
+            dibujarGraficoDona('chartPerfil', 'chartPerfil', 'legend-chartPerfil', dG['Perfil'], iconsPerfil);
+            dibujarGraficoDona('chartEscolaridad', 'chartEscolaridad', 'legend-chartEscolaridad', dG['Escolaridad'], iconsEscolaridad);
+
             dibujarMapaCoropletico(dG['Comuna']); dibujarGraficoComunas('chartComunas', dG['Comuna']); 
             
-            toggleVisibilidad('col-sexo', dG['Sexo']); toggleVisibilidad('col-edad', dG['Curso de Vida']); toggleVisibilidad('col-perfil', dG['Perfil']); toggleVisibilidad('col-escolaridad', dG['Escolaridad']); toggleVisibilidad('col-mapa', dG['Comuna']); toggleVisibilidad('col-comunas', dG['Comuna']);
+            toggleVisibilidad('card-sexo', dG['Sexo']); toggleVisibilidad('card-edad', dG['Curso de Vida']); toggleVisibilidad('card-perfil', dG['Perfil']); toggleVisibilidad('card-escolaridad', dG['Escolaridad']); toggleVisibilidad('col-mapa', dG['Comuna']); toggleVisibilidad('col-comunas', dG['Comuna']);
             
             let tF=0, tA=0, tIn=0, sD=0, cD=0; cF.forEach(c => { let i = c.Total_Inscritos||0; tF+=(c['Tasa_Finalizacion_%']/100)*i; tA+=(c['Tasa_Abandono_%']/100)*i; tIn+=(c['Tasa_Inactividad_%']/100)*i; if (c.Tiempo_Promedio_Dias) { sD+=c.Tiempo_Promedio_Dias; cD++; } }); 
             let pF=tI?Math.round((tF/tI)*100):0; let pA=tI?Math.round((tA/tI)*100):0; let pI=tI?Math.round((tIn/tI)*100):0; 
-            document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI+"%", null, "bi-door-closed", "danger")}`; 
+            document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "fa-trophy", "success")} ${crearTarjetaKPI("Abandono Crítico", pA+"%", null, "fa-triangle-exclamation", "warning")} ${crearTarjetaKPI("Inactividad Absoluta", pI+"%", null, "fa-door-closed", "danger")}`; 
             document.getElementById('tiempo-consumo-dias').innerText = cD?Math.round(sD/cD):0; dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pF, 'Tasa_Abandono_%': pA, 'Tasa_Inactividad_%': pI }); 
-            document.getElementById('titulo-radar').innerText = añoActual==="ALL"?"Perfil Institucional Consolidado":`Perfil Consolidado (${añoActual})`; dibujarRadar(promediosGlobalesPreguntas, true); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
+            document.getElementById('titulo-radar').innerText = añoActual==="ALL"?"Radar vs Benchmark General":`Radar vs Benchmark (${añoActual})`; dibujarRadar(promediosGlobalesPreguntas, true); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
         }
 
         function actualizarPantallaCurso(dOlap = null) { 
             if(!dOlap) cargarFiltrosOLAP();
             const dD = dOlap?dOlap.Demografia:cursoActual.Demografia; const dP = dOlap?dOlap.Detalle_Preguntas:cursoActual.Detalle_Preguntas; const tE = dOlap?dOlap.Total_Encuestas:cursoActual.Total_Encuestas; const dN = dOlap?dOlap.e_NPS:cursoActual.e_NPS; const bI = cursoActual.Total_Inscritos; const tF = cursoActual['Tasa_Finalizacion_%'];
-            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Matrículas", bI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", Math.round((bI*tF)/100).toLocaleString(), tF+"%", "bi-check-circle", "success")} ${crearTarjetaKPI(dOlap?"Encuestas (Filtro)":"Encuestas", tE.toLocaleString(), null, "bi-ui-radios", dOlap?"primary":"warning")} ${crearTarjetaKPI("CHS", cursoActual.Salud_Curso_CHS, null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", dN, null, "bi-emoji-smile", "primary")}`; 
-            let kE = dD['Edad']?'Edad':'Curso de Vida'; dibujarGraficoDona('chartSexo', dD['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dD[kE], 'right'); dibujarGraficoDona('chartPerfil', dD['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dD['Escolaridad'], 'right'); dibujarMapaCoropletico(dD['Comuna']); dibujarGraficoComunas('chartComunas', dD['Comuna']); 
+            document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Matrículas", bI.toLocaleString(), null, "fa-users", "info")} ${crearTarjetaKPI("Aprobados", Math.round((bI*tF)/100).toLocaleString(), tF+"%", "fa-circle-check", "success")} ${crearTarjetaKPI(dOlap?"Encuestas (Filtro)":"Encuestas", tE.toLocaleString(), null, "fa-list-check", dOlap?"primary":"warning")} ${crearTarjetaKPI("Score CHS", cursoActual.Salud_Curso_CHS, null, "fa-heart-pulse", "danger")} ${crearTarjetaKPI("Satisfacción e-NPS", dN, null, "fa-face-smile", "primary")}`; 
             
-            toggleVisibilidad('col-sexo', dD['Sexo']); toggleVisibilidad('col-edad', dD[kE]); toggleVisibilidad('col-perfil', dD['Perfil']); toggleVisibilidad('col-escolaridad', dD['Escolaridad']); toggleVisibilidad('col-mapa', dD['Comuna']); toggleVisibilidad('col-comunas', dD['Comuna']);
+            let kE = dD['Edad']?'Edad':'Curso de Vida'; 
+            dibujarGraficoDona('chartSexo', 'chartSexo', 'legend-chartSexo', dD['Sexo'], iconsSexo);
+            dibujarGraficoDona('chartEdad', 'chartEdad', 'legend-chartEdad', dD[kE], iconsCurso);
+            dibujarGraficoDona('chartPerfil', 'chartPerfil', 'legend-chartPerfil', dD['Perfil'], iconsPerfil);
+            dibujarGraficoDona('chartEscolaridad', 'chartEscolaridad', 'legend-chartEscolaridad', dD['Escolaridad'], iconsEscolaridad);
+            
+            dibujarMapaCoropletico(dD['Comuna']); dibujarGraficoComunas('chartComunas', dD['Comuna']); 
+            
+            toggleVisibilidad('card-sexo', dD['Sexo']); toggleVisibilidad('card-edad', dD[kE]); toggleVisibilidad('card-perfil', dD['Perfil']); toggleVisibilidad('card-escolaridad', dD['Escolaridad']); toggleVisibilidad('col-mapa', dD['Comuna']); toggleVisibilidad('col-comunas', dD['Comuna']);
 
-            if(!dOlap) { document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); }
-            document.getElementById('titulo-radar').innerText = dOlap?"Radar Filtrado vs Benchmark":"Radar vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
+            if(!dOlap) { document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "fa-trophy", "success")} ${crearTarjetaKPI("Abandono Crítico", cursoActual['Tasa_Abandono_%']+"%", null, "fa-triangle-exclamation", "warning")} ${crearTarjetaKPI("Inactividad Absoluta", cursoActual['Tasa_Inactividad_%']+"%", null, "fa-door-closed", "danger")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); }
+            document.getElementById('titulo-radar').innerText = dOlap?"Radar Filtrado vs Benchmark":"Radar Cohorte vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
         }
 
         function generarEstrellas(valor) {
             let v = parseFloat(valor) || 0; let html = '';
             for(let i=1; i<=5; i++) {
-                if(v >= i) html += '<i class="bi bi-star-fill text-warning"></i>';
-                else if(v >= i - 0.5) html += '<i class="bi bi-star-half text-warning"></i>';
-                else html += '<i class="bi bi-star text-warning"></i>';
+                if(v >= i) html += '<i class="fa-solid fa-star text-amber-500"></i>';
+                else if(v >= i - 0.5) html += '<i class="fa-solid fa-star-half-stroke text-amber-500"></i>';
+                else html += '<i class="fa-regular fa-star text-amber-500"></i>';
             }
-            return `<span style="letter-spacing:1px;">${html}</span> <span class="ms-1 small fw-bold text-muted">${v.toFixed(1)}</span>`;
+            return `<span class="tracking-widest">${html}</span> <span class="ml-1 text-[10px] font-black text-slate-500">${v.toFixed(1)}</span>`;
         }
 
         function obtenerModa(objetoData) {
@@ -911,77 +884,47 @@
 
         window.poblarSelectoresComparador = function() {
             if (!dashboardData || !dashboardData.cursos) return;
-            
             let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
-            
-            let cursosSeguros = [...dashboardData.cursos].sort((a,b) => {
-                let edA = a.Edicion ? String(a.Edicion) : "Sin Fecha";
-                let edB = b.Edicion ? String(b.Edicion) : "Sin Fecha";
-                return edB.localeCompare(edA);
-            });
-
-            cursosSeguros.forEach(c => {
-                let nBase = c.Curso_Base || c.Nombre_Curso || "Curso";
-                let nEd = c.Edicion || "Sin Fecha";
-                opcionesHTML += `<option value="${c.Nombre_Curso}">${nBase} - ${nEd}</option>`;
-            });
-
-            for(let i=1; i<=4; i++) {
-                let sel = document.getElementById(`select-comp-${i}`);
-                if(sel) sel.innerHTML = opcionesHTML;
-            }
+            let cursosSeguros = [...dashboardData.cursos].sort((a,b) => { let edA = a.Edicion ? String(a.Edicion) : "Sin Fecha"; let edB = b.Edicion ? String(b.Edicion) : "Sin Fecha"; return edB.localeCompare(edA); });
+            cursosSeguros.forEach(c => { let nBase = c.Curso_Base || c.Nombre_Curso || "Curso"; let nEd = c.Edicion || "Sin Fecha"; opcionesHTML += `<option value="${c.Nombre_Curso}">${nBase} - ${nEd}</option>`; });
+            for(let i=1; i<=4; i++) { let sel = document.getElementById(`select-comp-${i}`); if(sel) sel.innerHTML = opcionesHTML; }
         };
 
         window.actualizarComparador = function(slotIndex, courseName) {
             const contentDiv = document.getElementById(`comp-content-${slotIndex}`);
             const emptyDiv = document.getElementById(`comp-empty-${slotIndex}`);
-            
-            if(!courseName) { contentDiv.classList.add('d-none'); emptyDiv.classList.remove('d-none'); return; }
-            
+            if(!courseName) { contentDiv.classList.add('hidden'); emptyDiv.classList.remove('hidden'); return; }
             const curso = dashboardData.cursos.find(c => c.Nombre_Curso === courseName);
             if(!curso) return;
 
-            contentDiv.classList.remove('d-none'); emptyDiv.classList.add('d-none');
-            
-            // Operativo
-            document.getElementById(`comp-mat-${slotIndex}`).innerText = (curso.Total_Inscritos || 0).toLocaleString();
-            document.getElementById(`comp-fin-${slotIndex}`).innerText = (curso['Tasa_Finalizacion_%']||0) + "%";
-            document.getElementById(`comp-fug-${slotIndex}`).innerText = ((curso['Tasa_Abandono_%']||0) + (curso['Tasa_Inactividad_%']||0)).toFixed(1) + "%";
-            
-            // Calidad
-            const qMet = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0;
-            const qUx = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0;
-            const qPrac = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0;
-            
-            document.getElementById(`comp-met-${slotIndex}`).innerHTML = generarEstrellas(qMet);
-            document.getElementById(`comp-ux-${slotIndex}`).innerHTML = generarEstrellas(qUx);
-            document.getElementById(`comp-prac-${slotIndex}`).innerHTML = generarEstrellas(qPrac);
-            
-            // Demografía (Moda)
-            document.getElementById(`comp-prof-${slotIndex}`).innerText = curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A";
-            let modaCom = curso.Demografia ? obtenerModa(curso.Demografia.Comuna) : "N/A";
-            if(modaCom !== "N/A" && !isNaN(modaCom)) modaCom = "Comuna " + modaCom;
-            document.getElementById(`comp-com-${slotIndex}`).innerText = modaCom;
+            contentDiv.classList.remove('hidden'); contentDiv.classList.add('flex'); emptyDiv.classList.add('hidden');
+            let htmlInner = `
+                <h6 class="font-black text-xs text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-1 mt-2 mb-3"><i class="fa-solid fa-gauge-high mr-1"></i> R. Operativo</h6>
+                <div class="flex justify-between items-center text-xs py-1.5"><span class="font-semibold text-slate-500">Matrículas</span><span class="font-black text-slate-800">${(curso.Total_Inscritos || 0).toLocaleString()}</span></div>
+                <div class="flex justify-between items-center text-xs py-1.5"><span class="font-semibold text-slate-500">Éxito</span><span class="font-black text-emerald-600">${(curso['Tasa_Finalizacion_%']||0)}%</span></div>
+                <div class="flex justify-between items-center text-xs py-1.5"><span class="font-semibold text-slate-500">Fuga Crítica</span><span class="font-black text-rose-600">${((curso['Tasa_Abandono_%']||0) + (curso['Tasa_Inactividad_%']||0)).toFixed(1)}%</span></div>
+
+                <h6 class="font-black text-xs text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-1 mt-6 mb-3"><i class="fa-solid fa-star mr-1"></i> Calidad (0-5)</h6>
+                <div class="flex flex-col gap-1 text-xs py-1.5"><span class="font-semibold text-slate-500">Metodología Docente</span><div>${generarEstrellas(curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0)}</div></div>
+                <div class="flex flex-col gap-1 text-xs py-1.5"><span class="font-semibold text-slate-500">Plataforma Virtual (UX)</span><div>${generarEstrellas(curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0)}</div></div>
+                <div class="flex flex-col gap-1 text-xs py-1.5"><span class="font-semibold text-slate-500">Aplicabilidad Práctica</span><div>${generarEstrellas(curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0)}</div></div>
+
+                <h6 class="font-black text-xs text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-1 mt-6 mb-3"><i class="fa-solid fa-id-badge mr-1"></i> Perfil Dominante</h6>
+                <div class="flex justify-between items-center text-xs py-1.5"><span class="font-semibold text-slate-500">Profesión</span><span class="font-black text-slate-800 text-right">${curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A"}</span></div>
+                <div class="flex justify-between items-center text-xs py-1.5"><span class="font-semibold text-slate-500">Comunidad</span><span class="font-black text-slate-800 text-right">${curso.Demografia ? ((obtenerModa(curso.Demografia.Comuna)!=="N/A" && !isNaN(obtenerModa(curso.Demografia.Comuna))) ? "Comuna "+obtenerModa(curso.Demografia.Comuna) : obtenerModa(curso.Demografia.Comuna)) : "N/A"}</span></div>
+            `;
+            contentDiv.innerHTML = htmlInner;
         };
 
+        // STARTUP
         document.addEventListener("DOMContentLoaded", async () => {
-            cambiarTema(localStorage.getItem('temaDashboard') || 'light');
-            
-            const triggerTabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
-            triggerTabList.forEach(triggerEl => {
-              triggerEl.addEventListener('shown.bs.tab', event => {
-                for (let id in chartInstances) { if (chartInstances[id]) chartInstances[id].resize(); }
-                if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) { setTimeout(() => mapInstance.invalidateSize(), 50); }
-              });
-            });
-
             proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
             
             try { 
                 const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); 
                 dashboardData = await res.json(); 
             } catch (e) { 
-                console.warn("Entorno local detectado. Cargando datos de respaldo temporal (Fallback) para la vista previa.");
+                console.warn("Entorno local detectado. Cargando datos de respaldo.");
                 dashboardData = {
                     "metadata": { "total_cursos_analizados": 5, "total_encuestas_historicas": 1250, "total_estudiantes_unicos": 3800 },
                     "kpis_globales": { "chs_promedio_secretaria": 85.4, "nps_global": 72 },
@@ -1010,11 +953,9 @@
                 const gRes = await fetch('mc_comunas.json'); let gd = await gRes.json(); 
                 if(gd && gd.features) { gd.features.forEach(f=>{if(f.geometry&&f.geometry.coordinates){if(f.geometry.type==="Polygon")f.geometry.coordinates=f.geometry.coordinates.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c)));else if(f.geometry.type==="MultiPolygon")f.geometry.coordinates=f.geometry.coordinates.map(p=>p.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c))));}}); geoJsonDataRaw = gd; }
             } catch (e) { 
-                console.warn("No se pudo cargar el mapa geoJSON local. Usando mapa base."); 
-                geoJsonDataRaw = { "type": "FeatureCollection", "features": [] }; 
+                console.warn("No se pudo cargar mapa. Usando base."); geoJsonDataRaw = { "type": "FeatureCollection", "features": [] }; 
             }
             
-            Chart.defaults.font.family = 'Inter'; 
             inicializarMapa(); agruparCursos(); 
             
             document.getElementById('selector-anio').addEventListener('change', manejarCambioAnio); 
