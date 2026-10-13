@@ -194,7 +194,6 @@
         .text-amber { color: var(--warning); } .bg-amber-soft { background: rgba(255, 181, 71, 0.1); color: var(--warning); }
         .text-rose { color: var(--danger); } .bg-rose-soft { background: rgba(238, 93, 80, 0.1); color: var(--danger); }
 
-        /* Media Queries Adaptativas */
         @media (max-width: 992px) {
             .glass-card { padding: 20px; }
             .kpi-mini { padding: 16px; }
@@ -298,6 +297,10 @@
                                 <div>
                                     <div class="kpi-val" id="bento-cursos">-</div>
                                     <div class="kpi-lbl">Cursos Auditados</div>
+                                    <!-- NUEVO BADGE DE CURSOS ACTIVOS -->
+                                    <div class="mt-2 badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 py-1 border border-primary border-opacity-25" style="font-size: 0.75rem;">
+                                        <i class="bi bi-play-circle-fill"></i> <span id="bento-activos">-</span> Activos
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -983,7 +986,7 @@
             } catch (e) { 
                 console.warn("Entorno local detectado. Cargando datos de respaldo temporal (Fallback) para la vista previa.");
                 dashboardData = {
-                    "metadata": { "total_cursos_analizados": 5, "total_encuestas_historicas": 1250, "total_estudiantes_unicos": 3800 },
+                    "metadata": { "total_cursos_analizados": 5, "total_encuestas_historicas": 1250, "total_estudiantes_unicos": 3800, "cursos_activos": 2 },
                     "kpis_globales": { "chs_promedio_secretaria": 85.4, "nps_global": 72 },
                     "demografia_global": {
                         "Sexo": {"Femenino": 2500, "Masculino": 1300},
@@ -1026,6 +1029,7 @@
             const unicos = dashboardData.metadata.total_estudiantes_unicos || tI;
             
             document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados||0; 
+            document.getElementById('bento-activos').innerText = dashboardData.metadata.cursos_activos || 0; // NUEVA LÍNEA INYECTANDO EL DATO
             document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); 
             document.getElementById('bento-unicos').innerText = unicos.toLocaleString() + " Únicos";
             document.getElementById('bento-certificados').innerText = tC.toLocaleString();
