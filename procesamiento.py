@@ -3,6 +3,7 @@ import glob
 import pandas as pd
 import numpy as np
 import logging
+import re
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -27,7 +28,6 @@ class PipelineAnalitico:
         # =====================================================================
         # 🛠️ PARCHE QUIRÚRGICO: FRACCIONAR FORMULARIO DOBLE (RPMS PI e I 012026)
         # =====================================================================
-        # Buscamos todas las filas que tengan el nombre larguísimo con ambas ediciones
         mask_doble = df['Nombre_Curso'].str.contains('AISPPMSCVPI_01_2026', na=False) & \
                      df['Nombre_Curso'].str.contains('AISPPMSCVPI_02_2026', na=False)
         
@@ -35,9 +35,7 @@ class PipelineAnalitico:
         
         if len(indices_doble) > 0:
             logging.info(f"Separando formulario doble: {len(indices_doble)} respuestas encontradas.")
-            # Los primeros 416 se asignan a la Edición 01
             df.loc[indices_doble[:416], 'Nombre_Curso'] = 'RPMS PI e I 012026 - (AISPPMSCVPI_01_2026, AISPPMSCVI_01_2026)'
-            # Los restantes (del 416 en adelante) se asignan a la Edición 02
             df.loc[indices_doble[416:], 'Nombre_Curso'] = 'RPMS PI e I 012026 - (AISPPMSCVPI_02_2026, AISPPMSCVI_02_2026)'
         # =====================================================================
 
@@ -65,7 +63,6 @@ class PipelineAnalitico:
             return {}
 
         df_cat = pd.read_csv(self.ruta_catalogo, encoding='utf-8-sig')
-        # Mapear el ID de Moodle exclusivamente a su Nombre Oficial Limpio, ignorando la columna de Forms
         dict_nombres_moodle = dict(zip(df_cat['ID_Moodle'], df_cat['Nombre_Moodle_Extraido']))
         return dict_nombres_moodle
 
@@ -77,8 +74,6 @@ class PipelineAnalitico:
 
         for file_path in csv_files:
             id_moodle = os.path.basename(file_path).replace('progress.', '').replace('.csv', '').lower()
-            
-            # Aquí está la magia: Usamos el ID para jalar el nombre hermoso del catálogo
             nombre_oficial = dict_nombres_moodle.get(id_moodle, id_moodle)
 
             try:
@@ -98,8 +93,6 @@ class PipelineAnalitico:
 
             completados_lista = []
             para_tiempos = []
-            
-            # NUEVA LISTA: Para capturar todas las interacciones del curso
             fechas_globales_curso = []
 
             for index, row in df.iterrows():
@@ -107,12 +100,14 @@ class PipelineAnalitico:
                 fechas = []
                 for col in cols_todas:
                     val = str(row[col]).strip()
-                    if val.lower() in ['finalizado', 'completado', 'sí'] or 'aprobado' in val.lower():
+                    if val.lower() in ['finalizado', 'completado', 'sí', 'si'] or 'aprobado' in val.lower():
                         completados += 1
-                    elif len(val) == 19 and val.count('-') == 2 and val.count(':') == 2:
-                        fecha_parsed = pd.to_datetime(val, errors='coerce')
-                        fechas.append(fecha_parsed)
-                        fechas_globales_curso.append(fecha_parsed) # Captura global
+                    # Expresión regular robusta para atrapar fechas de Moodle (detecta / o - )
+                    elif re.search(r'\d{1,4}[-/]\d{1,2}[-/]\d{1,4}', val):
+                        fecha_parsed = pd.to_datetime(val, dayfirst=True, errors='coerce')
+                        if pd.notna(fecha_parsed):
+                            fechas.append(fecha_parsed)
+                            fechas_globales_curso.append(fecha_parsed)
                 
                 fechas = [f for f in fechas if pd.notna(f)]
                 completados_lista.append(completados)
@@ -127,25 +122,25 @@ class PipelineAnalitico:
             duraciones_dias = [(max_f - min_f).total_seconds() / 86400 for min_f, max_f in para_tiempos if min_f != max_f]
             tiempo_promedio = np.mean(duraciones_dias) if duraciones_dias else 0
 
-            # NUEVA LÓGICA: Determinar si el curso está activo (14 días)
             es_activo = False
-            fechas_validas = [f for f in fechas_globales_curso if pd.notna(f)]
-            if fechas_validas:
-                ultima_actividad = max(fechas_validas)
+            fechas_globales_curso = [f for f in fechas_globales_curso if pd.notna(f)]
+            if fechas_globales_curso:
+                ultima_actividad = max(fechas_globales_curso)
                 if ultima_actividad.tzinfo is not None:
                     ultima_actividad = ultima_actividad.tz_localize(None)
-                fecha_limite = pd.Timestamp.now() - pd.Timedelta(days=14)
+                # Restamos 30 días desde el momento exacto en que se corre el script
+                fecha_limite = pd.Timestamp.now() - pd.Timedelta(days=30)
                 es_activo = bool(ultima_actividad >= fecha_limite)
 
             kpis_cursos.append({
-                'Nombre_Curso': nombre_oficial, # Nombre limpio!
-                'ID_Moodle_Original': id_moodle, # ID en minúsculas para cruzar con Forms
+                'Nombre_Curso': nombre_oficial,
+                'ID_Moodle_Original': id_moodle,
                 'Total_Inscritos': inscritos,
                 'Tasa_Finalizacion_%': round((graduados / inscritos * 100), 1) if inscritos else 0,
                 'Tasa_Abandono_%': round((activos_incompletos / inscritos * 100), 1) if inscritos else 0,
                 'Tasa_Inactividad_%': round((inactivos / inscritos * 100), 1) if inscritos else 0,
                 'Tiempo_Promedio_Dias': round(tiempo_promedio, 1),
-                'Es_Activo': es_activo # NUEVO CAMPO AGREGADO
+                'Es_Activo': es_activo
             })
 
         pd.DataFrame(kpis_cursos).to_csv(os.path.join(self.base_dir, 'kpis_moodle_agregados.csv'), index=False, encoding='utf-8-sig')
