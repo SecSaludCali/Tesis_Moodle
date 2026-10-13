@@ -114,7 +114,6 @@
         .glass-card:hover { transform: translateY(-3px) translateZ(0); }
 
         .home-header { margin-bottom: 40px; text-align: center; }
-        /* Fluid Typography for responsiveness */
         .home-title { font-size: clamp(1.7rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); margin-bottom: 8px;}
         .home-subtitle { color: var(--text-muted); font-size: clamp(0.9rem, 2vw, 1.05rem); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
 
@@ -203,8 +202,6 @@
         @media (max-width: 768px) {
             #sidebar { transform: translateX(-100%); width: 260px; padding-left: 20px; align-items: flex-start; z-index: 1050; box-shadow: 10px 0 30px rgba(0,0,0,0.1);}
             #sidebar.mobile-open { transform: translateX(0); }
-            
-            /* Sombra/overlay de fondo al abrir menú en celular */
             body.menu-open::after { content: ''; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); z-index: 1040; backdrop-filter: blur(2px); pointer-events: auto;}
             
             #main-content { margin-left: 0; max-width: 100vw; width: 100vw; }
@@ -225,15 +222,11 @@
             .chart-wrapper { height: 220px; }
             .radar-wrapper { height: 300px; }
             #map-container { min-height: 250px; }
-
-            .dashboard-top-bar { margin-bottom: 15px; }
-            .home-header { margin-bottom: 25px; }
         }
 
         @media (max-width: 480px) {
             .bento-kpi { justify-content: flex-start; }
             .kpi-mini-val { font-size: 1.5rem; }
-            .nav-tabs-clean { padding-bottom: 10px; }
             .olap-chip { min-width: 45%; }
         }
     </style>
@@ -289,7 +282,6 @@
                         <p class="home-subtitle">Plataforma central de monitoreo, entrenamiento y simulación clínica.</p>
                     </div>
 
-                    <!-- 4 Tarjetas de Bento con Datos Integrados -->
                     <div class="row g-3 g-md-4 mb-5">
                         <div class="col-12 col-md-6 col-xl-3">
                             <div class="glass-card bento-kpi">
@@ -297,7 +289,6 @@
                                 <div>
                                     <div class="kpi-val" id="bento-cursos">-</div>
                                     <div class="kpi-lbl">Cursos Auditados</div>
-                                    <!-- NUEVO BADGE DE CURSOS ACTIVOS -->
                                     <div class="mt-2 badge bg-primary bg-opacity-10 text-primary rounded-pill px-2 py-1 border border-primary border-opacity-25" style="font-size: 0.75rem;">
                                         <i class="bi bi-play-circle-fill"></i> <span id="bento-activos">-</span> Activos
                                     </div>
@@ -415,9 +406,39 @@
                         </div>
 
                         <div class="tab-content pb-4" id="myTabContent">
-                            
                             <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                                 <div class="row g-2 g-md-3 mb-4" id="kpi-global-row"></div>
+                                
+                                <div class="row mb-4" id="row-tabla-activos" style="display: none;">
+                                    <div class="col-12">
+                                        <div class="glass-card p-3 p-md-4">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h6 class="mb-0 fw-bold fs-5 text-primary"><i class="bi bi-play-circle-fill me-2"></i> Cursos Activos (Últimos 30 días)</h6>
+                                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 border border-primary border-opacity-25" id="contador-activos-tabla">0</span>
+                                            </div>
+                                            <div class="table-responsive" style="border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden;">
+                                                <table class="table table-hover align-middle mb-0" style="background: transparent;">
+                                                    <thead class="bg-primary bg-opacity-10 text-primary" style="border-bottom: 2px solid var(--primary);">
+                                                        <tr>
+                                                            <th scope="col" class="py-3 px-4 fw-bold" style="border-bottom: none;">Nombre del Curso</th>
+                                                            <th scope="col" class="py-3 px-4 fw-bold" style="border-bottom: none;">Cohorte</th>
+                                                            <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Matrículas</th>
+                                                            <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Aprobados</th>
+                                                            <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Score CHS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-activos" style="border-top: none;">
+                                                        <!-- Las filas se inyectan por JavaScript dinámicamente -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div id="mensaje-sin-activos" class="text-center text-muted p-4" style="display: none;">
+                                                <i class="bi bi-inbox fs-2 opacity-50 d-block mb-2"></i>
+                                                <small>No se registran cursos con actividad en los últimos 30 días.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 
                                 <div class="row g-3 mb-4">
                                     <div class="col-12 col-md-6 col-xl-3" id="col-sexo"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Sexo</h6><button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartSexo"></canvas></div></div></div>
@@ -489,9 +510,8 @@
                             </div>
 
                             <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
-                                <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente. (Desliza horizontalmente si estás en móvil).</div>
+                                <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente.</div>
                                 
-                                <!-- Wrapper para permitir scroll horizontal nativo si son 4 columnas y no caben en tablet -->
                                 <div style="overflow-x: auto; padding-bottom: 10px;">
                                     <div class="row g-3 mb-4 flex-nowrap flex-md-wrap" id="comparador-row" style="min-width: 900px;">
                                         
@@ -673,7 +693,6 @@
             }
         }
         
-        // Cerrar menu si tocas fuera de el
         document.addEventListener('click', function(event) {
             const sidebar = document.getElementById('sidebar');
             const toggleBtn = document.querySelector('.mobile-toggle');
@@ -766,8 +785,6 @@
         function inicializarMapa() { 
             if (mapInstance) return; 
             mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); 
-            
-            // Usamos Esri Light Gray Canvas: minimalista, tonos grises y 100% gratuito sin API KEY
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { 
                 attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ', 
                 maxZoom: 16 
@@ -800,10 +817,7 @@
                     let valor = mapNorm[id]||0;
                     let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
                     
-                    // Tooltip de información
                     layer.bindTooltip(`<strong>${nombreDisplay}</strong><br>Participantes: ${valor}`, {sticky: true});
-                    
-                    // Efectos Hover
                     layer.on({
                         mouseover: (e) => {
                             let l = e.target;
@@ -867,10 +881,61 @@
             document.getElementById('filtros-cruzados-bar').style.display='none'; datosFiltradosActuales=null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock'); document.getElementById('moodle-tab').classList.remove('locked'); document.getElementById('moodle-tab').setAttribute('data-bs-toggle', 'tab'); document.getElementById('lock-icon').classList.add('d-none');
             let cF = dashboardData.cursos; if(añoActual!=="ALL") cF = cF.filter(c => (c.Edicion||"").includes(añoActual));
             const tC = cF.length; const tI = cF.reduce((s, c) => s+(c.Total_Inscritos||0), 0); let tCert = 0, tE = 0, npsP = 0, npsD = 0, chsS = 0; let dG = { 'Sexo':{}, 'Curso de Vida':{}, 'Perfil':{}, 'Escolaridad':{}, 'Comuna':{} };
-            if (añoActual==="ALL") { dG = dashboardData.demografia_global; tE = dashboardData.metadata.total_encuestas_historicas; dashboardData.cursos.forEach(c => tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100)); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; dashboardData.cursos.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; } 
-            else { cF.forEach(c => { tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); tE+=(c.Total_Encuestas||0); chsS+=(c.Salud_Curso_CHS||0); if(c.Demografia){ for(let k in c.Demografia.Sexo) dG.Sexo[k]=(dG.Sexo[k]||0)+c.Demografia.Sexo[k]; let kE=c.Demografia.Edad?'Edad':'Curso de Vida'; for(let k in c.Demografia[kE]) dG['Curso de Vida'][k]=(dG['Curso de Vida'][k]||0)+c.Demografia[kE][k]; for(let k in c.Demografia.Perfil) dG.Perfil[k]=(dG.Perfil[k]||0)+c.Demografia.Perfil[k]; for(let k in c.Demografia.Comuna) dG.Comuna[k]=(dG.Comuna[k]||0)+c.Demografia.Comuna[k]; for(let k in c.Demografia.Escolaridad) dG.Escolaridad[k]=(dG.Escolaridad[k]||0)+c.Demografia.Escolaridad[k]; } if(c.Total_Encuestas>0){let p=Math.round((c.e_NPS+100)/2); npsP+=(p*c.Total_Encuestas)/100; npsD+=((100-p)*c.Total_Encuestas)/100;} }); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; cF.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; }
             
-            let labelActivos = añoActual === "ALL" ? (dashboardData.metadata.cursos_activos + " Activos") : null;
+            let cursosActivos = [];
+
+            if (añoActual==="ALL") { 
+                dG = dashboardData.demografia_global; tE = dashboardData.metadata.total_encuestas_historicas; dashboardData.cursos.forEach(c => tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100)); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; dashboardData.cursos.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; 
+            } else { 
+                cF.forEach(c => { tCert += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); tE+=(c.Total_Encuestas||0); chsS+=(c.Salud_Curso_CHS||0); if(c.Demografia){ for(let k in c.Demografia.Sexo) dG.Sexo[k]=(dG.Sexo[k]||0)+c.Demografia.Sexo[k]; let kE=c.Demografia.Edad?'Edad':'Curso de Vida'; for(let k in c.Demografia[kE]) dG['Curso de Vida'][k]=(dG['Curso de Vida'][k]||0)+c.Demografia[kE][k]; for(let k in c.Demografia.Perfil) dG.Perfil[k]=(dG.Perfil[k]||0)+c.Demografia.Perfil[k]; for(let k in c.Demografia.Comuna) dG.Comuna[k]=(dG.Comuna[k]||0)+c.Demografia.Comuna[k]; for(let k in c.Demografia.Escolaridad) dG.Escolaridad[k]=(dG.Escolaridad[k]||0)+c.Demografia.Escolaridad[k]; } if(c.Total_Encuestas>0){let p=Math.round((c.e_NPS+100)/2); npsP+=(p*c.Total_Encuestas)/100; npsD+=((100-p)*c.Total_Encuestas)/100;} }); promediosGlobalesPreguntas = {}; let s={}; let cnt={}; cF.forEach(c=>{if(c.Detalle_Preguntas&&c.Total_Encuestas>0){for(let k in c.Detalle_Preguntas){if(c.Detalle_Preguntas[k]>0){s[k]=(s[k]||0)+c.Detalle_Preguntas[k];cnt[k]=(cnt[k]||0)+1;}}}}); for(let k in s) promediosGlobalesPreguntas[k]=s[k]/cnt[k]; 
+            }
+            
+            cF.forEach(c => { if(c.Es_Activo) cursosActivos.push(c); });
+            
+            let rowTabla = document.getElementById('row-tabla-activos');
+            if (añoActual === "ALL") {
+                rowTabla.style.display = 'flex';
+                let tbody = document.getElementById('tbody-activos');
+                let countBadge = document.getElementById('contador-activos-tabla');
+                let emptyMsg = document.getElementById('mensaje-sin-activos');
+                let tWrapper = document.querySelector('.table-responsive');
+                
+                tbody.innerHTML = '';
+                countBadge.innerText = cursosActivos.length;
+                
+                if(cursosActivos.length === 0) {
+                    emptyMsg.style.display = 'block';
+                    tWrapper.style.display = 'none';
+                } else {
+                    emptyMsg.style.display = 'none';
+                    tWrapper.style.display = 'block';
+                    cursosActivos.sort((a,b) => b.Total_Inscritos - a.Total_Inscritos).forEach(ca => {
+                        let rowBg = document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(255,255,255,0.02)' : '#ffffff';
+                        let textColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
+                        
+                        let tr = document.createElement('tr');
+                        tr.style.backgroundColor = rowBg;
+                        tr.style.color = textColor;
+                        tr.style.borderBottom = '1px solid var(--border-color)';
+                        
+                        let ap = Math.round((ca.Total_Inscritos || 0) * (ca['Tasa_Finalizacion_%'] || 0) / 100);
+                        let chsColor = ca.Salud_Curso_CHS >= 80 ? 'success' : (ca.Salud_Curso_CHS >= 60 ? 'warning' : 'danger');
+                        
+                        tr.innerHTML = `
+                            <td class="px-4 py-3 fw-semibold text-truncate" style="max-width: 250px;" title="${ca.Curso_Base}">${ca.Curso_Base}</td>
+                            <td class="px-4 py-3 text-muted small">${ca.Edicion}</td>
+                            <td class="px-4 py-3 text-center fw-bold font-monospace">${(ca.Total_Inscritos || 0).toLocaleString()}</td>
+                            <td class="px-4 py-3 text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill border border-success border-opacity-25 px-2">${ap.toLocaleString()}</span></td>
+                            <td class="px-4 py-3 text-center"><span class="fw-bold text-${chsColor}">${ca.Salud_Curso_CHS}</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } else {
+                rowTabla.style.display = 'none';
+            }
+
+            let labelActivos = añoActual === "ALL" ? ((dashboardData.metadata.cursos_activos !== undefined ? dashboardData.metadata.cursos_activos : cursosActivos.length) + " Activos") : null;
             document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Auditados", tC, labelActivos, "bi-journal-bookmark", "primary")} ${crearTarjetaKPI("Matrículas", tI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", tCert.toLocaleString(), tI?Math.round((tCert/tI)*100)+"%":"0%", "bi-check-circle", "success")} ${crearTarjetaKPI("Encuestas", tE.toLocaleString(), null, "bi-ui-radios", "warning")} ${crearTarjetaKPI("CHS", añoActual==="ALL"?dashboardData.kpis_globales.chs_promedio_secretaria:(tC?(chsS/tC).toFixed(1):0), null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", añoActual==="ALL"?dashboardData.kpis_globales.nps_global:(tE?Math.round(((npsP-npsD)/tE)*100):0), null, "bi-emoji-smile", "primary")}`; 
             
             dibujarGraficoDona('chartSexo', dG['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dG['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dG['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dG['Escolaridad'], 'right'); 
@@ -948,12 +1013,10 @@
 
             contentDiv.classList.remove('d-none'); emptyDiv.classList.add('d-none');
             
-            // Operativo
             document.getElementById(`comp-mat-${slotIndex}`).innerText = (curso.Total_Inscritos || 0).toLocaleString();
             document.getElementById(`comp-fin-${slotIndex}`).innerText = (curso['Tasa_Finalizacion_%']||0) + "%";
             document.getElementById(`comp-fug-${slotIndex}`).innerText = ((curso['Tasa_Abandono_%']||0) + (curso['Tasa_Inactividad_%']||0)).toFixed(1) + "%";
             
-            // Calidad
             const qMet = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0;
             const qUx = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0;
             const qPrac = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0;
@@ -962,7 +1025,6 @@
             document.getElementById(`comp-ux-${slotIndex}`).innerHTML = generarEstrellas(qUx);
             document.getElementById(`comp-prac-${slotIndex}`).innerHTML = generarEstrellas(qPrac);
             
-            // Demografía (Moda)
             document.getElementById(`comp-prof-${slotIndex}`).innerText = curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A";
             let modaCom = curso.Demografia ? obtenerModa(curso.Demografia.Comuna) : "N/A";
             if(modaCom !== "N/A" && !isNaN(modaCom)) modaCom = "Comuna " + modaCom;
@@ -1001,7 +1063,7 @@
                         {
                             "Nombre_Curso": "Bioseguridad_2023", "Curso_Base": "Bioseguridad", "Edicion": "2023-01",
                             "Total_Inscritos": 500, "Total_Encuestas": 300, "Salud_Curso_CHS": 88, "e_NPS": 75,
-                            "Tasa_Finalizacion_%": 80, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 5, "Tiempo_Promedio_Dias": 12,
+                            "Tasa_Finalizacion_%": 80, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 5, "Tiempo_Promedio_Dias": 12, "Es_Activo": true,
                             "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.8, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.2 },
                             "Demografia": { "Sexo": {"Femenino": 350, "Masculino": 150}, "Edad": {"Juventud": 200, "Adultez": 300}, "Perfil": {"Enfermera": 250, "Auxiliar": 250}, "Escolaridad": {"Técnico": 300, "Profesional": 200}, "Comuna": {"17": 150, "19": 100} },
                             "Registros_Crudos": []
@@ -1030,8 +1092,16 @@
             let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); });
             const unicos = dashboardData.metadata.total_estudiantes_unicos || tI;
             
+            // CÁLCULO SEGURO DEL NÚMERO DE CURSOS ACTIVOS PARA EL HOME
+            let totalCursosActivos = 0;
+            if (dashboardData.metadata && dashboardData.metadata.cursos_activos !== undefined) {
+                totalCursosActivos = dashboardData.metadata.cursos_activos;
+            } else if (dashboardData.cursos) {
+                totalCursosActivos = dashboardData.cursos.filter(c => c.Es_Activo === true).length;
+            }
+
             document.getElementById('bento-cursos').innerText = dashboardData.metadata.total_cursos_analizados||0; 
-            document.getElementById('bento-activos').innerText = dashboardData.metadata.cursos_activos || 0; // NUEVA LÍNEA INYECTANDO EL DATO
+            document.getElementById('bento-activos').innerText = totalCursosActivos;
             document.getElementById('bento-matriculas').innerText = tI.toLocaleString(); 
             document.getElementById('bento-unicos').innerText = unicos.toLocaleString() + " Únicos";
             document.getElementById('bento-certificados').innerText = tC.toLocaleString();
