@@ -98,6 +98,9 @@ class PipelineAnalitico:
 
             completados_lista = []
             para_tiempos = []
+            
+            # NUEVA LISTA: Para capturar todas las interacciones del curso
+            fechas_globales_curso = []
 
             for index, row in df.iterrows():
                 completados = 0
@@ -107,7 +110,9 @@ class PipelineAnalitico:
                     if val.lower() in ['finalizado', 'completado', 'sí'] or 'aprobado' in val.lower():
                         completados += 1
                     elif len(val) == 19 and val.count('-') == 2 and val.count(':') == 2:
-                        fechas.append(pd.to_datetime(val, errors='coerce'))
+                        fecha_parsed = pd.to_datetime(val, errors='coerce')
+                        fechas.append(fecha_parsed)
+                        fechas_globales_curso.append(fecha_parsed) # Captura global
                 
                 fechas = [f for f in fechas if pd.notna(f)]
                 completados_lista.append(completados)
@@ -122,6 +127,16 @@ class PipelineAnalitico:
             duraciones_dias = [(max_f - min_f).total_seconds() / 86400 for min_f, max_f in para_tiempos if min_f != max_f]
             tiempo_promedio = np.mean(duraciones_dias) if duraciones_dias else 0
 
+            # NUEVA LÓGICA: Determinar si el curso está activo (14 días)
+            es_activo = False
+            fechas_validas = [f for f in fechas_globales_curso if pd.notna(f)]
+            if fechas_validas:
+                ultima_actividad = max(fechas_validas)
+                if ultima_actividad.tzinfo is not None:
+                    ultima_actividad = ultima_actividad.tz_localize(None)
+                fecha_limite = pd.Timestamp.now() - pd.Timedelta(days=14)
+                es_activo = bool(ultima_actividad >= fecha_limite)
+
             kpis_cursos.append({
                 'Nombre_Curso': nombre_oficial, # Nombre limpio!
                 'ID_Moodle_Original': id_moodle, # ID en minúsculas para cruzar con Forms
@@ -129,7 +144,8 @@ class PipelineAnalitico:
                 'Tasa_Finalizacion_%': round((graduados / inscritos * 100), 1) if inscritos else 0,
                 'Tasa_Abandono_%': round((activos_incompletos / inscritos * 100), 1) if inscritos else 0,
                 'Tasa_Inactividad_%': round((inactivos / inscritos * 100), 1) if inscritos else 0,
-                'Tiempo_Promedio_Dias': round(tiempo_promedio, 1)
+                'Tiempo_Promedio_Dias': round(tiempo_promedio, 1),
+                'Es_Activo': es_activo # NUEVO CAMPO AGREGADO
             })
 
         pd.DataFrame(kpis_cursos).to_csv(os.path.join(self.base_dir, 'kpis_moodle_agregados.csv'), index=False, encoding='utf-8-sig')
