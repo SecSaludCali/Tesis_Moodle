@@ -271,8 +271,16 @@ class MotorAnalitico:
             c.pop('Llave_PK', None)
 
         dashboard_json = {
-            "metadata": { "total_cursos_analizados": len(cursos_lista), "total_encuestas_historicas": len(df_sat_raw), "total_estudiantes_unicos": len(estudiantes_unicos) },
-            "kpis_globales": { "chs_promedio_secretaria": round(df_final['Salud_Curso_CHS'].mean(), 1) if len(df_final) > 0 else 0, "nps_global": round(df_final[df_final['Total_Encuestas'] > 0]['e_NPS'].mean(), 1) if len(df_final) > 0 else 0 },
+            "metadata": { 
+                "total_cursos_analizados": len(cursos_lista), 
+                "total_encuestas_historicas": len(df_sat_raw), 
+                "total_estudiantes_unicos": len(estudiantes_unicos),
+                "cursos_activos": int(df_final['Es_Activo'].fillna(False).astype(bool).sum()) if 'Es_Activo' in df_final.columns else 0
+            },
+            "kpis_globales": { 
+                "chs_promedio_secretaria": round(df_final['Salud_Curso_CHS'].mean(), 1) if len(df_final) > 0 else 0, 
+                "nps_global": round(df_final[df_final['Total_Encuestas'] > 0]['e_NPS'].mean(), 1) if len(df_final) > 0 else 0 
+            },
             "demografia_global": demografia_global,
             "cursos": cursos_lista
         }
