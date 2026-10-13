@@ -104,7 +104,7 @@ class PipelineAnalitico:
                         completados += 1
                     # Expresión regular robusta para atrapar fechas de Moodle (detecta / o - )
                     elif re.search(r'\d{1,4}[-/]\d{1,2}[-/]\d{1,4}', val):
-                        fecha_parsed = pd.to_datetime(val, dayfirst=True, errors='coerce')
+                        fecha_parsed = pd.to_datetime(val, format='mixed', dayfirst=True, errors='coerce')
                         if pd.notna(fecha_parsed):
                             fechas.append(fecha_parsed)
                             fechas_globales_curso.append(fecha_parsed)
