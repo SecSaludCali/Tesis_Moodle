@@ -1,46 +1,46 @@
 {
     "metadata": {
         "total_cursos_analizados": 61,
-        "total_encuestas_historicas": 4209,
+        "total_encuestas_historicas": 4216,
         "total_estudiantes_unicos": 7705,
-        "cursos_activos": 19
+        "cursos_activos": 20
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 53.7,
-        "nps_global": 70.2
+        "chs_promedio_secretaria": 54.7,
+        "nps_global": 70.9
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 3076,
-            "Masculino": 1128,
+            "Femenino": 3082,
+            "Masculino": 1129,
             "Intersexual": 5
         },
         "Perfil": {
-            "Área de la salud": 2858,
-            "Estudiante": 937,
-            "Otro": 414
+            "Área de la salud": 2861,
+            "Estudiante": 940,
+            "Otro": 415
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2364,
-            "Adolescencia (12 - 17 años)": 950,
-            "Juventud (18 - 28 años)": 727,
+            "Adultez (29 - 59 años)": 2366,
+            "Adolescencia (12 - 17 años)": 952,
+            "Juventud (18 - 28 años)": 730,
             "Vejez (60 años o más)": 168
         },
         "Comuna": {
             "COMUNA 17": 457,
             "COMUNA 1": 249,
             "COMUNA 19": 239,
-            "COMUNA 10": 214,
+            "COMUNA 10": 215,
             "COMUNA 2": 206,
             "COMUNA 15": 185,
-            "COMUNA 6": 173,
-            "COMUNA 18": 167,
-            "COMUNA 16": 154,
+            "COMUNA 6": 174,
+            "COMUNA 18": 168,
+            "COMUNA 16": 156,
             "COMUNA 5": 153,
             "COMUNA 14": 141,
             "COMUNA 21": 132,
             "COMUNA 8": 131,
-            "COMUNA 11": 124,
+            "COMUNA 11": 125,
             "COMUNA 12": 121,
             "COMUNA 7": 119,
             "COMUNA 13": 117,
@@ -54,27 +54,28 @@
             "C. DE EL HORMIGUERO": 12,
             "C. DE EL SALADITO": 10,
             "C. DE FELIDIA": 9,
-            "C. DE MONTEBELLO": 5,
             "C. DE LA CASTILLA": 5,
-            "C. DE NAVARRO": 3,
+            "C. DE MONTEBELLO": 5,
             "C. DE VILLACARMELO": 3,
+            "C. DE NAVARRO": 3,
             "C. DE PICHINDE": 3,
+            "C. DE GOLONDRINAS": 2,
             "C. DE LOS ANDES": 2,
             "C. DE LA PAZ": 2,
-            "C. DE GOLONDRINAS": 2,
             "12 de octubre ": 1,
-            "Marroquín 2": 1,
-            "C.Alirio Mora": 1,
+            "MUNICIPIO DE PRADERA VALLE ": 1,
             "candelaria": 1,
+            "C.Alirio Mora": 1,
+            "Marroquín 2": 1,
             "guayaquil": 1,
             "C. DE LA ELVIRA": 1,
             "C. DE LA LEONERA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1791,
-            "Bachiller": 1309,
-            "Postgrado": 1029,
-            "Ninguna": 80
+            "Pregrado": 1794,
+            "Bachiller": 1310,
+            "Postgrado": 1031,
+            "Ninguna": 81
         }
     },
     "cursos": [
@@ -195,6 +196,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -421,6 +423,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -607,6 +610,7 @@
                     "COMUNA 7": 3,
                     "COMUNA 8": 0,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -1163,32 +1167,32 @@
             "Tasa_Finalizacion_%": 1.0,
             "Tasa_Abandono_%": 0.0,
             "Tasa_Inactividad_%": 99.0,
-            "Tiempo_Promedio_Dias": 0.6,
+            "Tiempo_Promedio_Dias": 2.4,
             "Es_Activo": true,
-            "Total_Encuestas": 1.0,
-            "ISG_Promedio": 4.846153846153846,
+            "Total_Encuestas": 2.0,
+            "ISG_Promedio": 4.923076923076923,
             "ICD_Promedio": 5.0,
             "IUP_Promedio": 5.0,
-            "UX_Promedio": 4.0,
+            "UX_Promedio": 4.5,
             "e_NPS": 100.0,
-            "Salud_Curso_CHS": 57.5,
+            "Salud_Curso_CHS": 58.9,
             "Curso_Base": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE JUVENTUD",
             "Edicion": "2026 - Cohorte 2",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 1,
+                    "Femenino": 2,
                     "Intersexual": 0,
                     "Masculino": 0
                 },
                 "Perfil": {
                     "Estudiante": 0,
                     "Otro": 0,
-                    "Área de la salud": 1
+                    "Área de la salud": 2
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
                     "Adultez (29 - 59 años)": 1,
-                    "Juventud (18 - 28 años)": 0,
+                    "Juventud (18 - 28 años)": 1,
                     "Vejez (60 años o más)": 0
                 },
                 "Comuna": {
@@ -1231,6 +1235,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 1,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -1238,7 +1243,7 @@
                 "Escolaridad": {
                     "Bachiller": 1,
                     "Ninguna": 0,
-                    "Postgrado": 0,
+                    "Postgrado": 1,
                     "Pregrado": 0
                 }
             },
@@ -1253,8 +1258,8 @@
                 "¿El facilitador demostró el dominio del tema brindado?": 5.0,
                 "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5.0,
                 "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5.0,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.0,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.5,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.5,
                 "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5.0
             },
             "Registros_Crudos": [
@@ -1276,6 +1281,26 @@
                     "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4,
                     "¿El material utilizado permitió el entendimiento del tema?": 4,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "MUNICIPIO DE PRADERA VALLE ",
+                    "Escolaridad": "Postgrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 }
             ]
@@ -1397,6 +1422,7 @@
                     "COMUNA 7": 9,
                     "COMUNA 8": 9,
                     "COMUNA 9": 5,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -4221,6 +4247,7 @@
                     "COMUNA 7": 9,
                     "COMUNA 8": 9,
                     "COMUNA 9": 5,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -7045,6 +7072,7 @@
                     "COMUNA 7": 9,
                     "COMUNA 8": 9,
                     "COMUNA 9": 5,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -15398,35 +15426,35 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2025 - 01",
             "ID_Moodle_Original": "sello_012025",
             "Total_Inscritos": 1338,
-            "Tasa_Finalizacion_%": 76.0,
+            "Tasa_Finalizacion_%": 76.2,
             "Tasa_Abandono_%": 2.5,
-            "Tasa_Inactividad_%": 21.4,
+            "Tasa_Inactividad_%": 21.3,
             "Tiempo_Promedio_Dias": 3.0,
             "Es_Activo": true,
-            "Total_Encuestas": 708.0,
-            "ISG_Promedio": 4.562798783137766,
-            "ICD_Promedio": 4.49105461393597,
-            "IUP_Promedio": 4.646186440677966,
-            "UX_Promedio": 4.567796610169491,
-            "e_NPS": 60.2,
-            "Salud_Curso_CHS": 85.5,
+            "Total_Encuestas": 710.0,
+            "ISG_Promedio": 4.561430119176598,
+            "ICD_Promedio": 4.489671361502348,
+            "IUP_Promedio": 4.645774647887324,
+            "UX_Promedio": 4.5654929577464785,
+            "e_NPS": 60.1,
+            "Salud_Curso_CHS": 85.6,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 468,
+                    "Femenino": 470,
                     "Intersexual": 1,
                     "Masculino": 239
                 },
                 "Perfil": {
-                    "Estudiante": 15,
-                    "Otro": 174,
+                    "Estudiante": 16,
+                    "Otro": 175,
                     "Área de la salud": 519
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 566,
-                    "Juventud (18 - 28 años)": 83,
+                    "Adultez (29 - 59 años)": 567,
+                    "Juventud (18 - 28 años)": 84,
                     "Vejez (60 años o más)": 59
                 },
                 "Comuna": {
@@ -15448,7 +15476,7 @@
                     "C. DE VILLACARMELO": 0,
                     "C.Alirio Mora": 0,
                     "COMUNA 1": 12,
-                    "COMUNA 10": 55,
+                    "COMUNA 10": 56,
                     "COMUNA 11": 26,
                     "COMUNA 12": 15,
                     "COMUNA 13": 21,
@@ -15456,7 +15484,7 @@
                     "COMUNA 15": 27,
                     "COMUNA 16": 23,
                     "COMUNA 17": 118,
-                    "COMUNA 18": 25,
+                    "COMUNA 18": 26,
                     "COMUNA 19": 76,
                     "COMUNA 2": 40,
                     "COMUNA 20": 13,
@@ -15469,6 +15497,7 @@
                     "COMUNA 7": 17,
                     "COMUNA 8": 32,
                     "COMUNA 9": 13,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -15476,24 +15505,24 @@
                 "Escolaridad": {
                     "Bachiller": 110,
                     "Ninguna": 2,
-                    "Postgrado": 266,
-                    "Pregrado": 330
+                    "Postgrado": 267,
+                    "Pregrado": 331
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.621468926553672,
-                "¿Se cumplió el objetivo de la capacitación?": 4.628531073446328,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.6059322033898304,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.5790960451977405,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.661016949152542,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.63135593220339,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.549435028248587,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.5607344632768365,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.426553672316384,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.362994350282486,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.556497175141243,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.5790960451977405,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.553672316384181
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.621126760563381,
+                "¿Se cumplió el objetivo de la capacitación?": 4.628169014084507,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.604225352112676,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.577464788732394,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.66056338028169,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.630985915492958,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.547887323943662,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.56056338028169,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.422535211267606,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.3605633802816905,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.553521126760564,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.577464788732394,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.553521126760564
             },
             "Registros_Crudos": [
                 {
@@ -18059,6 +18088,26 @@
                 {
                     "Sexo": "Femenino",
                     "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Otro",
+                    "Comuna_Unificada": "COMUNA 18",
+                    "Escolaridad": "Postgrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 3,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 3,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 3,
+                    "¿El material utilizado permitió el entendimiento del tema?": 4,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
                     "Perfil": "Área de la salud",
                     "Comuna_Unificada": "COMUNA 17",
                     "Escolaridad": "Pregrado",
@@ -20555,6 +20604,26 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
                     "¿El material utilizado permitió el entendimiento del tema?": 5,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Estudiante",
+                    "Comuna_Unificada": "COMUNA 10",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 4,
+                    "¿Se cumplió el objetivo de la capacitación?": 4,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 3,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4,
+                    "¿El facilitador demostró el dominio del tema brindado?": 4,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 3,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4,
+                    "¿El material utilizado permitió el entendimiento del tema?": 4,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4
                 },
                 {
                     "Sexo": "Femenino",
@@ -29733,6 +29802,7 @@
                     "COMUNA 7": 2,
                     "COMUNA 8": 2,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -31319,6 +31389,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -31687,6 +31758,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 1,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -34771,6 +34843,7 @@
                     "COMUNA 7": 1,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -34915,6 +34988,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -35161,6 +35235,7 @@
                     "COMUNA 7": 2,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -35405,6 +35480,7 @@
                     "COMUNA 7": 9,
                     "COMUNA 8": 9,
                     "COMUNA 9": 5,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -43871,6 +43947,7 @@
                     "COMUNA 7": 2,
                     "COMUNA 8": 1,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -44175,6 +44252,7 @@
                     "COMUNA 7": 19,
                     "COMUNA 8": 1,
                     "COMUNA 9": 9,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -48429,8 +48507,8 @@
             "ID_Moodle_Original": "rpmsa_022026",
             "Total_Inscritos": 308,
             "Tasa_Finalizacion_%": 0.6,
-            "Tasa_Abandono_%": 2.3,
-            "Tasa_Inactividad_%": 97.1,
+            "Tasa_Abandono_%": 2.6,
+            "Tasa_Inactividad_%": 96.8,
             "Tiempo_Promedio_Dias": 0.3,
             "Es_Activo": true,
             "Total_Encuestas": 1.0,
@@ -48499,6 +48577,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -48623,6 +48702,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 1,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -48947,6 +49027,7 @@
                     "COMUNA 7": 1,
                     "COMUNA 8": 0,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -49851,6 +49932,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -49975,6 +50057,7 @@
                     "COMUNA 7": 19,
                     "COMUNA 8": 1,
                     "COMUNA 9": 9,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -54299,6 +54382,7 @@
                     "COMUNA 7": 1,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -54483,6 +54567,7 @@
                     "COMUNA 7": 3,
                     "COMUNA 8": 1,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -55627,6 +55712,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -55895,6 +55981,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -56559,6 +56646,7 @@
                     "COMUNA 7": 2,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -57003,6 +57091,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -57422,43 +57511,146 @@
             "Nombre_Curso": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL - 2026 - 01",
             "ID_Moodle_Original": "soat_012026",
             "Total_Inscritos": 248,
-            "Tasa_Finalizacion_%": 0.0,
-            "Tasa_Abandono_%": 0.8,
-            "Tasa_Inactividad_%": 99.2,
-            "Tiempo_Promedio_Dias": 1.8,
-            "Es_Activo": false,
-            "Total_Encuestas": 0.0,
-            "ISG_Promedio": 0.0,
-            "ICD_Promedio": 0.0,
-            "IUP_Promedio": 0.0,
-            "UX_Promedio": 0.0,
-            "e_NPS": 0.0,
-            "Salud_Curso_CHS": 0.0,
+            "Tasa_Finalizacion_%": 0.8,
+            "Tasa_Abandono_%": 1.2,
+            "Tasa_Inactividad_%": 98.0,
+            "Tiempo_Promedio_Dias": 0.6,
+            "Es_Activo": true,
+            "Total_Encuestas": 2.0,
+            "ISG_Promedio": 5.0,
+            "ICD_Promedio": 5.0,
+            "IUP_Promedio": 5.0,
+            "UX_Promedio": 5.0,
+            "e_NPS": 100.0,
+            "Salud_Curso_CHS": 60.3,
             "Curso_Base": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
-                "Sexo": {},
-                "Perfil": {},
-                "Edad": {},
-                "Comuna": {},
-                "Escolaridad": {}
+                "Sexo": {
+                    "Femenino": 2,
+                    "Intersexual": 0,
+                    "Masculino": 0
+                },
+                "Perfil": {
+                    "Estudiante": 0,
+                    "Otro": 0,
+                    "Área de la salud": 2
+                },
+                "Edad": {
+                    "Adolescencia (12 - 17 años)": 0,
+                    "Adultez (29 - 59 años)": 1,
+                    "Juventud (18 - 28 años)": 1,
+                    "Vejez (60 años o más)": 0
+                },
+                "Comuna": {
+                    "12 de octubre ": 0,
+                    "C. DE EL HORMIGUERO": 0,
+                    "C. DE EL SALADITO": 0,
+                    "C. DE FELIDIA": 0,
+                    "C. DE GOLONDRINAS": 0,
+                    "C. DE LA BUITRERA": 0,
+                    "C. DE LA CASTILLA": 0,
+                    "C. DE LA ELVIRA": 0,
+                    "C. DE LA LEONERA": 0,
+                    "C. DE LA PAZ": 0,
+                    "C. DE LOS ANDES": 0,
+                    "C. DE MONTEBELLO": 0,
+                    "C. DE NAVARRO": 0,
+                    "C. DE PANCE": 0,
+                    "C. DE PICHINDE": 0,
+                    "C. DE VILLACARMELO": 0,
+                    "C.Alirio Mora": 0,
+                    "COMUNA 1": 0,
+                    "COMUNA 10": 0,
+                    "COMUNA 11": 0,
+                    "COMUNA 12": 0,
+                    "COMUNA 13": 0,
+                    "COMUNA 14": 0,
+                    "COMUNA 15": 0,
+                    "COMUNA 16": 2,
+                    "COMUNA 17": 0,
+                    "COMUNA 18": 0,
+                    "COMUNA 19": 0,
+                    "COMUNA 2": 0,
+                    "COMUNA 20": 0,
+                    "COMUNA 21": 0,
+                    "COMUNA 22": 0,
+                    "COMUNA 3": 0,
+                    "COMUNA 4": 0,
+                    "COMUNA 5": 0,
+                    "COMUNA 6": 0,
+                    "COMUNA 7": 0,
+                    "COMUNA 8": 0,
+                    "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
+                    "Marroquín 2": 0,
+                    "candelaria": 0,
+                    "guayaquil": 0
+                },
+                "Escolaridad": {
+                    "Bachiller": 0,
+                    "Ninguna": 0,
+                    "Postgrado": 0,
+                    "Pregrado": 2
+                }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
-                "¿Se cumplió el objetivo de la capacitación?": 0.0,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
-                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
-                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+                "¿Se dio a conocer el objetivo de la capacitación?": 5.0,
+                "¿Se cumplió el objetivo de la capacitación?": 5.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 5.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 5.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 5.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5.0
             },
-            "Registros_Crudos": []
+            "Registros_Crudos": [
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 16",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 16",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                }
+            ]
         },
         {
             "Nombre_Curso": "ESTRATEGIAS DE INTERVENCIÓN EN SALUD MENTAL Y PREVENCIÓN DEL CONSUMO DE SUSTANCIAS PSICOACTIVAS EN EL CONTEXTO DEL SISTEMA DE RESPONSABILIDAD PENAL ADOLESCENTE - 2025 - 01",
@@ -57619,6 +57811,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -57763,6 +57956,7 @@
                     "COMUNA 7": 1,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -57987,6 +58181,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 1,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -61071,6 +61266,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -61417,6 +61613,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -61721,6 +61918,7 @@
                     "COMUNA 7": 2,
                     "COMUNA 8": 0,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -62765,6 +62963,7 @@
                     "COMUNA 7": 2,
                     "COMUNA 8": 0,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -63809,6 +64008,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -64153,6 +64353,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 1,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -64386,33 +64587,33 @@
             "Nombre_Curso": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES) - 2026 - 01",
             "ID_Moodle_Original": "pfsa_022026",
             "Total_Inscritos": 1006,
-            "Tasa_Finalizacion_%": 82.2,
-            "Tasa_Abandono_%": 4.8,
-            "Tasa_Inactividad_%": 13.0,
-            "Tiempo_Promedio_Dias": 121.3,
+            "Tasa_Finalizacion_%": 83.3,
+            "Tasa_Abandono_%": 4.0,
+            "Tasa_Inactividad_%": 12.7,
+            "Tiempo_Promedio_Dias": 97.2,
             "Es_Activo": true,
-            "Total_Encuestas": 131.0,
-            "ISG_Promedio": 4.4221961244862005,
-            "ICD_Promedio": 4.414758269720102,
-            "IUP_Promedio": 4.458015267175573,
-            "UX_Promedio": 4.431297709923665,
-            "e_NPS": 61.1,
-            "Salud_Curso_CHS": 86.1,
+            "Total_Encuestas": 133.0,
+            "ISG_Promedio": 4.406015037593985,
+            "ICD_Promedio": 4.406015037593985,
+            "IUP_Promedio": 4.43984962406015,
+            "UX_Promedio": 4.409774436090226,
+            "e_NPS": 59.4,
+            "Salud_Curso_CHS": 86.3,
             "Curso_Base": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 92,
+                    "Femenino": 93,
                     "Intersexual": 1,
-                    "Masculino": 38
+                    "Masculino": 39
                 },
                 "Perfil": {
-                    "Estudiante": 130,
+                    "Estudiante": 132,
                     "Otro": 0,
                     "Área de la salud": 1
                 },
                 "Edad": {
-                    "Adolescencia (12 - 17 años)": 129,
+                    "Adolescencia (12 - 17 años)": 131,
                     "Adultez (29 - 59 años)": 0,
                     "Juventud (18 - 28 años)": 2,
                     "Vejez (60 años o más)": 0
@@ -64437,7 +64638,7 @@
                     "C.Alirio Mora": 1,
                     "COMUNA 1": 19,
                     "COMUNA 10": 9,
-                    "COMUNA 11": 23,
+                    "COMUNA 11": 24,
                     "COMUNA 12": 8,
                     "COMUNA 13": 3,
                     "COMUNA 14": 13,
@@ -64453,35 +64654,36 @@
                     "COMUNA 3": 4,
                     "COMUNA 4": 0,
                     "COMUNA 5": 1,
-                    "COMUNA 6": 3,
+                    "COMUNA 6": 4,
                     "COMUNA 7": 0,
                     "COMUNA 8": 5,
                     "COMUNA 9": 2,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 1,
                     "candelaria": 1,
                     "guayaquil": 1
                 },
                 "Escolaridad": {
-                    "Bachiller": 114,
-                    "Ninguna": 14,
+                    "Bachiller": 115,
+                    "Ninguna": 15,
                     "Postgrado": 0,
                     "Pregrado": 3
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.450381679389313,
-                "¿Se cumplió el objetivo de la capacitación?": 4.3893129770992365,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.450381679389313,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.320610687022901,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.5038167938931295,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.412213740458015,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.404580152671755,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.419847328244275,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.320610687022901,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.419847328244275,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.412213740458015,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.450381679389313,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.534351145038168
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.428571428571429,
+                "¿Se cumplió el objetivo de la capacitación?": 4.37593984962406,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.428571428571429,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.315789473684211,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.481203007518797,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.398496240601504,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.406015037593985,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.406015037593985,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.30827067669173,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.406015037593985,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.398496240601504,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.421052631578948,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.503759398496241
             },
             "Registros_Crudos": [
                 {
@@ -65483,6 +65685,26 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
                     "¿El material utilizado permitió el entendimiento del tema?": 5,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Masculino",
+                    "Curso de vida": "Adolescencia (12 - 17 años)",
+                    "Perfil": "Estudiante",
+                    "Comuna_Unificada": "COMUNA 6",
+                    "Escolaridad": "Bachiller",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 1,
+                    "¿Se cumplió el objetivo de la capacitación?": 3,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 2,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 3,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 2,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 3,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4,
+                    "¿El facilitador demostró el dominio del tema brindado?": 2,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 2,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 3,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 2,
+                    "¿El material utilizado permitió el entendimiento del tema?": 1,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 1
                 },
                 {
                     "Sexo": "Femenino",
@@ -66688,6 +66910,26 @@
                     "Sexo": "Femenino",
                     "Curso de vida": "Adolescencia (12 - 17 años)",
                     "Perfil": "Estudiante",
+                    "Comuna_Unificada": "COMUNA 11",
+                    "Escolaridad": "Ninguna",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 4,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 4,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adolescencia (12 - 17 años)",
+                    "Perfil": "Estudiante",
                     "Comuna_Unificada": "COMUNA 14",
                     "Escolaridad": "Bachiller",
                     "¿Se dio a conocer el objetivo de la capacitación?": 5,
@@ -67181,6 +67423,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -67365,6 +67608,7 @@
                     "COMUNA 7": 3,
                     "COMUNA 8": 1,
                     "COMUNA 9": 1,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -68509,6 +68753,7 @@
                     "COMUNA 7": 12,
                     "COMUNA 8": 28,
                     "COMUNA 9": 12,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -81313,6 +81558,7 @@
                     "COMUNA 7": 1,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
@@ -81817,6 +82063,7 @@
                     "COMUNA 7": 0,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
+                    "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "candelaria": 0,
                     "guayaquil": 0
