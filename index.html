@@ -160,7 +160,7 @@
         .chart-wrapper { position: relative; height: 180px; width: 100%; margin-top: 10px; display: flex; justify-content: center; transition: height 0.3s ease;}
         .radar-wrapper { position: relative; height: 360px; width: 100%; display: flex; justify-content: center; transition: height 0.3s ease;}
         
-        /* Modificación: Mapa limpio sin fondo */
+        /* Modificación 5: Mapa limpio sin fondo */
         #map-container { border-radius: 16px; transform: translateZ(0); width: 100%; flex-grow: 1; min-height: 350px; background: transparent !important; }
         .leaflet-container { background: transparent !important; }
 
@@ -300,7 +300,6 @@
         </nav>
 
         <main id="main-content">
-            
             <div id="mobile-top-bar">
                 <div class="sidebar-brand m-0">
                     <img src="Recurso.png" alt="Logo" onerror="this.src='https://placehold.co/40x40/4318ff/ffffff?text=SS'">
@@ -397,7 +396,7 @@
                     </div>
                 </div>
             </section>
-
+            
             <section id="dashboard_view" class="view-section">
                 <div class="container-fluid px-3 px-md-4 py-4">
                     
@@ -760,20 +759,14 @@
                 if (chart.config.type !== 'doughnut') return;
                 const { width, height, ctx } = chart;
                 ctx.restore();
-                
-                // Calcula el total sumando el dataset
                 const total = chart.data.datasets[0].data.reduce((a, b) => a + (Number(b) || 0), 0);
-                
-                // Estilo del texto
                 const fontSize = (height / 5).toFixed(2);
                 ctx.font = `800 ${fontSize}px Inter`;
                 ctx.textBaseline = "middle";
                 ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-main');
-                
                 const text = total.toLocaleString();
                 const textX = Math.round((width - ctx.measureText(text).width) / 2);
                 const textY = height / 2;
-                
                 ctx.fillText(text, textX, textY);
                 ctx.save();
             }
@@ -927,9 +920,8 @@
 
         function inicializarMapa() { 
             if (mapInstance) return; 
-            // Eliminamos el tileLayer y controles sobrantes para dejarlo limpio y transparente
+            // Eliminamos el tileLayer para dejar el contenedor transparente
             mapInstance = L.map('map-container', { preferCanvas: true, zoomControl: true, attributionControl: false }).setView([3.42158, -76.5205], 11); 
-            // No L.tileLayer(...) here.
         }
         
         function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
@@ -945,7 +937,6 @@
             } 
             if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
             
-            // Obtener color del stroke según el tema
             const strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || 'rgba(255,255,255,0.7)';
             
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
@@ -976,7 +967,7 @@
                     });
                 }
             }).addTo(mapInstance); 
-            geoJsonLayer.lastDataComunas = dataComunas; // Guardar referencia para repintar al cambiar tema
+            geoJsonLayer.lastDataComunas = dataComunas; 
             setTimeout(() => { mapInstance.invalidateSize(); if(geoJsonLayer.getBounds().isValid()) mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]}); }, 200);
         }
 
@@ -991,7 +982,7 @@
                     data: { labels: labels, datasets: [{ data: datos, backgroundColor: cols, borderWidth: 0, hoverOffset: 4, cursor: 'pointer' }] }, 
                     options: { 
                         responsive: true, maintainAspectRatio: false, cutout: '75%', 
-                        plugins: { legend: { display: false } }, // Ocultamos leyenda por defecto
+                        plugins: { legend: { display: false } }, 
                         animation: false,
                         onClick: (e, elements, chart) => {
                             if (elements.length > 0 && cursoActual) {
@@ -1003,7 +994,6 @@
                     } 
                 }); 
             }
-            // Generar leyenda custom
             generarLeyendaCustom(canvasId, labels, datos, cols, filterType);
         }
         
@@ -1011,7 +1001,6 @@
             const legendContainer = document.getElementById(`legend-${canvasId}`);
             if(!legendContainer) return;
             
-            // Ordenar por valor (Mayor a menor)
             let items = labels.map((l, i) => ({ label: l, val: datos[i], color: cols[i] }));
             items.sort((a,b) => b.val - a.val);
             
@@ -1019,7 +1008,6 @@
             items.forEach(item => {
                 if(item.val > 0) {
                     const iconClass = getIconForLabel(item.label);
-                    // El clic en la leyenda también filtra
                     html += `
                         <div class="legend-item" onclick="if(cursoActual) triggerCrossFilter('${filterType}', '${item.label}')">
                             <div class="legend-color-box" style="background-color: ${item.color};"></div>
@@ -1243,6 +1231,7 @@
               });
             });
 
+            // Agregando oyentes para el Acordeón
             const collapseElementList = document.querySelectorAll('.collapse');
             collapseElementList.forEach(collapseEl => {
                 collapseEl.addEventListener('show.bs.collapse', e => {
@@ -1303,7 +1292,6 @@
             let tC = 0; dashboardData.cursos.forEach(c => { tC += Math.round((c.Total_Inscritos||0)*(c['Tasa_Finalizacion_%']||0)/100); });
             const unicos = dashboardData.metadata.total_estudiantes_unicos || tI;
             
-            // CÁLCULO SEGURO DEL NÚMERO DE CURSOS ACTIVOS PARA EL HOME
             let totalCursosActivos = 0;
             if (dashboardData.metadata && dashboardData.metadata.cursos_activos !== undefined) {
                 totalCursosActivos = dashboardData.metadata.cursos_activos;
