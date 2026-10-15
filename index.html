@@ -968,7 +968,17 @@
                 }
             }).addTo(mapInstance); 
             geoJsonLayer.lastDataComunas = dataComunas; 
-            setTimeout(() => { mapInstance.invalidateSize(); if(geoJsonLayer.getBounds().isValid()) mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]}); }, 200);
+            
+            setTimeout(() => { 
+                mapInstance.invalidateSize(); 
+                // SOLUCIÓN AL ERROR: Solo hacemos zoom si el mapa tiene polígonos válidos
+                if(geoJsonLayer && Object.keys(geoJsonLayer._layers).length > 0) {
+                    let mapBounds = geoJsonLayer.getBounds();
+                    if(mapBounds && mapBounds.isValid()) {
+                        mapInstance.fitBounds(mapBounds, {padding: [10, 10]}); 
+                    }
+                }
+            }, 200);
         }
 
         function dibujarGraficoDona(canvasId, dataObject, filterType) { 
