@@ -787,7 +787,6 @@
 
         // Filtro Interactivo Cross-filtering
         function triggerCrossFilter(filterId, value) {
-            if (!cursoActual) return; // Solo filtra si hay un curso seleccionado
             const selectEl = document.getElementById(filterId);
             if(selectEl) {
                 if(selectEl.value === String(value)) selectEl.value = 'ALL';
@@ -861,10 +860,11 @@
         };
 
         function cargarFiltrosOLAP() {
-            if(!cursoActual || !cursoActual.Registros_Crudos || cursoActual.Registros_Crudos.length === 0) { document.getElementById('filtros-cruzados-bar').style.display = 'none'; return; }
+            let registros = cursoActual ? cursoActual.Registros_Crudos : dashboardData.cursos.flatMap(c => c.Registros_Crudos || []);
+            if(!registros || registros.length === 0) { document.getElementById('filtros-cruzados-bar').style.display = 'none'; return; }
             document.getElementById('filtros-cruzados-bar').style.display = 'flex';
             const fSexo = new Set(), fEdad = new Set(), fPerf = new Set(), fCom = new Set();
-            cursoActual.Registros_Crudos.forEach(r => { fSexo.add(r['Sexo']); fEdad.add(r['Curso de vida']); fPerf.add(r['Perfil']); fCom.add(r['Comuna_Unificada']); });
+            registros.forEach(r => { fSexo.add(r['Sexo']); fEdad.add(r['Curso de vida']); fPerf.add(r['Perfil']); fCom.add(r['Comuna_Unificada']); });
             const setOpts = (id, set, lbl) => { const el = document.getElementById(id); el.innerHTML = `<option value="ALL">${lbl}</option>`; Array.from(set).sort().forEach(v => { if(v && v!=="N/A") el.appendChild(new Option(v, v)); }); el.classList.remove('active-chip'); };
             setOpts('f-sexo', fSexo, 'Sexo'); setOpts('f-edad', fEdad, 'Edad'); setOpts('f-perfil', fPerf, 'Perfil'); setOpts('f-comuna', fCom, 'Comuna');
         }
@@ -882,7 +882,6 @@
         }
 
         function aplicarFiltrosReal() {
-            if(!cursoActual || !cursoActual.Registros_Crudos) return;
             const vS = document.getElementById('f-sexo').value, vE = document.getElementById('f-edad').value, vP = document.getElementById('f-perfil').value, vC = document.getElementById('f-comuna').value;
             const esFiltrado = (vS!=="ALL" || vE!=="ALL" || vP!=="ALL" || vC!=="ALL");
 
@@ -890,16 +889,29 @@
 
             if(!esFiltrado) {
                 datosFiltradosActuales = null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock');
-                moodleTab.classList.remove('locked'); moodleTab.setAttribute('data-bs-toggle', 'tab'); lockIcon.classList.add('d-none'); actualizarPantallaCurso(null); return;
+                moodleTab.classList.remove('locked'); moodleTab.setAttribute('data-bs-toggle', 'tab'); lockIcon.classList.add('d-none'); 
+                if(cursoActual) actualizarPantallaCurso(null);
+                else actualizarPantallaGlobal(null);
+                return;
             }
 
             document.getElementById('kpi-moodle-row').classList.add('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.add('filtro-lock');
             moodleTab.classList.add('locked'); moodleTab.removeAttribute('data-bs-toggle'); lockIcon.classList.remove('d-none');
             if(moodleTab.classList.contains('active')) { let tab = new bootstrap.Tab(radarTab); tab.show(); document.querySelectorAll('.tab-clean').forEach(t => t.classList.remove('active')); radarTab.classList.add('active'); }
 
-            let arrF = cursoActual.Registros_Crudos.filter(r => {
-                let cID = String(r['Comuna_Unificada']||"").replace(/\D/g, ''); cID = cID ? cID : String(r['Comuna_Unificada']).trim();
-                return (vS==="ALL" || r['Sexo']===vS) && (vE==="ALL" || r['Curso de vida']===vE) && (vP==="ALL" || r['Perfil']===vP) && (vC==="ALL" || cID===vC);
+            let cursosFuente = cursoActual ? [cursoActual] : dashboardData.cursos;
+            if (!cursoActual && añoActual !== "ALL") {
+                cursosFuente = cursosFuente.filter(c => (c.Edicion||"").includes(añoActual));
+            }
+
+            let arrF = [];
+            cursosFuente.forEach(c => {
+                if(c.Registros_Crudos) {
+                    arrF = arrF.concat(c.Registros_Crudos.filter(r => {
+                        let cID = String(r['Comuna_Unificada']||"").replace(/\D/g, ''); cID = cID ? cID : String(r['Comuna_Unificada']).trim();
+                        return (vS==="ALL" || r['Sexo']===vS) && (vE==="ALL" || r['Curso de vida']===vE) && (vP==="ALL" || r['Perfil']===vP) && (vC==="ALL" || cID===vC);
+                    }));
+                }
             });
             
             let nD = { 'Sexo':{}, 'Edad':{}, 'Perfil':{}, 'Comuna':{}, 'Escolaridad':{} }; let sumQ = {}; let cQ = arrF.length; let p = 0, d = 0;
@@ -909,9 +921,11 @@
                 let vg = parseFloat(r['En general, ¿Cómo se sintió con la actividad de capacitación realizada?'])||0; if(vg===5) p++; else if(vg<=3 && vg>0) d++;
             });
             datosFiltradosActuales = { Total_Encuestas: cQ, e_NPS: cQ>0?Math.round(((p-d)/cQ)*100,1):0, Demografia: nD, Detalle_Preguntas: (()=>{let n={}; Object.keys(sumQ).forEach(q=>n[q]=cQ>0?(sumQ[q]/cQ):0); return n})(), isFiltered: true };
-            actualizarPantallaCurso(datosFiltradosActuales);
+            
+            if (cursoActual) actualizarPantallaCurso(datosFiltradosActuales);
+            else actualizarPantallaGlobal(datosFiltradosActuales);
         }
-        function limpiarFiltros() { if(!cursoActual) return; ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
+        function limpiarFiltros() { ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
 
         function inicializarMapa() { 
             if (mapInstance) return; 
@@ -956,18 +970,19 @@
                             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) { l.bringToFront(); }
                         },
                         mouseout: (e) => { geoJsonLayer.resetStyle(e.target); },
-                        click: (e) => { if(cursoActual) triggerCrossFilter('f-comuna', id); } // Filtro Cross-Filter interactivo
+                        click: (e) => { triggerCrossFilter('f-comuna', id); } // Filtro Global
                     });
                 }
             }).addTo(mapInstance); 
             geoJsonLayer.lastDataComunas = dataComunas; 
             
             setTimeout(() => { 
-                mapInstance.invalidateSize(); 
-                // Evitamos el crash asegurándonos de que haya polígonos válidos
+                if (mapInstance) mapInstance.invalidateSize(); 
                 if(geoJsonLayer && Object.keys(geoJsonLayer._layers).length > 0) {
-                    let bounds = geoJsonLayer.getBounds();
-                    if(bounds && bounds.isValid()) mapInstance.fitBounds(bounds, {padding: [10, 10]}); 
+                    try {
+                        let bounds = geoJsonLayer.getBounds();
+                        if(bounds && bounds.isValid()) mapInstance.fitBounds(bounds, {padding: [10, 10]}); 
+                    } catch(e) { console.warn("Evitando bloqueo por coordenadas atípicas en Auto-Zoom"); }
                 }
             }, 200);
         }
@@ -1010,7 +1025,7 @@
                         plugins: { legend: { display: false } }, 
                         animation: false,
                         onClick: (e, elements, chart) => {
-                            if (elements.length > 0 && cursoActual) {
+                            if (elements.length > 0) {
                                 const idx = elements[0].index;
                                 const label = chart.data.labels[idx];
                                 triggerCrossFilter(filterType, label);
@@ -1027,7 +1042,7 @@
             let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
             
             if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false, onClick: (e, elements, chart) => { if (elements.length > 0 && cursoActual) { const label = chart.data.labels[elements[0].index]; const id = label.replace(/\D/g, ''); if(id) triggerCrossFilter('f-comuna', id); } } } }); }
+            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false, onClick: (e, elements, chart) => { if (elements.length > 0) { const label = chart.data.labels[elements[0].index]; const id = label.replace(/\D/g, ''); if(id) triggerCrossFilter('f-comuna', id); } } } }); }
         }
         
         function dibujarBarraMoodle(canvasId, c) { 
@@ -1063,8 +1078,24 @@
         window.seleccionarCohorteDesdeLobby = function(n) { document.getElementById('selector-cohorte').value = n; document.getElementById('panel-lobby-curso').style.display = 'none'; document.getElementById('contenedor-tabs').style.display = 'block'; cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === n); actualizarPantallaCurso(); };
         function manejarCambioCohorte() { if (!this.value) { document.getElementById('panel-lobby-curso').style.display='block'; document.getElementById('contenedor-tabs').style.display='none'; return; } document.getElementById('panel-lobby-curso').style.display='none'; document.getElementById('contenedor-tabs').style.display='block'; cursoActual = cursosPorBase[document.getElementById('selector-curso-base').value].find(c => c.Nombre_Curso === this.value); actualizarPantallaCurso(); }
 
-        function actualizarPantallaGlobal() { 
-            document.getElementById('filtros-cruzados-bar').style.display='none'; datosFiltradosActuales=null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock'); document.getElementById('moodle-tab').classList.remove('locked'); document.getElementById('moodle-tab').setAttribute('data-bs-toggle', 'tab'); document.getElementById('lock-icon').classList.add('d-none');
+        function actualizarPantallaGlobal(dOlap = null) { 
+            if(!dOlap) cargarFiltrosOLAP();
+            
+            if (dOlap) {
+                const dD = dOlap.Demografia; 
+                const dP = dOlap.Detalle_Preguntas; 
+                let kE = dD['Edad']?'Edad':'Curso de Vida'; 
+                
+                dibujarGraficoDona('chartSexo', dD['Sexo'], 'f-sexo'); dibujarGraficoDona('chartEdad', dD[kE], 'f-edad'); dibujarGraficoDona('chartPerfil', dD['Perfil'], 'f-perfil'); dibujarGraficoDona('chartEscolaridad', dD['Escolaridad'], 'f-escolaridad'); 
+                dibujarMapaCoropletico(dD['Comuna']); dibujarGraficoComunas('chartComunas', dD['Comuna']); 
+                
+                toggleVisibilidad('col-sexo', dD['Sexo']); toggleVisibilidad('col-edad', dD[kE]); toggleVisibilidad('col-perfil', dD['Perfil']); toggleVisibilidad('col-escolaridad', dD['Escolaridad']); toggleVisibilidad('col-mapa', dD['Comuna']); toggleVisibilidad('col-comunas', dD['Comuna']);
+
+                document.getElementById('titulo-radar').innerText = "Radar Filtrado vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
+                return;
+            }
+
+            datosFiltradosActuales=null; document.getElementById('kpi-moodle-row').classList.remove('filtro-lock'); document.getElementById('moodle-charts-wrapper').classList.remove('filtro-lock'); document.getElementById('moodle-tab').classList.remove('locked'); document.getElementById('moodle-tab').setAttribute('data-bs-toggle', 'tab'); document.getElementById('lock-icon').classList.add('d-none');
             let cF = dashboardData.cursos; if(añoActual!=="ALL") cF = cF.filter(c => (c.Edicion||"").includes(añoActual));
             const tC = cF.length; const tI = cF.reduce((s, c) => s+(c.Total_Inscritos||0), 0); let tCert = 0, tE = 0, npsP = 0, npsD = 0, chsS = 0; let dG = { 'Sexo':{}, 'Curso de Vida':{}, 'Perfil':{}, 'Escolaridad':{}, 'Comuna':{} };
             
