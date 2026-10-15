@@ -18,7 +18,7 @@
         :root[data-theme="light"] {
             --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #1e293b; --text-muted: #64748b; --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5);
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5); --map-stroke: #ffffff;
             --card-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.05);
             --blob-1: rgba(67, 24, 255, 0.1); --blob-2: rgba(5, 205, 153, 0.1);
         }
@@ -26,7 +26,7 @@
         :root[data-theme="dark"] {
             --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.95); --card-bg: rgba(17, 28, 68, 0.85); 
             --text-main: #f8fafc; --text-muted: #a3aed1; --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08); --map-stroke: #1e293b;
             --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
             --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1);
         }
@@ -34,7 +34,7 @@
         :root[data-theme="rose"] {
             --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #4c0519; --text-muted: #9f1239; --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15);
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15); --map-stroke: #ffe4e6;
             --card-shadow: 0 4px 20px 0 rgba(225, 29, 72, 0.05);
             --blob-1: rgba(225, 29, 72, 0.1); --blob-2: rgba(244, 63, 94, 0.1);
         }
@@ -42,7 +42,7 @@
         :root[data-theme="amber"] {
             --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #451a03; --text-muted: #92400e; --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15);
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15); --map-stroke: #fef3c7;
             --card-shadow: 0 4px 20px 0 rgba(217, 119, 6, 0.05);
             --blob-1: rgba(217, 119, 6, 0.1); --blob-2: rgba(245, 158, 11, 0.1);
         }
@@ -157,9 +157,40 @@
         .kpi-mini-lbl { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-top: 5px;}
         .badge-kpi { font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 12px; }
 
-        .chart-wrapper { position: relative; height: 260px; width: 100%; margin-top: 10px; transition: height 0.3s ease;}
+        .chart-wrapper { position: relative; height: 180px; width: 100%; margin-top: 10px; display: flex; justify-content: center; transition: height 0.3s ease;}
         .radar-wrapper { position: relative; height: 360px; width: 100%; display: flex; justify-content: center; transition: height 0.3s ease;}
-        #map-container { border-radius: 16px; border: 1px solid var(--border-color); transform: translateZ(0); width: 100%; flex-grow: 1; min-height: 350px;}
+        
+        /* Modificación: Mapa limpio sin fondo */
+        #map-container { border-radius: 16px; transform: translateZ(0); width: 100%; flex-grow: 1; min-height: 350px; background: transparent !important; }
+        .leaflet-container { background: transparent !important; }
+
+        /* Estilos para las Leyendas Personalizadas de las Donas */
+        .custom-legend-container {
+            margin-top: 15px;
+            max-height: 100px;
+            overflow-y: auto;
+            padding-right: 5px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+        .custom-legend-container::-webkit-scrollbar { width: 4px; }
+        .custom-legend-container::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 4px; }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.85rem;
+        }
+        .legend-item:hover { background: rgba(0,0,0,0.03); }
+        :root[data-theme="dark"] .legend-item:hover { background: rgba(255,255,255,0.05); }
+        .legend-color-box { width: 12px; height: 12px; border-radius: 4px; margin-right: 10px; flex-shrink: 0;}
+        .legend-icon { color: var(--text-muted); margin-right: 8px; font-size: 1rem; flex-shrink: 0; width: 18px; text-align: center;}
+        .legend-label { flex-grow: 1; color: var(--text-main); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .legend-value { font-weight: 800; color: var(--text-main); margin-left: 10px;}
         
         .progress-label { display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.8rem; margin-bottom: 6px; color: var(--text-main); font-weight: 500;}
         .progress-bg { height: 8px; background: rgba(0,0,0,0.05); border-radius: 4px; overflow: hidden; transform: translateZ(0); }
@@ -192,6 +223,10 @@
         .text-emerald { color: var(--success); } .bg-emerald-soft { background: rgba(5, 205, 153, 0.1); color: var(--success); }
         .text-amber { color: var(--warning); } .bg-amber-soft { background: rgba(255, 181, 71, 0.1); color: var(--warning); }
         .text-rose { color: var(--danger); } .bg-rose-soft { background: rgba(238, 93, 80, 0.1); color: var(--danger); }
+        
+        /* Rotación para el icono del acordeón de la tabla */
+        .icon-collapse { transition: transform 0.3s ease; }
+        .collapsed .icon-collapse { transform: rotate(-90deg); }
 
         @media (max-width: 992px) {
             .glass-card { padding: 20px; }
@@ -219,7 +254,7 @@
             .olap-title { width: 100%; margin-bottom: 5px;}
             .btn-limpiar { width: 100%; margin-left: 0 !important; margin-top: 10px; background: rgba(238, 93, 80, 0.05); border: 1px solid rgba(238, 93, 80, 0.2);}
             
-            .chart-wrapper { height: 220px; }
+            .chart-wrapper { height: 160px; }
             .radar-wrapper { height: 300px; }
             #map-container { min-height: 250px; }
         }
@@ -409,49 +444,98 @@
                             <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                                 <div class="row g-2 g-md-3 mb-4" id="kpi-global-row"></div>
                                 
+                                <!-- Modificación 4: Tabla Acordeón -->
                                 <div class="row mb-4" id="row-tabla-activos" style="display: none;">
                                     <div class="col-12">
                                         <div class="glass-card p-3 p-md-4">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h6 class="mb-0 fw-bold fs-5 text-primary"><i class="bi bi-play-circle-fill me-2"></i> Cursos Activos (Últimos 30 días)</h6>
+                                            <div class="d-flex justify-content-between align-items-center mb-0 collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTablaActivos" aria-expanded="false" style="cursor: pointer;">
+                                                <h6 class="mb-0 fw-bold fs-5 text-primary d-flex align-items-center">
+                                                    <i class="bi bi-play-circle-fill me-2"></i> Cursos Activos (Últimos 30 días) 
+                                                    <i class="bi bi-chevron-down ms-2 icon-collapse"></i>
+                                                </h6>
                                                 <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 border border-primary border-opacity-25" id="contador-activos-tabla">0</span>
                                             </div>
-                                            <div class="table-responsive" style="border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden;">
-                                                <table class="table table-hover align-middle mb-0" style="background: transparent;">
-                                                    <thead class="bg-primary bg-opacity-10 text-primary" style="border-bottom: 2px solid var(--primary);">
-                                                        <tr>
-                                                            <th scope="col" class="py-3 px-4 fw-bold" style="border-bottom: none;">Nombre del Curso</th>
-                                                            <th scope="col" class="py-3 px-4 fw-bold" style="border-bottom: none;">Cohorte</th>
-                                                            <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Matrículas</th>
-                                                            <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Aprobados</th>
-                                                            <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Score CHS</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="tbody-activos" style="border-top: none;">
-                                                        <!-- Las filas se inyectan por JavaScript dinámicamente -->
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div id="mensaje-sin-activos" class="text-center text-muted p-4" style="display: none;">
-                                                <i class="bi bi-inbox fs-2 opacity-50 d-block mb-2"></i>
-                                                <small>No se registran cursos con actividad en los últimos 30 días.</small>
+                                            
+                                            <div class="collapse" id="collapseTablaActivos">
+                                                <div class="table-responsive mt-4" style="border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden;">
+                                                    <table class="table table-hover align-middle mb-0" style="background: transparent;">
+                                                        <thead class="bg-primary bg-opacity-10 text-primary" style="border-bottom: 2px solid var(--primary);">
+                                                            <tr>
+                                                                <th scope="col" class="py-3 px-4 fw-bold" style="border-bottom: none;">Nombre del Curso</th>
+                                                                <th scope="col" class="py-3 px-4 fw-bold" style="border-bottom: none;">Cohorte</th>
+                                                                <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Matrículas</th>
+                                                                <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Aprobados</th>
+                                                                <th scope="col" class="py-3 px-4 fw-bold text-center" style="border-bottom: none;">Score CHS</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tbody-activos" style="border-top: none;">
+                                                            <!-- Inyectado por JS -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="mensaje-sin-activos" class="text-center text-muted p-4" style="display: none;">
+                                                    <i class="bi bi-inbox fs-2 opacity-50 d-block mb-2"></i>
+                                                    <small>No se registran cursos con actividad en los últimos 30 días.</small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 
+                                <!-- Modificación 2: Donas de igual tamaño con leyendas inferiores interactivas -->
                                 <div class="row g-3 mb-4">
-                                    <div class="col-12 col-md-6 col-xl-3" id="col-sexo"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Sexo</h6><button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartSexo"></canvas></div></div></div>
-                                    <div class="col-12 col-md-6 col-xl-3" id="col-edad"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6><button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Edad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartEdad"></canvas></div></div></div>
-                                    <div class="col-12 col-md-6 col-xl-3" id="col-perfil"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6><button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Perfil')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div></div></div>
-                                    <div class="col-12 col-md-6 col-xl-3" id="col-escolaridad"><div class="glass-card p-3"><div class="d-flex justify-content-between align-items-center mb-1"><h6 class="mb-0 fw-bold fs-6">Escolaridad</h6><button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button></div><div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div></div></div>
+                                    <div class="col-12 col-md-6 col-xl-3 d-flex flex-column" id="col-sexo">
+                                        <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="mb-0 fw-bold fs-6">Sexo</h6>
+                                                <button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button>
+                                            </div>
+                                            <div class="chart-wrapper"><canvas id="chartSexo"></canvas></div>
+                                            <div id="legend-chartSexo" class="custom-legend-container flex-grow-1"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-xl-3 d-flex flex-column" id="col-edad">
+                                        <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6>
+                                                <button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Edad')"><i class="bi bi-download"></i></button>
+                                            </div>
+                                            <div class="chart-wrapper"><canvas id="chartEdad"></canvas></div>
+                                            <div id="legend-chartEdad" class="custom-legend-container flex-grow-1"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-xl-3 d-flex flex-column" id="col-perfil">
+                                        <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6>
+                                                <button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Perfil')"><i class="bi bi-download"></i></button>
+                                            </div>
+                                            <div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div>
+                                            <div id="legend-chartPerfil" class="custom-legend-container flex-grow-1"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-xl-3 d-flex flex-column" id="col-escolaridad">
+                                        <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="mb-0 fw-bold fs-6">Escolaridad</h6>
+                                                <button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button>
+                                            </div>
+                                            <div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div>
+                                            <div id="legend-chartEscolaridad" class="custom-legend-container flex-grow-1"></div>
+                                        </div>
+                                    </div>
                                 </div>
 
+                                <!-- Modificación 5: Mapa sin baldosas, estilizado y clickeable -->
                                 <div class="row g-3 mb-4">
                                     <div class="col-12 col-lg-5 d-flex" id="col-mapa">
-                                        <div class="glass-card p-3 d-flex flex-column w-100">
-                                            <h6 class="mb-2 fw-bold fs-6">Mapa de Participación</h6>
-                                            <div id="map-container"></div>
+                                        <div class="glass-card p-3 d-flex flex-column w-100" style="padding: 15px;">
+                                            <div class="d-flex justify-content-between align-items-center mb-2 z-3" style="position: relative;">
+                                                <h6 class="mb-0 fw-bold fs-6">Mapa de Participación</h6>
+                                                <small class="text-muted"><i class="bi bi-hand-index-thumb"></i> Interactúa</small>
+                                            </div>
+                                            <!-- Fondo transparente manejado por CSS -->
+                                            <div id="map-container" style="margin-top: -30px; z-index: 1;"></div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-7" id="col-comunas">
@@ -669,6 +753,49 @@
         };
         const coloresRespaldo = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6', '#f43f5e', '#f97316'];
 
+        // Plugin para dibujar el número total en el centro de las donas
+        const centerTextPlugin = {
+            id: 'centerText',
+            beforeDraw(chart) {
+                if (chart.config.type !== 'doughnut') return;
+                const { width, height, ctx } = chart;
+                ctx.restore();
+                
+                // Calcula el total sumando el dataset
+                const total = chart.data.datasets[0].data.reduce((a, b) => a + (Number(b) || 0), 0);
+                
+                // Estilo del texto
+                const fontSize = (height / 5).toFixed(2);
+                ctx.font = `800 ${fontSize}px Inter`;
+                ctx.textBaseline = "middle";
+                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-main');
+                
+                const text = total.toLocaleString();
+                const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                const textY = height / 2;
+                
+                ctx.fillText(text, textX, textY);
+                ctx.save();
+            }
+        };
+        Chart.register(centerTextPlugin);
+
+        // Iconos para las leyendas personalizadas
+        function getIconForLabel(label) {
+            const l = String(label).toLowerCase();
+            if(l.includes('femenino')) return 'bi-gender-female text-danger';
+            if(l.includes('masculino')) return 'bi-gender-male text-info';
+            if(l.includes('intersexual') || l.includes('otro')) return 'bi-gender-ambiguous text-warning';
+            if(l.includes('infancia') || l.includes('juventud')) return 'bi-person-arms-up text-success';
+            if(l.includes('adultez')) return 'bi-person-fill text-primary';
+            if(l.includes('vejez')) return 'bi-person-walking text-indigo';
+            if(l.includes('médico') || l.includes('salud') || l.includes('enfermer')) return 'bi-heart-pulse-fill text-success';
+            if(l.includes('estudiante') || l.includes('grado')) return 'bi-mortarboard-fill text-primary';
+            if(l.includes('técnico') || l.includes('tecnólogo')) return 'bi-tools text-warning';
+            if(l.includes('bachiller') || l.includes('ninguna')) return 'bi-book text-secondary';
+            return 'bi-record-circle';
+        }
+
         function switchView(viewId, element) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
             document.getElementById(viewId).classList.add('active-view');
@@ -707,7 +834,7 @@
             document.querySelectorAll(`.theme-btn[data-theme-btn="${tema}"]`).forEach(b => b.classList.add('active'));
             Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main');
             for (let id in chartInstances) { if (chartInstances[id]) { chartInstances[id].options.color = Chart.defaults.color; chartInstances[id].update('none'); } }
-            if (mapInstance && geoJsonDataRaw) setTimeout(() => mapInstance.invalidateSize(), 100);
+            if (mapInstance && geoJsonLayer) { dibujarMapaCoropletico(geoJsonLayer.lastDataComunas); } // Redibujar mapa para heredar border
         }
 
         window.descargarGrafico = function(canvasId, nombre) {
@@ -732,6 +859,17 @@
             link.download = `${nombre}${sufijo}.png`;
             link.href = tempCanvas.toDataURL('image/png'); link.click();
         };
+
+        // Función para interceptar clics en gráficas y leyendas
+        function triggerCrossFilter(filterId, value) {
+            const selectEl = document.getElementById(filterId);
+            if(selectEl) {
+                // Alternar el filtro (Toggle)
+                if(selectEl.value === value) { selectEl.value = 'ALL'; } 
+                else { selectEl.value = value; }
+                aplicarFiltrosDebounced();
+            }
+        }
 
         function cargarFiltrosOLAP() {
             if(!cursoActual || !cursoActual.Registros_Crudos || cursoActual.Registros_Crudos.length === 0) { document.getElementById('filtros-cruzados-bar').style.display = 'none'; return; }
@@ -770,7 +908,12 @@
             moodleTab.classList.add('locked'); moodleTab.removeAttribute('data-bs-toggle'); lockIcon.classList.remove('d-none');
             if(moodleTab.classList.contains('active')) { let tab = new bootstrap.Tab(radarTab); tab.show(); document.querySelectorAll('.tab-clean').forEach(t => t.classList.remove('active')); radarTab.classList.add('active'); }
 
-            let arrF = cursoActual.Registros_Crudos.filter(r => (vS==="ALL" || r['Sexo']===vS) && (vE==="ALL" || r['Curso de vida']===vE) && (vP==="ALL" || r['Perfil']===vP) && (vC==="ALL" || r['Comuna_Unificada']===vC));
+            let arrF = cursoActual.Registros_Crudos.filter(r => {
+                // Compatibilidad con el cruce espacial de comuna (limpieza de texto)
+                let cID = String(r['Comuna_Unificada']||"").replace(/\D/g, ''); cID = cID ? cID : String(r['Comuna_Unificada']).trim();
+                return (vS==="ALL" || r['Sexo']===vS) && (vE==="ALL" || r['Curso de vida']===vE) && (vP==="ALL" || r['Perfil']===vP) && (vC==="ALL" || cID===vC);
+            });
+            
             let nD = { 'Sexo':{}, 'Edad':{}, 'Perfil':{}, 'Comuna':{}, 'Escolaridad':{} }; let sumQ = {}; let cQ = arrF.length; let p = 0, d = 0;
             arrF.forEach(r => {
                 nD.Sexo[r['Sexo']]=(nD.Sexo[r['Sexo']]||0)+1; nD.Edad[r['Curso de vida']]=(nD.Edad[r['Curso de vida']]||0)+1; nD.Perfil[r['Perfil']]=(nD.Perfil[r['Perfil']]||0)+1; nD.Comuna[r['Comuna_Unificada']]=(nD.Comuna[r['Comuna_Unificada']]||0)+1; nD.Escolaridad[r['Escolaridad']]=(nD.Escolaridad[r['Escolaridad']]||0)+1;
@@ -784,11 +927,9 @@
 
         function inicializarMapa() { 
             if (mapInstance) return; 
-            mapInstance = L.map('map-container', { preferCanvas: true }).setView([3.42158, -76.5205], 11); 
-            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { 
-                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ', 
-                maxZoom: 16 
-            }).addTo(mapInstance); 
+            // Eliminamos el tileLayer y controles sobrantes para dejarlo limpio y transparente
+            mapInstance = L.map('map-container', { preferCanvas: true, zoomControl: true, attributionControl: false }).setView([3.42158, -76.5205], 11); 
+            // No L.tileLayer(...) here.
         }
         
         function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
@@ -804,12 +945,15 @@
             } 
             if (geoJsonLayer) mapInstance.removeLayer(geoJsonLayer); 
             
+            // Obtener color del stroke según el tema
+            const strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || 'rgba(255,255,255,0.7)';
+            
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, { 
                 style: (f) => { 
                     let propComuna = f.properties.comuna || f.properties.COMUNA || f.properties.nombre || f.properties.id || "N/A";
                     let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
                     let p = mapNorm[id]||0; 
-                    return { fillColor: getColorMapa(p, maxP), weight: 1, opacity: 1, color: 'rgba(255,255,255,0.7)', fillOpacity: p>0?0.85:0.1 }; 
+                    return { fillColor: getColorMapa(p, maxP), weight: 1.5, opacity: 1, color: strokeColor, fillOpacity: p>0?0.9:0.1 }; 
                 },
                 onEachFeature: (feature, layer) => {
                     let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
@@ -821,27 +965,80 @@
                     layer.on({
                         mouseover: (e) => {
                             let l = e.target;
-                            l.setStyle({ weight: 3, color: '#1e293b', fillOpacity: 0.95 });
+                            let themeGlow = getComputedStyle(document.documentElement).getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
+                            l.setStyle({ weight: 3, color: themeGlow, fillOpacity: 1 });
                             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) { l.bringToFront(); }
                         },
-                        mouseout: (e) => { geoJsonLayer.resetStyle(e.target); }
+                        mouseout: (e) => { geoJsonLayer.resetStyle(e.target); },
+                        click: (e) => {
+                             if(cursoActual) { triggerCrossFilter('f-comuna', id); }
+                        }
                     });
                 }
             }).addTo(mapInstance); 
-            setTimeout(() => mapInstance.invalidateSize(), 200);
+            geoJsonLayer.lastDataComunas = dataComunas; // Guardar referencia para repintar al cambiar tema
+            setTimeout(() => { mapInstance.invalidateSize(); if(geoJsonLayer.getBounds().isValid()) mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]}); }, 200);
         }
 
-        function dibujarGraficoDona(canvasId, dataObject, legendPosition) { 
+        function dibujarGraficoDona(canvasId, dataObject, filterType) { 
             let labels = Object.keys(dataObject); let datos = Object.values(dataObject); let cols = labels.map((l, i) => mapeoColores[l] || coloresRespaldo[i % coloresRespaldo.length]); 
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update('none'); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'doughnut', data: { labels: labels, datasets: [{ data: datos, backgroundColor: cols, borderWidth: 0, hoverOffset: 4 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: legendPosition, labels: { boxWidth: 10, font: { size: 10, family: 'Inter' } } } }, animation: false } }); }
+            
+            if (chartInstances[canvasId]) { 
+                chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update('none'); 
+            } else { 
+                chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
+                    type: 'doughnut', 
+                    data: { labels: labels, datasets: [{ data: datos, backgroundColor: cols, borderWidth: 0, hoverOffset: 4, cursor: 'pointer' }] }, 
+                    options: { 
+                        responsive: true, maintainAspectRatio: false, cutout: '75%', 
+                        plugins: { legend: { display: false } }, // Ocultamos leyenda por defecto
+                        animation: false,
+                        onClick: (e, elements, chart) => {
+                            if (elements.length > 0 && cursoActual) {
+                                const idx = elements[0].index;
+                                const label = chart.data.labels[idx];
+                                triggerCrossFilter(filterType, label);
+                            }
+                        }
+                    } 
+                }); 
+            }
+            // Generar leyenda custom
+            generarLeyendaCustom(canvasId, labels, datos, cols, filterType);
+        }
+        
+        function generarLeyendaCustom(canvasId, labels, datos, cols, filterType) {
+            const legendContainer = document.getElementById(`legend-${canvasId}`);
+            if(!legendContainer) return;
+            
+            // Ordenar por valor (Mayor a menor)
+            let items = labels.map((l, i) => ({ label: l, val: datos[i], color: cols[i] }));
+            items.sort((a,b) => b.val - a.val);
+            
+            let html = '';
+            items.forEach(item => {
+                if(item.val > 0) {
+                    const iconClass = getIconForLabel(item.label);
+                    // El clic en la leyenda también filtra
+                    html += `
+                        <div class="legend-item" onclick="if(cursoActual) triggerCrossFilter('${filterType}', '${item.label}')">
+                            <div class="legend-color-box" style="background-color: ${item.color};"></div>
+                            <i class="${iconClass} legend-icon"></i>
+                            <div class="legend-label" title="${item.label}">${item.label}</div>
+                            <div class="legend-value">${item.val.toLocaleString()}</div>
+                        </div>
+                    `;
+                }
+            });
+            legendContainer.innerHTML = html;
         }
         
         function dibujarGraficoComunas(canvasId, dataObject) { 
             let ag = {}; for (let k in dataObject) { let id = String(k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?String(k).trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
             let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
+            
             if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false } }); }
+            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false, onClick: (e, elements, chart) => { if (elements.length > 0 && cursoActual) { const label = chart.data.labels[elements[0].index]; const id = label.replace(/\D/g, ''); if(id) triggerCrossFilter('f-comuna', id); } } } }); }
         }
         
         function dibujarBarraMoodle(canvasId, c) { 
@@ -898,17 +1095,17 @@
                 let tbody = document.getElementById('tbody-activos');
                 let countBadge = document.getElementById('contador-activos-tabla');
                 let emptyMsg = document.getElementById('mensaje-sin-activos');
-                let tWrapper = document.querySelector('.table-responsive');
+                let collapseContainer = document.getElementById('collapseTablaActivos');
                 
                 tbody.innerHTML = '';
                 countBadge.innerText = cursosActivos.length;
                 
                 if(cursosActivos.length === 0) {
                     emptyMsg.style.display = 'block';
-                    tWrapper.style.display = 'none';
+                    collapseContainer.querySelector('.table-responsive').style.display = 'none';
                 } else {
                     emptyMsg.style.display = 'none';
-                    tWrapper.style.display = 'block';
+                    collapseContainer.querySelector('.table-responsive').style.display = 'block';
                     cursosActivos.sort((a,b) => b.Total_Inscritos - a.Total_Inscritos).forEach(ca => {
                         let rowBg = document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(255,255,255,0.02)' : '#ffffff';
                         let textColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
@@ -938,7 +1135,7 @@
             let labelActivos = añoActual === "ALL" ? ((dashboardData.metadata.cursos_activos !== undefined ? dashboardData.metadata.cursos_activos : cursosActivos.length) + " Activos") : null;
             document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Auditados", tC, labelActivos, "bi-journal-bookmark", "primary")} ${crearTarjetaKPI("Matrículas", tI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", tCert.toLocaleString(), tI?Math.round((tCert/tI)*100)+"%":"0%", "bi-check-circle", "success")} ${crearTarjetaKPI("Encuestas", tE.toLocaleString(), null, "bi-ui-radios", "warning")} ${crearTarjetaKPI("CHS", añoActual==="ALL"?dashboardData.kpis_globales.chs_promedio_secretaria:(tC?(chsS/tC).toFixed(1):0), null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", añoActual==="ALL"?dashboardData.kpis_globales.nps_global:(tE?Math.round(((npsP-npsD)/tE)*100):0), null, "bi-emoji-smile", "primary")}`; 
             
-            dibujarGraficoDona('chartSexo', dG['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dG['Curso de Vida'], 'right'); dibujarGraficoDona('chartPerfil', dG['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dG['Escolaridad'], 'right'); 
+            dibujarGraficoDona('chartSexo', dG['Sexo'], 'f-sexo'); dibujarGraficoDona('chartEdad', dG['Curso de Vida'], 'f-edad'); dibujarGraficoDona('chartPerfil', dG['Perfil'], 'f-perfil'); dibujarGraficoDona('chartEscolaridad', dG['Escolaridad'], 'f-escolaridad'); 
             dibujarMapaCoropletico(dG['Comuna']); dibujarGraficoComunas('chartComunas', dG['Comuna']); 
             
             toggleVisibilidad('col-sexo', dG['Sexo']); toggleVisibilidad('col-edad', dG['Curso de Vida']); toggleVisibilidad('col-perfil', dG['Perfil']); toggleVisibilidad('col-escolaridad', dG['Escolaridad']); toggleVisibilidad('col-mapa', dG['Comuna']); toggleVisibilidad('col-comunas', dG['Comuna']);
@@ -954,7 +1151,10 @@
             if(!dOlap) cargarFiltrosOLAP();
             const dD = dOlap?dOlap.Demografia:cursoActual.Demografia; const dP = dOlap?dOlap.Detalle_Preguntas:cursoActual.Detalle_Preguntas; const tE = dOlap?dOlap.Total_Encuestas:cursoActual.Total_Encuestas; const dN = dOlap?dOlap.e_NPS:cursoActual.e_NPS; const bI = cursoActual.Total_Inscritos; const tF = cursoActual['Tasa_Finalizacion_%'];
             document.getElementById('kpi-global-row').innerHTML = `${crearTarjetaKPI("Matrículas", bI.toLocaleString(), null, "bi-people", "info")} ${crearTarjetaKPI("Aprobados", Math.round((bI*tF)/100).toLocaleString(), tF+"%", "bi-check-circle", "success")} ${crearTarjetaKPI(dOlap?"Encuestas (Filtro)":"Encuestas", tE.toLocaleString(), null, "bi-ui-radios", dOlap?"primary":"warning")} ${crearTarjetaKPI("CHS", cursoActual.Salud_Curso_CHS, null, "bi-heart-pulse", "danger")} ${crearTarjetaKPI("e-NPS", dN, null, "bi-emoji-smile", "primary")}`; 
-            let kE = dD['Edad']?'Edad':'Curso de Vida'; dibujarGraficoDona('chartSexo', dD['Sexo'], 'bottom'); dibujarGraficoDona('chartEdad', dD[kE], 'right'); dibujarGraficoDona('chartPerfil', dD['Perfil'], 'right'); dibujarGraficoDona('chartEscolaridad', dD['Escolaridad'], 'right'); dibujarMapaCoropletico(dD['Comuna']); dibujarGraficoComunas('chartComunas', dD['Comuna']); 
+            let kE = dD['Edad']?'Edad':'Curso de Vida'; 
+            
+            dibujarGraficoDona('chartSexo', dD['Sexo'], 'f-sexo'); dibujarGraficoDona('chartEdad', dD[kE], 'f-edad'); dibujarGraficoDona('chartPerfil', dD['Perfil'], 'f-perfil'); dibujarGraficoDona('chartEscolaridad', dD['Escolaridad'], 'f-escolaridad'); 
+            dibujarMapaCoropletico(dD['Comuna']); dibujarGraficoComunas('chartComunas', dD['Comuna']); 
             
             toggleVisibilidad('col-sexo', dD['Sexo']); toggleVisibilidad('col-edad', dD[kE]); toggleVisibilidad('col-perfil', dD['Perfil']); toggleVisibilidad('col-escolaridad', dD['Escolaridad']); toggleVisibilidad('col-mapa', dD['Comuna']); toggleVisibilidad('col-comunas', dD['Comuna']);
 
@@ -984,10 +1184,11 @@
             
             let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
             
+            // Orden Alfabético estricto de A a Z basado en Nombre_Curso
             let cursosSeguros = [...dashboardData.cursos].sort((a,b) => {
-                let edA = a.Edicion ? String(a.Edicion) : "Sin Fecha";
-                let edB = b.Edicion ? String(b.Edicion) : "Sin Fecha";
-                return edB.localeCompare(edA);
+                let nameA = a.Nombre_Curso || "";
+                let nameB = b.Nombre_Curso || "";
+                return nameA.localeCompare(nameB);
             });
 
             cursosSeguros.forEach(c => {
@@ -1040,6 +1241,16 @@
                 for (let id in chartInstances) { if (chartInstances[id]) chartInstances[id].resize(); }
                 if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) { setTimeout(() => mapInstance.invalidateSize(), 50); }
               });
+            });
+
+            const collapseElementList = document.querySelectorAll('.collapse');
+            collapseElementList.forEach(collapseEl => {
+                collapseEl.addEventListener('show.bs.collapse', e => {
+                    if (e.target.previousElementSibling) e.target.previousElementSibling.classList.remove('collapsed');
+                });
+                collapseEl.addEventListener('hide.bs.collapse', e => {
+                    if (e.target.previousElementSibling) e.target.previousElementSibling.classList.add('collapsed');
+                });
             });
 
             proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
