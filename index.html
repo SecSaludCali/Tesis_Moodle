@@ -161,7 +161,7 @@
         .radar-wrapper { position: relative; height: 360px; width: 100%; display: flex; justify-content: center; transition: height 0.3s ease;}
         
         /* Modificación: Dimensiones estrictas para evitar el colapso del mapa */
-        #map-container { border-radius: 16px; width: 100%; height: 350px; position: relative; z-index: 1; overflow: hidden; }
+        #map-container { border-radius: 16px; width: 100%; height: 500px; position: relative; z-index: 1; overflow: hidden; }
         
         /* Estilos Leaflet para integrar con el Dashboard */
         .leaflet-container { background: transparent !important; font-family: 'Inter', sans-serif; outline: none; }
@@ -502,69 +502,78 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Modificación Donas: Uniformes y con leyendas HTML abajo -->
+                                <!-- Modificación Layout: 2x2 Donas a la izquierda, Mapa y Barras a la derecha -->
                                 <div class="row g-3 mb-4">
-                                    <div class="col-12 col-md-6 col-xl-3 d-flex flex-column" id="col-sexo">
-                                        <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h6 class="mb-0 fw-bold fs-6">Sexo</h6>
-                                                <button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button>
+                                    
+                                    <!-- COLUMNA IZQUIERDA: Cuadrícula 2x2 de Donas -->
+                                    <div class="col-12 col-xl-6">
+                                        <div class="row g-3 h-100">
+                                            <div class="col-12 col-md-6 d-flex flex-column" id="col-sexo">
+                                                <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <h6 class="mb-0 fw-bold fs-6">Sexo</h6>
+                                                        <button class="btn-download-img" onclick="descargarGrafico('chartSexo', 'Sexo')"><i class="bi bi-download"></i></button>
+                                                    </div>
+                                                    <div class="chart-wrapper"><canvas id="chartSexo"></canvas></div>
+                                                    <div id="legend-chartSexo" class="custom-legend-container flex-grow-1"></div>
+                                                </div>
                                             </div>
-                                            <div class="chart-wrapper"><canvas id="chartSexo"></canvas></div>
-                                            <div id="legend-chartSexo" class="custom-legend-container flex-grow-1"></div>
+                                            <div class="col-12 col-md-6 d-flex flex-column" id="col-edad">
+                                                <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6>
+                                                        <button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Edad')"><i class="bi bi-download"></i></button>
+                                                    </div>
+                                                    <div class="chart-wrapper"><canvas id="chartEdad"></canvas></div>
+                                                    <div id="legend-chartEdad" class="custom-legend-container flex-grow-1"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6 d-flex flex-column" id="col-perfil">
+                                                <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6>
+                                                        <button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Perfil')"><i class="bi bi-download"></i></button>
+                                                    </div>
+                                                    <div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div>
+                                                    <div id="legend-chartPerfil" class="custom-legend-container flex-grow-1"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6 d-flex flex-column" id="col-escolaridad">
+                                                <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <h6 class="mb-0 fw-bold fs-6">Escolaridad</h6>
+                                                        <button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button>
+                                                    </div>
+                                                    <div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div>
+                                                    <div id="legend-chartEscolaridad" class="custom-legend-container flex-grow-1"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6 col-xl-3 d-flex flex-column" id="col-edad">
-                                        <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h6 class="mb-0 fw-bold fs-6">Curso de Vida</h6>
-                                                <button class="btn-download-img" onclick="descargarGrafico('chartEdad', 'Edad')"><i class="bi bi-download"></i></button>
-                                            </div>
-                                            <div class="chart-wrapper"><canvas id="chartEdad"></canvas></div>
-                                            <div id="legend-chartEdad" class="custom-legend-container flex-grow-1"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6 col-xl-3 d-flex flex-column" id="col-perfil">
-                                        <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h6 class="mb-0 fw-bold fs-6">Perfil Profesional</h6>
-                                                <button class="btn-download-img" onclick="descargarGrafico('chartPerfil', 'Perfil')"><i class="bi bi-download"></i></button>
-                                            </div>
-                                            <div class="chart-wrapper"><canvas id="chartPerfil"></canvas></div>
-                                            <div id="legend-chartPerfil" class="custom-legend-container flex-grow-1"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6 col-xl-3 d-flex flex-column" id="col-escolaridad">
-                                        <div class="glass-card p-3 flex-grow-1 d-flex flex-column">
-                                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <h6 class="mb-0 fw-bold fs-6">Escolaridad</h6>
-                                                <button class="btn-download-img" onclick="descargarGrafico('chartEscolaridad', 'Escolaridad')"><i class="bi bi-download"></i></button>
-                                            </div>
-                                            <div class="chart-wrapper"><canvas id="chartEscolaridad"></canvas></div>
-                                            <div id="legend-chartEscolaridad" class="custom-legend-container flex-grow-1"></div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="row g-3 mb-4">
-                                    <div class="col-12 col-lg-5 d-flex" id="col-mapa">
-                                        <div class="glass-card p-3 d-flex flex-column w-100">
-                                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h6 class="mb-0 fw-bold fs-6">Mapa de Participación</h6>
-                                                <small class="text-muted"><i class="bi bi-hand-index-thumb"></i> Interactúa</small>
+                                    <!-- COLUMNA DERECHA: Mapa vertical + Barras horizontales -->
+                                    <div class="col-12 col-xl-6 d-flex flex-column gap-3">
+                                        <div id="col-mapa" class="d-flex flex-column flex-grow-1">
+                                            <div class="glass-card p-3 d-flex flex-column w-100 h-100">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h6 class="mb-0 fw-bold fs-6">Mapa de Participación</h6>
+                                                    <small class="text-muted"><i class="bi bi-hand-index-thumb"></i> Interactúa</small>
+                                                </div>
+                                                <div id="map-container" class="flex-grow-1" style="min-height: 480px;"></div>
                                             </div>
-                                            <div id="map-container"></div>
+                                        </div>
+                                        
+                                        <div id="col-comunas" class="w-100">
+                                            <div class="glass-card p-3 w-100">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <h6 class="mb-0 fw-bold fs-6">Distribución por Ubicación</h6>
+                                                    <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Comunas')"><i class="bi bi-download"></i></button>
+                                                </div>
+                                                <div class="chart-wrapper" style="height: 220px; margin-top: 0;"><canvas id="chartComunas"></canvas></div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-lg-7" id="col-comunas">
-                                        <div class="glass-card p-3">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <h6 class="mb-0 fw-bold fs-6">Distribución por Ubicación</h6>
-                                                <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Comunas')"><i class="bi bi-download"></i></button>
-                                            </div>
-                                            <div class="chart-wrapper" style="height: 350px; margin-top: 0;"><canvas id="chartComunas"></canvas></div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
 
