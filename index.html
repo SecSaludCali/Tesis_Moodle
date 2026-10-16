@@ -971,6 +971,16 @@
             mapInstance.hasLoadedGeoJson = true;
             
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, {
+                // MAGIA AQUÍ: Invertimos las coordenadas si vienen al revés en tu JSON
+                coordsToLatLng: function (coords) {
+                    // Si el primer número es positivo (Lat 3.4) y el segundo negativo (Lng -76.5)
+                    // significa que el GeoJSON viene como [Latitud, Longitud]. Lo volteamos:
+                    if (coords[0] > 0 && coords[1] < 0) {
+                        return new L.LatLng(coords[0], coords[1]);
+                    }
+                    // Si ya vienen bien como [Longitud, Latitud], se procesan normal
+                    return new L.LatLng(coords[1], coords[0]);
+                },
                 style: function(feature) {
                     let defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
                     return {
