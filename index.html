@@ -17,7 +17,7 @@
         :root[data-theme="light"] {
             --bg-color: #f4f7fe; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #1e293b; --text-muted: #64748b; --primary: #4318ff; --success: #05cd99; --warning: #ffb547; --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5); --map-stroke: #ffffff;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(203, 213, 225, 0.5); --map-stroke: #cbd5e1;
             --card-shadow: 0 4px 20px 0 rgba(31, 38, 135, 0.05);
             --blob-1: rgba(67, 24, 255, 0.1); --blob-2: rgba(5, 205, 153, 0.1);
         }
@@ -25,7 +25,7 @@
         :root[data-theme="dark"] {
             --bg-color: #0b1437; --sidebar-bg: rgba(17, 28, 68, 0.95); --card-bg: rgba(17, 28, 68, 0.85); 
             --text-main: #f8fafc; --text-muted: #a3aed1; --primary: #7551ff; --success: #01b574; --warning: #ffb547; --danger: #ee5d50;
-            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08); --map-stroke: #1e293b;
+            --border-light: rgba(255, 255, 255, 0.1); --border-color: rgba(255, 255, 255, 0.08); --map-stroke: #334155;
             --card-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.3);
             --blob-1: rgba(117, 81, 255, 0.15); --blob-2: rgba(14, 165, 233, 0.1);
         }
@@ -33,7 +33,7 @@
         :root[data-theme="rose"] {
             --bg-color: #fff1f2; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #4c0519; --text-muted: #9f1239; --primary: #e11d48; --success: #10b981; --warning: #f59e0b; --danger: #be123c;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15); --map-stroke: #ffe4e6;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(225, 29, 72, 0.15); --map-stroke: #fca5a5;
             --card-shadow: 0 4px 20px 0 rgba(225, 29, 72, 0.05);
             --blob-1: rgba(225, 29, 72, 0.1); --blob-2: rgba(244, 63, 94, 0.1);
         }
@@ -41,7 +41,7 @@
         :root[data-theme="amber"] {
             --bg-color: #fffbeb; --sidebar-bg: rgba(255, 255, 255, 0.9); --card-bg: rgba(255, 255, 255, 0.85); 
             --text-main: #451a03; --text-muted: #92400e; --primary: #d97706; --success: #059669; --warning: #d97706; --danger: #dc2626;
-            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15); --map-stroke: #fef3c7;
+            --border-light: rgba(255, 255, 255, 0.9); --border-color: rgba(217, 119, 6, 0.15); --map-stroke: #fcd34d;
             --card-shadow: 0 4px 20px 0 rgba(217, 119, 6, 0.05);
             --blob-1: rgba(217, 119, 6, 0.1); --blob-2: rgba(245, 158, 11, 0.1);
         }
@@ -809,8 +809,10 @@
                 setTimeout(() => {
                     if(mapInstance) {
                         mapInstance.invalidateSize();
-                        // Auto-centrar solo cuando ya se hizo visible
-                        if(geoJsonLayer) mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
+                        // Auto-centrar solo cuando ya se hizo visible y es un área válida
+                        if(geoJsonLayer && geoJsonLayer.getBounds().isValid()) {
+                            mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
+                        }
                     }
                     for(let id in chartInstances) { if(chartInstances[id]) chartInstances[id].resize(); }
                 }, 100);
@@ -963,9 +965,6 @@
                 dragging: true,
                 scrollWheelZoom: true
             }).setView([3.42158, -76.5205], 11);
-            
-            // ¡EL SECRETO!: NO agregamos ninguna capa de calles (TileLayer). 
-            // Esto hace que el mapa sea literalmente invisible y actúe solo como un lienzo para el GeoJSON.
         }
         
         if(geoJsonDataRaw && !mapInstance.hasLoadedGeoJson) {
@@ -973,12 +972,13 @@
             
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, {
                 style: function(feature) {
+                    let defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
                     return {
-                        fillColor: 'transparent',
-                        weight: 1,
+                        fillColor: defaultColor, // Hacemos que siempre haya un color de fondo gris suave
+                        weight: 1.5,
                         opacity: 1,
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#ffffff',
-                        fillOpacity: 0.1
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#cbd5e1',
+                        fillOpacity: 0.4
                     };
                 },
                 onEachFeature: function(feature, layer) {
@@ -999,17 +999,18 @@
                     
                     layer.on('mouseout', function(e) {
                         mapInstance.closePopup();
-                        // Al salir el cursor, restauramos el color correcto que tenía
                         if (mapInstance.lastDataComunas) {
                             let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
                             let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10));
                             let p = mapInstance.lastDataComunas[id] || 0;
                             let maxP = mapInstance.lastMaxP || 1;
+                            
+                            let defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
                             layer.setStyle({
-                                fillColor: getColorMapa(p, maxP),
-                                fillOpacity: p > 0 ? 0.7 : 0.1,
-                                weight: 1,
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#ffffff'
+                                fillColor: p > 0 ? getColorMapa(p, maxP) : defaultColor,
+                                fillOpacity: p > 0 ? 0.8 : 0.4,
+                                weight: 1.5,
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#cbd5e1'
                             });
                         } else {
                             geoJsonLayer.resetStyle(layer);
@@ -1024,10 +1025,9 @@
                 }
             }).addTo(mapInstance);
             
-            // Encuadrar la cámara automáticamente para que la ciudad encaje perfecto en el cuadro
+            // Encuadrar la cámara (Seguro contra NaN)
             if (geoJsonDataRaw.features && geoJsonDataRaw.features.length > 0) {
-                // SOLUCIÓN: Solo encuadrar si el mapa tiene un ancho mayor a 0 (si es visible)
-                if (document.getElementById('map-container').offsetWidth > 0) {
+                if (document.getElementById('map-container').offsetWidth > 0 && geoJsonLayer.getBounds().isValid()) {
                     mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
                 }
             }
@@ -1038,7 +1038,11 @@
         }
     }
     
-    function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
+    function getColorMapa(v, max) { 
+        if(v===0) return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0'; 
+        let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; 
+        if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; 
+    }
         
         function dibujarMapaCoropletico(dataComunas) { 
             if (!mapInstance || !geoJsonLayer) return; 
@@ -1052,19 +1056,20 @@
             } 
             
             mapInstance.lastDataComunas = mapNorm;
-            mapInstance.lastMaxP = maxP; // Guardamos maxP para el hover
-            const strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#ffffff';
+            mapInstance.lastMaxP = maxP; 
+            const strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#cbd5e1';
+            const defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
             
             geoJsonLayer.eachLayer(function(layer) {
                 let propComuna = layer.feature.properties.comuna || layer.feature.properties.COMUNA || layer.feature.properties.nombre || layer.feature.properties.id || "N/A";
                 let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
                 let p = mapNorm[id]||0; 
-                let color = getColorMapa(p, maxP);
+                let color = p > 0 ? getColorMapa(p, maxP) : defaultColor;
                 
                 layer.setStyle({
                     fillColor: color,
-                    fillOpacity: p > 0 ? 0.7 : 0.1,
-                    weight: 1,
+                    fillOpacity: p > 0 ? 0.8 : 0.4,
+                    weight: 1.5,
                     color: strokeColor
                 });
             });
