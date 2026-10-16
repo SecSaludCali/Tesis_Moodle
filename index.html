@@ -807,7 +807,11 @@
             
             if(viewId === 'dashboard_view') {
                 setTimeout(() => {
-                    if(mapInstance) mapInstance.invalidateSize();
+                    if(mapInstance) {
+                        mapInstance.invalidateSize();
+                        // Auto-centrar solo cuando ya se hizo visible
+                        if(geoJsonLayer) mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
+                    }
                     for(let id in chartInstances) { if(chartInstances[id]) chartInstances[id].resize(); }
                 }, 100);
             }
@@ -1022,7 +1026,10 @@
             
             // Encuadrar la cámara automáticamente para que la ciudad encaje perfecto en el cuadro
             if (geoJsonDataRaw.features && geoJsonDataRaw.features.length > 0) {
-                mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
+                // SOLUCIÓN: Solo encuadrar si el mapa tiene un ancho mayor a 0 (si es visible)
+                if (document.getElementById('map-container').offsetWidth > 0) {
+                    mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
+                }
             }
             
             if (mapInstance.lastDataComunas) {
@@ -1335,7 +1342,13 @@
             triggerTabList.forEach(triggerEl => {
               triggerEl.addEventListener('shown.bs.tab', event => {
                 for (let id in chartInstances) { if (chartInstances[id]) chartInstances[id].resize(); }
-                if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) { setTimeout(() => mapInstance.invalidateSize(), 50); }
+                if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) { 
+                    setTimeout(() => {
+                        mapInstance.invalidateSize();
+                        // Re-centrar si vuelven a esta pestaña
+                        if(geoJsonLayer) mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
+                    }, 50); 
+                }
               });
             });
 
