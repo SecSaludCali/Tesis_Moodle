@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDc8qcR93x_SXR-89L1ktFlN7di9tu5K5Q&loading=async&callback=mapaListo"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         :root[data-theme="light"] {
@@ -161,6 +161,12 @@
         
         /* Modificación: Dimensiones estrictas para evitar el colapso del mapa */
         #map-container { border-radius: 16px; width: 100%; height: 350px; position: relative; z-index: 1; overflow: hidden; }
+        
+        /* Estilos Leaflet para integrar con el Dashboard */
+        .leaflet-container { background: transparent !important; font-family: 'Inter', sans-serif; outline: none; }
+        .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: var(--card-shadow); background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(8px);}
+        .leaflet-popup-tip { background: var(--card-bg); }
+        .leaflet-popup-content { margin: 10px; line-height: 1.4; }
 
         /* Estilos Leyendas Personalizadas */
         .custom-legend-container {
@@ -726,8 +732,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let dashboardData = {}; let cursosPorBase = {}; let cursoActual = null; let datosFiltradosActuales = null; 
-        let chartInstances = {}; let promediosGlobalesPreguntas = {}; let mapInstance = null; let infoWindow = null; 
-        let geoJsonDataRaw = null; let añosDisponibles = new Set(); let añoActual = "ALL"; let filterDebounceTimer = null;
+        let chartInstances = {}; let promediosGlobalesPreguntas = {}; let mapInstance = null; let geoJsonDataRaw = null; 
+        let geoJsonLayer = null; let añosDisponibles = new Set(); let añoActual = "ALL"; let filterDebounceTimer = null;
 
         const mapeoPreguntas = { 
             "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Obj. Cumplido", 
@@ -801,7 +807,7 @@
             
             if(viewId === 'dashboard_view') {
                 setTimeout(() => {
-                    if(mapInstance) google.maps.event.trigger(mapInstance, 'resize');
+                    if(mapInstance) mapInstance.invalidateSize();
                     for(let id in chartInstances) { if(chartInstances[id]) chartInstances[id].resize(); }
                 }, 100);
             }
@@ -831,7 +837,7 @@
             document.querySelectorAll(`.theme-btn[data-theme-btn="${tema}"]`).forEach(b => b.classList.add('active'));
             Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue('--text-main');
             for (let id in chartInstances) { if (chartInstances[id]) { chartInstances[id].options.color = Chart.defaults.color; chartInstances[id].update('none'); } }
-            if (mapInstance && geoJsonLayer) { dibujarMapaCoropletico(geoJsonLayer.lastDataComunas); }
+            if (mapInstance && mapInstance.lastDataComunas) { dibujarMapaCoropletico(mapInstance.lastDataComunas); }
         }
 
         window.descargarGrafico = function(canvasId, nombre) {
@@ -943,72 +949,81 @@
         }
         function limpiarFiltros() { ['f-sexo', 'f-edad', 'f-perfil', 'f-comuna'].forEach(id => { document.getElementById(id).value = 'ALL'; document.getElementById(id).classList.remove('active-chip');}); aplicarFiltrosReal(); };
 
-    window.mapaListo = function() {
-        inicializarMapa();
-    };
-
     function inicializarMapa() { 
-        if (typeof google === 'undefined') return; 
+        if (typeof L === 'undefined') return; 
         
         if (!mapInstance) {
-            mapInstance = new google.maps.Map(document.getElementById('map-container'), {
-                center: { lat: 3.42158, lng: -76.5205 },
-                zoom: 11,
-                mapTypeControl: false,
-                streetViewControl: false,
-                styles: [
-                    { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },
-                    { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-                    { elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
-                    { elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f5" }] },
-                    { featureType: "administrative.land_parcel", elementType: "labels.text.fill", stylers: [{ color: "#bdbdbd" }] },
-                    { featureType: "poi", elementType: "geometry", stylers: [{ color: "#eeeeee" }] },
-                    { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
-                    { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#e5e5e5" }] },
-                    { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
-                    { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-                    { featureType: "road.arterial", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
-                    { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#dadada" }] },
-                    { featureType: "road.highway", elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
-                    { featureType: "road.local", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
-                    { featureType: "transit.line", elementType: "geometry", stylers: [{ color: "#e5e5e5" }] },
-                    { featureType: "transit.station", elementType: "geometry", stylers: [{ color: "#eeeeee" }] },
-                    { featureType: "water", elementType: "geometry", stylers: [{ color: "#c9c9c9" }] },
-                    { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] }
-                ]
-            }); 
-            infoWindow = new google.maps.InfoWindow();
+            mapInstance = L.map('map-container', {
+                zoomControl: true, // Agregamos controles sutiles de zoom
+                attributionControl: false,
+                dragging: true,
+                scrollWheelZoom: true
+            }).setView([3.42158, -76.5205], 11);
+            
+            // ¡EL SECRETO!: NO agregamos ninguna capa de calles (TileLayer). 
+            // Esto hace que el mapa sea literalmente invisible y actúe solo como un lienzo para el GeoJSON.
         }
         
-        // Añadir los datos GeoJSON crudos
         if(geoJsonDataRaw && !mapInstance.hasLoadedGeoJson) {
             mapInstance.hasLoadedGeoJson = true;
-            mapInstance.data.addGeoJson(geoJsonDataRaw);
             
-            mapInstance.data.addListener('mouseover', function(event) {
-                let strokeCol = getComputedStyle(document.documentElement).getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
-                    mapInstance.data.overrideStyle(event.feature, { strokeWeight: 3, strokeColor: strokeCol, fillOpacity: 0.9 });
+            geoJsonLayer = L.geoJSON(geoJsonDataRaw, {
+                style: function(feature) {
+                    return {
+                        fillColor: 'transparent',
+                        weight: 1,
+                        opacity: 1,
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#ffffff',
+                        fillOpacity: 0.1
+                    };
+                },
+                onEachFeature: function(feature, layer) {
+                    layer.on('mouseover', function(e) {
+                        let strokeCol = getComputedStyle(document.documentElement).getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
+                        layer.setStyle({ weight: 3, color: strokeCol, fillOpacity: 0.9 });
+                        
+                        let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
+                        let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
+                        let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
+                        let valor = mapInstance.lastDataComunas ? (mapInstance.lastDataComunas[id] || 0) : 0;
+                        
+                        L.popup({closeButton: false, offset: L.point(0, -5)})
+                            .setLatLng(e.latlng)
+                            .setContent(`<div style="padding: 2px; text-align: center;"><strong>${nombreDisplay}</strong><br>Participantes: ${valor}</div>`)
+                            .openOn(mapInstance);
+                    });
                     
-                    let propComuna = event.feature.getProperty('comuna') || event.feature.getProperty('COMUNA') || event.feature.getProperty('nombre') || event.feature.getProperty('id') || "N/A";
-                    let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
-                    let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
-                    let valor = mapInstance.lastDataComunas ? (mapInstance.lastDataComunas[id] || 0) : 0;
+                    layer.on('mouseout', function(e) {
+                        mapInstance.closePopup();
+                        // Al salir el cursor, restauramos el color correcto que tenía
+                        if (mapInstance.lastDataComunas) {
+                            let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
+                            let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10));
+                            let p = mapInstance.lastDataComunas[id] || 0;
+                            let maxP = mapInstance.lastMaxP || 1;
+                            layer.setStyle({
+                                fillColor: getColorMapa(p, maxP),
+                                fillOpacity: p > 0 ? 0.7 : 0.1,
+                                weight: 1,
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#ffffff'
+                            });
+                        } else {
+                            geoJsonLayer.resetStyle(layer);
+                        }
+                    });
                     
-                    infoWindow.setContent(`<div style="padding: 5px; font-family: Inter, sans-serif;"><strong>${nombreDisplay}</strong><br>Participantes: ${valor}</div>`);
-                    infoWindow.setPosition(event.latLng);
-                    infoWindow.open(mapInstance);
-                });
-                
-                mapInstance.data.addListener('mouseout', function(event) {
-                    mapInstance.data.revertStyle();
-                    infoWindow.close();
-                });
-                
-                mapInstance.data.addListener('click', function(event) {
-                let propComuna = event.feature.getProperty('comuna') || event.feature.getProperty('COMUNA') || event.feature.getProperty('nombre') || event.feature.getProperty('id') || "N/A";
-                let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
-                triggerCrossFilter('f-comuna', id);
-            });
+                    layer.on('click', function(e) {
+                        let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
+                        let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
+                        triggerCrossFilter('f-comuna', id);
+                    });
+                }
+            }).addTo(mapInstance);
+            
+            // Encuadrar la cámara automáticamente para que la ciudad encaje perfecto en el cuadro
+            if (geoJsonDataRaw.features && geoJsonDataRaw.features.length > 0) {
+                mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
+            }
             
             if (mapInstance.lastDataComunas) {
                 dibujarMapaCoropletico(mapInstance.lastDataComunas);
@@ -1019,7 +1034,7 @@
     function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
         
         function dibujarMapaCoropletico(dataComunas) { 
-            if (!mapInstance || !geoJsonDataRaw) return; 
+            if (!mapInstance || !geoJsonLayer) return; 
             
             let mapNorm = {}; let maxP = 0; 
             for (let n in dataComunas) { 
@@ -1030,36 +1045,22 @@
             } 
             
             mapInstance.lastDataComunas = mapNorm;
+            mapInstance.lastMaxP = maxP; // Guardamos maxP para el hover
             const strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#ffffff';
             
-            mapInstance.data.setStyle(function(feature) {
-                let propComuna = feature.getProperty('comuna') || feature.getProperty('COMUNA') || feature.getProperty('nombre') || feature.getProperty('id') || "N/A";
+            geoJsonLayer.eachLayer(function(layer) {
+                let propComuna = layer.feature.properties.comuna || layer.feature.properties.COMUNA || layer.feature.properties.nombre || layer.feature.properties.id || "N/A";
                 let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
                 let p = mapNorm[id]||0; 
                 let color = getColorMapa(p, maxP);
-                return {
+                
+                layer.setStyle({
                     fillColor: color,
                     fillOpacity: p > 0 ? 0.7 : 0.1,
-                    strokeWeight: 1,
-                    strokeColor: strokeColor,
-                    visible: true
-                };
-            });
-            
-            if(!mapInstance.hasZoomedToData && geoJsonDataRaw && geoJsonDataRaw.features.length > 0) {
-                let bounds = new google.maps.LatLngBounds();
-                mapInstance.data.forEach(function(feature) {
-                    if (feature.getGeometry()) {
-                        feature.getGeometry().forEachLatLng(function(latlng) {
-                            bounds.extend(latlng);
-                        });
-                    }
+                    weight: 1,
+                    color: strokeColor
                 });
-                if(!bounds.isEmpty()) {
-                    mapInstance.fitBounds(bounds);
-                    mapInstance.hasZoomedToData = true;
-                }
-            }
+            });
         }
 
         function generarLeyendaCustom(canvasId, labels, datos, cols, filterType) {
@@ -1334,7 +1335,7 @@
             triggerTabList.forEach(triggerEl => {
               triggerEl.addEventListener('shown.bs.tab', event => {
                 for (let id in chartInstances) { if (chartInstances[id]) chartInstances[id].resize(); }
-                if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) { setTimeout(() => google.maps.event.trigger(mapInstance, 'resize'), 50); }
+                if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) { setTimeout(() => mapInstance.invalidateSize(), 50); }
               });
             });
 
