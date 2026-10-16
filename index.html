@@ -983,7 +983,7 @@
                 },
                 onEachFeature: function(feature, layer) {
                     layer.on('mouseover', function(e) {
-                        let strokeCol = getComputedStyle(document.documentElement).getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
+                        let strokeCol = document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
                         layer.setStyle({ weight: 3, color: strokeCol, fillOpacity: 0.9 });
                         
                         let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
