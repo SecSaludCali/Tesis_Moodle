@@ -1,41 +1,41 @@
 {
     "metadata": {
         "total_cursos_analizados": 61,
-        "total_encuestas_historicas": 4229,
-        "total_estudiantes_unicos": 7705,
+        "total_encuestas_historicas": 4236,
+        "total_estudiantes_unicos": 7706,
         "cursos_activos": 20
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 54.9,
-        "nps_global": 72.1
+        "nps_global": 72.5
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 3092,
+            "Femenino": 3099,
             "Masculino": 1132,
             "Intersexual": 5
         },
         "Perfil": {
-            "Área de la salud": 2866,
-            "Estudiante": 944,
-            "Otro": 419
+            "Área de la salud": 2869,
+            "Estudiante": 947,
+            "Otro": 420
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2372,
-            "Adolescencia (12 - 17 años)": 957,
-            "Juventud (18 - 28 años)": 732,
-            "Vejez (60 años o más)": 168
+            "Adultez (29 - 59 años)": 2374,
+            "Adolescencia (12 - 17 años)": 960,
+            "Juventud (18 - 28 años)": 733,
+            "Vejez (60 años o más)": 169
         },
         "Comuna": {
             "COMUNA 17": 458,
-            "COMUNA 1": 249,
+            "COMUNA 1": 252,
             "COMUNA 19": 239,
             "COMUNA 10": 216,
             "COMUNA 2": 208,
             "COMUNA 15": 188,
             "COMUNA 6": 174,
             "COMUNA 18": 168,
-            "COMUNA 16": 156,
+            "COMUNA 16": 159,
             "COMUNA 5": 153,
             "COMUNA 14": 141,
             "COMUNA 21": 132,
@@ -54,15 +54,16 @@
             "C. DE EL HORMIGUERO": 12,
             "C. DE EL SALADITO": 10,
             "C. DE FELIDIA": 9,
-            "C. DE MONTEBELLO": 5,
             "C. DE LA CASTILLA": 5,
-            "C. DE VILLACARMELO": 3,
+            "C. DE MONTEBELLO": 5,
             "C. DE NAVARRO": 3,
+            "C. DE VILLACARMELO": 3,
             "C. DE PICHINDE": 3,
+            "C. DE LOS ANDES": 2,
             "C. DE GOLONDRINAS": 2,
             "C. DE LA PAZ": 2,
-            "C. DE LOS ANDES": 2,
             "PALMIRA": 1,
+            "Buga": 1,
             "12 de octubre ": 1,
             "candelaria": 1,
             "C.Alirio Mora": 1,
@@ -73,8 +74,8 @@
             "C. DE LA LEONERA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1797,
-            "Bachiller": 1318,
+            "Pregrado": 1800,
+            "Bachiller": 1322,
             "Postgrado": 1033,
             "Ninguna": 81
         }
@@ -159,6 +160,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -387,6 +389,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -575,6 +578,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -1201,6 +1205,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -1389,6 +1394,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -4215,6 +4221,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -7041,6 +7048,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -15434,39 +15442,40 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2025 - 01",
             "ID_Moodle_Original": "sello_012025",
             "Total_Inscritos": 1338,
-            "Tasa_Finalizacion_%": 76.4,
-            "Tasa_Abandono_%": 2.4,
+            "Tasa_Finalizacion_%": 76.5,
+            "Tasa_Abandono_%": 2.3,
             "Tasa_Inactividad_%": 21.2,
             "Tiempo_Promedio_Dias": 3.3,
             "Es_Activo": true,
-            "Total_Encuestas": 712.0,
-            "ISG_Promedio": 4.561149524632671,
-            "ICD_Promedio": 4.489232209737828,
-            "IUP_Promedio": 4.645365168539326,
-            "UX_Promedio": 4.565308988764045,
-            "e_NPS": 60.1,
-            "Salud_Curso_CHS": 85.6,
+            "Total_Encuestas": 714.0,
+            "ISG_Promedio": 4.562378797672915,
+            "ICD_Promedio": 4.4906629318394025,
+            "IUP_Promedio": 4.646358543417367,
+            "UX_Promedio": 4.5665266106442575,
+            "e_NPS": 60.2,
+            "Salud_Curso_CHS": 85.7,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 472,
+                    "Femenino": 474,
                     "Intersexual": 1,
                     "Masculino": 239
                 },
                 "Perfil": {
                     "Estudiante": 16,
-                    "Otro": 176,
-                    "Área de la salud": 520
+                    "Otro": 177,
+                    "Área de la salud": 521
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 569,
+                    "Adultez (29 - 59 años)": 570,
                     "Juventud (18 - 28 años)": 84,
-                    "Vejez (60 años o más)": 59
+                    "Vejez (60 años o más)": 60
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 4,
                     "C. DE EL SALADITO": 2,
                     "C. DE FELIDIA": 4,
@@ -15483,7 +15492,7 @@
                     "C. DE PICHINDE": 0,
                     "C. DE VILLACARMELO": 0,
                     "C.Alirio Mora": 0,
-                    "COMUNA 1": 12,
+                    "COMUNA 1": 14,
                     "COMUNA 10": 56,
                     "COMUNA 11": 26,
                     "COMUNA 12": 15,
@@ -15515,23 +15524,23 @@
                     "Bachiller": 110,
                     "Ninguna": 2,
                     "Postgrado": 268,
-                    "Pregrado": 332
+                    "Pregrado": 334
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.620786516853933,
-                "¿Se cumplió el objetivo de la capacitación?": 4.627808988764045,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.603932584269663,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.577247191011236,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.660112359550562,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.63061797752809,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.547752808988764,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.560393258426966,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.422752808988764,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.359550561797753,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.553370786516854,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.577247191011236,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.553370786516854
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.621848739495798,
+                "¿Se cumplió el objetivo de la capacitación?": 4.628851540616247,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.605042016806722,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.578431372549019,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.661064425770308,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.631652661064426,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.549019607843137,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.561624649859944,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.42436974789916,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.361344537815126,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.554621848739496,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.578431372549019,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.554621848739496
             },
             "Registros_Crudos": [
                 {
@@ -20879,6 +20888,26 @@
                     "Curso de vida": "Adultez (29 - 59 años)",
                     "Perfil": "Área de la salud",
                     "Comuna_Unificada": "COMUNA 17",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Vejez (60 años o más)",
+                    "Perfil": "Otro",
+                    "Comuna_Unificada": "COMUNA 1",
                     "Escolaridad": "Pregrado",
                     "¿Se dio a conocer el objetivo de la capacitación?": 5,
                     "¿Se cumplió el objetivo de la capacitación?": 5,
@@ -28158,6 +28187,26 @@
                     "Sexo": "Femenino",
                     "Curso de vida": "Adultez (29 - 59 años)",
                     "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 1",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Área de la salud",
                     "Comuna_Unificada": "COMUNA 10",
                     "Escolaridad": "Postgrado",
                     "¿Se dio a conocer el objetivo de la capacitación?": 5,
@@ -29813,6 +29862,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -31401,6 +31451,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -31771,6 +31822,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -34857,6 +34909,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -35003,6 +35056,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -35251,6 +35305,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -35557,6 +35612,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -44025,6 +44081,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -44331,6 +44388,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -48624,39 +48682,40 @@
             "Nombre_Curso": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE ADOLESCENCIA - 2026 - 02",
             "ID_Moodle_Original": "rpmsa_022026",
             "Total_Inscritos": 308,
-            "Tasa_Finalizacion_%": 1.0,
-            "Tasa_Abandono_%": 2.6,
+            "Tasa_Finalizacion_%": 1.3,
+            "Tasa_Abandono_%": 2.3,
             "Tasa_Inactividad_%": 96.4,
-            "Tiempo_Promedio_Dias": 0.3,
+            "Tiempo_Promedio_Dias": 0.5,
             "Es_Activo": true,
-            "Total_Encuestas": 2.0,
-            "ISG_Promedio": 4.615384615384615,
-            "ICD_Promedio": 4.333333333333333,
+            "Total_Encuestas": 3.0,
+            "ISG_Promedio": 4.743589743589744,
+            "ICD_Promedio": 4.555555555555555,
             "IUP_Promedio": 5.0,
-            "UX_Promedio": 4.25,
-            "e_NPS": 50.0,
-            "Salud_Curso_CHS": 56.6,
+            "UX_Promedio": 4.5,
+            "e_NPS": 66.7,
+            "Salud_Curso_CHS": 58.0,
             "Curso_Base": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE ADOLESCENCIA",
             "Edicion": "2026 - Cohorte 2",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 2,
+                    "Femenino": 3,
                     "Intersexual": 0,
                     "Masculino": 0
                 },
                 "Perfil": {
                     "Estudiante": 0,
                     "Otro": 0,
-                    "Área de la salud": 2
+                    "Área de la salud": 3
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 2,
                     "Adultez (29 - 59 años)": 0,
-                    "Juventud (18 - 28 años)": 0,
+                    "Juventud (18 - 28 años)": 1,
                     "Vejez (60 años o más)": 0
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -48673,7 +48732,7 @@
                     "C. DE PICHINDE": 0,
                     "C. DE VILLACARMELO": 0,
                     "C.Alirio Mora": 0,
-                    "COMUNA 1": 0,
+                    "COMUNA 1": 1,
                     "COMUNA 10": 0,
                     "COMUNA 11": 0,
                     "COMUNA 12": 0,
@@ -48705,7 +48764,7 @@
                     "Bachiller": 1,
                     "Ninguna": 0,
                     "Postgrado": 0,
-                    "Pregrado": 1
+                    "Pregrado": 2
                 }
             },
             "Detalle_Preguntas": {
@@ -48715,13 +48774,13 @@
                 "¿Los temas se desarrollaron en el tiempo previsto?": 5.0,
                 "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5.0,
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5.0,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.5,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.5,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.0,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.0,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.0,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.5,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.5
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.666666666666667,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.666666666666667,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.333333333333333,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.333333333333333,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.333333333333333,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.666666666666667,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.666666666666667
             },
             "Registros_Crudos": [
                 {
@@ -48763,6 +48822,26 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 3,
                     "¿El material utilizado permitió el entendimiento del tema?": 4,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 1",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 }
             ]
         },
@@ -48803,6 +48882,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -49129,6 +49209,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -50035,6 +50116,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -50161,6 +50243,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -54487,6 +54570,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -54673,6 +54757,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -55819,6 +55904,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -56089,6 +56175,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -56755,6 +56842,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -57201,6 +57289,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -57659,40 +57748,41 @@
         {
             "Nombre_Curso": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL - 2026 - 01",
             "ID_Moodle_Original": "soat_012026",
-            "Total_Inscritos": 248,
-            "Tasa_Finalizacion_%": 2.8,
+            "Total_Inscritos": 250,
+            "Tasa_Finalizacion_%": 3.6,
             "Tasa_Abandono_%": 2.4,
-            "Tasa_Inactividad_%": 94.8,
-            "Tiempo_Promedio_Dias": 0.3,
+            "Tasa_Inactividad_%": 94.0,
+            "Tiempo_Promedio_Dias": 0.2,
             "Es_Activo": true,
-            "Total_Encuestas": 5.0,
-            "ISG_Promedio": 4.969230769230769,
+            "Total_Encuestas": 6.0,
+            "ISG_Promedio": 4.9743589743589745,
             "ICD_Promedio": 5.0,
             "IUP_Promedio": 5.0,
             "UX_Promedio": 5.0,
             "e_NPS": 100.0,
-            "Salud_Curso_CHS": 60.9,
+            "Salud_Curso_CHS": 61.3,
             "Curso_Base": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 4,
+                    "Femenino": 5,
                     "Intersexual": 0,
                     "Masculino": 1
                 },
                 "Perfil": {
                     "Estudiante": 0,
                     "Otro": 0,
-                    "Área de la salud": 5
+                    "Área de la salud": 6
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 3,
+                    "Adultez (29 - 59 años)": 4,
                     "Juventud (18 - 28 años)": 2,
                     "Vejez (60 años o más)": 0
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 1,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -57738,7 +57828,7 @@
                     "guayaquil": 0
                 },
                 "Escolaridad": {
-                    "Bachiller": 1,
+                    "Bachiller": 2,
                     "Ninguna": 0,
                     "Postgrado": 1,
                     "Pregrado": 3
@@ -57753,7 +57843,7 @@
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5.0,
                 "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5.0,
                 "¿El facilitador demostró el dominio del tema brindado?": 5.0,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.6,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.666666666666667,
                 "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5.0,
                 "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5.0,
                 "¿El material utilizado permitió el entendimiento del tema?": 5.0,
@@ -57859,6 +57949,26 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
                     "¿El material utilizado permitió el entendimiento del tema?": 5,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "Buga",
+                    "Escolaridad": "Bachiller",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 }
             ]
         },
@@ -57950,10 +58060,10 @@
             "Nombre_Curso": "ZONAS DE ORIENTACIÓN ESCOLAR (ZOE) - 2026 - 01",
             "ID_Moodle_Original": "zoe_012026",
             "Total_Inscritos": 117,
-            "Tasa_Finalizacion_%": 36.8,
-            "Tasa_Abandono_%": 0.9,
-            "Tasa_Inactividad_%": 62.4,
-            "Tiempo_Promedio_Dias": 0.1,
+            "Tasa_Finalizacion_%": 39.3,
+            "Tasa_Abandono_%": 5.1,
+            "Tasa_Inactividad_%": 55.6,
+            "Tiempo_Promedio_Dias": 0.2,
             "Es_Activo": true,
             "Total_Encuestas": 2.0,
             "ISG_Promedio": 4.846153846153847,
@@ -57961,7 +58071,7 @@
             "IUP_Promedio": 4.5,
             "UX_Promedio": 5.0,
             "e_NPS": 100.0,
-            "Salud_Curso_CHS": 71.8,
+            "Salud_Curso_CHS": 72.8,
             "Curso_Base": "ZONAS DE ORIENTACIÓN ESCOLAR (ZOE)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -57983,6 +58093,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -58129,6 +58240,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -58355,6 +58467,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -61441,6 +61554,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -61789,6 +61903,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -62095,6 +62210,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -63141,6 +63257,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -64187,6 +64304,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -64533,6 +64651,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -64806,39 +64925,40 @@
             "Nombre_Curso": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES) - 2026 - 01",
             "ID_Moodle_Original": "pfsa_022026",
             "Total_Inscritos": 1006,
-            "Tasa_Finalizacion_%": 86.6,
-            "Tasa_Abandono_%": 3.0,
-            "Tasa_Inactividad_%": 10.4,
-            "Tiempo_Promedio_Dias": 187.0,
+            "Tasa_Finalizacion_%": 90.3,
+            "Tasa_Abandono_%": 2.5,
+            "Tasa_Inactividad_%": 7.3,
+            "Tiempo_Promedio_Dias": 113.9,
             "Es_Activo": true,
-            "Total_Encuestas": 137.0,
-            "ISG_Promedio": 4.399775407074677,
-            "ICD_Promedio": 4.401459854014599,
-            "IUP_Promedio": 4.430656934306569,
-            "UX_Promedio": 4.405109489051095,
-            "e_NPS": 58.4,
-            "Salud_Curso_CHS": 87.6,
+            "Total_Encuestas": 140.0,
+            "ISG_Promedio": 4.412637362637362,
+            "ICD_Promedio": 4.414285714285715,
+            "IUP_Promedio": 4.442857142857143,
+            "UX_Promedio": 4.417857142857143,
+            "e_NPS": 59.3,
+            "Salud_Curso_CHS": 89.2,
             "Curso_Base": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 95,
+                    "Femenino": 98,
                     "Intersexual": 1,
                     "Masculino": 41
                 },
                 "Perfil": {
-                    "Estudiante": 136,
+                    "Estudiante": 139,
                     "Otro": 0,
                     "Área de la salud": 1
                 },
                 "Edad": {
-                    "Adolescencia (12 - 17 años)": 135,
+                    "Adolescencia (12 - 17 años)": 138,
                     "Adultez (29 - 59 años)": 0,
                     "Juventud (18 - 28 años)": 2,
                     "Vejez (60 años o más)": 0
                 },
                 "Comuna": {
                     "12 de octubre ": 1,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -64862,7 +64982,7 @@
                     "COMUNA 13": 3,
                     "COMUNA 14": 13,
                     "COMUNA 15": 12,
-                    "COMUNA 16": 8,
+                    "COMUNA 16": 11,
                     "COMUNA 17": 0,
                     "COMUNA 18": 3,
                     "COMUNA 19": 0,
@@ -64884,26 +65004,26 @@
                     "guayaquil": 1
                 },
                 "Escolaridad": {
-                    "Bachiller": 119,
+                    "Bachiller": 122,
                     "Ninguna": 15,
                     "Postgrado": 0,
                     "Pregrado": 3
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.423357664233577,
-                "¿Se cumplió el objetivo de la capacitación?": 4.372262773722627,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.423357664233577,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.306569343065694,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.474452554744525,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.386861313868613,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.386861313868613,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.408759124087592,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.299270072992701,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.408759124087592,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.394160583941606,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.416058394160584,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.4963503649635035
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.435714285714286,
+                "¿Se cumplió el objetivo de la capacitación?": 4.385714285714286,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.435714285714286,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.321428571428571,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.485714285714286,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.4,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.4,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.421428571428572,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.314285714285714,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.421428571428572,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.4071428571428575,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.428571428571429,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.507142857142857
             },
             "Registros_Crudos": [
                 {
@@ -65525,6 +65645,26 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 3,
                     "¿El material utilizado permitió el entendimiento del tema?": 4,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adolescencia (12 - 17 años)",
+                    "Perfil": "Estudiante",
+                    "Comuna_Unificada": "COMUNA 16",
+                    "Escolaridad": "Bachiller",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 },
                 {
                     "Sexo": "Femenino",
@@ -67030,6 +67170,26 @@
                     "Sexo": "Femenino",
                     "Curso de vida": "Adolescencia (12 - 17 años)",
                     "Perfil": "Estudiante",
+                    "Comuna_Unificada": "COMUNA 16",
+                    "Escolaridad": "Bachiller",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adolescencia (12 - 17 años)",
+                    "Perfil": "Estudiante",
                     "Comuna_Unificada": "COMUNA 11",
                     "Escolaridad": "Bachiller",
                     "¿Se dio a conocer el objetivo de la capacitación?": 4,
@@ -67610,6 +67770,26 @@
                     "Sexo": "Femenino",
                     "Curso de vida": "Adolescencia (12 - 17 años)",
                     "Perfil": "Estudiante",
+                    "Comuna_Unificada": "COMUNA 16",
+                    "Escolaridad": "Bachiller",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adolescencia (12 - 17 años)",
+                    "Perfil": "Estudiante",
                     "Comuna_Unificada": "COMUNA 18",
                     "Escolaridad": "Bachiller",
                     "¿Se dio a conocer el objetivo de la capacitación?": 4,
@@ -67685,6 +67865,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -67871,6 +68052,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 1,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -69017,6 +69199,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 2,
                     "C. DE EL SALADITO": 2,
                     "C. DE FELIDIA": 4,
@@ -81823,6 +82006,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
@@ -82329,6 +82513,7 @@
                 },
                 "Comuna": {
                     "12 de octubre ": 0,
+                    "Buga": 0,
                     "C. DE EL HORMIGUERO": 0,
                     "C. DE EL SALADITO": 0,
                     "C. DE FELIDIA": 0,
