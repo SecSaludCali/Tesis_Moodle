@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
 
     <style>
         :root[data-theme="light"] {
@@ -969,17 +970,45 @@
         
         if(geoJsonDataRaw && !mapInstance.hasLoadedGeoJson) {
             mapInstance.hasLoadedGeoJson = true;
+
+            // Definir los sistemas de coordenadas métricas de Colombia (MAGNA-SIRGAS)
+            if (typeof proj4 !== 'undefined') {
+                // Cali (IGAC Oeste - EPSG:3115)
+                proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+                // CTM12 (Nuevo Origen Nacional IGAC - EPSG:9377)
+                proj4.defs("EPSG:9377", "+proj=tmerc +lat_0=4.0 +lon_0=-73.0 +k=0.9992 +x_0=5000000 +y_0=2000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+            }
             
             geoJsonLayer = L.geoJSON(geoJsonDataRaw, {
-                // MAGIA AQUÍ: Invertimos las coordenadas si vienen al revés en tu JSON
                 coordsToLatLng: function (coords) {
-                    // Si el primer número es positivo (Lat 3.4) y el segundo negativo (Lng -76.5)
-                    // significa que el GeoJSON viene como [Latitud, Longitud]. Lo volteamos:
-                    if (coords[0] > 0 && coords[1] < 0) {
-                        return new L.LatLng(coords[0], coords[1]);
+                    let x = coords[0];
+                    let y = coords[1];
+
+                    // Si ya son geográficas normales (GPS de -180 a 180), pasan directo
+                    if (Math.abs(x) <= 180 && Math.abs(y) <= 90) {
+                        if (x > 0 && y < 0) return new L.LatLng(x, y); // Caso invertidas
+                        return new L.LatLng(y, x); // Caso normal
                     }
-                    // Si ya vienen bien como [Longitud, Latitud], se procesan normal
-                    return new L.LatLng(coords[1], coords[0]);
+
+                    // Si son gigantes (en metros), el traductor proj4 hace magia
+                    if (typeof proj4 !== 'undefined') {
+                        try {
+                            if (x > 800000 && x < 1500000) {
+                                // Traducir MAGNA-SIRGAS Oeste a WGS84
+                                let wgs = proj4("EPSG:3115", "EPSG:4326", [x, y]);
+                                return new L.LatLng(wgs[1], wgs[0]);
+                            } else if (x > 3000000 && x < 6000000) {
+                                // Traducir Origen Nacional CTM12 a WGS84
+                                let wgs = proj4("EPSG:9377", "EPSG:4326", [x, y]);
+                                return new L.LatLng(wgs[1], wgs[0]);
+                            }
+                        } catch(e) {
+                            console.error("No se pudo traducir la coordenada", e);
+                        }
+                    }
+                    
+                    // Fallback seguro al centro de Cali si algo es ininteligible
+                    return new L.LatLng(3.42158, -76.5205); 
                 },
                 style: function(feature) {
                     let defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
