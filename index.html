@@ -864,7 +864,14 @@
             if(!registros || registros.length === 0) { document.getElementById('filtros-cruzados-bar').style.display = 'none'; return; }
             document.getElementById('filtros-cruzados-bar').style.display = 'flex';
             const fSexo = new Set(), fEdad = new Set(), fPerf = new Set(), fCom = new Set();
-            registros.forEach(r => { fSexo.add(r['Sexo']); fEdad.add(r['Curso de vida']); fPerf.add(r['Perfil']); fCom.add(r['Comuna_Unificada']); });
+            registros.forEach(r => { 
+                fSexo.add(String(r['Sexo']||"N/A").trim()); 
+                fEdad.add(String(r['Curso de vida']||"N/A").trim()); 
+                fPerf.add(String(r['Perfil']||"N/A").trim()); 
+                let cu = String(r['Comuna_Unificada']||"N/A").trim();
+                let cID = cu.replace(/\D/g, ''); cID = cID ? cID : cu;
+                fCom.add(cID); 
+            });
             const setOpts = (id, set, lbl) => { const el = document.getElementById(id); el.innerHTML = `<option value="ALL">${lbl}</option>`; Array.from(set).sort().forEach(v => { if(v && v!=="N/A") el.appendChild(new Option(v, v)); }); el.classList.remove('active-chip'); };
             setOpts('f-sexo', fSexo, 'Sexo'); setOpts('f-edad', fEdad, 'Edad'); setOpts('f-perfil', fPerf, 'Perfil'); setOpts('f-comuna', fCom, 'Comuna');
         }
@@ -908,20 +915,25 @@
             cursosFuente.forEach(c => {
                 if(c.Registros_Crudos) {
                     arrF = arrF.concat(c.Registros_Crudos.filter(r => {
-                        let cID = String(r['Comuna_Unificada']||"").replace(/\D/g, ''); cID = cID ? cID : String(r['Comuna_Unificada']).trim();
-                        return (vS==="ALL" || r['Sexo']===vS) && (vE==="ALL" || r['Curso de vida']===vE) && (vP==="ALL" || r['Perfil']===vP) && (vC==="ALL" || cID===vC);
+                        let s = String(r['Sexo']||"N/A").trim();
+                        let e = String(r['Curso de vida']||"N/A").trim();
+                        let pf = String(r['Perfil']||"N/A").trim();
+                        let cu = String(r['Comuna_Unificada']||"N/A").trim();
+                        let cID = cu.replace(/\D/g, ''); cID = cID ? cID : cu;
+                        return (vS==="ALL" || s===vS) && (vE==="ALL" || e===vE) && (vP==="ALL" || pf===vP) && (vC==="ALL" || cID===vC);
                     }));
                 }
             });
             
             let nD = { 'Sexo':{}, 'Edad':{}, 'Perfil':{}, 'Comuna':{}, 'Escolaridad':{} }; let sumQ = {}; let cQ = arrF.length; let p = 0, d = 0;
             arrF.forEach(r => {
-                // Corrección: Evitar que los nulos queden por fuera y descuadren los totales
-                let s = r['Sexo'] || "N/A"; nD.Sexo[s] = (nD.Sexo[s]||0) + 1;
-                let e = r['Curso de vida'] || "N/A"; nD.Edad[e] = (nD.Edad[e]||0) + 1;
-                let pf = r['Perfil'] || "N/A"; nD.Perfil[pf] = (nD.Perfil[pf]||0) + 1;
-                let c = r['Comuna_Unificada'] || "N/A"; nD.Comuna[c] = (nD.Comuna[c]||0) + 1;
-                let esc = r['Escolaridad'] || "N/A"; nD.Escolaridad[esc] = (nD.Escolaridad[esc]||0) + 1;
+                let s = String(r['Sexo'] || "N/A").trim(); nD.Sexo[s] = (nD.Sexo[s]||0) + 1;
+                let e = String(r['Curso de vida'] || "N/A").trim(); nD.Edad[e] = (nD.Edad[e]||0) + 1;
+                let pf = String(r['Perfil'] || "N/A").trim(); nD.Perfil[pf] = (nD.Perfil[pf]||0) + 1;
+                let cu = String(r['Comuna_Unificada'] || "N/A").trim();
+                let cid = cu.replace(/\D/g, ''); cid = cid ? cid : cu;
+                nD.Comuna[cid] = (nD.Comuna[cid]||0) + 1;
+                let esc = String(r['Escolaridad'] || "N/A").trim(); nD.Escolaridad[esc] = (nD.Escolaridad[esc]||0) + 1;
 
                 Object.keys(mapeoPreguntas).forEach(q => { sumQ[q]=(sumQ[q]||0)+(parseFloat(r[q])||0); });
                 let vg = parseFloat(r['En general, ¿Cómo se sintió con la actividad de capacitación realizada?'])||0; if(vg===5) p++; else if(vg<=3 && vg>0) d++;
@@ -1021,7 +1033,7 @@
             let labels = Object.keys(dataObject); let datos = Object.values(dataObject); let cols = labels.map((l, i) => mapeoColores[l] || coloresRespaldo[i % coloresRespaldo.length]); 
             
             if (chartInstances[canvasId]) { 
-                chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update('none'); 
+                chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = datos; chartInstances[canvasId].data.datasets[0].backgroundColor = cols; chartInstances[canvasId].update(); 
             } else { 
                 chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
                     type: 'doughnut', 
@@ -1029,7 +1041,7 @@
                     options: { 
                         responsive: true, maintainAspectRatio: false, cutout: '75%', 
                         plugins: { legend: { display: false } }, 
-                        animation: false,
+                        animation: { duration: 800, easing: 'easeOutQuart' },
                         onClick: (e, elements, chart) => {
                             if (elements.length > 0) {
                                 const idx = elements[0].index;
@@ -1047,20 +1059,20 @@
             let ag = {}; for (let k in dataObject) { let id = String(k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?String(k).trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
             let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
             
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update('none'); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: false, onClick: (e, elements, chart) => { if (elements.length > 0) { const label = chart.data.labels[elements[0].index]; const id = label.replace(/\D/g, ''); if(id) triggerCrossFilter('f-comuna', id); } } } }); }
+            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update(); } 
+            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: { duration: 800, easing: 'easeOutQuart' }, onClick: (e, elements, chart) => { if (elements.length > 0) { const label = chart.data.labels[elements[0].index]; const id = label.replace(/\D/g, ''); if(id) triggerCrossFilter('f-comuna', id); } } } }); }
         }
         
         function dibujarBarraMoodle(canvasId, c) { 
             let d = [c['Tasa_Finalizacion_%']||0, c['Tasa_Abandono_%']||0, c['Tasa_Inactividad_%']||0];
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data=[d[0]]; chartInstances[canvasId].data.datasets[1].data=[d[1]]; chartInstances[canvasId].data.datasets[2].data=[d[2]]; chartInstances[canvasId].update('none'); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#ffb547' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: false } }); }
+            if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data=[d[0]]; chartInstances[canvasId].data.datasets[1].data=[d[1]]; chartInstances[canvasId].data.datasets[2].data=[d[2]]; chartInstances[canvasId].update(); } 
+            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#ffb547' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: { duration: 800, easing: 'easeOutQuart' } } }); }
         }
         
         function dibujarRadar(pC, isG = false) { 
             const lbl = Object.keys(pC).map(q => mapeoPreguntas[q] || "Pregunta"); let d1 = Object.values(pC); let d2 = Object.keys(pC).map(q => promediosGlobalesPreguntas[q] || 0);
-            if (chartInstances['chartRadar']) { chartInstances['chartRadar'].data.labels = lbl; chartInstances['chartRadar'].data.datasets[0].data = d1; chartInstances['chartRadar'].data.datasets[0].label = isG ? 'Promedio' : 'Cohorte'; if(!isG) { if(!chartInstances['chartRadar'].data.datasets[1]) chartInstances['chartRadar'].data.datasets.push({ label: 'Benchmark', backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'].data.datasets[1].data = d2; } else if (chartInstances['chartRadar'].data.datasets.length > 1) { chartInstances['chartRadar'].data.datasets.pop(); } chartInstances['chartRadar'].update('none'); } 
-            else { let arr = [{ label: isG ? 'Promedio' : 'Cohorte', data: d1, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 3 }]; if (!isG) arr.push({ label: 'Benchmark', data: d2, backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: lbl, datasets: arr }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 9, family: 'Inter', weight: '600' } } } }, animation: false } }); }
+            if (chartInstances['chartRadar']) { chartInstances['chartRadar'].data.labels = lbl; chartInstances['chartRadar'].data.datasets[0].data = d1; chartInstances['chartRadar'].data.datasets[0].label = isG ? 'Promedio' : 'Cohorte'; if(!isG) { if(!chartInstances['chartRadar'].data.datasets[1]) chartInstances['chartRadar'].data.datasets.push({ label: 'Benchmark', backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'].data.datasets[1].data = d2; } else if (chartInstances['chartRadar'].data.datasets.length > 1) { chartInstances['chartRadar'].data.datasets.pop(); } chartInstances['chartRadar'].update(); } 
+            else { let arr = [{ label: isG ? 'Promedio' : 'Cohorte', data: d1, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 3 }]; if (!isG) arr.push({ label: 'Benchmark', data: d2, backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: lbl, datasets: arr }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 9, family: 'Inter', weight: '600' } } } }, animation: { duration: 800, easing: 'easeOutQuart' } } }); }
         }
 
         function crearTarjetaKPI(l, v, pct = null, i = "bi-bar-chart", c="primary") { let bp = pct ? `<span class="badge-kpi bg-${c} bg-opacity-10 text-${c}">${pct}</span>` : ''; return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-mini"><div class="kpi-mini-header"><div class="kpi-mini-icon bg-${c}-soft"><i class="bi ${i}"></i></div>${bp}</div><div class="kpi-mini-val">${v}</div><div class="kpi-mini-lbl">${l}</div></div></div>`; }
@@ -1280,8 +1292,6 @@
                 });
             });
 
-            proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-            
             try { 
                 const res = await fetch('dashboard_data.json?v=' + new Date().getTime()); 
                 dashboardData = await res.json(); 
@@ -1313,29 +1323,13 @@
             window.poblarSelectoresComparador();
 
             try {
-                const gRes = await fetch('mc_comunas.json'); let gd = await gRes.json(); 
+                const gRes = await fetch('mc_comunas.json'); 
+                let gd = await gRes.json(); 
                 if(gd && gd.features) { 
-                    // Corrección: Detector inteligente para no dañar coordenadas que ya son correctas
-                    gd.features.forEach(f => {
-                        if(f.geometry && f.geometry.coordinates) {
-                            const transformCoord = (c) => {
-                                // Solo transformamos si vemos valores planos por encima de 180
-                                if (Math.abs(c[0]) > 180 || Math.abs(c[1]) > 180) {
-                                    try { return proj4("EPSG:3115", "EPSG:4326", c); } catch(e) { return c; }
-                                }
-                                return c; // Se dejan intactas las buenas
-                            };
-                            if(f.geometry.type === "Polygon") {
-                                f.geometry.coordinates = f.geometry.coordinates.map(r => r.map(transformCoord));
-                            } else if(f.geometry.type === "MultiPolygon") {
-                                f.geometry.coordinates = f.geometry.coordinates.map(p => p.map(r => r.map(transformCoord)));
-                            }
-                        }
-                    }); 
                     geoJsonDataRaw = gd; 
                 }
             } catch (e) { 
-                console.warn("No se pudo cargar el mapa geoJSON local. Usando mapa base."); 
+                console.warn("No se pudo cargar el mapa geoJSON local. Usando mapa base.", e); 
                 geoJsonDataRaw = { "type": "FeatureCollection", "features": [] }; 
             }
             
