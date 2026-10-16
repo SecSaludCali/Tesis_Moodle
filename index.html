@@ -169,6 +169,23 @@
         .leaflet-popup-tip { background: var(--card-bg); }
         .leaflet-popup-content { margin: 10px; line-height: 1.4; }
 
+        /* Nuevos estilos premium para el mapa */
+        path.leaflet-interactive {
+            transition: fill 0.3s ease, fill-opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease;
+        }
+        .leaflet-tooltip-premium {
+            background: rgba(17, 28, 68, 0.95) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            border-radius: 12px !important;
+            padding: 8px 12px !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3) !important;
+            font-family: 'Inter', sans-serif !important;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        .leaflet-tooltip-premium::before { display: none; } /* Quita la flecha del tooltip base */
+
         /* Estilos Leyendas Personalizadas */
         .custom-legend-container {
             margin-top: 15px;
@@ -994,62 +1011,63 @@
                     if (typeof proj4 !== 'undefined') {
                         try {
                             if (x > 800000 && x < 1500000) {
-                                // Traducir MAGNA-SIRGAS Oeste a WGS84
                                 let wgs = proj4("EPSG:3115", "EPSG:4326", [x, y]);
                                 return new L.LatLng(wgs[1], wgs[0]);
                             } else if (x > 3000000 && x < 6000000) {
-                                // Traducir Origen Nacional CTM12 a WGS84
                                 let wgs = proj4("EPSG:9377", "EPSG:4326", [x, y]);
                                 return new L.LatLng(wgs[1], wgs[0]);
                             }
-                        } catch(e) {
-                            console.error("No se pudo traducir la coordenada", e);
-                        }
+                        } catch(e) {}
                     }
-                    
-                    // Fallback seguro al centro de Cali si algo es ininteligible
                     return new L.LatLng(3.42158, -76.5205); 
                 },
                 style: function(feature) {
                     let defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
                     return {
-                        fillColor: defaultColor, // Hacemos que siempre haya un color de fondo gris suave
-                        weight: 1.5,
+                        fillColor: defaultColor, 
+                        weight: 1, // Bordes ultra delgados para un look limpio
                         opacity: 1,
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#cbd5e1',
-                        fillOpacity: 0.4
+                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1',
+                        fillOpacity: 0.3 // Las comunas sin datos se ven sutiles
                     };
                 },
                 onEachFeature: function(feature, layer) {
+                    let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
+                    let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
+                    let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
+                    
+                    // Magia 1: Tooltip oscuro magnético
+                    layer.bindTooltip('', { className: 'leaflet-tooltip-premium', sticky: true, direction: 'top', offset: [0, -10] });
+
                     layer.on('mouseover', function(e) {
-                        let strokeCol = document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
-                        layer.setStyle({ weight: 3, color: strokeCol, fillOpacity: 0.9 });
+                        // Magia 2: Traer el polígono al frente (Efecto 3D real)
+                        layer.bringToFront(); 
                         
-                        let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
-                        let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
-                        let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
+                        let strokeCol = document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#1e293b';
+                        layer.setStyle({ weight: 3, color: strokeCol, fillOpacity: 0.95 });
+                        
+                        // Magia 3: Sombra paralela en el SVG
+                        if(layer._path) layer._path.style.filter = "drop-shadow(0px 8px 12px rgba(0,0,0,0.4))";
+                        
                         let valor = mapInstance.lastDataComunas ? (mapInstance.lastDataComunas[id] || 0) : 0;
-                        
-                        L.popup({closeButton: false, offset: L.point(0, -5)})
-                            .setLatLng(e.latlng)
-                            .setContent(`<div style="padding: 2px; text-align: center;"><strong>${nombreDisplay}</strong><br>Participantes: ${valor}</div>`)
-                            .openOn(mapInstance);
+                        layer.setTooltipContent(`<div style="text-align: center;"><span style="font-size: 0.7rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px;">${nombreDisplay}</span><br><strong style="font-size: 1.3rem; font-weight: 800; color: #fff;">${valor.toLocaleString()}</strong><span style="font-size: 0.8rem; font-weight: 400; color: #94a3b8; margin-left: 4px;">participantes</span></div>`);
                     });
                     
                     layer.on('mouseout', function(e) {
-                        mapInstance.closePopup();
+                        // Quitar sombra
+                        if(layer._path) layer._path.style.filter = "none";
+                        
                         if (mapInstance.lastDataComunas) {
-                            let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
-                            let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10));
                             let p = mapInstance.lastDataComunas[id] || 0;
                             let maxP = mapInstance.lastMaxP || 1;
                             
                             let defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
+                            let defStroke = document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1';
                             layer.setStyle({
                                 fillColor: p > 0 ? getColorMapa(p, maxP) : defaultColor,
-                                fillOpacity: p > 0 ? 0.8 : 0.4,
-                                weight: 1.5,
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#cbd5e1'
+                                fillOpacity: p > 0 ? 0.85 : 0.3,
+                                weight: 1,
+                                color: p > 0 ? (document.documentElement.getAttribute('data-theme') === 'dark' ? '#475569' : '#ffffff') : defStroke
                             });
                         } else {
                             geoJsonLayer.resetStyle(layer);
@@ -1057,14 +1075,11 @@
                     });
                     
                     layer.on('click', function(e) {
-                        let propComuna = feature.properties.comuna || feature.properties.COMUNA || feature.properties.nombre || feature.properties.id || "N/A";
-                        let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
                         triggerCrossFilter('f-comuna', id);
                     });
                 }
             }).addTo(mapInstance);
             
-            // Encuadrar la cámara (Seguro contra NaN)
             if (geoJsonDataRaw.features && geoJsonDataRaw.features.length > 0) {
                 if (document.getElementById('map-container').offsetWidth > 0 && geoJsonLayer.getBounds().isValid()) {
                     mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
@@ -1079,7 +1094,16 @@
     
     function getColorMapa(v, max) { 
         if(v===0) return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0'; 
-        let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; 
+        
+        // Magia 4: Colores Premium Oceanic (Azul cielo -> Azul profundo)
+        let cOceanic = ['#bae6fd', '#7dd3fc', '#38bdf8', '#0284c7', '#0369a1']; 
+        let cRose = ['#ffe4e6','#fda4af','#fb7185','#e11d48','#be123c'];
+        let cAmber = ['#fef3c7','#fde047','#f59e0b','#d97706','#b45309'];
+        let cDark = ['#312e81', '#4338ca', '#4f46e5', '#6366f1', '#818cf8']; 
+        
+        let t = document.documentElement.getAttribute('data-theme');
+        let c = t==='rose' ? cRose : t==='amber' ? cAmber : t==='dark' ? cDark : cOceanic; 
+        
         if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; 
     }
         
@@ -1096,8 +1120,8 @@
             
             mapInstance.lastDataComunas = mapNorm;
             mapInstance.lastMaxP = maxP; 
-            const strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--map-stroke').trim() || '#cbd5e1';
             const defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
+            const defStroke = document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1';
             
             geoJsonLayer.eachLayer(function(layer) {
                 let propComuna = layer.feature.properties.comuna || layer.feature.properties.COMUNA || layer.feature.properties.nombre || layer.feature.properties.id || "N/A";
@@ -1107,9 +1131,10 @@
                 
                 layer.setStyle({
                     fillColor: color,
-                    fillOpacity: p > 0 ? 0.8 : 0.4,
-                    weight: 1.5,
-                    color: strokeColor
+                    fillOpacity: p > 0 ? 0.85 : 0.3,
+                    weight: 1,
+                    // Borde blanco sutil para los activos
+                    color: p > 0 ? (document.documentElement.getAttribute('data-theme') === 'dark' ? '#475569' : '#ffffff') : defStroke
                 });
             });
         }
