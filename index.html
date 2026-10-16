@@ -160,9 +160,9 @@
         .chart-wrapper { position: relative; height: 180px; width: 100%; margin-top: 10px; display: flex; justify-content: center; transition: height 0.3s ease;}
         .radar-wrapper { position: relative; height: 360px; width: 100%; display: flex; justify-content: center; transition: height 0.3s ease;}
         
-        /* Modificación: Mapa restaurado para depuración */
-        #map-container { border-radius: 16px; transform: translateZ(0); width: 100%; flex-grow: 1; min-height: 350px; }
-        .leaflet-container { background: #e5e7eb !important; }
+        /* Modificación: Dimensiones estrictas para evitar el colapso del mapa */
+        #map-container { border-radius: 16px; width: 100%; height: 350px; position: relative; z-index: 1; overflow: hidden; }
+        .leaflet-container { background: #e5e7eb !important; font-family: 'Inter', sans-serif; }
 
         /* Estilos Leyendas Personalizadas */
         .custom-legend-container {
@@ -526,12 +526,12 @@
 
                                 <div class="row g-3 mb-4">
                                     <div class="col-12 col-lg-5 d-flex" id="col-mapa">
-                                        <div class="glass-card p-3 d-flex flex-column w-100" style="padding: 15px;">
-                                            <div class="d-flex justify-content-between align-items-center mb-2 z-3" style="position: relative;">
+                                        <div class="glass-card p-3 d-flex flex-column w-100">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h6 class="mb-0 fw-bold fs-6">Mapa de Participación</h6>
                                                 <small class="text-muted"><i class="bi bi-hand-index-thumb"></i> Interactúa</small>
                                             </div>
-                                            <div id="map-container" style="margin-top: -30px; z-index: 1;"></div>
+                                            <div id="map-container"></div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-7" id="col-comunas">
@@ -955,6 +955,9 @@
                 subdomains: 'abcd',
                 maxZoom: 20
             }).addTo(mapInstance);
+
+            // Seguro Anti-Mapa-Gris: Fuerza a recalcular el tamaño una vez pintado en pantalla
+            setTimeout(() => { if (mapInstance) mapInstance.invalidateSize(); }, 600);
         }
         
         function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
@@ -1329,13 +1332,17 @@
             window.poblarSelectoresComparador();
 
             try {
-                const gRes = await fetch('mc_comunas.json'); 
-                let gd = await gRes.json(); 
+                // Modificación: Intentar buscar el archivo original o el archivo con "(1)"
+                let resArchivo = null;
+                try { resArchivo = await fetch('mc_comunas.json'); } catch(e) {}
+                if (!resArchivo || !resArchivo.ok) { resArchivo = await fetch('mc_comunas (1).json'); }
+                
+                let gd = await resArchivo.json(); 
                 if(gd && gd.features) { 
                     geoJsonDataRaw = gd; 
                 }
             } catch (e) { 
-                console.warn("No se pudo cargar el mapa geoJSON local. Usando mapa base.", e); 
+                console.warn("No se pudo cargar el mapa geoJSON local. Verifica que el archivo exista en la carpeta.", e); 
                 geoJsonDataRaw = { "type": "FeatureCollection", "features": [] }; 
             }
             
