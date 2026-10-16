@@ -916,7 +916,13 @@
             
             let nD = { 'Sexo':{}, 'Edad':{}, 'Perfil':{}, 'Comuna':{}, 'Escolaridad':{} }; let sumQ = {}; let cQ = arrF.length; let p = 0, d = 0;
             arrF.forEach(r => {
-                nD.Sexo[r['Sexo']]=(nD.Sexo[r['Sexo']]||0)+1; nD.Edad[r['Curso de vida']]=(nD.Edad[r['Curso de vida']]||0)+1; nD.Perfil[r['Perfil']]=(nD.Perfil[r['Perfil']]||0)+1; nD.Comuna[r['Comuna_Unificada']]=(nD.Comuna[r['Comuna_Unificada']]||0)+1; nD.Escolaridad[r['Escolaridad']]=(nD.Escolaridad[r['Escolaridad']]||0)+1;
+                // Corrección: Evitar que los nulos queden por fuera y descuadren los totales
+                let s = r['Sexo'] || "N/A"; nD.Sexo[s] = (nD.Sexo[s]||0) + 1;
+                let e = r['Curso de vida'] || "N/A"; nD.Edad[e] = (nD.Edad[e]||0) + 1;
+                let pf = r['Perfil'] || "N/A"; nD.Perfil[pf] = (nD.Perfil[pf]||0) + 1;
+                let c = r['Comuna_Unificada'] || "N/A"; nD.Comuna[c] = (nD.Comuna[c]||0) + 1;
+                let esc = r['Escolaridad'] || "N/A"; nD.Escolaridad[esc] = (nD.Escolaridad[esc]||0) + 1;
+
                 Object.keys(mapeoPreguntas).forEach(q => { sumQ[q]=(sumQ[q]||0)+(parseFloat(r[q])||0); });
                 let vg = parseFloat(r['En general, ¿Cómo se sintió con la actividad de capacitación realizada?'])||0; if(vg===5) p++; else if(vg<=3 && vg>0) d++;
             });
@@ -1281,6 +1287,7 @@
                 dashboardData = await res.json(); 
             } catch (e) { 
                 console.warn("Entorno local detectado. Cargando datos de respaldo temporal (Fallback) para la vista previa.");
+                // Fallback objects...
                 dashboardData = {
                     "metadata": { "total_cursos_analizados": 5, "total_encuestas_historicas": 1250, "total_estudiantes_unicos": 3800, "cursos_activos": 2 },
                     "kpis_globales": { "chs_promedio_secretaria": 85.4, "nps_global": 72 },
@@ -1307,7 +1314,26 @@
 
             try {
                 const gRes = await fetch('mc_comunas.json'); let gd = await gRes.json(); 
-                if(gd && gd.features) { gd.features.forEach(f=>{if(f.geometry&&f.geometry.coordinates){if(f.geometry.type==="Polygon")f.geometry.coordinates=f.geometry.coordinates.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c)));else if(f.geometry.type==="MultiPolygon")f.geometry.coordinates=f.geometry.coordinates.map(p=>p.map(r=>r.map(c=>proj4("EPSG:3115","EPSG:4326",c))));}}); geoJsonDataRaw = gd; }
+                if(gd && gd.features) { 
+                    // Corrección: Detector inteligente para no dañar coordenadas que ya son correctas
+                    gd.features.forEach(f => {
+                        if(f.geometry && f.geometry.coordinates) {
+                            const transformCoord = (c) => {
+                                // Solo transformamos si vemos valores planos por encima de 180
+                                if (Math.abs(c[0]) > 180 || Math.abs(c[1]) > 180) {
+                                    try { return proj4("EPSG:3115", "EPSG:4326", c); } catch(e) { return c; }
+                                }
+                                return c; // Se dejan intactas las buenas
+                            };
+                            if(f.geometry.type === "Polygon") {
+                                f.geometry.coordinates = f.geometry.coordinates.map(r => r.map(transformCoord));
+                            } else if(f.geometry.type === "MultiPolygon") {
+                                f.geometry.coordinates = f.geometry.coordinates.map(p => p.map(r => r.map(transformCoord)));
+                            }
+                        }
+                    }); 
+                    geoJsonDataRaw = gd; 
+                }
             } catch (e) { 
                 console.warn("No se pudo cargar el mapa geoJSON local. Usando mapa base."); 
                 geoJsonDataRaw = { "type": "FeatureCollection", "features": [] }; 
