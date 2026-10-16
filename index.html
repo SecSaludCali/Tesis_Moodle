@@ -160,9 +160,9 @@
         .chart-wrapper { position: relative; height: 180px; width: 100%; margin-top: 10px; display: flex; justify-content: center; transition: height 0.3s ease;}
         .radar-wrapper { position: relative; height: 360px; width: 100%; display: flex; justify-content: center; transition: height 0.3s ease;}
         
-        /* Modificación: Mapa transparente */
-        #map-container { border-radius: 16px; transform: translateZ(0); width: 100%; flex-grow: 1; min-height: 350px; background: transparent !important; }
-        .leaflet-container { background: transparent !important; }
+        /* Modificación: Mapa restaurado para depuración */
+        #map-container { border-radius: 16px; transform: translateZ(0); width: 100%; flex-grow: 1; min-height: 350px; }
+        .leaflet-container { background: #e5e7eb !important; }
 
         /* Estilos Leyendas Personalizadas */
         .custom-legend-container {
@@ -948,7 +948,13 @@
         function inicializarMapa() { 
             if (mapInstance) return; 
             mapInstance = L.map('map-container', { preferCanvas: true, zoomControl: true, attributionControl: false }).setView([3.42158, -76.5205], 11); 
-            // Eliminamos L.tileLayer para dejar el mapa con fondo transparente
+            
+            // Capa base de mapa (CartoDB Light) para poder ubicar visualmente los polígonos
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(mapInstance);
         }
         
         function getColorMapa(v, max) { if(v===0) return 'transparent'; let c = document.documentElement.getAttribute('data-theme')==='rose'?['#fff1f2','#fecdd3','#fda4af','#f43f5e','#be123c']:document.documentElement.getAttribute('data-theme')==='amber'?['#fffbeb','#fef08a','#f59e0b','#d97706','#92400e']:['#ece6ff','#d1c4ff','#a389ff','#7551ff','#4318ff']; if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; }
