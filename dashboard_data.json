@@ -1,27 +1,27 @@
 {
     "metadata": {
         "total_cursos_analizados": 61,
-        "total_encuestas_historicas": 4241,
+        "total_encuestas_historicas": 4243,
         "total_estudiantes_unicos": 7706,
         "cursos_activos": 20
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 54.8,
-        "nps_global": 72.2
+        "chs_promedio_secretaria": 54.9,
+        "nps_global": 72.3
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 3101,
+            "Femenino": 3103,
             "Masculino": 1135,
             "Intersexual": 5
         },
         "Perfil": {
-            "Área de la salud": 2872,
+            "Área de la salud": 2874,
             "Estudiante": 949,
             "Otro": 420
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2376,
+            "Adultez (29 - 59 años)": 2378,
             "Adolescencia (12 - 17 años)": 962,
             "Juventud (18 - 28 años)": 734,
             "Vejez (60 años o más)": 169
@@ -38,7 +38,7 @@
             "COMUNA 16": 159,
             "COMUNA 5": 153,
             "COMUNA 14": 141,
-            "COMUNA 8": 132,
+            "COMUNA 8": 133,
             "COMUNA 21": 132,
             "COMUNA 11": 127,
             "COMUNA 12": 121,
@@ -62,21 +62,22 @@
             "C. DE LOS ANDES": 2,
             "C. DE GOLONDRINAS": 2,
             "C. DE LA PAZ": 2,
-            "PALMIRA": 1,
             "Buga": 1,
-            "12 de octubre ": 1,
+            "PALMIRA": 1,
+            "jamundi terranova": 1,
+            "guayaquil": 1,
             "candelaria": 1,
             "C.Alirio Mora": 1,
             "Marroquín 2": 1,
-            "guayaquil": 1,
+            "12 de octubre ": 1,
             "MUNICIPIO DE PRADERA VALLE ": 1,
             "C. DE LA ELVIRA": 1,
             "C. DE LA LEONERA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1802,
+            "Pregrado": 1803,
             "Bachiller": 1323,
-            "Postgrado": 1035,
+            "Postgrado": 1036,
             "Ninguna": 81
         }
     },
@@ -127,10 +128,10 @@
             "Nombre_Curso": "SALUD BUCAL / PADRES, CUIDADORES Y DOCENTES - 2026 - 01",
             "ID_Moodle_Original": "sbpcd_2026",
             "Total_Inscritos": 37,
-            "Tasa_Finalizacion_%": 0.0,
-            "Tasa_Abandono_%": 13.5,
+            "Tasa_Finalizacion_%": 2.7,
+            "Tasa_Abandono_%": 10.8,
             "Tasa_Inactividad_%": 86.5,
-            "Tiempo_Promedio_Dias": 0.3,
+            "Tiempo_Promedio_Dias": 1.7,
             "Es_Activo": true,
             "Total_Encuestas": 4.0,
             "ISG_Promedio": 5.0,
@@ -138,7 +139,7 @@
             "IUP_Promedio": 5.0,
             "UX_Promedio": 5.0,
             "e_NPS": 100.0,
-            "Salud_Curso_CHS": 60.0,
+            "Salud_Curso_CHS": 61.1,
             "Curso_Base": "SALUD BUCAL / PADRES, CUIDADORES Y DOCENTES",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -203,7 +204,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 3,
@@ -432,7 +434,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -621,7 +624,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 4,
@@ -1248,7 +1252,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -1437,7 +1442,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -4264,7 +4270,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -7091,7 +7098,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -15518,7 +15526,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 110,
@@ -29945,7 +29954,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 7,
@@ -31534,7 +31544,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 3,
@@ -31905,7 +31916,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 24,
@@ -34992,7 +35004,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -35139,7 +35152,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -35388,7 +35402,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 5,
@@ -35695,7 +35710,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -44164,7 +44180,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -44471,7 +44488,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 382,
@@ -48722,10 +48740,10 @@
             "Nombre_Curso": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE ADOLESCENCIA - 2026 - 02",
             "ID_Moodle_Original": "rpmsa_022026",
             "Total_Inscritos": 308,
-            "Tasa_Finalizacion_%": 1.3,
+            "Tasa_Finalizacion_%": 1.6,
             "Tasa_Abandono_%": 2.3,
-            "Tasa_Inactividad_%": 96.4,
-            "Tiempo_Promedio_Dias": 0.5,
+            "Tasa_Inactividad_%": 96.1,
+            "Tiempo_Promedio_Dias": 0.4,
             "Es_Activo": true,
             "Total_Encuestas": 3.0,
             "ISG_Promedio": 4.743589743589744,
@@ -48733,7 +48751,7 @@
             "IUP_Promedio": 5.0,
             "UX_Promedio": 4.5,
             "e_NPS": 66.7,
-            "Salud_Curso_CHS": 58.0,
+            "Salud_Curso_CHS": 58.1,
             "Curso_Base": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE ADOLESCENCIA",
             "Edicion": "2026 - Cohorte 2",
             "Demografia": {
@@ -48798,7 +48816,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -48965,7 +48984,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -49292,7 +49312,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 7,
@@ -50199,7 +50220,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -50326,7 +50348,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 382,
@@ -54653,7 +54676,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 3,
@@ -54840,7 +54864,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 6,
@@ -55987,7 +56012,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -56258,7 +56284,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 5,
@@ -56925,7 +56952,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -57372,7 +57400,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 2,
@@ -57789,34 +57818,34 @@
             "Nombre_Curso": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL - 2026 - 01",
             "ID_Moodle_Original": "soat_012026",
             "Total_Inscritos": 250,
-            "Tasa_Finalizacion_%": 0.0,
-            "Tasa_Abandono_%": 6.8,
+            "Tasa_Finalizacion_%": 0.8,
+            "Tasa_Abandono_%": 6.0,
             "Tasa_Inactividad_%": 93.2,
-            "Tiempo_Promedio_Dias": 0.2,
+            "Tiempo_Promedio_Dias": 0.6,
             "Es_Activo": true,
-            "Total_Encuestas": 7.0,
-            "ISG_Promedio": 4.945054945054944,
-            "ICD_Promedio": 5.0,
+            "Total_Encuestas": 9.0,
+            "ISG_Promedio": 4.94017094017094,
+            "ICD_Promedio": 4.9259259259259265,
             "IUP_Promedio": 5.0,
-            "UX_Promedio": 4.857142857142857,
-            "e_NPS": 85.7,
-            "Salud_Curso_CHS": 59.4,
+            "UX_Promedio": 4.888888888888889,
+            "e_NPS": 88.9,
+            "Salud_Curso_CHS": 59.7,
             "Curso_Base": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 5,
+                    "Femenino": 7,
                     "Intersexual": 0,
                     "Masculino": 2
                 },
                 "Perfil": {
                     "Estudiante": 0,
                     "Otro": 0,
-                    "Área de la salud": 7
+                    "Área de la salud": 9
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 5,
+                    "Adultez (29 - 59 años)": 7,
                     "Juventud (18 - 28 años)": 2,
                     "Vejez (60 años o más)": 0
                 },
@@ -57859,19 +57888,20 @@
                     "COMUNA 5": 0,
                     "COMUNA 6": 0,
                     "COMUNA 7": 1,
-                    "COMUNA 8": 0,
+                    "COMUNA 8": 1,
                     "COMUNA 9": 0,
                     "MUNICIPIO DE PRADERA VALLE ": 0,
                     "Marroquín 2": 0,
                     "PALMIRA": 1,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 1
                 },
                 "Escolaridad": {
                     "Bachiller": 2,
                     "Ninguna": 0,
-                    "Postgrado": 2,
-                    "Pregrado": 3
+                    "Postgrado": 3,
+                    "Pregrado": 4
                 }
             },
             "Detalle_Preguntas": {
@@ -57883,11 +57913,11 @@
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5.0,
                 "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5.0,
                 "¿El facilitador demostró el dominio del tema brindado?": 5.0,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.714285714285714,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5.0,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.857142857142857,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.857142857142857,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.857142857142857
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.777777777777778,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.777777777777778,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.888888888888889,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.888888888888889,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.888888888888889
             },
             "Registros_Crudos": [
                 {
@@ -57926,6 +57956,26 @@
                     "¿El facilitador demostró el dominio del tema brindado?": 5,
                     "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
                     "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "jamundi terranova",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 3,
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
                     "¿El material utilizado permitió el entendimiento del tema?": 5,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
@@ -57985,6 +58035,26 @@
                     "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
                     "¿El facilitador demostró el dominio del tema brindado?": 5,
                     "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 3,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 8",
+                    "Escolaridad": "Postgrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
                     "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
                     "¿El material utilizado permitió el entendimiento del tema?": 5,
@@ -58196,7 +58266,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -58343,7 +58414,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -58570,7 +58642,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 24,
@@ -61657,7 +61730,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 3,
@@ -62006,7 +62080,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -62313,7 +62388,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -63360,7 +63436,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -64407,7 +64484,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 2,
@@ -64754,7 +64832,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -65061,7 +65140,8 @@
                     "Marroquín 2": 1,
                     "PALMIRA": 0,
                     "candelaria": 1,
-                    "guayaquil": 1
+                    "guayaquil": 1,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 123,
@@ -68008,7 +68088,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -68195,7 +68276,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 6,
@@ -69342,7 +69424,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 93,
@@ -82149,7 +82232,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 4,
@@ -82656,7 +82740,8 @@
                     "Marroquín 2": 0,
                     "PALMIRA": 0,
                     "candelaria": 0,
-                    "guayaquil": 0
+                    "guayaquil": 0,
+                    "jamundi terranova": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
