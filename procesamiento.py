@@ -119,8 +119,9 @@ class PipelineAnalitico:
             activos_incompletos = len(df[(df['Progreso'] > 0) & (df['Progreso'] < 0.90)])
             inactivos = len(df[df['Progreso'] == 0])
             
+            # --- MODIFICACIÓN DE PROMEDIO A MÁXIMO ---
             duraciones_dias = [(max_f - min_f).total_seconds() / 86400 for min_f, max_f in para_tiempos if min_f != max_f]
-            tiempo_promedio = np.mean(duraciones_dias) if duraciones_dias else 0
+            tiempo_maximo = np.max(duraciones_dias) if duraciones_dias else 0
 
             es_activo = False
             fechas_globales_curso = [f for f in fechas_globales_curso if pd.notna(f)]
@@ -139,7 +140,7 @@ class PipelineAnalitico:
                 'Tasa_Finalizacion_%': round((graduados / inscritos * 100), 1) if inscritos else 0,
                 'Tasa_Abandono_%': round((activos_incompletos / inscritos * 100), 1) if inscritos else 0,
                 'Tasa_Inactividad_%': round((inactivos / inscritos * 100), 1) if inscritos else 0,
-                'Tiempo_Promedio_Dias': round(tiempo_promedio, 1),
+                'Tiempo_Maximo_Dias': round(tiempo_maximo, 1), # Nueva columna actualizada
                 'Es_Activo': es_activo
             })
 
