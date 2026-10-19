@@ -585,8 +585,8 @@
                                         <div class="glass-card p-4 text-center d-flex flex-column justify-content-center align-items-center">
                                             <div class="kpi-mini-icon bg-indigo-soft mb-2"><i class="bi bi-stopwatch-fill"></i></div>
                                             <h6 class="fw-bold fs-6 mb-3">Ritmo de Aprendizaje</h6>
-                                            <div class="kpi-mini-val text-primary" style="font-size: clamp(2.5rem, 5vw, 3rem);" id="tiempo-consumo-dias">0</div>
-                                            <div class="kpi-mini-lbl mt-2">Días Máximo para Finalizar</div>
+                                            <div class="kpi-mini-val text-primary" style="font-size: clamp(2rem, 4vw, 2.5rem);" id="tiempo-consumo-dias">0</div>
+                                            <div class="kpi-mini-lbl mt-2" id="tiempo-consumo-lbl">Días Máximo para Finalizar</div>
                                         </div>
                                     </div>
                                 </div>
@@ -787,6 +787,15 @@
             }
         };
         Chart.register(centerTextPlugin);
+
+        // NUEVA FUNCIÓN MATEMÁTICA PARA EL TIEMPO
+        function formatoDiasHoras(diasDecimal) {
+            if (!diasDecimal || isNaN(diasDecimal)) return "0D 0H";
+            let d = Math.floor(diasDecimal);
+            let h = Math.round((diasDecimal - d) * 24);
+            if (h >= 24) { d += 1; h -= 24; }
+            return `${d}D ${h}H`;
+        }
 
         function getIconForLabel(label) {
             const l = String(label).toLowerCase();
@@ -1295,6 +1304,7 @@
             
             toggleVisibilidad('col-sexo', dG['Sexo']); toggleVisibilidad('col-edad', dG['Curso de Vida']); toggleVisibilidad('col-perfil', dG['Perfil']); toggleVisibilidad('col-escolaridad', dG['Escolaridad']); toggleVisibilidad('col-mapa', dG['Comuna']); toggleVisibilidad('col-comunas', dG['Comuna']);
             
+            // LÓGICA MODIFICADA PARA VISTA GLOBAL "DÍAS ACUMULADOS"
             let tF=0, tA=0, tIn=0;
             let mD = 0; 
             cF.forEach(c => { 
@@ -1302,13 +1312,20 @@
                 tF+=(c['Tasa_Finalizacion_%']/100)*i; 
                 tA+=(c['Tasa_Abandono_%']/100)*i; 
                 tIn+=(c['Tasa_Inactividad_%']/100)*i; 
-                if (c.Tiempo_Maximo_Dias && c.Tiempo_Maximo_Dias > mD) { 
-                    mD = c.Tiempo_Maximo_Dias; 
+                if (c.Tiempo_Maximo_Dias) { 
+                    mD += c.Tiempo_Maximo_Dias; 
                 } 
             }); 
+            
             let pF=tI?Math.round((tF/tI)*100):0; let pA=tI?Math.round((tA/tI)*100):0; let pI=tI?Math.round((tIn/tI)*100):0; 
             document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI+"%", null, "bi-door-closed", "danger")}`; 
-            document.getElementById('tiempo-consumo-dias').innerText = Math.round(mD); dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pF, 'Tasa_Abandono_%': pA, 'Tasa_Inactividad_%': pI }); 
+            
+            // Formateo de días a miles (ej: 20K)
+            let formatGlobal = mD > 1000 ? (mD/1000).toFixed(1) + 'K' : Math.round(mD).toLocaleString();
+            document.getElementById('tiempo-consumo-dias').innerText = formatGlobal; 
+            document.getElementById('tiempo-consumo-lbl').innerText = "Días Acumulados de Formación";
+            
+            dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pF, 'Tasa_Abandono_%': pA, 'Tasa_Inactividad_%': pI }); 
             document.getElementById('titulo-radar').innerText = añoActual==="ALL"?"Perfil Institucional Consolidado":`Perfil Consolidado (${añoActual})`; dibujarRadar(promediosGlobalesPreguntas, true); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
         }
 
@@ -1323,7 +1340,15 @@
             
             toggleVisibilidad('col-sexo', dD['Sexo']); toggleVisibilidad('col-edad', dD[kE]); toggleVisibilidad('col-perfil', dD['Perfil']); toggleVisibilidad('col-escolaridad', dD['Escolaridad']); toggleVisibilidad('col-mapa', dD['Comuna']); toggleVisibilidad('col-comunas', dD['Comuna']);
 
-            if(!dOlap) { document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Maximo_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); }
+            if(!dOlap) { 
+                document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; 
+                
+                // LÓGICA MODIFICADA PARA VISTA CURSO "TIEMPO MÁXIMO EN DÍAS Y HORAS"
+                document.getElementById('tiempo-consumo-dias').innerText = formatoDiasHoras(cursoActual['Tiempo_Maximo_Dias']); 
+                document.getElementById('tiempo-consumo-lbl').innerText = "Tiempo Máximo de Finalización";
+                
+                dibujarBarraMoodle('chartMoodleBar', cursoActual); 
+            }
             document.getElementById('titulo-radar').innerText = dOlap?"Radar Filtrado vs Benchmark":"Radar vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
         }
 
