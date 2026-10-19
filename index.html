@@ -160,16 +160,13 @@
         .chart-wrapper { position: relative; height: 180px; width: 100%; margin-top: 10px; display: flex; justify-content: center; transition: height 0.3s ease;}
         .radar-wrapper { position: relative; height: 360px; width: 100%; display: flex; justify-content: center; transition: height 0.3s ease;}
         
-        /* Modificación: Dimensiones estrictas para evitar el colapso del mapa */
         #map-container { border-radius: 16px; width: 100%; height: 500px; position: relative; z-index: 1; overflow: hidden; }
         
-        /* Estilos Leaflet para integrar con el Dashboard */
         .leaflet-container { background: transparent !important; font-family: 'Inter', sans-serif; outline: none; }
         .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: var(--card-shadow); background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(8px);}
         .leaflet-popup-tip { background: var(--card-bg); }
         .leaflet-popup-content { margin: 10px; line-height: 1.4; }
 
-        /* Nuevos estilos premium para el mapa */
         path.leaflet-interactive {
             transition: fill 0.3s ease, fill-opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease;
         }
@@ -184,9 +181,8 @@
             font-weight: 500;
             backdrop-filter: blur(10px);
         }
-        .leaflet-tooltip-premium::before { display: none; } /* Quita la flecha del tooltip base */
+        .leaflet-tooltip-premium::before { display: none; } 
 
-        /* Estilos Leyendas Personalizadas */
         .custom-legend-container {
             margin-top: 15px;
             max-height: 100px;
@@ -465,7 +461,6 @@
                             <div class="tab-pane fade show active" id="panel-global" role="tabpanel">
                                 <div class="row g-2 g-md-3 mb-4" id="kpi-global-row"></div>
                                 
-                                <!-- Modificación Acordeón Tabla de Cursos -->
                                 <div class="row mb-4" id="row-tabla-activos" style="display: none;">
                                     <div class="col-12">
                                         <div class="glass-card p-3 p-md-4">
@@ -502,10 +497,8 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Modificación Layout: 2x2 Donas a la izquierda, Mapa y Barras a la derecha -->
                                 <div class="row g-3 mb-4">
                                     
-                                    <!-- COLUMNA IZQUIERDA: Cuadrícula 2x2 de Donas -->
                                     <div class="col-12 col-xl-6">
                                         <div class="row g-3 h-100">
                                             <div class="col-12 col-md-6 d-flex flex-column" id="col-sexo">
@@ -551,7 +544,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- COLUMNA DERECHA: Mapa vertical + Barras horizontales -->
                                     <div class="col-12 col-xl-6 d-flex flex-column gap-3">
                                         <div id="col-mapa" class="d-flex flex-column flex-grow-1">
                                             <div class="glass-card p-3 d-flex flex-column w-100 h-100">
@@ -594,7 +586,7 @@
                                             <div class="kpi-mini-icon bg-indigo-soft mb-2"><i class="bi bi-stopwatch-fill"></i></div>
                                             <h6 class="fw-bold fs-6 mb-3">Ritmo de Aprendizaje</h6>
                                             <div class="kpi-mini-val text-primary" style="font-size: clamp(2.5rem, 5vw, 3rem);" id="tiempo-consumo-dias">0</div>
-                                            <div class="kpi-mini-lbl mt-2">Días Promedio para Finalizar</div>
+                                            <div class="kpi-mini-lbl mt-2">Días Máximo para Finalizar</div>
                                         </div>
                                     </div>
                                 </div>
@@ -626,7 +618,6 @@
                                 <div style="overflow-x: auto; padding-bottom: 10px;">
                                     <div class="row g-3 mb-4 flex-nowrap flex-md-wrap" id="comparador-row" style="min-width: 900px;">
                                         
-                                        <!-- COLUMNA ESTATICA 1 -->
                                         <div class="col-10 col-md-6 col-xl-3">
                                             <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
                                                 <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
@@ -656,7 +647,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- COLUMNA ESTATICA 2 -->
                                         <div class="col-10 col-md-6 col-xl-3">
                                             <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
                                                 <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
@@ -686,7 +676,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- COLUMNA ESTATICA 3 -->
                                         <div class="col-10 col-md-6 col-xl-3">
                                             <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
                                                 <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
@@ -716,7 +705,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- COLUMNA ESTATICA 4 -->
                                         <div class="col-10 col-md-6 col-xl-3">
                                             <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
                                                 <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
@@ -780,7 +768,6 @@
         };
         const coloresRespaldo = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6', '#f43f5e', '#f97316'];
 
-        // Plugin para dibujar el total en el centro de las donas
         const centerTextPlugin = {
             id: 'centerText',
             beforeDraw(chart) {
@@ -816,7 +803,6 @@
             return 'bi-record-circle';
         }
 
-        // Filtro Interactivo Cross-filtering
         function triggerCrossFilter(filterId, value) {
             const selectEl = document.getElementById(filterId);
             if(selectEl) {
@@ -836,7 +822,6 @@
                 setTimeout(() => {
                     if(mapInstance) {
                         mapInstance.invalidateSize();
-                        // Auto-centrar solo cuando ya se hizo visible y es un área válida
                         if(geoJsonLayer && geoJsonLayer.getBounds().isValid()) {
                             mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
                         }
@@ -987,7 +972,7 @@
         
         if (!mapInstance) {
             mapInstance = L.map('map-container', {
-                zoomControl: true, // Agregamos controles sutiles de zoom
+                zoomControl: true,
                 attributionControl: false,
                 dragging: true,
                 scrollWheelZoom: true
@@ -997,11 +982,8 @@
         if(geoJsonDataRaw && !mapInstance.hasLoadedGeoJson) {
             mapInstance.hasLoadedGeoJson = true;
 
-            // Definir los sistemas de coordenadas métricas de Colombia (MAGNA-SIRGAS)
             if (typeof proj4 !== 'undefined') {
-                // Cali (IGAC Oeste - EPSG:3115)
                 proj4.defs("EPSG:3115", "+proj=tmerc +lat_0=4.596200416666666 +lon_0=-77.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
-                // CTM12 (Nuevo Origen Nacional IGAC - EPSG:9377)
                 proj4.defs("EPSG:9377", "+proj=tmerc +lat_0=4.0 +lon_0=-73.0 +k=0.9992 +x_0=5000000 +y_0=2000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
             }
             
@@ -1010,13 +992,11 @@
                     let x = coords[0];
                     let y = coords[1];
 
-                    // Si ya son geográficas normales (GPS de -180 a 180), pasan directo
                     if (Math.abs(x) <= 180 && Math.abs(y) <= 90) {
-                        if (x > 0 && y < 0) return new L.LatLng(x, y); // Caso invertidas
-                        return new L.LatLng(y, x); // Caso normal
+                        if (x > 0 && y < 0) return new L.LatLng(x, y); 
+                        return new L.LatLng(y, x); 
                     }
 
-                    // Si son gigantes (en metros), el traductor proj4 hace magia
                     if (typeof proj4 !== 'undefined') {
                         try {
                             if (x > 800000 && x < 1500000) {
@@ -1034,10 +1014,10 @@
                     let defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
                     return {
                         fillColor: defaultColor, 
-                        weight: 1, // Bordes ultra delgados para un look limpio
+                        weight: 1, 
                         opacity: 1,
                         color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1',
-                        fillOpacity: 0.3 // Las comunas sin datos se ven sutiles
+                        fillOpacity: 0.3 
                     };
                 },
                 onEachFeature: function(feature, layer) {
@@ -1045,17 +1025,14 @@
                     let id = String(propComuna).replace(/\D/g, ''); id = isNaN(parseInt(id,10)) ? String(propComuna) : String(parseInt(id,10)); 
                     let nombreDisplay = isNaN(parseInt(id,10)) ? propComuna : "Comuna " + id;
                     
-                    // Magia 1: Tooltip oscuro magnético
                     layer.bindTooltip('', { className: 'leaflet-tooltip-premium', sticky: true, direction: 'top', offset: [0, -10] });
 
                     layer.on('mouseover', function(e) {
-                        // Magia 2: Traer el polígono al frente (Efecto 3D real)
                         layer.bringToFront(); 
                         
                         let strokeCol = document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#1e293b';
                         layer.setStyle({ weight: 3, color: strokeCol, fillOpacity: 0.95 });
                         
-                        // Magia 3: Sombra paralela en el SVG
                         if(layer._path) layer._path.style.filter = "drop-shadow(0px 8px 12px rgba(0,0,0,0.4))";
                         
                         let valor = mapInstance.lastDataComunas ? (mapInstance.lastDataComunas[id] || 0) : 0;
@@ -1063,7 +1040,6 @@
                     });
                     
                     layer.on('mouseout', function(e) {
-                        // Quitar sombra
                         if(layer._path) layer._path.style.filter = "none";
                         
                         if (mapInstance.lastDataComunas) {
@@ -1104,7 +1080,6 @@
     function getColorMapa(v, max) { 
         if(v===0) return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0'; 
         
-        // Magia 4: Colores Premium Oceanic (Azul cielo -> Azul profundo)
         let cOceanic = ['#bae6fd', '#7dd3fc', '#38bdf8', '#0284c7', '#0369a1']; 
         let cRose = ['#ffe4e6','#fda4af','#fb7185','#e11d48','#be123c'];
         let cAmber = ['#fef3c7','#fde047','#f59e0b','#d97706','#b45309'];
@@ -1142,7 +1117,6 @@
                     fillColor: color,
                     fillOpacity: p > 0 ? 0.85 : 0.3,
                     weight: 1,
-                    // Borde blanco sutil para los activos
                     color: p > 0 ? (document.documentElement.getAttribute('data-theme') === 'dark' ? '#475569' : '#ffffff') : defStroke
                 });
             });
@@ -1321,10 +1295,20 @@
             
             toggleVisibilidad('col-sexo', dG['Sexo']); toggleVisibilidad('col-edad', dG['Curso de Vida']); toggleVisibilidad('col-perfil', dG['Perfil']); toggleVisibilidad('col-escolaridad', dG['Escolaridad']); toggleVisibilidad('col-mapa', dG['Comuna']); toggleVisibilidad('col-comunas', dG['Comuna']);
             
-            let tF=0, tA=0, tIn=0, sD=0, cD=0; cF.forEach(c => { let i = c.Total_Inscritos||0; tF+=(c['Tasa_Finalizacion_%']/100)*i; tA+=(c['Tasa_Abandono_%']/100)*i; tIn+=(c['Tasa_Inactividad_%']/100)*i; if (c.Tiempo_Promedio_Dias) { sD+=c.Tiempo_Promedio_Dias; cD++; } }); 
+            let tF=0, tA=0, tIn=0;
+            let mD = 0; 
+            cF.forEach(c => { 
+                let i = c.Total_Inscritos||0; 
+                tF+=(c['Tasa_Finalizacion_%']/100)*i; 
+                tA+=(c['Tasa_Abandono_%']/100)*i; 
+                tIn+=(c['Tasa_Inactividad_%']/100)*i; 
+                if (c.Tiempo_Maximo_Dias && c.Tiempo_Maximo_Dias > mD) { 
+                    mD = c.Tiempo_Maximo_Dias; 
+                } 
+            }); 
             let pF=tI?Math.round((tF/tI)*100):0; let pA=tI?Math.round((tA/tI)*100):0; let pI=tI?Math.round((tIn/tI)*100):0; 
             document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI+"%", null, "bi-door-closed", "danger")}`; 
-            document.getElementById('tiempo-consumo-dias').innerText = cD?Math.round(sD/cD):0; dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pF, 'Tasa_Abandono_%': pA, 'Tasa_Inactividad_%': pI }); 
+            document.getElementById('tiempo-consumo-dias').innerText = Math.round(mD); dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pF, 'Tasa_Abandono_%': pA, 'Tasa_Inactividad_%': pI }); 
             document.getElementById('titulo-radar').innerText = añoActual==="ALL"?"Perfil Institucional Consolidado":`Perfil Consolidado (${añoActual})`; dibujarRadar(promediosGlobalesPreguntas, true); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
         }
 
@@ -1339,7 +1323,7 @@
             
             toggleVisibilidad('col-sexo', dD['Sexo']); toggleVisibilidad('col-edad', dD[kE]); toggleVisibilidad('col-perfil', dD['Perfil']); toggleVisibilidad('col-escolaridad', dD['Escolaridad']); toggleVisibilidad('col-mapa', dD['Comuna']); toggleVisibilidad('col-comunas', dD['Comuna']);
 
-            if(!dOlap) { document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Promedio_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); }
+            if(!dOlap) { document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; document.getElementById('tiempo-consumo-dias').innerText = cursoActual['Tiempo_Maximo_Dias'] || 0; dibujarBarraMoodle('chartMoodleBar', cursoActual); }
             document.getElementById('titulo-radar').innerText = dOlap?"Radar Filtrado vs Benchmark":"Radar vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
         }
 
@@ -1365,7 +1349,6 @@
             
             let opcionesHTML = '<option value="">+ Seleccionar Curso</option>';
             
-            // Ordenamiento estricto de A a Z basado en Nombre_Curso
             let cursosSeguros = [...dashboardData.cursos].sort((a,b) => {
                 let nameA = a.Nombre_Curso || "";
                 let nameB = b.Nombre_Curso || "";
@@ -1423,14 +1406,12 @@
                 if (event.target.getAttribute('data-bs-target') === '#panel-global' && mapInstance) { 
                     setTimeout(() => {
                         mapInstance.invalidateSize();
-                        // Re-centrar si vuelven a esta pestaña
                         if(geoJsonLayer) mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
                     }, 50); 
                 }
               });
             });
 
-            // Lógica para que las flechitas de la tabla acordeón giren
             const collapseElementList = document.querySelectorAll('.collapse');
             collapseElementList.forEach(collapseEl => {
                 collapseEl.addEventListener('show.bs.collapse', e => {
@@ -1446,7 +1427,6 @@
                 dashboardData = await res.json(); 
             } catch (e) { 
                 console.warn("Entorno local detectado. Cargando datos de respaldo temporal (Fallback) para la vista previa.");
-                // Fallback objects...
                 dashboardData = {
                     "metadata": { "total_cursos_analizados": 5, "total_encuestas_historicas": 1250, "total_estudiantes_unicos": 3800, "cursos_activos": 2 },
                     "kpis_globales": { "chs_promedio_secretaria": 85.4, "nps_global": 72 },
@@ -1461,7 +1441,7 @@
                         {
                             "Nombre_Curso": "Bioseguridad_2023", "Curso_Base": "Bioseguridad", "Edicion": "2023-01",
                             "Total_Inscritos": 500, "Total_Encuestas": 300, "Salud_Curso_CHS": 88, "e_NPS": 75,
-                            "Tasa_Finalizacion_%": 80, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 5, "Tiempo_Promedio_Dias": 12, "Es_Activo": true,
+                            "Tasa_Finalizacion_%": 80, "Tasa_Abandono_%": 15, "Tasa_Inactividad_%": 5, "Tiempo_Maximo_Dias": 12, "Es_Activo": true,
                             "Detalle_Preguntas": { "¿Se dio a conocer el objetivo de la capacitación?": 4.8, "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.5, "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.2 },
                             "Demografia": { "Sexo": {"Femenino": 350, "Masculino": 150}, "Edad": {"Juventud": 200, "Adultez": 300}, "Perfil": {"Enfermera": 250, "Auxiliar": 250}, "Escolaridad": {"Técnico": 300, "Profesional": 200}, "Comuna": {"17": 150, "19": 100} },
                             "Registros_Crudos": []
@@ -1472,10 +1452,9 @@
             window.poblarSelectoresComparador();
 
             try {
-                // Modificación: Intentar buscar el archivo original o el archivo con "(1)"
                 let resArchivo = null;
                 try { resArchivo = await fetch('mc_comunas.json'); } catch(e) {}
-                if (!resArchivo || !resArchivo.ok) { resArchivo = await fetch('mc_comunas (1).json'); }
+                if (!resArchivo || !resArchivo.ok) { resArchivo = await fetch('mc_comunas (1)_2.geojson'); }
                 
                 let gd = await resArchivo.json(); 
                 if(gd && gd.features) { 
