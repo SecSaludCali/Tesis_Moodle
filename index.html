@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecosistema - Secretaría de Salud</title>
+    <title>Ecosistema IA - Secretaría de Salud</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -232,7 +232,7 @@
         :root[data-theme="dark"] .select-comparador { background: rgba(0,0,0,0.3); }
         .select-comparador:focus, .select-comparador:hover { border-color: var(--primary); background: transparent; }
         
-        .comp-metric-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.85rem;}
+        .comp-metric-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.8rem;}
         .comp-metric-row:last-child { border-bottom: none; }
         .comp-label { color: var(--text-muted); font-weight: 600; }
         .comp-val { font-weight: 800; color: var(--text-main); text-align: right;}
@@ -454,7 +454,7 @@
                                 <i class="bi bi-speedometer2"></i> Operativo <i class="bi bi-lock-fill text-danger ms-1 d-none" id="lock-icon" title="Bloqueado por filtros"></i>
                             </button>
                             <button class="tab-clean" id="radar-tab" data-bs-toggle="tab" data-bs-target="#panel-radar" type="button" role="tab"><i class="bi bi-star-fill"></i> Calidad Percibida</button>
-                            <button class="tab-clean" id="comparador-tab" data-bs-toggle="tab" data-bs-target="#panel-comparador" type="button" role="tab"><i class="bi bi-layout-three-columns"></i> Laboratorio A/B</button>
+                            <button class="tab-clean" id="comparador-tab" data-bs-toggle="tab" data-bs-target="#panel-comparador" type="button" role="tab"><i class="bi bi-heart-pulse-fill"></i> Analizador de Fugas</button>
                         </div>
 
                         <div class="tab-content pb-4" id="myTabContent">
@@ -613,126 +613,71 @@
                             </div>
 
                             <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
-                                <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> Selecciona hasta 4 cursos o cohortes distintas para comparar su rendimiento frente a frente.</div>
+                                <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> <strong>Analizador de Deserción:</strong> Compara cohortes para identificar las causas raíz de la fuga crítica (Fricción con Moodle, Aislamiento, Relevancia o Frustración).</div>
                                 
                                 <div style="overflow-x: auto; padding-bottom: 10px;">
-                                    <div class="row g-3 mb-4 flex-nowrap flex-md-wrap" id="comparador-row" style="min-width: 900px;">
+                                    <div class="row g-3 mb-4 flex-nowrap flex-md-wrap" id="comparador-row" style="min-width: 1000px;">
                                         
-                                        <div class="col-10 col-md-6 col-xl-3">
-                                            <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                                                <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                                                    <select id="select-comp-1" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(1, this.value)">
-                                                        <option value="">+ Seleccionar Curso</option>
-                                                    </select>
-                                                </div>
-                                                <div id="comp-content-1" class="p-3 d-none flex-grow-1">
-                                                    <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-1">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-1">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-1">-</span></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-1">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-1">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-1">-</div></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-1">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-1">-</span></div>
-                                                </div>
-                                                <div id="comp-empty-1" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                                                    <p class="small">Elige una edición para analizar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <script>
+                                            let htmlColumnas = '';
+                                            for(let i=1; i<=4; i++) {
+                                                htmlColumnas += `
+                                                <div class="col-10 col-md-6 col-xl-3">
+                                                    <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
+                                                        <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
+                                                            <select id="select-comp-${i}" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(${i}, this.value)">
+                                                                <option value="">+ Seleccionar Curso</option>
+                                                            </select>
+                                                        </div>
+                                                        <div id="comp-content-${i}" class="p-3 d-none flex-grow-1">
+                                                            
+                                                            <!-- IMPACTO DE DESERCIÓN VS ÉXITO -->
+                                                            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-danger border-opacity-10">
+                                                                <div class="text-center w-50 border-end border-danger border-opacity-10">
+                                                                    <div class="text-muted" style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase;">Éxito Operativo</div>
+                                                                    <div class="fw-bold text-success" style="font-size: 1.4rem; line-height: 1;" id="comp-fin-${i}">-</div>
+                                                                </div>
+                                                                <div class="text-center w-50">
+                                                                    <div class="text-danger" style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase;"><i class="bi bi-exclamation-triangle-fill"></i> Fuga Crítica</div>
+                                                                    <div class="fw-bold text-danger" style="font-size: 1.4rem; line-height: 1;" id="comp-fug-${i}">-</div>
+                                                                </div>
+                                                            </div>
 
-                                        <div class="col-10 col-md-6 col-xl-3">
-                                            <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                                                <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                                                    <select id="select-comp-2" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(2, this.value)">
-                                                        <option value="">+ Seleccionar Curso</option>
-                                                    </select>
-                                                </div>
-                                                <div id="comp-content-2" class="p-3 d-none flex-grow-1">
-                                                    <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-2">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-2">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-2">-</span></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-2">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-2">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-2">-</div></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-2">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-2">-</span></div>
-                                                </div>
-                                                <div id="comp-empty-2" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                                                    <p class="small">Elige una edición para analizar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                            <div class="comp-metric-row"><span class="comp-label">Matrículas Iniciales</span> <span class="comp-val font-monospace" id="comp-mat-${i}">-</span></div>
+                                                            <div class="comp-metric-row"><span class="comp-label">Tasa de Silencio</span> <span class="comp-val fw-bold" id="comp-sil-${i}" title="Porcentaje de matriculados que no llenaron la encuesta">-</span></div>
+                                                            <div class="comp-metric-row"><span class="comp-label">Score CHS</span> <span class="comp-val fw-bold" id="comp-chs-${i}">-</span></div>
+                                                            <div class="comp-metric-row border-0 pb-0"><span class="comp-label">Expectativa vs Realidad</span></div>
+                                                            <div class="mb-3 text-end"><span class="badge" id="comp-brecha-${i}">-</span></div>
 
-                                        <div class="col-10 col-md-6 col-xl-3">
-                                            <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                                                <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                                                    <select id="select-comp-3" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(3, this.value)">
-                                                        <option value="">+ Seleccionar Curso</option>
-                                                    </select>
-                                                </div>
-                                                <div id="comp-content-3" class="p-3 d-none flex-grow-1">
-                                                    <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-3">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-3">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-3">-</span></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-3">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-3">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-3">-</div></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-3">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-3">-</span></div>
-                                                </div>
-                                                <div id="comp-empty-3" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                                                    <p class="small">Elige una edición para analizar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                            <!-- ANALIZADOR DE CAUSAS RAÍZ -->
+                                                            <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-search text-warning"></i> Análisis de Causas de Fuga</h6>
+                                                            
+                                                            <div class="comp-metric-row border-0 pb-0"><span class="comp-label" style="font-size: 0.75rem;">Tiempo Máximo Retención</span></div>
+                                                            <div class="mb-2 text-end fw-bold text-primary" style="font-size: 0.85rem;" id="comp-time-${i}">-</div>
 
-                                        <div class="col-10 col-md-6 col-xl-3">
-                                            <div class="glass-card p-0 overflow-hidden d-flex flex-column h-100" style="border-radius: 16px;">
-                                                <div class="p-3 bg-primary bg-opacity-10 border-bottom border-primary border-opacity-25">
-                                                    <select id="select-comp-4" class="form-select-custom w-100 fw-bold text-primary select-comparador" onchange="actualizarComparador(4, this.value)">
-                                                        <option value="">+ Seleccionar Curso</option>
-                                                    </select>
-                                                </div>
-                                                <div id="comp-content-4" class="p-3 d-none flex-grow-1">
-                                                    <h6 class="fw-bold text-muted mb-2 mt-1" style="font-size:0.8rem;"><i class="bi bi-speedometer2"></i> R. Operativo</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Matrículas</span> <span class="comp-val" id="comp-mat-4">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Éxito</span> <span class="comp-val text-success" id="comp-fin-4">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Fuga Crítica</span> <span class="comp-val text-danger" id="comp-fug-4">-</span></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-stars"></i> Calidad (0-5)</h6>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Metodología Docente</span> <div id="comp-met-4">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Plataforma Virtual (UX)</span> <div id="comp-ux-4">-</div></div>
-                                                    <div class="comp-metric-row flex-column align-items-start gap-1"><span class="comp-label">Aplicabilidad Práctica</span> <div id="comp-prac-4">-</div></div>
-                                                    
-                                                    <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-person-badge"></i> Perfil Dominante</h6>
-                                                    <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val" id="comp-prof-4">-</span></div>
-                                                    <div class="comp-metric-row"><span class="comp-label">Comunidad</span> <span class="comp-val" id="comp-com-4">-</span></div>
-                                                </div>
-                                                <div id="comp-empty-4" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
-                                                    <i class="bi bi-layout-split fs-1 mb-2 opacity-50"></i>
-                                                    <p class="small">Elige una edición para analizar.</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1 mb-2"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.7rem;">Plataforma (UX) y Materiales</span> <span class="fw-bold text-main" style="font-size: 0.7rem;" id="comp-ux-val-${i}">-</span></div><div class="progress" style="height: 5px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-ux-bar-${i}" style="width: 0%;"></div></div></div>
+                                                            
+                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1 mb-2"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.7rem;">Acompañamiento (Aislamiento)</span> <span class="fw-bold text-main" style="font-size: 0.7rem;" id="comp-inq-val-${i}">-</span></div><div class="progress" style="height: 5px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-inq-bar-${i}" style="width: 0%;"></div></div></div>
+                                                            
+                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1 mb-2"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.7rem;">Claridad Metodológica</span> <span class="fw-bold text-main" style="font-size: 0.7rem;" id="comp-met-val-${i}">-</span></div><div class="progress" style="height: 5px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-met-bar-${i}" style="width: 0%;"></div></div></div>
+                                                            
+                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.7rem;">Valor Agregado (Práctica y Novedad)</span> <span class="fw-bold text-main" style="font-size: 0.7rem;" id="comp-prac-val-${i}">-</span></div><div class="progress" style="height: 5px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-prac-bar-${i}" style="width: 0%;"></div></div></div>
+                                                            
+                                                            <!-- AUDIENCIA VULNERABLE -->
+                                                            <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-people-fill text-info"></i> Audiencia Predominante</h6>
+                                                            <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val text-truncate" style="max-width: 120px;" id="comp-prof-${i}" title="-">-</span></div>
+                                                            <div class="comp-metric-row"><span class="comp-label">Rango Edad</span> <span class="comp-val" id="comp-edad-${i}">-</span></div>
+                                                            <div class="comp-metric-row"><span class="comp-label">Territorio</span> <span class="comp-val" id="comp-com-${i}">-</span></div>
+                                                        </div>
+                                                        <div id="comp-empty-${i}" class="p-4 text-center text-muted d-flex flex-column justify-content-center align-items-center h-100">
+                                                            <i class="bi bi-funnel-fill fs-1 mb-2 opacity-25 text-danger"></i>
+                                                            <p class="small">Elige una edición para evaluar su nivel de deserción.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                                            }
+                                            document.write(htmlColumnas);
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -788,7 +733,6 @@
         };
         Chart.register(centerTextPlugin);
 
-        // NUEVA FUNCIÓN MATEMÁTICA PARA EL TIEMPO
         function formatoDiasHoras(diasDecimal) {
             if (!diasDecimal || isNaN(diasDecimal)) return "0D 0H";
             let d = Math.floor(diasDecimal);
@@ -1304,7 +1248,6 @@
             
             toggleVisibilidad('col-sexo', dG['Sexo']); toggleVisibilidad('col-edad', dG['Curso de Vida']); toggleVisibilidad('col-perfil', dG['Perfil']); toggleVisibilidad('col-escolaridad', dG['Escolaridad']); toggleVisibilidad('col-mapa', dG['Comuna']); toggleVisibilidad('col-comunas', dG['Comuna']);
             
-            // LÓGICA MODIFICADA PARA VISTA GLOBAL "DÍAS ACUMULADOS"
             let tF=0, tA=0, tIn=0;
             let mD = 0; 
             cF.forEach(c => { 
@@ -1320,7 +1263,6 @@
             let pF=tI?Math.round((tF/tI)*100):0; let pA=tI?Math.round((tA/tI)*100):0; let pI=tI?Math.round((tIn/tI)*100):0; 
             document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI+"%", null, "bi-door-closed", "danger")}`; 
             
-            // Formateo de días a miles (ej: 20K)
             let formatGlobal = mD > 1000 ? (mD/1000).toFixed(1) + 'K' : Math.round(mD).toLocaleString();
             document.getElementById('tiempo-consumo-dias').innerText = formatGlobal; 
             document.getElementById('tiempo-consumo-lbl').innerText = "Días Acumulados de Formación";
@@ -1343,23 +1285,12 @@
             if(!dOlap) { 
                 document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; 
                 
-                // LÓGICA MODIFICADA PARA VISTA CURSO "TIEMPO MÁXIMO EN DÍAS Y HORAS"
                 document.getElementById('tiempo-consumo-dias').innerText = formatoDiasHoras(cursoActual['Tiempo_Maximo_Dias']); 
                 document.getElementById('tiempo-consumo-lbl').innerText = "Tiempo Máximo de Finalización";
                 
                 dibujarBarraMoodle('chartMoodleBar', cursoActual); 
             }
             document.getElementById('titulo-radar').innerText = dOlap?"Radar Filtrado vs Benchmark":"Radar vs Benchmark Global"; dibujarRadar(dP, false); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(dP);
-        }
-
-        function generarEstrellas(valor) {
-            let v = parseFloat(valor) || 0; let html = '';
-            for(let i=1; i<=5; i++) {
-                if(v >= i) html += '<i class="bi bi-star-fill text-warning"></i>';
-                else if(v >= i - 0.5) html += '<i class="bi bi-star-half text-warning"></i>';
-                else html += '<i class="bi bi-star text-warning"></i>';
-            }
-            return `<span style="letter-spacing:1px;">${html}</span> <span class="ms-1 small fw-bold text-muted">${v.toFixed(1)}</span>`;
         }
 
         function obtenerModa(objetoData) {
@@ -1397,25 +1328,84 @@
             const emptyDiv = document.getElementById(`comp-empty-${slotIndex}`);
             
             if(!courseName) { contentDiv.classList.add('d-none'); emptyDiv.classList.remove('d-none'); return; }
-            
             const curso = dashboardData.cursos.find(c => c.Nombre_Curso === courseName);
             if(!curso) return;
 
             contentDiv.classList.remove('d-none'); emptyDiv.classList.add('d-none');
             
-            document.getElementById(`comp-mat-${slotIndex}`).innerText = (curso.Total_Inscritos || 0).toLocaleString();
+            // 1. IMPACTO: Éxito vs Fuga
+            let fuga = (curso['Tasa_Abandono_%'] || 0) + (curso['Tasa_Inactividad_%'] || 0);
             document.getElementById(`comp-fin-${slotIndex}`).innerText = (curso['Tasa_Finalizacion_%']||0) + "%";
-            document.getElementById(`comp-fug-${slotIndex}`).innerText = ((curso['Tasa_Abandono_%']||0) + (curso['Tasa_Inactividad_%']||0)).toFixed(1) + "%";
+            document.getElementById(`comp-fug-${slotIndex}`).innerText = fuga.toFixed(1) + "%";
             
-            const qMet = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0;
-            const qUx = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0;
-            const qPrac = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0;
+            // 2. INDICADORES ALERTA: Matrículas, Silencio, CHS, Brecha
+            let inscritos = curso.Total_Inscritos || 0;
+            let encuestas = curso.Total_Encuestas || 0;
+            let silencio = inscritos > 0 ? ((inscritos - encuestas) / inscritos) * 100 : 0;
+            document.getElementById(`comp-mat-${slotIndex}`).innerText = inscritos.toLocaleString();
+            document.getElementById(`comp-sil-${slotIndex}`).innerHTML = `<span class="${silencio > 50 ? 'text-danger' : 'text-success'}">${silencio.toFixed(1)}%</span>`;
+
+            let chs = curso.Salud_Curso_CHS || 0;
+            let chsColor = chs >= 80 ? 'text-success' : (chs >= 60 ? 'text-warning' : 'text-danger');
+            document.getElementById(`comp-chs-${slotIndex}`).innerHTML = `<span class="${chsColor}">${chs}</span> / 100`;
+
+            // Brecha = Cumplió - Prometió
+            let qObjCumplido = curso.Detalle_Preguntas ? (curso.Detalle_Preguntas["¿Se cumplió el objetivo de la capacitación?"] || 0) : 0;
+            let qObjConocer = curso.Detalle_Preguntas ? (curso.Detalle_Preguntas["¿Se dio a conocer el objetivo de la capacitación?"] || 0) : 0;
+            let brecha = qObjCumplido - qObjConocer;
+            let badgeBrecha = document.getElementById(`comp-brecha-${slotIndex}`);
             
-            document.getElementById(`comp-met-${slotIndex}`).innerHTML = generarEstrellas(qMet);
-            document.getElementById(`comp-ux-${slotIndex}`).innerHTML = generarEstrellas(qUx);
-            document.getElementById(`comp-prac-${slotIndex}`).innerHTML = generarEstrellas(qPrac);
+            if(brecha > 0) {
+                badgeBrecha.className = "badge bg-success bg-opacity-10 text-success border border-success border-opacity-25";
+                badgeBrecha.innerHTML = `<i class="bi bi-arrow-up-right-circle-fill"></i> Superó (${brecha.toFixed(1)})`;
+            } else if (brecha < 0) {
+                badgeBrecha.className = "badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25";
+                badgeBrecha.innerHTML = `<i class="bi bi-arrow-down-right-circle-fill"></i> Decepción (${brecha.toFixed(1)})`;
+            } else {
+                badgeBrecha.className = "badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25";
+                badgeBrecha.innerHTML = `<i class="bi bi-dash-circle-fill"></i> Neutral (0.0)`;
+            }
+
+            // 3. ANALIZADOR DE CAUSAS RAÍZ
+            document.getElementById(`comp-time-${slotIndex}`).innerText = formatoDiasHoras(curso.Tiempo_Maximo_Dias || curso.Tiempo_Promedio_Dias);
             
-            document.getElementById(`comp-prof-${slotIndex}`).innerText = curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A";
+            const setBarraCalidad = (idBase, val1, val2 = null) => {
+                let v = parseFloat(val1) || 0;
+                if(val2 !== null) { // Si hay dos variables, hacemos promedio
+                    let v2 = parseFloat(val2) || 0;
+                    v = (v + v2) / 2;
+                }
+                let p = (v / 5) * 100;
+                let colorClase = v >= 4.5 ? 'bg-success' : (v >= 4.0 ? 'bg-warning' : 'bg-danger');
+                
+                document.getElementById(`${idBase}-val-${slotIndex}`).innerText = v.toFixed(1);
+                let barra = document.getElementById(`${idBase}-bar-${slotIndex}`);
+                barra.style.width = `${p}%`;
+                barra.className = `progress-bar ${colorClase}`;
+            };
+
+            // Traer métricas
+            let qUx = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?"] : 0;
+            let qMat = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿El material utilizado permitió el entendimiento del tema?"] : 0;
+            let qInq = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Durante la capacitación se dio espacio para la solución de inquietudes?"] : 0;
+            let qMet = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?"] : 0;
+            let qPrac = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?"] : 0;
+            let qNov = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?"] : 0;
+
+            // Inyectar a las barras combinando lo relacionado
+            setBarraCalidad('comp-ux', qUx, qMat); // UX + Material
+            setBarraCalidad('comp-inq', qInq);     // Aislamiento
+            setBarraCalidad('comp-met', qMet);     // Docencia
+            setBarraCalidad('comp-prac', qPrac, qNov); // Valor agregado (Práctica + Novedad)
+            
+            // 4. AUDIENCIA PREDOMINANTE
+            let modaProf = curso.Demografia ? obtenerModa(curso.Demografia.Perfil) : "N/A";
+            document.getElementById(`comp-prof-${slotIndex}`).innerText = modaProf;
+            document.getElementById(`comp-prof-${slotIndex}`).title = modaProf;
+            
+            let kE = (curso.Demografia && curso.Demografia.Edad) ? 'Edad' : 'Curso de Vida';
+            document.getElementById(`comp-edad-${slotIndex}`).innerText = curso.Demografia ? obtenerModa(curso.Demografia[kE]) : "N/A";
+            
             let modaCom = curso.Demografia ? obtenerModa(curso.Demografia.Comuna) : "N/A";
             if(modaCom !== "N/A" && !isNaN(modaCom)) modaCom = "Comuna " + modaCom;
             document.getElementById(`comp-com-${slotIndex}`).innerText = modaCom;
