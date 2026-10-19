@@ -166,6 +166,10 @@
         .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: var(--card-shadow); background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); backdrop-filter: blur(8px);}
         .leaflet-popup-tip { background: var(--card-bg); }
         .leaflet-popup-content { margin: 10px; line-height: 1.4; }
+        
+        /* Boton Resetear Mapa Custom */
+        .leaflet-control-custom { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px !important; box-shadow: var(--card-shadow) !important; transition: all 0.2s ease; }
+        .leaflet-control-custom:hover { background: rgba(67, 24, 255, 0.05); border-color: var(--primary); }
 
         path.leaflet-interactive {
             transition: fill 0.3s ease, fill-opacity 0.3s ease, stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease;
@@ -238,6 +242,7 @@
             font-size: 0.85rem; 
             padding: 8px; 
             border-radius: 8px;
+            /* TRUNCAR TEXTO PARA QUE NO CORTA EL MENU */
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
@@ -512,7 +517,6 @@
                                 </div>
                                 
                                 <div class="row g-3 mb-4">
-                                    
                                     <div class="col-12 col-xl-6">
                                         <div class="row g-3 h-100">
                                             <div class="col-12 col-md-6 d-flex flex-column" id="col-sexo">
@@ -599,7 +603,7 @@
                                         <div class="glass-card p-4 text-center d-flex flex-column justify-content-center align-items-center">
                                             <div class="kpi-mini-icon bg-indigo-soft mb-2"><i class="bi bi-stopwatch-fill"></i></div>
                                             <h6 class="fw-bold fs-6 mb-3">Ritmo de Aprendizaje</h6>
-                                            <div class="kpi-mini-val text-primary" style="font-size: clamp(2.5rem, 5vw, 3rem);" id="tiempo-consumo-dias">0</div>
+                                            <div class="kpi-mini-val text-primary" style="font-size: clamp(2rem, 4vw, 2.5rem);" id="tiempo-consumo-dias">0</div>
                                             <div class="kpi-mini-lbl mt-2" id="tiempo-consumo-lbl">Días Máximo para Finalizar</div>
                                         </div>
                                     </div>
@@ -627,7 +631,7 @@
                             </div>
 
                             <div class="tab-pane fade" id="panel-comparador" role="tabpanel">
-                                <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> <strong>Analizador de Deserción:</strong> Compara cohortes para identificar si la fuga crítica se debe a fricción con Moodle (UX), aislamiento, metodología o irrelevancia del contenido.</div>
+                                <div class="mb-3 text-muted small"><i class="bi bi-info-circle-fill text-primary me-1"></i> <strong>Analizador de Deserción:</strong> Compara cohortes para identificar si la fuga crítica se debe a fricción con Moodle (UX), agotamiento (Tiempo) o irrelevancia del contenido (Práctica).</div>
                                 
                                 <div style="overflow-x: auto; padding-bottom: 10px;">
                                     <div class="row g-3 mb-4 flex-nowrap flex-md-wrap" id="comparador-row" style="min-width: 1000px; padding-right: 40px;">
@@ -645,39 +649,35 @@
                                                         </div>
                                                         <div id="comp-content-${i}" class="p-3 d-none flex-grow-1">
                                                             
-                                                            <!-- IMPACTO DE DESERCIÓN VS ÉXITO -->
                                                             <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-danger border-opacity-10">
                                                                 <div class="text-center w-50 border-end border-danger border-opacity-10">
-                                                                    <div class="text-muted" style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase;">Éxito Operativo</div>
-                                                                    <div class="fw-bold text-success" style="font-size: 1.4rem; line-height: 1;" id="comp-fin-${i}">-</div>
+                                                                    <div class="text-muted" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">Éxito Operativo</div>
+                                                                    <div class="fw-bold text-success" style="font-size: 1.5rem; line-height: 1;" id="comp-fin-${i}">-</div>
                                                                 </div>
                                                                 <div class="text-center w-50">
-                                                                    <div class="text-danger" style="font-size: 0.65rem; font-weight: 800; text-transform: uppercase;"><i class="bi bi-exclamation-triangle-fill"></i> Fuga Crítica</div>
-                                                                    <div class="fw-bold text-danger" style="font-size: 1.4rem; line-height: 1;" id="comp-fug-${i}">-</div>
+                                                                    <div class="text-danger" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;"><i class="bi bi-exclamation-triangle-fill"></i> Fuga Crítica</div>
+                                                                    <div class="fw-bold text-danger" style="font-size: 1.5rem; line-height: 1;" id="comp-fug-${i}">-</div>
                                                                 </div>
                                                             </div>
 
                                                             <div class="comp-metric-row"><span class="comp-label">Matrículas Iniciales</span> <span class="comp-val font-monospace" id="comp-mat-${i}">-</span></div>
                                                             <div class="comp-metric-row"><span class="comp-label">Tasa de Silencio</span> <span class="comp-val fw-bold" id="comp-sil-${i}" title="Porcentaje de matriculados que no llenaron la encuesta">-</span></div>
-                                                            <div class="comp-metric-row"><span class="comp-label">Score CHS</span> <span class="comp-val fw-bold" id="comp-chs-${i}">-</span></div>
-                                                            <div class="comp-metric-row border-0 pb-0"><span class="comp-label">Expectativa vs Realidad</span></div>
+                                                            <div class="comp-metric-row"><span class="comp-label">Score de Salud (CHS)</span> <span class="comp-val fw-bold" id="comp-chs-${i}">-</span></div>
+                                                            
+                                                            <div class="comp-metric-row border-0 pb-0"><span class="comp-label" title="Diferencia entre si se dio a conocer el objetivo y si realmente se cumplió.">Expectativa vs Realidad <i class="bi bi-info-circle text-muted" style="font-size:0.7rem;"></i></span></div>
                                                             <div class="mb-3 text-end" id="comp-exp-container-${i}">-</div>
 
-                                                            <!-- ANALIZADOR DE CAUSAS RAÍZ -->
                                                             <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-search text-warning"></i> Análisis de Causas de Fuga</h6>
                                                             
-                                                            <div class="comp-metric-row border-0 pb-0"><span class="comp-label" style="font-size: 0.75rem;">Tiempo Máximo Retención</span></div>
+                                                            <div class="comp-metric-row border-0 pb-0"><span class="comp-label" style="font-size: 0.75rem;">Tiempo Máximo de Retención</span></div>
                                                             <div class="mb-2 text-end fw-bold text-primary" style="font-size: 0.85rem;" id="comp-time-${i}">-</div>
 
-                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1 mb-2"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.7rem;">Plataforma (UX) y Materiales</span> <span class="fw-bold text-main" style="font-size: 0.7rem;" id="comp-ux-val-${i}">-</span></div><div class="progress" style="height: 5px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-ux-bar-${i}" style="width: 0%;"></div></div></div>
+                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1 mb-2"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.75rem;">Fricción de Plataforma (UX)</span> <span class="fw-bold text-main" style="font-size: 0.75rem;" id="comp-ux-val-${i}">-</span></div><div class="progress" style="height: 6px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-ux-bar-${i}" style="width: 0%;"></div></div></div>
                                                             
-                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1 mb-2"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.7rem;">Acompañamiento (Aislamiento)</span> <span class="fw-bold text-main" style="font-size: 0.7rem;" id="comp-inq-val-${i}">-</span></div><div class="progress" style="height: 5px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-inq-bar-${i}" style="width: 0%;"></div></div></div>
+                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1 mb-2"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.75rem;">Claridad Metodológica</span> <span class="fw-bold text-main" style="font-size: 0.75rem;" id="comp-met-val-${i}">-</span></div><div class="progress" style="height: 6px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-met-bar-${i}" style="width: 0%;"></div></div></div>
                                                             
-                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1 mb-2"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.7rem;">Claridad Metodológica</span> <span class="fw-bold text-main" style="font-size: 0.7rem;" id="comp-met-val-${i}">-</span></div><div class="progress" style="height: 5px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-met-bar-${i}" style="width: 0%;"></div></div></div>
+                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.75rem;">Aplicabilidad al Cargo</span> <span class="fw-bold text-main" style="font-size: 0.75rem;" id="comp-prac-val-${i}">-</span></div><div class="progress" style="height: 6px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-prac-bar-${i}" style="width: 0%;"></div></div></div>
                                                             
-                                                            <div class="comp-metric-row flex-column align-items-stretch gap-1"><div class="d-flex justify-content-between"><span class="comp-label" style="font-size: 0.7rem;">Valor Agregado (Práctica y Novedad)</span> <span class="fw-bold text-main" style="font-size: 0.7rem;" id="comp-prac-val-${i}">-</span></div><div class="progress" style="height: 5px; background: rgba(0,0,0,0.05);"><div class="progress-bar" id="comp-prac-bar-${i}" style="width: 0%;"></div></div></div>
-                                                            
-                                                            <!-- AUDIENCIA VULNERABLE -->
                                                             <h6 class="fw-bold text-muted mb-2 mt-4" style="font-size:0.8rem;"><i class="bi bi-people-fill text-info"></i> Audiencia Predominante</h6>
                                                             <div class="comp-metric-row"><span class="comp-label">Profesión</span> <span class="comp-val text-truncate" style="max-width: 120px;" id="comp-prof-${i}" title="-">-</span></div>
                                                             <div class="comp-metric-row"><span class="comp-label">Rango Edad</span> <span class="comp-val" id="comp-edad-${i}">-</span></div>
@@ -944,6 +944,21 @@
                 dragging: true,
                 scrollWheelZoom: true
             }).setView([3.42158, -76.5205], 11);
+
+            // NUEVO: Control para Resetear / Centrar el Mapa
+            let resetControl = L.control({position: 'topleft'});
+            resetControl.onAdd = function (map) {
+                let div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+                div.innerHTML = '<a href="#" title="Centrar Mapa" style="display:flex; justify-content:center; align-items:center; color:var(--primary); font-size:1.1rem; text-decoration:none;"><i class="bi bi-arrows-collapse"></i></a>';
+                div.onclick = function(e){
+                    e.preventDefault();
+                    if(geoJsonLayer && geoJsonLayer.getBounds().isValid()) {
+                        mapInstance.fitBounds(geoJsonLayer.getBounds(), {padding: [10, 10]});
+                    }
+                }
+                return div;
+            };
+            resetControl.addTo(mapInstance);
         }
         
         if(geoJsonDataRaw && !mapInstance.hasLoadedGeoJson) {
@@ -984,7 +999,7 @@
                         weight: 1, 
                         opacity: 1,
                         color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1',
-                        fillOpacity: 0.3 
+                        fillOpacity: 0.2
                     };
                 },
                 onEachFeature: function(feature, layer) {
@@ -997,32 +1012,38 @@
                     layer.on('mouseover', function(e) {
                         layer.bringToFront(); 
                         
-                        let strokeCol = document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#1e293b';
-                        layer.setStyle({ weight: 3, color: strokeCol, fillOpacity: 0.95 });
-                        
-                        if(layer._path) layer._path.style.filter = "drop-shadow(0px 8px 12px rgba(0,0,0,0.4))";
+                        layer.setStyle({ weight: 3, color: '#ffffff', fillOpacity: 0.95 });
+                        // Resplandor vibrante al pasar el mouse
+                        if(layer._path) layer._path.style.filter = "drop-shadow(0px 0px 10px var(--primary))";
                         
                         let valor = mapInstance.lastDataComunas ? (mapInstance.lastDataComunas[id] || 0) : 0;
                         layer.setTooltipContent(`<div style="text-align: center;"><span style="font-size: 0.7rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px;">${nombreDisplay}</span><br><strong style="font-size: 1.3rem; font-weight: 800; color: #fff;">${valor.toLocaleString()}</strong><span style="font-size: 0.8rem; font-weight: 400; color: #94a3b8; margin-left: 4px;">participantes</span></div>`);
                     });
                     
                     layer.on('mouseout', function(e) {
-                        if(layer._path) layer._path.style.filter = "none";
-                        
                         if (mapInstance.lastDataComunas) {
                             let p = mapInstance.lastDataComunas[id] || 0;
                             let maxP = mapInstance.lastMaxP || 1;
                             
                             let defaultColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0';
                             let defStroke = document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1';
+                            
                             layer.setStyle({
                                 fillColor: p > 0 ? getColorMapa(p, maxP) : defaultColor,
-                                fillOpacity: p > 0 ? 0.85 : 0.3,
-                                weight: 1,
-                                color: p > 0 ? (document.documentElement.getAttribute('data-theme') === 'dark' ? '#475569' : '#ffffff') : defStroke
+                                fillOpacity: p > 0 ? 0.85 : 0.2,
+                                weight: p > 0 ? 1.5 : 1,
+                                color: p > 0 ? '#ffffff' : defStroke
                             });
+
+                            // Devolver el resplandor base si tiene datos
+                            if(layer._path && p > 0) {
+                                layer._path.style.filter = "drop-shadow(0px 0px 4px rgba(67, 24, 255, 0.4))";
+                            } else if (layer._path) {
+                                layer._path.style.filter = "none";
+                            }
                         } else {
                             geoJsonLayer.resetStyle(layer);
+                            if(layer._path) layer._path.style.filter = "none";
                         }
                     });
                     
@@ -1082,10 +1103,17 @@
                 
                 layer.setStyle({
                     fillColor: color,
-                    fillOpacity: p > 0 ? 0.85 : 0.3,
-                    weight: 1,
-                    color: p > 0 ? (document.documentElement.getAttribute('data-theme') === 'dark' ? '#475569' : '#ffffff') : defStroke
+                    fillOpacity: p > 0 ? 0.85 : 0.2,
+                    weight: p > 0 ? 1.5 : 1,
+                    color: p > 0 ? '#ffffff' : defStroke
                 });
+
+                // Resplandor por defecto a los que tienen datos
+                if(layer._path && p > 0) {
+                    layer._path.style.filter = "drop-shadow(0px 0px 4px rgba(67, 24, 255, 0.4))";
+                } else if(layer._path) {
+                    layer._path.style.filter = "none";
+                }
             });
         }
 
@@ -1361,20 +1389,23 @@
             let chsColor = chs >= 80 ? 'text-success' : (chs >= 60 ? 'text-warning' : 'text-danger');
             document.getElementById(`comp-chs-${slotIndex}`).innerHTML = `<span class="${chsColor}">${chs}</span> / 100`;
 
+            // LÓGICA CORREGIDA DE EXPECTATIVA
             let qObjCumplido = curso.Detalle_Preguntas ? (curso.Detalle_Preguntas["¿Se cumplió el objetivo de la capacitación?"] || 0) : 0;
             let qObjConocer = curso.Detalle_Preguntas ? (curso.Detalle_Preguntas["¿Se dio a conocer el objetivo de la capacitación?"] || 0) : 0;
             
             let contenedorExp = document.getElementById(`comp-exp-container-${slotIndex}`);
             if (qObjCumplido > 0 && qObjConocer > 0) {
                 let brecha = qObjCumplido - qObjConocer;
+                // Primero redondeamos a 1 decimal
                 let brechaFormat = parseFloat(brecha.toFixed(1)); 
                 
+                // Evaluamos el número ya redondeado para evitar falsos positivos
                 if(brechaFormat > 0) {
-                    contenedorExp.innerHTML = `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25"><i class="bi bi-arrow-up-right-circle-fill"></i> Superó (+${brechaFormat})</span>`;
+                    contenedorExp.innerHTML = `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" title="La calidad percibida superó lo que se prometió al inicio del curso."><i class="bi bi-arrow-up-right-circle-fill"></i> Superó Promesa (+${brechaFormat})</span>`;
                 } else if (brechaFormat < 0) {
-                    contenedorExp.innerHTML = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25"><i class="bi bi-arrow-down-right-circle-fill"></i> Decepcionó (${brechaFormat})</span>`;
+                    contenedorExp.innerHTML = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25" title="El curso prometió más de lo que realmente entregó."><i class="bi bi-arrow-down-right-circle-fill"></i> Decepcionó (${brechaFormat})</span>`;
                 } else {
-                    contenedorExp.innerHTML = `<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25"><i class="bi bi-dash-circle-fill"></i> Neutral (0.0)</span>`;
+                    contenedorExp.innerHTML = `<span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25" title="El curso entregó exactamente lo que prometió, ni más ni menos."><i class="bi bi-check-circle-fill"></i> Cumplió Exacto (0.0)</span>`;
                 }
             } else {
                 contenedorExp.innerHTML = `<span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25">Sin Datos</span>`;
@@ -1405,7 +1436,6 @@
             let qNov = curso.Detalle_Preguntas ? curso.Detalle_Preguntas["¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?"] : 0;
 
             setBarraCalidad('comp-ux', qUx, qMat);
-            setBarraCalidad('comp-inq', qInq);
             setBarraCalidad('comp-met', qMet);
             setBarraCalidad('comp-prac', qPrac, qNov);
             
