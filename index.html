@@ -167,7 +167,6 @@
         .leaflet-popup-tip { background: var(--card-bg); }
         .leaflet-popup-content { margin: 10px; line-height: 1.4; }
         
-        /* Boton Resetear Mapa Custom */
         .leaflet-control-custom { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px !important; box-shadow: var(--card-shadow) !important; transition: all 0.2s ease; }
         .leaflet-control-custom:hover { background: rgba(67, 24, 255, 0.05); border-color: var(--primary); }
 
@@ -199,13 +198,7 @@
         .custom-legend-container::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 4px; }
         
         .legend-item {
-            display: flex;
-            align-items: center;
-            padding: 6px 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-size: 0.85rem;
+            display: flex; align-items: center; padding: 6px 8px; border-radius: 8px; cursor: pointer; transition: background 0.2s; font-size: 0.85rem;
         }
         .legend-item:hover { background: rgba(0,0,0,0.03); }
         :root[data-theme="dark"] .legend-item:hover { background: rgba(255,255,255,0.05); }
@@ -221,6 +214,8 @@
 
         .btn-download-img { background: rgba(0,0,0,0.03); color: var(--text-muted); border: none; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; opacity: 0.7;}
         .glass-card:hover .btn-download-img { opacity: 1; color: var(--primary); background: rgba(67, 24, 255, 0.1); }
+        /* Nuevos estilos para botones deshabilitados de paginación */
+        button:disabled { opacity: 0.3; cursor: not-allowed !important; }
 
         .nav-tabs-clean { display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; padding-bottom: 5px; -webkit-overflow-scrolling: touch; scrollbar-width: none;}
         .nav-tabs-clean::-webkit-scrollbar { display: none; }
@@ -233,20 +228,8 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .select-comparador { 
-            background: rgba(255,255,255,0.5); 
-            border: 1px solid transparent; 
-            color: var(--text-main); 
-            outline: none; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            font-size: 0.85rem; 
-            padding: 8px; 
-            border-radius: 8px;
-            /* TRUNCAR TEXTO PARA QUE NO CORTA EL MENU */
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 100%;
+            background: rgba(255,255,255,0.5); border: 1px solid transparent; color: var(--text-main); outline: none; cursor: pointer; 
+            transition: all 0.2s; font-size: 0.85rem; padding: 8px; border-radius: 8px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 100%;
         }
         :root[data-theme="dark"] .select-comparador { background: rgba(0,0,0,0.3); }
         .select-comparador:focus, .select-comparador:hover { border-color: var(--primary); background: transparent; }
@@ -573,11 +556,20 @@
                                             </div>
                                         </div>
                                         
+                                        <!-- AQUÍ VA LA TARJETA DE COMUNAS CON PAGINACIÓN INCORPORADA -->
                                         <div id="col-comunas" class="w-100">
                                             <div class="glass-card p-3 w-100">
                                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                                     <h6 class="mb-0 fw-bold fs-6">Distribución por Ubicación</h6>
-                                                    <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Comunas')"><i class="bi bi-download"></i></button>
+                                                    
+                                                    <!-- Controles de paginación y descarga -->
+                                                    <div class="d-flex gap-2 align-items-center">
+                                                        <span id="pag-comunas-info" class="text-muted small fw-bold" style="font-size: 0.75rem;">1 / 1</span>
+                                                        <button class="btn-download-img" id="btn-prev-comunas" onclick="cambiarPaginaComunas(-1)" title="Anterior"><i class="bi bi-chevron-left"></i></button>
+                                                        <button class="btn-download-img" id="btn-next-comunas" onclick="cambiarPaginaComunas(1)" title="Siguiente"><i class="bi bi-chevron-right"></i></button>
+                                                        <div style="width: 1px; height: 15px; background: var(--border-color); margin: 0 4px;"></div>
+                                                        <button class="btn-download-img" onclick="descargarGrafico('chartComunas', 'Comunas')" title="Descargar"><i class="bi bi-download"></i></button>
+                                                    </div>
                                                 </div>
                                                 <div class="chart-wrapper" style="height: 220px; margin-top: 0;"><canvas id="chartComunas"></canvas></div>
                                             </div>
@@ -709,6 +701,11 @@
         let chartInstances = {}; let promediosGlobalesPreguntas = {}; let mapInstance = null; let geoJsonDataRaw = null; 
         let geoJsonLayer = null; let añosDisponibles = new Set(); let añoActual = "ALL"; let filterDebounceTimer = null;
 
+        // Variables de caché para paginación de comunas
+        let paginaComunasActual = 0;
+        const ITEMS_POR_PAGINA_COMUNAS = 10;
+        let dataComunasCache = null;
+
         const mapeoPreguntas = { 
             "¿Se dio a conocer el objetivo de la capacitación?": "Objetivo Claro", "¿Se cumplió el objetivo de la capacitación?": "Obj. Cumplido", 
             "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": "Coherencia", "¿Los temas se desarrollaron en el tiempo previsto?": "Tiempo", 
@@ -755,19 +752,47 @@
             return `${d}D ${h}H`;
         }
 
-        function getIconForLabel(label) {
+        // LÓGICA DE ICONOS CONTEXTUALES ACTUALIZADA
+        function getIconForLabel(label, filterType) {
             const l = String(label).toLowerCase();
-            if(l.includes('femenino')) return 'bi-gender-female text-danger';
-            if(l.includes('masculino')) return 'bi-gender-male text-info';
-            if(l.includes('intersexual') || l.includes('otro')) return 'bi-gender-ambiguous text-warning';
-            if(l.includes('infancia') || l.includes('juventud')) return 'bi-person-arms-up text-success';
-            if(l.includes('adultez')) return 'bi-person-fill text-primary';
-            if(l.includes('vejez')) return 'bi-person-walking text-indigo';
-            if(l.includes('médico') || l.includes('salud') || l.includes('enfermer')) return 'bi-heart-pulse-fill text-success';
-            if(l.includes('estudiante') || l.includes('grado')) return 'bi-mortarboard-fill text-primary';
-            if(l.includes('técnico') || l.includes('tecnólogo')) return 'bi-tools text-warning';
-            if(l.includes('bachiller') || l.includes('ninguna')) return 'bi-book text-secondary';
-            return 'bi-record-circle';
+            
+            // Íconos para la dona de Curso de Vida
+            if (filterType === 'f-edad') {
+                if(l.includes('primera')) return 'bi-emoji-smile text-danger';
+                if(l.includes('infancia')) return 'bi-balloon text-warning';
+                if(l.includes('adolescencia')) return 'bi-headphones text-info';
+                if(l.includes('juventud')) return 'bi-person-arms-up text-success'; 
+                if(l.includes('adultez')) return 'bi-briefcase text-primary';
+                if(l.includes('vejez')) return 'bi-eyeglasses text-indigo'; 
+                return 'bi-person-circle text-secondary';
+            }
+            
+            // Íconos para la dona de Escolaridad
+            if (filterType === 'f-escolaridad') {
+                if(l.includes('bachiller')) return 'bi-book text-success';
+                if(l.includes('pregrado') || l.includes('profesional')) return 'bi-mortarboard-fill text-primary';
+                if(l.includes('postgrado') || l.includes('maestr') || l.includes('especializaci')) return 'bi-award-fill text-warning';
+                if(l.includes('técni') || l.includes('tecnólo')) return 'bi-tools text-info';
+                if(l.includes('ninguna')) return 'bi-circle text-secondary';
+                return 'bi-record-circle text-secondary';
+            }
+            
+            // Íconos para la dona de Perfil Profesional
+            if (filterType === 'f-perfil') {
+                if(l === 'otro' || l === 'otra') return 'bi-circle text-secondary';
+                if(l.includes('médico') || l.includes('salud') || l.includes('enfermer') || l.includes('auxiliar')) return 'bi-heart-pulse-fill text-danger';
+                if(l.includes('estudiante')) return 'bi-pencil text-info';
+                return 'bi-person-badge text-primary';
+            }
+
+            // Íconos para la dona de Sexo
+            if (filterType === 'f-sexo') {
+                if(l.includes('femenino')) return 'bi-gender-female text-danger';
+                if(l.includes('masculino')) return 'bi-gender-male text-info';
+                return 'bi-circle text-warning'; // intersexual u otro genérico
+            }
+            
+            return 'bi-record-circle text-muted';
         }
 
         function triggerCrossFilter(filterId, value) {
@@ -945,7 +970,6 @@
                 scrollWheelZoom: true
             }).setView([3.42158, -76.5205], 11);
 
-            // NUEVO: Control para Resetear / Centrar el Mapa
             let resetControl = L.control({position: 'topleft'});
             resetControl.onAdd = function (map) {
                 let div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
@@ -1013,7 +1037,6 @@
                         layer.bringToFront(); 
                         
                         layer.setStyle({ weight: 3, color: '#ffffff', fillOpacity: 0.95 });
-                        // Resplandor vibrante al pasar el mouse
                         if(layer._path) layer._path.style.filter = "drop-shadow(0px 0px 10px var(--primary))";
                         
                         let valor = mapInstance.lastDataComunas ? (mapInstance.lastDataComunas[id] || 0) : 0;
@@ -1035,7 +1058,6 @@
                                 color: p > 0 ? '#ffffff' : defStroke
                             });
 
-                            // Devolver el resplandor base si tiene datos
                             if(layer._path && p > 0) {
                                 layer._path.style.filter = "drop-shadow(0px 0px 4px rgba(67, 24, 255, 0.4))";
                             } else if (layer._path) {
@@ -1108,7 +1130,6 @@
                     color: p > 0 ? '#ffffff' : defStroke
                 });
 
-                // Resplandor por defecto a los que tienen datos
                 if(layer._path && p > 0) {
                     layer._path.style.filter = "drop-shadow(0px 0px 4px rgba(67, 24, 255, 0.4))";
                 } else if(layer._path) {
@@ -1117,6 +1138,7 @@
             });
         }
 
+        // LEYENDA SE ACTUALIZA PARA PASAR filterType AL GENERADOR DE ICONOS
         function generarLeyendaCustom(canvasId, labels, datos, cols, filterType) {
             const legendContainer = document.getElementById(`legend-${canvasId}`);
             if(!legendContainer) return;
@@ -1127,7 +1149,7 @@
             let html = '';
             items.forEach(item => {
                 if(item.val > 0) {
-                    const iconClass = getIconForLabel(item.label);
+                    const iconClass = getIconForLabel(item.label, filterType);
                     html += `
                         <div class="legend-item" onclick="triggerCrossFilter('${filterType}', '${item.label}')">
                             <div class="legend-color-box" style="background-color: ${item.color};"></div>
@@ -1167,13 +1189,69 @@
             generarLeyendaCustom(canvasId, labels, datos, cols, filterType);
         }
         
-        function dibujarGraficoComunas(canvasId, dataObject) { 
-            let ag = {}; for (let k in dataObject) { let id = String(k||"N/A").replace(/\D/g, ''); id = isNaN(parseInt(id,10))?String(k).trim():String(parseInt(id,10)); let l = (id==="N/A"?"Fuera de Cali":(!isNaN(id)?"Comuna "+id:"Correg. "+id)); ag[l] = (ag[l]||0) + dataObject[k]; } 
-            let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); let labels = sort.map(i=>i[0]); let data = sort.map(i=>i[1]);
+        // GRÁFICO DE COMUNAS CON PAGINACIÓN INCORPORADA
+        function dibujarGraficoComunas(canvasId, dataObject, resetPagina = true) { 
+            if (resetPagina) {
+                paginaComunasActual = 0;
+                dataComunasCache = dataObject;
+            }
+
+            let ag = {}; 
+            for (let k in dataObject) { 
+                let id = String(k||"N/A").replace(/\D/g, ''); 
+                id = isNaN(parseInt(id,10)) ? String(k).trim() : String(parseInt(id,10)); 
+                let l = (id==="N/A" ? "Fuera de Cali" : (!isNaN(id) ? "Comuna "+id : "Correg. "+id)); 
+                ag[l] = (ag[l]||0) + dataObject[k]; 
+            } 
             
-            if (chartInstances[canvasId]) { chartInstances[canvasId].data.labels = labels; chartInstances[canvasId].data.datasets[0].data = data; chartInstances[canvasId].update(); } 
-            else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, animation: { duration: 800, easing: 'easeOutQuart' }, onClick: (e, elements, chart) => { if (elements.length > 0) { const label = chart.data.labels[elements[0].index]; const id = label.replace(/\D/g, ''); if(id) triggerCrossFilter('f-comuna', id); } } } }); }
+            let sort = Object.entries(ag).sort((a, b) => b[1] - a[1]); 
+
+            let totalPaginas = Math.ceil(sort.length / ITEMS_POR_PAGINA_COMUNAS);
+            if (totalPaginas === 0) totalPaginas = 1;
+
+            let inicio = paginaComunasActual * ITEMS_POR_PAGINA_COMUNAS;
+            let paginados = sort.slice(inicio, inicio + ITEMS_POR_PAGINA_COMUNAS);
+
+            let labels = paginados.map(i=>i[0]); 
+            let data = paginados.map(i=>i[1]);
+
+            document.getElementById('pag-comunas-info').innerText = `${paginaComunasActual + 1} / ${totalPaginas}`;
+            
+            let btnPrev = document.getElementById('btn-prev-comunas');
+            let btnNext = document.getElementById('btn-next-comunas');
+            
+            btnPrev.disabled = paginaComunasActual === 0;
+            btnNext.disabled = paginaComunasActual >= totalPaginas - 1;
+
+            if (chartInstances[canvasId]) { 
+                chartInstances[canvasId].data.labels = labels; 
+                chartInstances[canvasId].data.datasets[0].data = data; 
+                chartInstances[canvasId].update(); 
+            } else { 
+                chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
+                    type: 'bar', 
+                    data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, 
+                    options: { 
+                        indexAxis: 'y', responsive: true, maintainAspectRatio: false, 
+                        plugins: { legend: { display: false } }, 
+                        scales: { x: { beginAtZero: true }, y: { ticks: { font: { family: 'Inter', size: 10 } } } }, 
+                        animation: { duration: 800, easing: 'easeOutQuart' }, 
+                        onClick: (e, elements, chart) => { 
+                            if (elements.length > 0) { 
+                                const label = chart.data.labels[elements[0].index]; 
+                                const id = label.replace(/\D/g, ''); 
+                                if(id) triggerCrossFilter('f-comuna', id); 
+                            } 
+                        } 
+                    } 
+                }); 
+            }
         }
+
+        window.cambiarPaginaComunas = function(direccion) {
+            paginaComunasActual += direccion;
+            dibujarGraficoComunas('chartComunas', dataComunasCache, false);
+        };
         
         function dibujarBarraMoodle(canvasId, c) { 
             let d = [c['Tasa_Finalizacion_%']||0, c['Tasa_Abandono_%']||0, c['Tasa_Inactividad_%']||0];
@@ -1389,17 +1467,14 @@
             let chsColor = chs >= 80 ? 'text-success' : (chs >= 60 ? 'text-warning' : 'text-danger');
             document.getElementById(`comp-chs-${slotIndex}`).innerHTML = `<span class="${chsColor}">${chs}</span> / 100`;
 
-            // LÓGICA CORREGIDA DE EXPECTATIVA
             let qObjCumplido = curso.Detalle_Preguntas ? (curso.Detalle_Preguntas["¿Se cumplió el objetivo de la capacitación?"] || 0) : 0;
             let qObjConocer = curso.Detalle_Preguntas ? (curso.Detalle_Preguntas["¿Se dio a conocer el objetivo de la capacitación?"] || 0) : 0;
             
             let contenedorExp = document.getElementById(`comp-exp-container-${slotIndex}`);
             if (qObjCumplido > 0 && qObjConocer > 0) {
                 let brecha = qObjCumplido - qObjConocer;
-                // Primero redondeamos a 1 decimal
                 let brechaFormat = parseFloat(brecha.toFixed(1)); 
                 
-                // Evaluamos el número ya redondeado para evitar falsos positivos
                 if(brechaFormat > 0) {
                     contenedorExp.innerHTML = `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" title="La calidad percibida superó lo que se prometió al inicio del curso."><i class="bi bi-arrow-up-right-circle-fill"></i> Superó Promesa (+${brechaFormat})</span>`;
                 } else if (brechaFormat < 0) {
