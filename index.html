@@ -1198,7 +1198,8 @@
             let labels = paginados.map(i=>i[0]); 
             let data = paginados.map(i=>i[1]);
 
-            document.getElementById('pag-comunas-info').innerText = `${paginaComunasActual + 1} / ${totalPaginas}`;
+            let infoEl = document.getElementById('pag-comunas-info');
+            if (infoEl) infoEl.innerText = `${paginaComunasActual + 1} / ${totalPaginas}`;
             
             let btnPrev = document.getElementById('btn-prev-comunas');
             let btnNext = document.getElementById('btn-next-comunas');
