@@ -38,7 +38,8 @@ class MoodleDataExtractor:
         self.download_dir = os.path.join(self.base_dir, "descargas_moodle")
         self._prepare_environment()
         self.driver = self._initialize_driver()
-        self.wait = WebDriverWait(self.driver, 15)
+        # AUMENTO DE TIEMPO: De 15 a 90 segundos para permitir que Moodle cargue tablas de cursos masivos
+        self.wait = WebDriverWait(self.driver, 90)
 
     def _prepare_environment(self):
         """
@@ -140,9 +141,9 @@ class MoodleDataExtractor:
             logging.warning("Latencia de red detectada. Incrementando tolerancia de espera...")
             time.sleep(5)
 
-        # Desplazamiento iterativo para renderizar elementos dinámicos
+        # Desplazamiento iterativo aumentado para no perder ningún curso al final de la página
         last_height = self.driver.execute_script("return document.body.scrollHeight")
-        for _ in range(4):
+        for _ in range(50):
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(2)
             new_height = self.driver.execute_script("return document.body.scrollHeight")
@@ -202,7 +203,8 @@ class MoodleDataExtractor:
                 export_url = f"{self.report_base_url}{course_id}&dataformat=csv"
                 self.driver.get(export_url)
                 
-                timeout = 15
+                # AUMENTO DE TIEMPO: De 15 a 90 segundos para esperar la descarga de archivos pesados
+                timeout = 90
                 archivo_descargado = None
                 while timeout > 0:
                     time.sleep(1)
