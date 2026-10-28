@@ -203,7 +203,7 @@
         .legend-item:hover { background: rgba(0,0,0,0.03); }
         :root[data-theme="dark"] .legend-item:hover { background: rgba(255,255,255,0.05); }
         .legend-color-box { width: 12px; height: 12px; border-radius: 4px; margin-right: 10px; flex-shrink: 0;}
-        .legend-icon { color: var(--text-muted); margin-right: 8px; font-size: 1rem; flex-shrink: 0; width: 18px; text-align: center;}
+        .legend-icon { margin-right: 8px; font-size: 1rem; flex-shrink: 0; width: 18px; text-align: center;} 
         .legend-label { flex-grow: 1; color: var(--text-main); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .legend-value { font-weight: 800; color: var(--text-main); margin-left: 10px;}
 
@@ -214,7 +214,6 @@
 
         .btn-download-img { background: rgba(0,0,0,0.03); color: var(--text-muted); border: none; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; opacity: 0.7;}
         .glass-card:hover .btn-download-img { opacity: 1; color: var(--primary); background: rgba(67, 24, 255, 0.1); }
-        /* Nuevos estilos para botones deshabilitados de paginación */
         button:disabled { opacity: 0.3; cursor: not-allowed !important; }
 
         .nav-tabs-clean { display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); margin-bottom: 25px; overflow-x: auto; flex-wrap: nowrap; white-space: nowrap; padding-bottom: 5px; -webkit-overflow-scrolling: touch; scrollbar-width: none;}
@@ -556,13 +555,11 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- AQUÍ VA LA TARJETA DE COMUNAS CON PAGINACIÓN INCORPORADA -->
                                         <div id="col-comunas" class="w-100">
                                             <div class="glass-card p-3 w-100">
                                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                                     <h6 class="mb-0 fw-bold fs-6">Distribución por Ubicación</h6>
                                                     
-                                                    <!-- Controles de paginación y descarga -->
                                                     <div class="d-flex gap-2 align-items-center">
                                                         <span id="pag-comunas-info" class="text-muted small fw-bold" style="font-size: 0.75rem;">1 / 1</span>
                                                         <button class="btn-download-img" id="btn-prev-comunas" onclick="cambiarPaginaComunas(-1)" title="Anterior"><i class="bi bi-chevron-left"></i></button>
@@ -701,7 +698,6 @@
         let chartInstances = {}; let promediosGlobalesPreguntas = {}; let mapInstance = null; let geoJsonDataRaw = null; 
         let geoJsonLayer = null; let añosDisponibles = new Set(); let añoActual = "ALL"; let filterDebounceTimer = null;
 
-        // Variables de caché para paginación de comunas
         let paginaComunasActual = 0;
         const ITEMS_POR_PAGINA_COMUNAS = 10;
         let dataComunasCache = null;
@@ -752,47 +748,42 @@
             return `${d}D ${h}H`;
         }
 
-        // LÓGICA DE ICONOS CONTEXTUALES ACTUALIZADA
         function getIconForLabel(label, filterType) {
             const l = String(label).toLowerCase();
             
-            // Íconos para la dona de Curso de Vida
             if (filterType === 'f-edad') {
-                if(l.includes('primera')) return 'bi-emoji-smile text-danger';
-                if(l.includes('infancia')) return 'bi-balloon text-warning';
-                if(l.includes('adolescencia')) return 'bi-headphones text-info';
-                if(l.includes('juventud')) return 'bi-person-arms-up text-success'; 
-                if(l.includes('adultez')) return 'bi-briefcase text-primary';
-                if(l.includes('vejez')) return 'bi-eyeglasses text-indigo'; 
-                return 'bi-person-circle text-secondary';
+                if(l.includes('primera')) return 'bi-emoji-smile';
+                if(l.includes('infancia')) return 'bi-balloon';
+                if(l.includes('adolescencia')) return 'bi-headphones';
+                if(l.includes('juventud')) return 'bi-person-arms-up'; 
+                if(l.includes('adultez')) return 'bi-briefcase';
+                if(l.includes('vejez')) return 'bi-eyeglasses'; 
+                return 'bi-person-circle';
             }
             
-            // Íconos para la dona de Escolaridad
             if (filterType === 'f-escolaridad') {
-                if(l.includes('bachiller')) return 'bi-book text-success';
-                if(l.includes('pregrado') || l.includes('profesional')) return 'bi-mortarboard-fill text-primary';
-                if(l.includes('postgrado') || l.includes('maestr') || l.includes('especializaci')) return 'bi-award-fill text-warning';
-                if(l.includes('técni') || l.includes('tecnólo')) return 'bi-tools text-info';
-                if(l.includes('ninguna')) return 'bi-circle text-secondary';
-                return 'bi-record-circle text-secondary';
+                if(l.includes('bachiller')) return 'bi-book';
+                if(l.includes('pregrado') || l.includes('profesional')) return 'bi-mortarboard-fill';
+                if(l.includes('postgrado') || l.includes('maestr') || l.includes('especializaci')) return 'bi-award-fill';
+                if(l.includes('técni') || l.includes('tecnólo')) return 'bi-tools';
+                if(l.includes('ninguna')) return 'bi-circle';
+                return 'bi-record-circle';
             }
             
-            // Íconos para la dona de Perfil Profesional
             if (filterType === 'f-perfil') {
-                if(l === 'otro' || l === 'otra') return 'bi-circle text-secondary';
-                if(l.includes('médico') || l.includes('salud') || l.includes('enfermer') || l.includes('auxiliar')) return 'bi-heart-pulse-fill text-danger';
-                if(l.includes('estudiante')) return 'bi-pencil text-info';
-                return 'bi-person-badge text-primary';
+                if(l === 'otro' || l === 'otra') return 'bi-circle';
+                if(l.includes('médico') || l.includes('salud') || l.includes('enfermer') || l.includes('auxiliar')) return 'bi-heart-pulse-fill';
+                if(l.includes('estudiante')) return 'bi-pencil';
+                return 'bi-person-badge';
             }
 
-            // Íconos para la dona de Sexo
             if (filterType === 'f-sexo') {
-                if(l.includes('femenino')) return 'bi-gender-female text-danger';
-                if(l.includes('masculino')) return 'bi-gender-male text-info';
-                return 'bi-circle text-warning'; // intersexual u otro genérico
+                if(l.includes('femenino')) return 'bi-gender-female';
+                if(l.includes('masculino')) return 'bi-gender-male';
+                return 'bi-circle';
             }
             
-            return 'bi-record-circle text-muted';
+            return 'bi-record-circle';
         }
 
         function triggerCrossFilter(filterId, value) {
@@ -1138,7 +1129,6 @@
             });
         }
 
-        // LEYENDA SE ACTUALIZA PARA PASAR filterType AL GENERADOR DE ICONOS
         function generarLeyendaCustom(canvasId, labels, datos, cols, filterType) {
             const legendContainer = document.getElementById(`legend-${canvasId}`);
             if(!legendContainer) return;
@@ -1153,7 +1143,7 @@
                     html += `
                         <div class="legend-item" onclick="triggerCrossFilter('${filterType}', '${item.label}')">
                             <div class="legend-color-box" style="background-color: ${item.color};"></div>
-                            <i class="${iconClass} legend-icon"></i>
+                            <i class="${iconClass} legend-icon" style="color: ${item.color};"></i>
                             <div class="legend-label" title="${item.label}">${item.label}</div>
                             <div class="legend-value">${item.val.toLocaleString()}</div>
                         </div>
@@ -1189,7 +1179,6 @@
             generarLeyendaCustom(canvasId, labels, datos, cols, filterType);
         }
         
-        // GRÁFICO DE COMUNAS CON PAGINACIÓN INCORPORADA
         function dibujarGraficoComunas(canvasId, dataObject, resetPagina = true) { 
             if (resetPagina) {
                 paginaComunasActual = 0;
