@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 62,
-        "total_encuestas_historicas": 4374,
+        "total_encuestas_historicas": 4376,
         "total_estudiantes_unicos": 8593,
         "cursos_activos": 23
     },
@@ -11,23 +11,23 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 3209,
-            "Masculino": 1160,
+            "Femenino": 3210,
+            "Masculino": 1161,
             "Intersexual": 5
         },
         "Perfil": {
-            "Área de la salud": 2992,
+            "Área de la salud": 2994,
             "Estudiante": 953,
             "Otro": 429
         },
         "Curso de Vida": {
             "Adultez (29 - 59 años)": 2481,
             "Adolescencia (12 - 17 años)": 967,
-            "Juventud (18 - 28 años)": 750,
-            "Vejez (60 años o más)": 176
+            "Juventud (18 - 28 años)": 751,
+            "Vejez (60 años o más)": 177
         },
         "Comuna": {
-            "COMUNA 17": 477,
+            "COMUNA 17": 478,
             "COMUNA 1": 256,
             "COMUNA 19": 247,
             "COMUNA 10": 224,
@@ -60,15 +60,15 @@
             "C. DE VILLACARMELO": 3,
             "C. DE NAVARRO": 3,
             "C. DE PICHINDE": 3,
-            "C. DE LOS ANDES": 2,
+            "Jamundi ": 2,
             "C. DE GOLONDRINAS": 2,
             "C. DE LA PAZ": 2,
+            "C. DE LOS ANDES": 2,
             "Palmira": 1,
-            "Jamundi ": 1,
-            "florida valle": 1,
             "JAMUNDI": 1,
-            "palmira": 1,
             "-": 1,
+            "palmira": 1,
+            "florida valle": 1,
             "Jamundí": 1,
             "Guadalajara de Buga ": 1,
             "La Victoria Valle del Cauca ": 1,
@@ -89,9 +89,9 @@
             "C. DE LA LEONERA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1877,
+            "Pregrado": 1878,
             "Bachiller": 1343,
-            "Postgrado": 1073,
+            "Postgrado": 1074,
             "Ninguna": 81
         }
     },
@@ -53649,8 +53649,8 @@
             "ID_Moodle_Original": "rpmsj_022026",
             "Total_Inscritos": 309,
             "Tasa_Finalizacion_%": 2.6,
-            "Tasa_Abandono_%": 0.0,
-            "Tasa_Inactividad_%": 97.4,
+            "Tasa_Abandono_%": 0.3,
+            "Tasa_Inactividad_%": 97.1,
             "Tiempo_Maximo_Dias": 6.2,
             "Es_Activo": true,
             "Total_Encuestas": 6.0,
@@ -62688,36 +62688,36 @@
             "Nombre_Curso": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL - 2026 - 01",
             "ID_Moodle_Original": "soat_012026",
             "Total_Inscritos": 252,
-            "Tasa_Finalizacion_%": 57.1,
+            "Tasa_Finalizacion_%": 57.5,
             "Tasa_Abandono_%": 5.6,
-            "Tasa_Inactividad_%": 37.3,
+            "Tasa_Inactividad_%": 36.9,
             "Tiempo_Maximo_Dias": 98.8,
             "Es_Activo": true,
-            "Total_Encuestas": 97.0,
-            "ISG_Promedio": 4.7208564631245045,
-            "ICD_Promedio": 4.670103092783505,
-            "IUP_Promedio": 4.757731958762887,
-            "UX_Promedio": 4.695876288659794,
-            "e_NPS": 79.4,
-            "Salud_Curso_CHS": 79.6,
+            "Total_Encuestas": 98.0,
+            "ISG_Promedio": 4.722135007849293,
+            "ICD_Promedio": 4.673469387755102,
+            "IUP_Promedio": 4.760204081632653,
+            "UX_Promedio": 4.6938775510204085,
+            "e_NPS": 79.6,
+            "Salud_Curso_CHS": 79.8,
             "Curso_Base": "LINEAMIENTOS PARA MEJORAR EL ABORDAJE DE LA SALUD BUCAL",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
                     "Femenino": 80,
                     "Intersexual": 0,
-                    "Masculino": 17
+                    "Masculino": 18
                 },
                 "Perfil": {
                     "Estudiante": 0,
                     "Otro": 1,
-                    "Área de la salud": 96
+                    "Área de la salud": 97
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 1,
                     "Adultez (29 - 59 años)": 82,
                     "Juventud (18 - 28 años)": 10,
-                    "Vejez (60 años o más)": 4
+                    "Vejez (60 años o más)": 5
                 },
                 "Comuna": {
                     "-": 1,
@@ -62765,7 +62765,7 @@
                     "El Dovio Valle": 0,
                     "Guadalajara de Buga ": 1,
                     "JAMUNDI": 1,
-                    "Jamundi ": 1,
+                    "Jamundi ": 2,
                     "Jamundí": 1,
                     "La Victoria Valle del Cauca": 0,
                     "La Victoria Valle del Cauca ": 0,
@@ -62784,24 +62784,24 @@
                 "Escolaridad": {
                     "Bachiller": 12,
                     "Ninguna": 0,
-                    "Postgrado": 34,
+                    "Postgrado": 35,
                     "Pregrado": 51
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.77319587628866,
-                "¿Se cumplió el objetivo de la capacitación?": 4.804123711340206,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.793814432989691,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.77319587628866,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.701030927835052,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.814432989690721,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.804123711340206,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.731958762886598,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.536082474226804,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.474226804123711,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.649484536082475,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.742268041237113,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.77319587628866
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.775510204081633,
+                "¿Se cumplió el objetivo de la capacitación?": 4.8061224489795915,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.795918367346939,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.775510204081633,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.704081632653061,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.816326530612245,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.8061224489795915,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.73469387755102,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.530612244897959,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.479591836734694,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.642857142857143,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.744897959183674,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.775510204081633
             },
             "Registros_Crudos": [
                 {
@@ -63001,6 +63001,26 @@
                     "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
                     "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4,
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Masculino",
+                    "Curso de vida": "Vejez (60 años o más)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "Jamundi ",
+                    "Escolaridad": "Postgrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4,
                     "¿El material utilizado permitió el entendimiento del tema?": 5,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 },
@@ -64750,8 +64770,8 @@
             "Nombre_Curso": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES) - 2026 - 01",
             "ID_Moodle_Original": "pfsa_022026",
             "Total_Inscritos": 1006,
-            "Tasa_Finalizacion_%": 97.0,
-            "Tasa_Abandono_%": 2.0,
+            "Tasa_Finalizacion_%": 98.7,
+            "Tasa_Abandono_%": 0.3,
             "Tasa_Inactividad_%": 1.0,
             "Tiempo_Maximo_Dias": 20742.8,
             "Es_Activo": true,
@@ -64761,7 +64781,7 @@
             "IUP_Promedio": 4.454861111111111,
             "UX_Promedio": 4.427083333333333,
             "e_NPS": 60.4,
-            "Salud_Curso_CHS": 92.0,
+            "Salud_Curso_CHS": 92.7,
             "Curso_Base": "PROCESO DE FORTALECIMIENTO DE CAPACIDADES (SERVICIOS AMIGABLES)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -67794,35 +67814,35 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2025 - 01",
             "ID_Moodle_Original": "sello_012025",
             "Total_Inscritos": 1380,
-            "Tasa_Finalizacion_%": 76.0,
-            "Tasa_Abandono_%": 2.2,
-            "Tasa_Inactividad_%": 21.7,
+            "Tasa_Finalizacion_%": 76.1,
+            "Tasa_Abandono_%": 2.3,
+            "Tasa_Inactividad_%": 21.6,
             "Tiempo_Maximo_Dias": 394.0,
             "Es_Activo": true,
-            "Total_Encuestas": 732.0,
-            "ISG_Promedio": 4.560739806641446,
-            "ICD_Promedio": 4.485428051001822,
-            "IUP_Promedio": 4.644808743169399,
-            "UX_Promedio": 4.566256830601093,
-            "e_NPS": 60.1,
+            "Total_Encuestas": 733.0,
+            "ISG_Promedio": 4.561339070206738,
+            "ICD_Promedio": 4.486130059117781,
+            "IUP_Promedio": 4.645293315143247,
+            "UX_Promedio": 4.566848567530696,
+            "e_NPS": 60.2,
             "Salud_Curso_CHS": 85.5,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 486,
+                    "Femenino": 487,
                     "Intersexual": 1,
                     "Masculino": 245
                 },
                 "Perfil": {
                     "Estudiante": 17,
                     "Otro": 180,
-                    "Área de la salud": 535
+                    "Área de la salud": 536
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
                     "Adultez (29 - 59 años)": 581,
-                    "Juventud (18 - 28 años)": 90,
+                    "Juventud (18 - 28 años)": 91,
                     "Vejez (60 años o más)": 61
                 },
                 "Comuna": {
@@ -67854,7 +67874,7 @@
                     "COMUNA 14": 13,
                     "COMUNA 15": 29,
                     "COMUNA 16": 24,
-                    "COMUNA 17": 120,
+                    "COMUNA 17": 121,
                     "COMUNA 18": 27,
                     "COMUNA 19": 77,
                     "COMUNA 2": 42,
@@ -67891,23 +67911,23 @@
                     "Bachiller": 112,
                     "Ninguna": 2,
                     "Postgrado": 272,
-                    "Pregrado": 346
+                    "Pregrado": 347
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.620218579234972,
-                "¿Se cumplió el objetivo de la capacitación?": 4.628415300546448,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.602459016393443,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.579234972677596,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.658469945355192,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.631147540983607,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.543715846994536,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.554644808743169,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.4275956284153,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.35792349726776,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.554644808743169,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.577868852459017,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.55327868852459
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.620736698499318,
+                "¿Se cumplió el objetivo de la capacitación?": 4.628922237380627,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.60300136425648,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.57980900409277,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.65893587994543,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.631650750341064,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.544338335607094,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.55525238744884,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.428376534788541,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.358799454297408,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.55525238744884,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.578444747612552,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.553888130968622
             },
             "Registros_Crudos": [
                 {
@@ -70675,6 +70695,26 @@
                     "Curso de vida": "Adultez (29 - 59 años)",
                     "Perfil": "Área de la salud",
                     "Comuna_Unificada": "COMUNA 10",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 17",
                     "Escolaridad": "Pregrado",
                     "¿Se dio a conocer el objetivo de la capacitación?": 5,
                     "¿Se cumplió el objetivo de la capacitación?": 5,
