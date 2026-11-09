@@ -1,34 +1,34 @@
 {
     "metadata": {
         "total_cursos_analizados": 62,
-        "total_encuestas_historicas": 4380,
+        "total_encuestas_historicas": 4381,
         "total_estudiantes_unicos": 8630,
-        "cursos_activos": 19
+        "cursos_activos": 18
     },
     "kpis_globales": {
         "chs_promedio_secretaria": 56.2,
-        "nps_global": 72.3
+        "nps_global": 72.4
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 3213,
+            "Femenino": 3214,
             "Masculino": 1162,
             "Intersexual": 5
         },
         "Perfil": {
-            "Área de la salud": 2998,
+            "Área de la salud": 2999,
             "Estudiante": 953,
             "Otro": 429
         },
         "Curso de Vida": {
             "Adultez (29 - 59 años)": 2483,
             "Adolescencia (12 - 17 años)": 967,
-            "Juventud (18 - 28 años)": 753,
+            "Juventud (18 - 28 años)": 754,
             "Vejez (60 años o más)": 177
         },
         "Comuna": {
             "COMUNA 17": 479,
-            "COMUNA 1": 257,
+            "COMUNA 1": 258,
             "COMUNA 19": 247,
             "COMUNA 10": 224,
             "COMUNA 2": 217,
@@ -90,7 +90,7 @@
             "C. DE LA LEONERA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1880,
+            "Pregrado": 1881,
             "Bachiller": 1343,
             "Postgrado": 1076,
             "Ninguna": 81
@@ -38235,35 +38235,35 @@
             "Nombre_Curso": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE ADOLESCENCIA - 2026 - 02",
             "ID_Moodle_Original": "rpmsa_022026",
             "Total_Inscritos": 309,
-            "Tasa_Finalizacion_%": 3.6,
-            "Tasa_Abandono_%": 3.9,
+            "Tasa_Finalizacion_%": 3.9,
+            "Tasa_Abandono_%": 3.6,
             "Tasa_Inactividad_%": 92.6,
-            "Tiempo_Maximo_Dias": 16.5,
+            "Tiempo_Maximo_Dias": 29.1,
             "Es_Activo": true,
-            "Total_Encuestas": 8.0,
-            "ISG_Promedio": 4.778846153846154,
-            "ICD_Promedio": 4.708333333333333,
-            "IUP_Promedio": 4.875,
-            "UX_Promedio": 4.6875,
-            "e_NPS": 75.0,
-            "Salud_Curso_CHS": 59.0,
+            "Total_Encuestas": 9.0,
+            "ISG_Promedio": 4.803418803418804,
+            "ICD_Promedio": 4.7407407407407405,
+            "IUP_Promedio": 4.888888888888889,
+            "UX_Promedio": 4.722222222222222,
+            "e_NPS": 77.8,
+            "Salud_Curso_CHS": 59.4,
             "Curso_Base": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE ADOLESCENCIA",
             "Edicion": "2026 - Cohorte 2",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 7,
+                    "Femenino": 8,
                     "Intersexual": 0,
                     "Masculino": 1
                 },
                 "Perfil": {
                     "Estudiante": 0,
                     "Otro": 0,
-                    "Área de la salud": 8
+                    "Área de la salud": 9
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 3,
                     "Adultez (29 - 59 años)": 4,
-                    "Juventud (18 - 28 años)": 1,
+                    "Juventud (18 - 28 años)": 2,
                     "Vejez (60 años o más)": 0
                 },
                 "Comuna": {
@@ -38287,7 +38287,7 @@
                     "C. DE PICHINDE": 0,
                     "C. DE VILLACARMELO": 0,
                     "C.Alirio Mora": 0,
-                    "COMUNA 1": 3,
+                    "COMUNA 1": 4,
                     "COMUNA 10": 0,
                     "COMUNA 11": 0,
                     "COMUNA 12": 0,
@@ -38333,23 +38333,23 @@
                     "Bachiller": 1,
                     "Ninguna": 0,
                     "Postgrado": 1,
-                    "Pregrado": 6
+                    "Pregrado": 7
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.875,
-                "¿Se cumplió el objetivo de la capacitación?": 4.875,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.875,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.875,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.875,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.875,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.75,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.75,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.625,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.625,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.625,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.75,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.75
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.888888888888889,
+                "¿Se cumplió el objetivo de la capacitación?": 4.888888888888889,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.888888888888889,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.888888888888889,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.888888888888889,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.888888888888889,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.777777777777778,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.777777777777778,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.666666666666667,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.666666666666667,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.666666666666667,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.777777777777778,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.777777777777778
             },
             "Registros_Crudos": [
                 {
@@ -38357,6 +38357,26 @@
                     "Curso de vida": "Adultez (29 - 59 años)",
                     "Perfil": "Área de la salud",
                     "Comuna_Unificada": "C. DE LA BUITRERA",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 1",
                     "Escolaridad": "Pregrado",
                     "¿Se dio a conocer el objetivo de la capacitación?": 5,
                     "¿Se cumplió el objetivo de la capacitación?": 5,
@@ -80139,7 +80159,7 @@
             "Tasa_Abandono_%": 0.0,
             "Tasa_Inactividad_%": 0.8,
             "Tiempo_Maximo_Dias": 22.0,
-            "Es_Activo": true,
+            "Es_Activo": false,
             "Total_Encuestas": 6.0,
             "ISG_Promedio": 4.91025641025641,
             "ICD_Promedio": 5.0,
