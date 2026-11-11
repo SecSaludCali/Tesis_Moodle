@@ -675,9 +675,13 @@ function actualizarPantallaGlobal(dOlap = null) {
     let pF=tI?Math.round((tF/tI)*100):0; let pA=tI?Math.round((tA/tI)*100):0; let pI=tI?Math.round((tIn/tI)*100):0; 
     document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI+"%", null, "bi-door-closed", "danger")}`; 
     
-    let formatGlobal = mD > 1000 ? (mD/1000).toFixed(1) + 'K' : Math.round(mD).toLocaleString();
-    document.getElementById('tiempo-consumo-dias').innerText = formatGlobal; 
-    document.getElementById('tiempo-consumo-lbl').innerText = "Días Acumulados de Formación";
+    // Oculta la tarjeta de tiempo a nivel global y expande el embudo
+    const colRitmo = document.getElementById('col-ritmo');
+    const colEmbudo = document.getElementById('col-embudo');
+    if(colRitmo && colEmbudo) {
+        colRitmo.style.display = 'none';
+        colEmbudo.className = 'col-12';
+    }
 
     dibujarBarraMoodle('chartMoodleBar', { 'Tasa_Finalizacion_%': pF, 'Tasa_Abandono_%': pA, 'Tasa_Inactividad_%': pI }); 
     document.getElementById('titulo-radar').innerText = añoActual==="ALL"?"Perfil Institucional Consolidado":`Perfil Consolidado (${añoActual})`; dibujarRadar(promediosGlobalesPreguntas, true); document.getElementById('diagnostico-detalles').innerHTML = generarBarrasCalidad(promediosGlobalesPreguntas);
@@ -697,6 +701,14 @@ function actualizarPantallaCurso(dOlap = null) {
     if(!dOlap) { 
         document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; 
         
+        // Muestra la tarjeta de tiempo y restaura el tamaño original del embudo
+        const colRitmo = document.getElementById('col-ritmo');
+        const colEmbudo = document.getElementById('col-embudo');
+        if(colRitmo && colEmbudo) {
+            colRitmo.style.display = 'block';
+            colEmbudo.className = 'col-12 col-md-8';
+        }
+
         document.getElementById('tiempo-consumo-dias').innerText = formatoDiasHoras(cursoActual['Tiempo_Maximo_Dias']); 
         document.getElementById('tiempo-consumo-lbl').innerText = "Tiempo Máximo de Finalización";
 
