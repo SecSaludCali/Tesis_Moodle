@@ -1,35 +1,35 @@
 {
     "metadata": {
-        "total_cursos_analizados": 62,
-        "total_encuestas_historicas": 4403,
-        "total_estudiantes_unicos": 8630,
-        "cursos_activos": 19
+        "total_cursos_analizados": 63,
+        "total_encuestas_historicas": 4407,
+        "total_estudiantes_unicos": 8644,
+        "cursos_activos": 18
     },
     "kpis_globales": {
-        "chs_promedio_secretaria": 57.2,
-        "nps_global": 72.0
+        "chs_promedio_secretaria": 56.4,
+        "nps_global": 72.1
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 3232,
+            "Femenino": 3236,
             "Masculino": 1166,
             "Intersexual": 5
         },
         "Perfil": {
-            "Área de la salud": 3019,
-            "Estudiante": 953,
+            "Área de la salud": 3022,
+            "Estudiante": 954,
             "Otro": 431
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2496,
-            "Adolescencia (12 - 17 años)": 967,
-            "Juventud (18 - 28 años)": 763,
+            "Adultez (29 - 59 años)": 2497,
+            "Adolescencia (12 - 17 años)": 968,
+            "Juventud (18 - 28 años)": 765,
             "Vejez (60 años o más)": 177
         },
         "Comuna": {
             "COMUNA 17": 483,
             "COMUNA 1": 258,
-            "COMUNA 19": 249,
+            "COMUNA 19": 250,
             "COMUNA 10": 224,
             "COMUNA 2": 219,
             "COMUNA 15": 193,
@@ -41,13 +41,13 @@
             "COMUNA 8": 138,
             "COMUNA 21": 136,
             "COMUNA 11": 131,
-            "COMUNA 7": 123,
+            "COMUNA 7": 124,
             "COMUNA 12": 122,
             "COMUNA 3": 121,
             "COMUNA 22": 120,
             "COMUNA 13": 120,
             "COMUNA 4": 109,
-            "COMUNA 20": 94,
+            "COMUNA 20": 95,
             "COMUNA 9": 73,
             "C. DE PANCE": 41,
             "C. DE LA BUITRERA": 18,
@@ -58,41 +58,42 @@
             "C. DE MONTEBELLO": 5,
             "PALMIRA": 4,
             "C. DE NAVARRO": 3,
-            "C. DE VILLACARMELO": 3,
             "C. DE PICHINDE": 3,
+            "C. DE VILLACARMELO": 3,
+            "C. DE LA PAZ": 2,
             "C. DE LOS ANDES": 2,
             "C. DE GOLONDRINAS": 2,
             "Jamundi ": 2,
-            "C. DE LA PAZ": 2,
+            "JAMUNDI": 1,
+            "Vijes": 1,
             "jamundi terranova": 1,
             "Palmira": 1,
             "florida valle": 1,
-            "JAMUNDI": 1,
             "palmira": 1,
             "-": 1,
+            "Palmira ": 1,
             "Jamundí": 1,
-            "Guadalajara de Buga ": 1,
+            "la unión valle del cauca": 1,
             "La Victoria Valle del Cauca ": 1,
             "guayaquil": 1,
             "candelaria": 1,
-            "C.Alirio Mora": 1,
-            "12 de octubre ": 1,
             "Marroquín 2": 1,
-            "Palmira ": 1,
+            "C.Alirio Mora": 1,
             "Buga": 1,
-            "Vijes": 1,
+            "12 de octubre ": 1,
+            "Guadalajara de Buga ": 1,
             "MUNICIPIO DE PRADERA VALLE ": 1,
-            "BUGA": 1,
             "La Victoria Valle del Cauca": 1,
-            "la unión valle del cauca": 1,
+            "palmira ": 1,
             "El Dovio Valle": 1,
+            "BUGA": 1,
             "C. DE LA ELVIRA": 1,
             "C. DE LA LEONERA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1889,
-            "Bachiller": 1350,
-            "Postgrado": 1082,
+            "Pregrado": 1891,
+            "Bachiller": 1351,
+            "Postgrado": 1083,
             "Ninguna": 82
         }
     },
@@ -193,7 +194,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -470,7 +472,7 @@
             "Tasa_Abandono_%": 1.9,
             "Tasa_Inactividad_%": 97.1,
             "Tiempo_Maximo_Dias": 0.0,
-            "Es_Activo": true,
+            "Es_Activo": false,
             "Total_Encuestas": 0.0,
             "ISG_Promedio": 0.0,
             "ICD_Promedio": 0.0,
@@ -684,7 +686,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -931,7 +934,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 2,
@@ -1222,35 +1226,35 @@
             "Nombre_Curso": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE JUVENTUD - 2026 - 02",
             "ID_Moodle_Original": "rpmsj_022026",
             "Total_Inscritos": 309,
-            "Tasa_Finalizacion_%": 3.6,
+            "Tasa_Finalizacion_%": 4.2,
             "Tasa_Abandono_%": 0.0,
-            "Tasa_Inactividad_%": 96.4,
+            "Tasa_Inactividad_%": 95.8,
             "Tiempo_Maximo_Dias": 29.6,
             "Es_Activo": true,
-            "Total_Encuestas": 8.0,
-            "ISG_Promedio": 4.855769230769231,
-            "ICD_Promedio": 4.875,
-            "IUP_Promedio": 4.875,
-            "UX_Promedio": 4.75,
-            "e_NPS": 87.5,
-            "Salud_Curso_CHS": 59.6,
+            "Total_Encuestas": 9.0,
+            "ISG_Promedio": 4.871794871794872,
+            "ICD_Promedio": 4.888888888888889,
+            "IUP_Promedio": 4.888888888888889,
+            "UX_Promedio": 4.777777777777778,
+            "e_NPS": 88.9,
+            "Salud_Curso_CHS": 60.0,
             "Curso_Base": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE JUVENTUD",
             "Edicion": "2026 - Cohorte 2",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 7,
+                    "Femenino": 8,
                     "Intersexual": 0,
                     "Masculino": 1
                 },
                 "Perfil": {
                     "Estudiante": 0,
                     "Otro": 0,
-                    "Área de la salud": 8
+                    "Área de la salud": 9
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
                     "Adultez (29 - 59 años)": 4,
-                    "Juventud (18 - 28 años)": 4,
+                    "Juventud (18 - 28 años)": 5,
                     "Vejez (60 años o más)": 0
                 },
                 "Comuna": {
@@ -1314,29 +1318,30 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 1
                 },
                 "Escolaridad": {
                     "Bachiller": 2,
                     "Ninguna": 0,
                     "Postgrado": 2,
-                    "Pregrado": 4
+                    "Pregrado": 5
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.875,
-                "¿Se cumplió el objetivo de la capacitación?": 4.875,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.875,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.875,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.875,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.875,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.875,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.875,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.875,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.875,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.75,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.75,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.875
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.888888888888889,
+                "¿Se cumplió el objetivo de la capacitación?": 4.888888888888889,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.888888888888889,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.888888888888889,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.888888888888889,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.888888888888889,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.888888888888889,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.888888888888889,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.888888888888889,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.888888888888889,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.777777777777778,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.777777777777778,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.888888888888889
             },
             "Registros_Crudos": [
                 {
@@ -1443,6 +1448,26 @@
                     "Sexo": "Femenino",
                     "Curso de vida": "Juventud (18 - 28 años)",
                     "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "palmira ",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Área de la salud",
                     "Comuna_Unificada": "MUNICIPIO DE PRADERA VALLE ",
                     "Escolaridad": "Postgrado",
                     "¿Se dio a conocer el objetivo de la capacitación?": 5,
@@ -1500,6 +1525,48 @@
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
                 }
             ]
+        },
+        {
+            "Nombre_Curso": "FORTALECIMIENTO DE LAS UNIDADES FUNCIONALES EN SALUD MENTAL (LADERA) - 2026 - 01",
+            "ID_Moodle_Original": "ufl_012026",
+            "Total_Inscritos": 27,
+            "Tasa_Finalizacion_%": 0.0,
+            "Tasa_Abandono_%": 0.0,
+            "Tasa_Inactividad_%": 100.0,
+            "Tiempo_Maximo_Dias": 0.0,
+            "Es_Activo": false,
+            "Total_Encuestas": 0.0,
+            "ISG_Promedio": 0.0,
+            "ICD_Promedio": 0.0,
+            "IUP_Promedio": 0.0,
+            "UX_Promedio": 0.0,
+            "e_NPS": 0.0,
+            "Salud_Curso_CHS": 0.0,
+            "Curso_Base": "FORTALECIMIENTO DE LAS UNIDADES FUNCIONALES EN SALUD MENTAL (LADERA)",
+            "Edicion": "2026 - Cohorte 1",
+            "Demografia": {
+                "Sexo": {},
+                "Perfil": {},
+                "Edad": {},
+                "Comuna": {},
+                "Escolaridad": {}
+            },
+            "Detalle_Preguntas": {
+                "¿Se dio a conocer el objetivo de la capacitación?": 0.0,
+                "¿Se cumplió el objetivo de la capacitación?": 0.0,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 0.0,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 0.0,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 0.0,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 0.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 0.0,
+                "¿El facilitador demostró el dominio del tema brindado?": 0.0,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 0.0,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 0.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 0.0,
+                "¿El material utilizado permitió el entendimiento del tema?": 0.0,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 0.0
+            },
+            "Registros_Crudos": []
         },
         {
             "Nombre_Curso": "DIPLOMADO AIEPI CLÍNICO - 2026 - 01",
@@ -1597,7 +1664,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -2660,7 +2728,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -11103,7 +11172,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -11608,7 +11678,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -11751,7 +11822,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -11954,7 +12026,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 7,
@@ -12961,7 +13034,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -13192,10 +13266,10 @@
             "Nombre_Curso": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE VEJEZ - 2026 - 02",
             "ID_Moodle_Original": "rpmsv_022026",
             "Total_Inscritos": 309,
-            "Tasa_Finalizacion_%": 3.2,
+            "Tasa_Finalizacion_%": 3.6,
             "Tasa_Abandono_%": 1.3,
-            "Tasa_Inactividad_%": 95.5,
-            "Tiempo_Maximo_Dias": 28.8,
+            "Tasa_Inactividad_%": 95.1,
+            "Tiempo_Maximo_Dias": 29.3,
             "Es_Activo": true,
             "Total_Encuestas": 8.0,
             "ISG_Promedio": 4.923076923076923,
@@ -13203,7 +13277,7 @@
             "IUP_Promedio": 5.0,
             "UX_Promedio": 4.8125,
             "e_NPS": 100.0,
-            "Salud_Curso_CHS": 60.4,
+            "Salud_Curso_CHS": 60.6,
             "Curso_Base": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE VEJEZ",
             "Edicion": "2026 - Cohorte 2",
             "Demografia": {
@@ -13284,7 +13358,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 1,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -13474,10 +13549,10 @@
         {
             "Nombre_Curso": "PROCESO DE INDUCCIÓN Y REINDUCCIÓN DE LA SECRETARÍA DE SALUD - 2025 - 01",
             "ID_Moodle_Original": "pir_sspm_2025",
-            "Total_Inscritos": 1324,
-            "Tasa_Finalizacion_%": 80.7,
+            "Total_Inscritos": 1327,
+            "Tasa_Finalizacion_%": 80.6,
             "Tasa_Abandono_%": 2.0,
-            "Tasa_Inactividad_%": 17.2,
+            "Tasa_Inactividad_%": 17.4,
             "Tiempo_Maximo_Dias": 423.9,
             "Es_Activo": true,
             "Total_Encuestas": 637.0,
@@ -13567,7 +13642,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 93,
@@ -26430,7 +26506,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 4,
@@ -26953,7 +27030,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -29796,7 +29874,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 24,
@@ -32899,7 +32978,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 382,
@@ -37242,7 +37322,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -38213,35 +38294,35 @@
             "Nombre_Curso": "SALUD MENTAL PARA COMUNIDAD UNIVERSITARIA - 2026 - 01",
             "ID_Moodle_Original": "smuniversidad_012026",
             "Total_Inscritos": 156,
-            "Tasa_Finalizacion_%": 1.3,
-            "Tasa_Abandono_%": 12.2,
+            "Tasa_Finalizacion_%": 2.6,
+            "Tasa_Abandono_%": 10.9,
             "Tasa_Inactividad_%": 86.5,
             "Tiempo_Maximo_Dias": 21.3,
             "Es_Activo": true,
-            "Total_Encuestas": 2.0,
-            "ISG_Promedio": 4.269230769230769,
-            "ICD_Promedio": 4.0,
+            "Total_Encuestas": 4.0,
+            "ISG_Promedio": 4.346153846153846,
+            "ICD_Promedio": 4.166666666666667,
             "IUP_Promedio": 4.5,
-            "UX_Promedio": 4.25,
+            "UX_Promedio": 4.375,
             "e_NPS": 50.0,
-            "Salud_Curso_CHS": 52.6,
+            "Salud_Curso_CHS": 53.9,
             "Curso_Base": "SALUD MENTAL PARA COMUNIDAD UNIVERSITARIA",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 1,
+                    "Femenino": 3,
                     "Intersexual": 0,
                     "Masculino": 1
                 },
                 "Perfil": {
-                    "Estudiante": 0,
+                    "Estudiante": 1,
                     "Otro": 1,
-                    "Área de la salud": 1
+                    "Área de la salud": 2
                 },
                 "Edad": {
                     "Adolescencia (12 - 17 años)": 0,
-                    "Adultez (29 - 59 años)": 2,
-                    "Juventud (18 - 28 años)": 0,
+                    "Adultez (29 - 59 años)": 3,
+                    "Juventud (18 - 28 años)": 1,
                     "Vejez (60 años o más)": 0
                 },
                 "Comuna": {
@@ -38275,9 +38356,9 @@
                     "COMUNA 16": 0,
                     "COMUNA 17": 1,
                     "COMUNA 18": 1,
-                    "COMUNA 19": 0,
+                    "COMUNA 19": 1,
                     "COMUNA 2": 0,
-                    "COMUNA 20": 0,
+                    "COMUNA 20": 1,
                     "COMUNA 21": 0,
                     "COMUNA 22": 0,
                     "COMUNA 3": 0,
@@ -38305,27 +38386,28 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
-                    "Bachiller": 0,
+                    "Bachiller": 1,
                     "Ninguna": 0,
-                    "Postgrado": 1,
+                    "Postgrado": 2,
                     "Pregrado": 1
                 }
             },
             "Detalle_Preguntas": {
                 "¿Se dio a conocer el objetivo de la capacitación?": 4.5,
                 "¿Se cumplió el objetivo de la capacitación?": 4.5,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.0,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.5,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.25,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.25,
                 "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.5,
                 "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.5,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.0,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.0,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.0,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.25,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.25,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.25,
                 "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.0,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.0,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.25,
                 "¿El material utilizado permitió el entendimiento del tema?": 4.5,
                 "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.5
             },
@@ -38369,6 +38451,46 @@
                     "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
                     "¿El material utilizado permitió el entendimiento del tema?": 5,
                     "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Juventud (18 - 28 años)",
+                    "Perfil": "Estudiante",
+                    "Comuna_Unificada": "COMUNA 20",
+                    "Escolaridad": "Bachiller",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 4,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
+                    "Curso de vida": "Adultez (29 - 59 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 19",
+                    "Escolaridad": "Postgrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 4,
+                    "¿Se cumplió el objetivo de la capacitación?": 4,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 4,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4,
+                    "¿El facilitador demostró el dominio del tema brindado?": 4,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4,
+                    "¿El material utilizado permitió el entendimiento del tema?": 4,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4
                 }
             ]
         },
@@ -38376,33 +38498,33 @@
             "Nombre_Curso": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE ADOLESCENCIA - 2026 - 02",
             "ID_Moodle_Original": "rpmsa_022026",
             "Total_Inscritos": 309,
-            "Tasa_Finalizacion_%": 3.9,
-            "Tasa_Abandono_%": 3.9,
+            "Tasa_Finalizacion_%": 4.2,
+            "Tasa_Abandono_%": 3.6,
             "Tasa_Inactividad_%": 92.2,
             "Tiempo_Maximo_Dias": 31.5,
             "Es_Activo": true,
-            "Total_Encuestas": 9.0,
-            "ISG_Promedio": 4.803418803418804,
-            "ICD_Promedio": 4.7407407407407405,
-            "IUP_Promedio": 4.888888888888889,
-            "UX_Promedio": 4.722222222222222,
-            "e_NPS": 77.8,
-            "Salud_Curso_CHS": 59.4,
+            "Total_Encuestas": 10.0,
+            "ISG_Promedio": 4.823076923076924,
+            "ICD_Promedio": 4.766666666666667,
+            "IUP_Promedio": 4.9,
+            "UX_Promedio": 4.75,
+            "e_NPS": 80.0,
+            "Salud_Curso_CHS": 59.7,
             "Curso_Base": "ATENCIÓN INTEGRAL EN SALUD PARA LA PROMOCIÓN Y MANTENIMIENTO DE LA SALUD EN EL CURSO DE VIDA DE ADOLESCENCIA",
             "Edicion": "2026 - Cohorte 2",
             "Demografia": {
                 "Sexo": {
-                    "Femenino": 8,
+                    "Femenino": 9,
                     "Intersexual": 0,
                     "Masculino": 1
                 },
                 "Perfil": {
                     "Estudiante": 0,
                     "Otro": 0,
-                    "Área de la salud": 9
+                    "Área de la salud": 10
                 },
                 "Edad": {
-                    "Adolescencia (12 - 17 años)": 3,
+                    "Adolescencia (12 - 17 años)": 4,
                     "Adultez (29 - 59 años)": 4,
                     "Juventud (18 - 28 años)": 2,
                     "Vejez (60 años o más)": 0
@@ -38447,7 +38569,7 @@
                     "COMUNA 4": 0,
                     "COMUNA 5": 0,
                     "COMUNA 6": 0,
-                    "COMUNA 7": 0,
+                    "COMUNA 7": 1,
                     "COMUNA 8": 0,
                     "COMUNA 9": 0,
                     "El Dovio Valle": 0,
@@ -38468,29 +38590,30 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
                     "Ninguna": 0,
                     "Postgrado": 1,
-                    "Pregrado": 7
+                    "Pregrado": 8
                 }
             },
             "Detalle_Preguntas": {
-                "¿Se dio a conocer el objetivo de la capacitación?": 4.888888888888889,
-                "¿Se cumplió el objetivo de la capacitación?": 4.888888888888889,
-                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.888888888888889,
-                "¿Los temas se desarrollaron en el tiempo previsto?": 4.888888888888889,
-                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.888888888888889,
-                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.888888888888889,
-                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.777777777777778,
-                "¿El facilitador demostró el dominio del tema brindado?": 4.777777777777778,
-                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.666666666666667,
-                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.666666666666667,
-                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.666666666666667,
-                "¿El material utilizado permitió el entendimiento del tema?": 4.777777777777778,
-                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.777777777777778
+                "¿Se dio a conocer el objetivo de la capacitación?": 4.9,
+                "¿Se cumplió el objetivo de la capacitación?": 4.9,
+                "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 4.9,
+                "¿Los temas se desarrollaron en el tiempo previsto?": 4.9,
+                "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 4.9,
+                "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 4.9,
+                "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 4.8,
+                "¿El facilitador demostró el dominio del tema brindado?": 4.8,
+                "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 4.7,
+                "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 4.7,
+                "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 4.7,
+                "¿El material utilizado permitió el entendimiento del tema?": 4.8,
+                "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 4.8
             },
             "Registros_Crudos": [
                 {
@@ -38655,6 +38778,26 @@
                 },
                 {
                     "Sexo": "Femenino",
+                    "Curso de vida": "Adolescencia (12 - 17 años)",
+                    "Perfil": "Área de la salud",
+                    "Comuna_Unificada": "COMUNA 7",
+                    "Escolaridad": "Pregrado",
+                    "¿Se dio a conocer el objetivo de la capacitación?": 5,
+                    "¿Se cumplió el objetivo de la capacitación?": 5,
+                    "¿Los contenidos brindados fueron coherentes con el objetivo planteado?": 5,
+                    "¿Los temas se desarrollaron en el tiempo previsto?": 5,
+                    "¿La capacitación aportó nuevos conceptos y/o técnicas que antes no conocía?": 5,
+                    "¿Los conocimientos recibidos durante la capacitación le permitirán llevarlos a la práctica en su vida cotidiana?": 5,
+                    "¿La metodología utilizada por el facilitador permitió el entendimiento de los contenidos?": 5,
+                    "¿El facilitador demostró el dominio del tema brindado?": 5,
+                    "¿Durante el desarrollo de la capacitación se propició la participación de los asistentes?": 5,
+                    "¿Durante la capacitación se dio espacio para la solución de inquietudes?": 5,
+                    "¿Cómo califica las condiciones del espacio físico o medio virtual en el que se desarrolló la capacitación?": 5,
+                    "¿El material utilizado permitió el entendimiento del tema?": 5,
+                    "En general, ¿Cómo se sintió con la actividad de capacitación realizada?": 5
+                },
+                {
+                    "Sexo": "Femenino",
                     "Curso de vida": "Juventud (18 - 28 años)",
                     "Perfil": "Área de la salud",
                     "Comuna_Unificada": "COMUNA 1",
@@ -38771,7 +38914,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 6,
@@ -39934,7 +40078,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -40277,7 +40422,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -40520,7 +40666,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 4,
@@ -41163,7 +41310,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 2,
@@ -41526,7 +41674,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 1,
@@ -41689,7 +41838,8 @@
                     "guayaquil": 1,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 125,
@@ -44692,7 +44842,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 382,
@@ -48942,10 +49093,10 @@
         {
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2025 - 01",
             "ID_Moodle_Original": "sello_012025",
-            "Total_Inscritos": 1380,
-            "Tasa_Finalizacion_%": 76.5,
+            "Total_Inscritos": 1382,
+            "Tasa_Finalizacion_%": 76.4,
             "Tasa_Abandono_%": 2.2,
-            "Tasa_Inactividad_%": 21.3,
+            "Tasa_Inactividad_%": 21.4,
             "Tiempo_Maximo_Dias": 412.2,
             "Es_Activo": true,
             "Total_Encuestas": 737.0,
@@ -48954,7 +49105,7 @@
             "IUP_Promedio": 4.645861601085482,
             "UX_Promedio": 4.565807327001357,
             "e_NPS": 60.1,
-            "Salud_Curso_CHS": 85.7,
+            "Salud_Curso_CHS": 85.6,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2025 - Cohorte 1",
             "Demografia": {
@@ -49035,7 +49186,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -63898,7 +64050,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 1,
                     "la unión valle del cauca": 0,
-                    "palmira": 1
+                    "palmira": 1,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 12,
@@ -65981,7 +66134,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -66144,7 +66298,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -66467,7 +66622,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -74952,7 +75108,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 5,
@@ -75635,7 +75792,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -75838,7 +75996,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 3,
@@ -76161,7 +76320,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 112,
@@ -79004,7 +79164,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -79136,8 +79297,8 @@
             "ID_Moodle_Original": "sello_01_2026",
             "Total_Inscritos": 165,
             "Tasa_Finalizacion_%": 34.5,
-            "Tasa_Abandono_%": 1.8,
-            "Tasa_Inactividad_%": 63.6,
+            "Tasa_Abandono_%": 2.4,
+            "Tasa_Inactividad_%": 63.0,
             "Tiempo_Maximo_Dias": 129.0,
             "Es_Activo": true,
             "Total_Encuestas": 0.0,
@@ -79353,7 +79514,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 8,
@@ -79676,7 +79838,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 5,
@@ -80083,7 +80246,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 3,
@@ -80428,7 +80592,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 0,
@@ -80579,9 +80744,9 @@
             "Nombre_Curso": "CENTRO DE ESCUCHA (CE) - 2026 - 01",
             "ID_Moodle_Original": "ce_012026",
             "Total_Inscritos": 112,
-            "Tasa_Finalizacion_%": 61.6,
+            "Tasa_Finalizacion_%": 69.6,
             "Tasa_Abandono_%": 0.9,
-            "Tasa_Inactividad_%": 37.5,
+            "Tasa_Inactividad_%": 29.5,
             "Tiempo_Maximo_Dias": 15.1,
             "Es_Activo": true,
             "Total_Encuestas": 5.0,
@@ -80590,7 +80755,7 @@
             "IUP_Promedio": 4.8,
             "UX_Promedio": 4.8,
             "e_NPS": 80.0,
-            "Salud_Curso_CHS": 82.4,
+            "Salud_Curso_CHS": 85.6,
             "Curso_Base": "CENTRO DE ESCUCHA (CE)",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
@@ -80671,7 +80836,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 3,
@@ -80894,7 +81060,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 24,
@@ -83997,7 +84164,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 7,
@@ -85560,7 +85728,8 @@
                     "guayaquil": 0,
                     "jamundi terranova": 0,
                     "la unión valle del cauca": 0,
-                    "palmira": 0
+                    "palmira": 0,
+                    "palmira ": 0
                 },
                 "Escolaridad": {
                     "Bachiller": 6,
