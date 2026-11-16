@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 63,
-        "total_encuestas_historicas": 4410,
+        "total_encuestas_historicas": 4411,
         "total_estudiantes_unicos": 8644,
         "cursos_activos": 17
     },
@@ -11,23 +11,23 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 3238,
+            "Femenino": 3239,
             "Masculino": 1167,
             "Intersexual": 5
         },
         "Perfil": {
-            "Área de la salud": 3024,
+            "Área de la salud": 3025,
             "Estudiante": 954,
             "Otro": 432
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2499,
+            "Adultez (29 - 59 años)": 2500,
             "Adolescencia (12 - 17 años)": 968,
             "Juventud (18 - 28 años)": 766,
             "Vejez (60 años o más)": 177
         },
         "Comuna": {
-            "COMUNA 17": 483,
+            "COMUNA 17": 484,
             "COMUNA 1": 258,
             "COMUNA 19": 250,
             "COMUNA 10": 224,
@@ -92,7 +92,7 @@
         },
         "Escolaridad": {
             "Pregrado": 1892,
-            "Bachiller": 1351,
+            "Bachiller": 1352,
             "Postgrado": 1085,
             "Ninguna": 82
         }
@@ -79316,9 +79316,9 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2026 - 01",
             "ID_Moodle_Original": "sello_01_2026",
             "Total_Inscritos": 165,
-            "Tasa_Finalizacion_%": 35.8,
+            "Tasa_Finalizacion_%": 36.4,
             "Tasa_Abandono_%": 1.8,
-            "Tasa_Inactividad_%": 62.4,
+            "Tasa_Inactividad_%": 61.8,
             "Tiempo_Maximo_Dias": 129.0,
             "Es_Activo": true,
             "Total_Encuestas": 0.0,
@@ -79327,7 +79327,7 @@
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 35.8,
+            "Salud_Curso_CHS": 36.4,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
