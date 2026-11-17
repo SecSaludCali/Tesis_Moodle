@@ -1,7 +1,7 @@
 {
     "metadata": {
         "total_cursos_analizados": 63,
-        "total_encuestas_historicas": 4411,
+        "total_encuestas_historicas": 4412,
         "total_estudiantes_unicos": 8644,
         "cursos_activos": 17
     },
@@ -11,17 +11,17 @@
     },
     "demografia_global": {
         "Sexo": {
-            "Femenino": 3239,
+            "Femenino": 3240,
             "Masculino": 1167,
             "Intersexual": 5
         },
         "Perfil": {
-            "Área de la salud": 3025,
+            "Área de la salud": 3026,
             "Estudiante": 954,
             "Otro": 432
         },
         "Curso de Vida": {
-            "Adultez (29 - 59 años)": 2500,
+            "Adultez (29 - 59 años)": 2501,
             "Adolescencia (12 - 17 años)": 968,
             "Juventud (18 - 28 años)": 766,
             "Vejez (60 años o más)": 177
@@ -33,7 +33,7 @@
             "COMUNA 10": 224,
             "COMUNA 2": 219,
             "COMUNA 15": 193,
-            "COMUNA 6": 185,
+            "COMUNA 6": 186,
             "COMUNA 18": 175,
             "COMUNA 16": 164,
             "COMUNA 5": 160,
@@ -91,7 +91,7 @@
             "C. DE LA LEONERA": 1
         },
         "Escolaridad": {
-            "Pregrado": 1892,
+            "Pregrado": 1893,
             "Bachiller": 1352,
             "Postgrado": 1085,
             "Ninguna": 82
@@ -13551,7 +13551,7 @@
             "ID_Moodle_Original": "pir_sspm_2025",
             "Total_Inscritos": 1327,
             "Tasa_Finalizacion_%": 80.6,
-            "Tasa_Abandono_%": 2.1,
+            "Tasa_Abandono_%": 2.2,
             "Tasa_Inactividad_%": 17.3,
             "Tiempo_Maximo_Dias": 423.9,
             "Es_Activo": true,
@@ -79316,9 +79316,9 @@
             "Nombre_Curso": "SELLO DE NO DISCRIMINACIÓN - 2026 - 01",
             "ID_Moodle_Original": "sello_01_2026",
             "Total_Inscritos": 165,
-            "Tasa_Finalizacion_%": 36.4,
+            "Tasa_Finalizacion_%": 37.0,
             "Tasa_Abandono_%": 1.8,
-            "Tasa_Inactividad_%": 61.8,
+            "Tasa_Inactividad_%": 61.2,
             "Tiempo_Maximo_Dias": 129.0,
             "Es_Activo": true,
             "Total_Encuestas": 0.0,
@@ -79327,7 +79327,7 @@
             "IUP_Promedio": 0.0,
             "UX_Promedio": 0.0,
             "e_NPS": 0.0,
-            "Salud_Curso_CHS": 36.4,
+            "Salud_Curso_CHS": 37.0,
             "Curso_Base": "SELLO DE NO DISCRIMINACIÓN",
             "Edicion": "2026 - Cohorte 1",
             "Demografia": {
