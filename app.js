@@ -17,12 +17,12 @@ const mapeoPreguntas = {
 };
 
 const mapeoColores = {
-    "Femenino": "#e11d48", "Masculino": "#0ea5e9", "N/A": "#94a3b8", "Otro": "#8b5cf6",
-    "Primera infancia": "#f43f5e", "Infancia": "#f97316", "Adolescencia": "#eab308", "Juventud": "#84cc16", "Adultez": "#06b6d4", "Vejez": "#6366f1",
-    "Médico": "#05cd99", "Enfermera": "#4318ff", "Auxiliar": "#ffb547", "Estudiante": "#ee5d50", "Área de la salud": "#05cd99",
-    "Profesional": "#3b82f6", "Técnico": "#10b981", "Tecnólogo": "#14b8a6", "Especialización": "#8b5cf6", "Maestría": "#6366f1", "Postgrado": "#8b5cf6", "Pregrado": "#3b82f6", "Bachiller": "#f59e0b", "Ninguna": "#94a3b8"
+    "Femenino": "#007A78", "Masculino": "#004884", "N/A": "#94a3b8", "Otro": "#64748b",
+    "Primera infancia": "#0284c7", "Infancia": "#0369a1", "Adolescencia": "#075985", "Juventud": "#0f766e", "Adultez": "#115e59", "Vejez": "#134e4a",
+    "Médico": "#007A78", "Enfermera": "#004884", "Auxiliar": "#0ea5e9", "Estudiante": "#14b8a6", "Área de la salud": "#007A78",
+    "Profesional": "#004884", "Técnico": "#0284c7", "Tecnólogo": "#0ea5e9", "Especialización": "#007A78", "Maestría": "#0f766e", "Postgrado": "#115e59", "Pregrado": "#004884", "Bachiller": "#64748b", "Ninguna": "#94a3b8"
 };
-const coloresRespaldo = ['#4318ff', '#05cd99', '#ffb547', '#ee5d50', '#0ea5e9', '#8b5cf6', '#14b8a6', '#f43f5e', '#f97316'];
+const coloresRespaldo = ['#004884', '#007A78', '#0284c7', '#0f766e', '#0369a1', '#14b8a6', '#075985', '#115e59', '#64748b'];
 
 const centerTextPlugin = {
     id: 'centerText',
@@ -154,10 +154,9 @@ window.descargarGrafico = function(canvasId, nombre) {
     
     const temaActual = document.documentElement.getAttribute('data-theme') || 'light';
     let bgColor = '#ffffff';
-    if(temaActual === 'dark') bgColor = '#0b1437';
-    else if(temaActual === 'rose') bgColor = '#fff1f2';
-    else if(temaActual === 'amber') bgColor = '#fffbeb';
-    else bgColor = '#f4f7fe';
+    if(temaActual === 'dark') bgColor = '#0f172a';
+    else if(temaActual === 'contrast') bgColor = '#000000';
+    else bgColor = '#f1f5f9';
     
     ctx.fillStyle = bgColor; ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
     ctx.drawImage(canvasOriginal, 0, 0);
@@ -332,7 +331,7 @@ if(geoJsonDataRaw && !mapInstance.hasLoadedGeoJson) {
                 layer.bringToFront(); 
                 
                 layer.setStyle({ weight: 3, color: '#ffffff', fillOpacity: 0.95 });
-                if(layer._path) layer._path.style.filter = "drop-shadow(0px 0px 10px var(--primary))";
+                if(layer._path) layer._path.style.filter = "brightness(1.05) drop-shadow(0px 2px 4px rgba(0,0,0,0.15))";
                 
                 let valor = mapInstance.lastDataComunas ? (mapInstance.lastDataComunas[id] || 0) : 0;
                 layer.setTooltipContent(`<div style="text-align: center;"><span style="font-size: 0.7rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px;">${nombreDisplay}</span><br><strong style="font-size: 1.3rem; font-weight: 800; color: #fff;">${valor.toLocaleString()}</strong><span style="font-size: 0.8rem; font-weight: 400; color: #94a3b8; margin-left: 4px;">participantes</span></div>`);
@@ -354,7 +353,7 @@ if(geoJsonDataRaw && !mapInstance.hasLoadedGeoJson) {
                     });
 
                     if(layer._path && p > 0) {
-                        layer._path.style.filter = "drop-shadow(0px 0px 4px rgba(67, 24, 255, 0.4))";
+                        layer._path.style.filter = "brightness(1.05) drop-shadow(0px 2px 4px rgba(0,0,0,0.15))";
                     } else if (layer._path) {
                         layer._path.style.filter = "none";
                     }
@@ -386,12 +385,10 @@ function getColorMapa(v, max) {
 if(v===0) return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#e2e8f0'; 
 
 let cOceanic = ['#bae6fd', '#7dd3fc', '#38bdf8', '#0284c7', '#0369a1']; 
-let cRose = ['#ffe4e6','#fda4af','#fb7185','#e11d48','#be123c'];
-let cAmber = ['#fef3c7','#fde047','#f59e0b','#d97706','#b45309'];
 let cDark = ['#312e81', '#4338ca', '#4f46e5', '#6366f1', '#818cf8']; 
 
 let t = document.documentElement.getAttribute('data-theme');
-let c = t==='rose' ? cRose : t==='amber' ? cAmber : t==='dark' ? cDark : cOceanic; 
+let c = t==='dark' ? cDark : cOceanic; 
 
 if(v>max*0.8) return c[4]; if(v>max*0.6) return c[3]; if(v>max*0.4) return c[2]; if(v>max*0.2) return c[1]; return c[0]; 
 }
@@ -426,7 +423,7 @@ function dibujarMapaCoropletico(dataComunas) {
         });
 
         if(layer._path && p > 0) {
-            layer._path.style.filter = "drop-shadow(0px 0px 4px rgba(67, 24, 255, 0.4))";
+            layer._path.style.filter = "brightness(1.05) drop-shadow(0px 2px 4px rgba(0,0,0,0.15))";
         } else if(layer._path) {
             layer._path.style.filter = "none";
         }
@@ -523,7 +520,7 @@ function dibujarGraficoComunas(canvasId, dataObject, resetPagina = true) {
     } else { 
         chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { 
             type: 'bar', 
-            data: { labels: labels, datasets: [{ data: data, backgroundColor: '#4318ff', borderRadius: 4 }] }, 
+            data: { labels: labels, datasets: [{ data: data, backgroundColor: '#004884', borderRadius: 4 }] }, 
             options: { 
                 indexAxis: 'y', responsive: true, maintainAspectRatio: false, 
                 plugins: { legend: { display: false } }, 
@@ -549,19 +546,19 @@ window.cambiarPaginaComunas = function(direccion) {
 function dibujarBarraMoodle(canvasId, c) { 
     let d = [c['Tasa_Finalizacion_%']||0, c['Tasa_Abandono_%']||0, c['Tasa_Inactividad_%']||0];
     if (chartInstances[canvasId]) { chartInstances[canvasId].data.datasets[0].data=[d[0]]; chartInstances[canvasId].data.datasets[1].data=[d[1]]; chartInstances[canvasId].data.datasets[2].data=[d[2]]; chartInstances[canvasId].update(); } 
-    else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#05cd99', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#ffb547' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#ee5d50', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: { duration: 800, easing: 'easeOutQuart' } } }); }
+    else { chartInstances[canvasId] = new Chart(document.getElementById(canvasId).getContext('2d'), { type: 'bar', data: { labels: ['Estado %'], datasets: [ { label: 'Finalizaron', data: [d[0]], backgroundColor: '#007A78', borderRadius: { topLeft: 6, bottomLeft: 6 } }, { label: 'Abandonaron', data: [d[1]], backgroundColor: '#d97706' }, { label: 'Inactivos', data: [d[2]], backgroundColor: '#dc2626', borderRadius: { topRight: 6, bottomRight: 6 } } ] }, options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { stacked: true, max: 100, display: false }, y: { stacked: true, display: false } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: {size:10} } } }, animation: { duration: 800, easing: 'easeOutQuart' } } }); }
 }
 
 function dibujarRadar(pC, isG = false) { 
     const lbl = Object.keys(pC).map(q => mapeoPreguntas[q] || "Pregunta"); let d1 = Object.values(pC); let d2 = Object.keys(pC).map(q => promediosGlobalesPreguntas[q] || 0);
     if (chartInstances['chartRadar']) { chartInstances['chartRadar'].data.labels = lbl; chartInstances['chartRadar'].data.datasets[0].data = d1; chartInstances['chartRadar'].data.datasets[0].label = isG ? 'Promedio' : 'Cohorte'; if(!isG) { if(!chartInstances['chartRadar'].data.datasets[1]) chartInstances['chartRadar'].data.datasets.push({ label: 'Benchmark', backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'].data.datasets[1].data = d2; } else if (chartInstances['chartRadar'].data.datasets.length > 1) { chartInstances['chartRadar'].data.datasets.pop(); } chartInstances['chartRadar'].update(); } 
-    else { let arr = [{ label: isG ? 'Promedio' : 'Cohorte', data: d1, backgroundColor: 'rgba(67, 24, 255, 0.15)', borderColor: '#4318ff', pointBackgroundColor: '#4318ff', borderWidth: 2, pointRadius: 3 }]; if (!isG) arr.push({ label: 'Benchmark', data: d2, backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: lbl, datasets: arr }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 9, family: 'Inter', weight: '600' } } } }, animation: { duration: 800, easing: 'easeOutQuart' } } }); }
+    else { let arr = [{ label: isG ? 'Promedio' : 'Cohorte', data: d1, backgroundColor: 'rgba(0, 72, 132, 0.15)', borderColor: '#004884', pointBackgroundColor: '#004884', borderWidth: 2, pointRadius: 3 }]; if (!isG) arr.push({ label: 'Benchmark', data: d2, backgroundColor: 'transparent', borderColor: '#64748b', borderDash: [4, 4], borderWidth: 2, pointRadius: 0 }); chartInstances['chartRadar'] = new Chart(document.getElementById('chartRadar').getContext('2d'), { type: 'radar', data: { labels: lbl, datasets: arr }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, backdropColor: 'transparent' }, pointLabels: { font: { size: 9, family: 'Inter', weight: '600' } } } }, animation: { duration: 800, easing: 'easeOutQuart' } } }); }
 }
 
 function crearTarjetaKPI(l, v, pct = null, i = "bi-bar-chart", c="primary") { let bp = pct ? `<span class="badge-kpi bg-${c} bg-opacity-10 text-${c}">${pct}</span>` : ''; return `<div class="col-6 col-md-4 col-xl"><div class="glass-card kpi-mini"><div class="kpi-mini-header"><div class="kpi-mini-icon bg-${c}-soft"><i class="bi ${i}"></i></div>${bp}</div><div class="kpi-mini-val">${v}</div><div class="kpi-mini-lbl">${l}</div></div></div>`; }
-function generarBarrasCalidad(d) { let h = ''; for (let q in d) { let v = parseFloat(d[q]) || 0; let c = v >= 4.5 ? 'success' : (v >= 4.0 ? 'info' : 'danger'); h += `<div class="progress-bar-container mb-3"><div class="progress-label"><span>${q}</span><span class="fw-bold text-${c}">${v.toFixed(1)}</span></div><div class="progress-bg"><div class="progress-fill bg-${c}" style="width: ${(v/5)*100}%"></div></div></div>`; } return h; }
+function generarBarrasCalidad(d) { let h = ''; for (let q in d) { let v = parseFloat(d[q]) || 0; let c = v >= 4.5 ? 'success' : (v >= 4.0 ? 'warning' : 'danger'); h += `<div class="progress-bar-container mb-3"><div class="progress-label"><span>${q}</span><span class="fw-bold text-${c}">${v.toFixed(1)}</span></div><div class="progress-bg"><div class="progress-fill bg-${c}" style="width: ${(v/5)*100}%"></div></div></div>`; } return h; }
 
-function agruparCursos() { const sA = document.getElementById('selector-anio'); const sB = document.getElementById('selector-curso-base'); dashboardData.cursos.forEach(c => { let m = (c.Edicion||"").match(/\b(20\d{2})\b/); if(m) añosDisponibles.add(m[1]); const b = c.Curso_Base || c.Nombre_Curso; if (!cursosPorBase[b]) cursosPorBase[b] = []; cursosPorBase[b].push(c); }); Array.from(añosDisponibles).sort().reverse().forEach(a => sA.appendChild(new Option(a, a))); Object.keys(cursosPorBase).sort().forEach(b => sB.appendChild(new Option(b, b))); }
+function agruparCursos() { const sA = document.getElementById('selector-anio'); const sB = document.getElementById('selector-curso-base'); dashboardData.cursos.forEach(c => { let m = (c.Edicion||"").match(/(20\d{2})/); if(m) añosDisponibles.add(m[1]); const b = c.Curso_Base || c.Nombre_Curso; if (!cursosPorBase[b]) cursosPorBase[b] = []; cursosPorBase[b].push(c); }); Array.from(añosDisponibles).sort().reverse().forEach(a => sA.appendChild(new Option(a, a))); Object.keys(cursosPorBase).sort().forEach(b => sB.appendChild(new Option(b, b))); }
 function manejarCambioAnio() { añoActual = this.value; const b = document.getElementById('selector-curso-base').value; if (b === "ALL") actualizarPantallaGlobal(); else document.getElementById('selector-curso-base').dispatchEvent(new Event('change')); }
 function manejarCambioBase() { 
     const s = this.value; const sC = document.getElementById('selector-cohorte'); const ic = document.getElementById('icon-cohorte'); const dc = document.getElementById('div-cohorte'); const lob = document.getElementById('panel-lobby-curso'); const tab = document.getElementById('contenedor-tabs'); 
@@ -629,7 +626,7 @@ function actualizarPantallaGlobal(dOlap = null) {
             collapseContainer.querySelector('.table-responsive').style.display = 'block';
             cursosActivos.sort((a,b) => b.Total_Inscritos - a.Total_Inscritos).forEach(ca => {
                 let rowBg = document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(255,255,255,0.02)' : '#ffffff';
-                let textColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#1e293b';
+                let textColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#334155';
                 
                 let tr = document.createElement('tr');
                 tr.style.backgroundColor = rowBg;
@@ -675,7 +672,6 @@ function actualizarPantallaGlobal(dOlap = null) {
     let pF=tI?Math.round((tF/tI)*100):0; let pA=tI?Math.round((tA/tI)*100):0; let pI=tI?Math.round((tIn/tI)*100):0; 
     document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", pF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", pA+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", pI+"%", null, "bi-door-closed", "danger")}`; 
     
-    // Oculta la tarjeta de tiempo a nivel global y expande el embudo
     const colRitmo = document.getElementById('col-ritmo');
     const colEmbudo = document.getElementById('col-embudo');
     if(colRitmo && colEmbudo) {
@@ -701,7 +697,6 @@ function actualizarPantallaCurso(dOlap = null) {
     if(!dOlap) { 
         document.getElementById('kpi-moodle-row').innerHTML = `${crearTarjetaKPI("Finalización", tF+"%", null, "bi-trophy", "success")} ${crearTarjetaKPI("Abandono", cursoActual['Tasa_Abandono_%']+"%", null, "bi-exclamation-triangle", "warning")} ${crearTarjetaKPI("Inactividad", cursoActual['Tasa_Inactividad_%']+"%", null, "bi-door-closed", "danger")}`; 
         
-        // Muestra la tarjeta de tiempo y restaura el tamaño original del embudo
         const colRitmo = document.getElementById('col-ritmo');
         const colEmbudo = document.getElementById('col-embudo');
         if(colRitmo && colEmbudo) {
@@ -831,9 +826,6 @@ window.actualizarComparador = function(slotIndex, courseName) {
     document.getElementById(`comp-com-${slotIndex}`).innerText = modaCom;
 };
 
-// ==========================================
-// FUNCIÓN NUEVA: Reemplaza el <script> en HTML
-// ==========================================
 function generarColumnasComparador() {
     let htmlColumnas = '';
     for(let i=1; i<=4; i++) {
@@ -893,7 +885,6 @@ function generarColumnasComparador() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Ejecutar la función que inyecta el HTML del comparador
     generarColumnasComparador();
     
     cambiarTema(localStorage.getItem('temaDashboard') || 'light');
